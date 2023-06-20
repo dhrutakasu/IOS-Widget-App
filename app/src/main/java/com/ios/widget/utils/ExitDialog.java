@@ -9,10 +9,10 @@ import android.widget.TextView;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.ios.widget.Ads.Ad_Native;
 import com.ios.widget.R;
-import com.ios.widget.ui.Activity.MainActivity;
+import com.ios.widget.ui.Activity.TestActivity;
 
 public class ExitDialog extends Dialog {
-    private final MainActivity activity;
+    private final TestActivity activity;
     public ExitListener exitListener;
     private NativeAd nativeAd;
 
@@ -21,7 +21,7 @@ public class ExitDialog extends Dialog {
         void onExit();
     }
 
-    public ExitDialog(MainActivity activity, Context context, ExitListener exitListener) {
+    public ExitDialog(TestActivity activity, Context context, ExitListener exitListener) {
         super(context);
         this.activity = activity;
         this.exitListener = exitListener;

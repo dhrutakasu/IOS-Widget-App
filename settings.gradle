@@ -14,5 +14,5 @@ dependencyResolutionManagement {
         jcenter()
     }
 }
-rootProject.name = "MeditionSound App"
+rootProject.name = "IOS-Widget App"
 include ':app'

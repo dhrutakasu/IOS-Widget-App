@@ -26,15 +26,6 @@ import com.ios.widget.utils.Pref;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashActivity extends AppCompatActivity {
@@ -146,6 +137,7 @@ public class SplashActivity extends AppCompatActivity {
 
     public void startMainActivity() {
         startActivity(new Intent(this, MainActivity.class));
+//        startActivity(new Intent(this, TestActivity.class));
         finish();
     }
 }
