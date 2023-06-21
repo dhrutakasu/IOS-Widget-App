@@ -8,10 +8,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MeditionSoundApp">
+        android:theme="@style/Theme.IOSWidgetApp">
         <activity
             android:name=".ui.Activity.WidgetItemActivity"
-            android:exported="false" />
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.android.calendar.AgendaActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.Activity.MainActivity"
             android:exported="false" />
@@ -35,15 +40,60 @@
 
 
         <receiver
-            android:name=".provider.NoteCreateWidgetProvider"
+            android:name=".provider.SmallCalenderWidgetProvider"
             android:exported="false">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
+                <intent-filter>
+                    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                    <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
+                    <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                    <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
+                </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_small" />
+        </receiver>
+        <receiver
+            android:name=".provider.SmallClockWidgetProvider"
+            android:exported="false">
+                <intent-filter>
+                    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                    <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
+                    <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                    <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
+                </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_small" />
+        </receiver>
+        <receiver
+            android:name=".provider.MediumCalenderWidgetProvider"
+            android:exported="false">
+                <intent-filter>
+                    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                    <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
+                    <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                    <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_medium" />
+        </receiver>
+        <receiver
+            android:name=".provider.LargeCalenderWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                    <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
+                    <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                    <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_large" />
         </receiver>
         <receiver
             android:name=".provider.NoteWidgetCreatedReceiver"
@@ -58,8 +108,10 @@
         </receiver>
 
         <service
-            android:name=".provider.WidgetService"
-            android:exported="false"
+            android:name=".provider.LargeWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service
+            android:name=".provider.MediumWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 

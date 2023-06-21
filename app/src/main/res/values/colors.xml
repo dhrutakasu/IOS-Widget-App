@@ -10,4 +10,6 @@
     <color name="brown">#4C3E37</color>
     <color name="light_brown">#6C6864</color>
     <color name="red">#E93539</color>
+    <color name="color_CA3338">#ffca3338</color>
+    <color name="color_1c1c1e">#1c1c1e</color>
 </resources>

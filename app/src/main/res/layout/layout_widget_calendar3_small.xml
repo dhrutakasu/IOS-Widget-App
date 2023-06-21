@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="top|center_vertical|center_horizontal|center"
+    android:layoutDirection="ltr">
+
+    <RelativeLayout
+        android:id="@+id/RlSmallCal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_background2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/iv_background2"
+            android:layout_alignTop="@+id/iv_background2"
+            android:layout_alignEnd="@+id/iv_background2"
+            android:layout_alignBottom="@+id/iv_background2"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="5">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:weightSum="10">
+
+                <TextClock
+                    android:id="@+id/TClockMonth"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:autoSizeMaxTextSize="@dimen/_16sdp"
+                    android:autoSizeMinTextSize="@dimen/_6sdp"
+                    android:autoSizeTextType="uniform"
+                    android:ellipsize="none"
+                    android:fontFamily="@font/main_medium"
+                    android:format12Hour="MMM"
+                    android:format24Hour="MMM"
+                    android:gravity="center|bottom"
+                    android:includeFontPadding="false"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textDirection="ltr"
+                    android:textSize="@dimen/_10sdp"
+                    android:textStyle="bold"  />
+
+                <TextClock
+                    android:id="@+id/TClockDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"
+                    android:autoSizeMaxTextSize="@dimen/_60sdp"
+                    android:autoSizeMinTextSize="@dimen/_25sdp"
+                    android:autoSizeTextType="uniform"
+                    android:ellipsize="none"
+                    android:fontFamily="@font/main_bold"
+                    android:format12Hour="d"
+                    android:format24Hour="d"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_60sdp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

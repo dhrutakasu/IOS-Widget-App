@@ -3,6 +3,7 @@ package com.ios.widget.ui.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -12,15 +13,23 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
-import com.ios.widget.provider.NoteCreateWidgetProvider;
+import com.ios.widget.provider.LargeCalenderWidgetProvider;
+import com.ios.widget.provider.MediumCalenderWidgetProvider;
+import com.ios.widget.provider.SmallCalenderWidgetProvider;
 import com.ios.widget.provider.NoteWidgetCreatedReceiver;
+import com.ios.widget.provider.LargeWidgetService;
+import com.ios.widget.provider.SmallClockWidgetProvider;
 import com.ios.widget.ui.Adapter.WidgetPagerAdapter;
 import com.ios.widget.utils.Constants;
+
+import java.util.Calendar;
+import java.util.Locale;
 
 public class WidgetItemActivity extends AppCompatActivity {
 
@@ -32,6 +41,29 @@ public class WidgetItemActivity extends AppCompatActivity {
     private Integer[] images;
     private TabLayout TabWidget;
     private WidgetModel widgetModel;
+
+    public static void UpdateWidget(int i, String packageName, Context context, int intExtra) {
+        @SuppressLint("RemoteViewLayout") RemoteViews WidgetViews = new RemoteViews(packageName, R.layout.layout_widget_calendar3_large);
+
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int year = calendar.get(Calendar.YEAR);
+        Intent svcIntent = new Intent(context, LargeWidgetService.class);
+
+        svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, intExtra);
+        WidgetViews.setRemoteAdapter(R.id.GridCalendarLargeView, svcIntent);
+//        long eventID = 208;
+//        Uri uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
+//        Intent clickIntent = new Intent(Intent.ACTION_VIEW).setData(uri);
+//        PendingIntent clickPI = PendingIntent.getActivity(context, 0, clickIntent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        WidgetViews.setOnClickPendingIntent(R.id.GridCalendarLargeView, clickPI);
+
+        AppWidgetManager.getInstance(context).updateAppWidget(intExtra, WidgetViews);
+//        gridCalendarAdapter = new GridCalendarAdapter(context, month, year, 0);
+//        gridCalendarAdapter.notifyDataSetChanged();
+//        GridCalendarLargeView.setAdapter(gridCalendarAdapter);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +83,7 @@ public class WidgetItemActivity extends AppCompatActivity {
     }
 
     private void initIntents() {
+//        if (getIntent().getIntExtra())
         pos = getIntent().getIntExtra(Constants.ITEM_POSITION, 0);
     }
 
@@ -58,41 +91,97 @@ public class WidgetItemActivity extends AppCompatActivity {
         TvAddWidget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                Intent insertCalendarIntent = new Intent(Intent.ACTION_VIEW)
+//                        .setData(CalendarContract.Events.CONTENT_URI);
+//                startActivity(insertCalendarIntent);
+                AppWidgetManager manager;
+                ComponentName name;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    AppWidgetManager manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
-                    ComponentName name = new ComponentName(context, NoteCreateWidgetProvider.class);
-                    if (manager != null && manager.isRequestPinAppWidgetSupported()) {
-                        new Handler().postDelayed(() -> {
-                            int ids;
-//                            String title = EdtCreateNoteTitle.getText().toString();
-//                            String content = EdtCreateNote.getText().toString();
-//                            if (noteActionCode == 0) {
-//                                int notesCount = (int) noteHelper.getNotesCount();
-//                                if (notesCount != 0) {
-//                                    if (!noteHelper.checkRecordExist(title, content)) {
-//                                        NoteSave();
-//                                        isInserted = true;
-//                                    }
-//                                } else {
-//                                    NoteSave();
-//                                    isInserted = true;
-//                                }
-//                                ids = (int) count;
-//                            } else {
-//                                ids = (int) NoteId;
-//                            }
-                            Intent intent = new Intent(context, NoteWidgetCreatedReceiver.class);
-//                            intent.putExtra(Constants.TAG_WIDGET_NOTE_TITLE, title);
-//                            intent.putExtra(Constants.TAG_WIDGET_NOTE_CONTENT, content);
-//                            intent.putExtra(Constants.TAG_WIDGET_NOTE_ID, ids);
-                            PendingIntent pendingIntent;
-                            pendingIntent = PendingIntent.getBroadcast(
-                                    context,
-                                    0, intent,
-                                    PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                            manager.requestPinAppWidget(name, (Bundle) null, pendingIntent);
-                        }, 100);
+                    switch (PagerWidget.getCurrentItem()) {
+                        case 0:
+                            switch (pos) {
+                                case 1:
+                                    manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
+                                    name = new ComponentName(context, SmallClockWidgetProvider.class);
+                                    if (manager != null && manager.isRequestPinAppWidgetSupported()) {
+                                        new Handler().postDelayed(() -> {
+                                            Intent intent = new Intent(context, NoteWidgetCreatedReceiver.class);
+                                            intent.putExtra(Constants.TAG_WIDGET_NOTE_ID, pos);
+                                            PendingIntent pendingIntent;
+                                            pendingIntent = PendingIntent.getBroadcast(
+                                                    context,
+                                                    0, intent,
+                                                    PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                            manager.requestPinAppWidget(name, (Bundle) null, pendingIntent);
+                                        }, 100);
+                                    }
+                                    break;
+                                case 14:
+                                    manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
+                                    name = new ComponentName(context, SmallCalenderWidgetProvider.class);
+                                    if (manager != null && manager.isRequestPinAppWidgetSupported()) {
+                                        new Handler().postDelayed(() -> {
+                                            Intent intent = new Intent(context, NoteWidgetCreatedReceiver.class);
+                                            intent.putExtra(Constants.TAG_WIDGET_NOTE_ID, pos);
+                                            PendingIntent pendingIntent;
+                                            pendingIntent = PendingIntent.getBroadcast(
+                                                    context,
+                                                    0, intent,
+                                                    PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                            manager.requestPinAppWidget(name, (Bundle) null, pendingIntent);
+                                        }, 100);
+                                    }
+                                    break;
+                            }
+                            break;
+                        case 1:
+                            switch (pos) {
+                                case 1:
+
+                                    break;
+                                case 14:
+                                    manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
+                                    name = new ComponentName(context, MediumCalenderWidgetProvider.class);
+                                    if (manager != null && manager.isRequestPinAppWidgetSupported()) {
+                                        new Handler().postDelayed(() -> {
+                                            Intent intent = new Intent(context, NoteWidgetCreatedReceiver.class);
+                                            intent.putExtra(Constants.TAG_WIDGET_NOTE_ID, pos);
+                                            PendingIntent pendingIntent;
+                                            pendingIntent = PendingIntent.getBroadcast(
+                                                    context,
+                                                    0, intent,
+                                                    PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                            manager.requestPinAppWidget(name, (Bundle) null, pendingIntent);
+                                        }, 100);
+                                    }
+                                    break;
+                            }
+                            break;
+                        case 2:
+                            switch (pos) {
+                                case 1:
+
+                                    break;
+                                case 14:
+                                    manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
+                                    name = new ComponentName(context, LargeCalenderWidgetProvider.class);
+                                    if (manager != null && manager.isRequestPinAppWidgetSupported()) {
+                                        new Handler().postDelayed(() -> {
+                                            Intent intent = new Intent(context, NoteWidgetCreatedReceiver.class);
+                                            intent.putExtra(Constants.TAG_WIDGET_NOTE_ID, pos);
+                                            PendingIntent pendingIntent;
+                                            pendingIntent = PendingIntent.getBroadcast(
+                                                    context,
+                                                    0, intent,
+                                                    PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                            manager.requestPinAppWidget(name, (Bundle) null, pendingIntent);
+                                        }, 100);
+                                    }
+                                    break;
+                            }
+                            break;
                     }
+
                 }
             }
         });

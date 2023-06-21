@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.widget.GridView;
 
 import com.ios.widget.R;
-import com.ios.widget.ui.Adapter.GridCalendarAdapter;
+import com.ios.widget.ui.Adapter.WidgtetCalendarAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,7 +13,7 @@ import java.util.Locale;
 public class TestActivity extends AppCompatActivity {
 
     private GridView GridCalendarLargeView,GridCalendarMediumView;
-    private GridCalendarAdapter gridCalendarAdapter;
+    private WidgtetCalendarAdapter widgtetCalendarAdapter;
     private Calendar calendar;
     private int month, year;
 
@@ -29,12 +29,12 @@ public class TestActivity extends AppCompatActivity {
         month = calendar.get(Calendar.MONTH) + 1;
         year = calendar.get(Calendar.YEAR);
 
-        gridCalendarAdapter = new GridCalendarAdapter(getApplicationContext(), month, year,0);
-        gridCalendarAdapter.notifyDataSetChanged();
-        GridCalendarLargeView.setAdapter(gridCalendarAdapter);
+        widgtetCalendarAdapter = new WidgtetCalendarAdapter(getApplicationContext(), month, year,0);
+        widgtetCalendarAdapter.notifyDataSetChanged();
+        GridCalendarLargeView.setAdapter(widgtetCalendarAdapter);
 
-        gridCalendarAdapter = new GridCalendarAdapter(getApplicationContext(), month, year,1);
-        gridCalendarAdapter.notifyDataSetChanged();
-        GridCalendarMediumView.setAdapter(gridCalendarAdapter);
+        widgtetCalendarAdapter = new WidgtetCalendarAdapter(getApplicationContext(), month, year,1);
+        widgtetCalendarAdapter.notifyDataSetChanged();
+        GridCalendarMediumView.setAdapter(widgtetCalendarAdapter);
     }
 }

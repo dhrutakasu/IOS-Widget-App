@@ -19,10 +19,10 @@ public class Constants {
     public static String ExerciseSetTime;
     public static String BASE_URL="https://7starinnovation.com/meditationmusic/";
     public static String BASE_URL_EXTENSION=".mp3";
-    public static final String TAG_WIDGET_NOTE_TITLE = "WIDGET_NOTE_TITLE";
     public static final String TAG_WIDGET_NOTE_ID = "WIDGET_NOTE_ID";
-    public static final String TAG_WIDGET_NOTE_CONTENT = "WIDGET_NOTE_CONTENT";
+    public static final String TAG_WIDGET_TYPE = "WIDGET_TYPE";
     public static int Widget_Id;
+    public static String WidgetClick="WidgetClick";
 
     public static boolean isConnectingToInternet(Context con) {
         ConnectivityManager connectivity = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);

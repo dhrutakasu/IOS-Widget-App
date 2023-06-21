@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:gravity="top|center_vertical|center_horizontal|center"
+    android:layoutDirection="ltr">
+
+    <RelativeLayout
+        android:id="@+id/RlMediumCal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/iv_background"
+            android:layout_alignTop="@+id/iv_background"
+            android:layout_alignEnd="@+id/iv_background"
+            android:layout_alignBottom="@+id/iv_background"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:weightSum="10">
+
+                <TextClock
+                    android:id="@+id/TClockMonth"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:autoSizeMaxTextSize="@dimen/_10sdp"
+                    android:autoSizeMinTextSize="@dimen/_2sdp"
+                    android:autoSizeTextType="uniform"
+                    android:ellipsize="none"
+                    android:text="Jun, 2023"
+                    android:fontFamily="@font/main_medium"
+                    android:format12Hour="EEEE"
+                    android:format24Hour="EEEE"
+                    android:paddingStart="25dp"
+                    android:gravity="center|start|bottom"
+                    android:includeFontPadding="false"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textDirection="ltr"
+                    android:textSize="@dimen/_8sdp" />
+
+                <TextClock
+                    android:id="@+id/TClockDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"
+                    android:autoSizeMaxTextSize="@dimen/_64sdp"
+                    android:autoSizeMinTextSize="@dimen/_6sdp"
+                    android:autoSizeTextType="uniform"
+                    android:ellipsize="none"
+                    android:text="23"
+                    android:paddingStart="20dp"
+                    android:fontFamily="@font/main_bold"
+                    android:format12Hour="d"
+                    android:format24Hour="d"
+                    android:gravity="center|start"
+                    android:includeFontPadding="false"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_48sdp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4.5"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:weightSum="10">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:gravity="center|bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/main_semibold"
+                        android:gravity="center"
+                        android:text="S"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_8sdp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/main_semibold"
+                        android:gravity="center"
+                        android:text="M"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_8sdp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/main_semibold"
+                        android:gravity="center"
+                        android:text="T"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_8sdp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/main_semibold"
+                        android:gravity="center"
+                        android:text="W"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_8sdp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/main_semibold"
+                        android:gravity="center"
+                        android:text="T"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_8sdp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/main_semibold"
+                        android:gravity="center"
+                        android:text="F"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_8sdp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/main_semibold"
+                        android:gravity="center"
+                        android:text="S"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_8sdp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <GridView
+                    android:id="@+id/GridCalendarMediumView"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="5"
+                    android:gravity="center"
+                    android:numColumns="7"
+                    tools:listitem="@layout/item_calendar_day" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

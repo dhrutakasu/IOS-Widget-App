@@ -1,13 +1,12 @@
-package com.ios.widget.ui.Adapter;
+package com.ios.widget.provider;
 
-
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
-import android.view.LayoutInflater;
+import android.content.Intent;
+import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.RemoteViews;
+import android.widget.RemoteViewsService;
 
 import com.ios.widget.R;
 
@@ -15,24 +14,54 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
-public class GridCalendarAdapter extends BaseAdapter {
-    private final Context context;
-    private final List<String> strings;
+public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
+    private Calendar calendar;
+    private Context context;
+    private long NoteId;
+
+    private List<String> strings;
     private static final int DAY_OFFSET = 1;
     private final String[] monthsList = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
     private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    private final int IsMedium;
     private int daysInMonth;
     private int currentDayOfMonth;
     private int currentWeekDay;
-    private TextView TvDates;
-    private RelativeLayout RlMainCalendar;
+    private int month, year;
 
-    public GridCalendarAdapter(Context context, int month, int year, int i) {
-        super();
-        this.context = context;
-        this.IsMedium = i;
+    @Override
+    public int getCount() {
+        return strings.size();
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return (long) 0;
+    }
+
+    @Override
+    public RemoteViews getLoadingView() {
+        return null;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
+
+    @Override
+    public void onCreate() {
+        System.out.println("-********* NoteId 00000: ");
+
+        calendar = Calendar.getInstance(Locale.getDefault());
+        month = calendar.get(Calendar.MONTH) + 1;
+        year = calendar.get(Calendar.YEAR);
         this.strings = new ArrayList<String>();
         Calendar calendar = Calendar.getInstance();
         GotoCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
@@ -47,15 +76,6 @@ public class GridCalendarAdapter extends BaseAdapter {
 
     private int getNumberOfDaysOfMonth(int i) {
         return daysOfMonth[i];
-    }
-
-    public String getItem(int position) {
-        return strings.get(position);
-    }
-
-    @Override
-    public int getCount() {
-        return strings.size();
     }
 
     private void GotoMonthDetail(int mm, int yy) {
@@ -114,47 +134,6 @@ public class GridCalendarAdapter extends BaseAdapter {
         }
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
-        if (view == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = layoutInflater.inflate(R.layout.item_calendar_day, parent, false);
-        }
-
-        TvDates = (TextView) view.findViewById(R.id.TvCalendarDates);
-        RlMainCalendar = (RelativeLayout) view.findViewById(R.id.RlMainCalendar);
-
-        String[] DayOfString = strings.get(position).split("-");
-        String Day = DayOfString[0];
-        String Month = DayOfString[2];
-        String Year = DayOfString[3];
-
-        if (!DayOfString[1].equals("GREY")) {
-            TvDates.setText(Day);
-        }
-        TvDates.setTag(Day + "-" + Month + "-" + Year);
-        if (IsMedium == 0) {
-            TvDates.setTextSize(11f);
-        } else {
-            TvDates.setTextSize(10f);
-        }
-        if (DayOfString[1].equals("WHITE")) {
-            TvDates.setTextColor(context.getResources().getColor(R.color.light_brown));
-        }
-        if (DayOfString[1].equals("BLUE")) {
-            RlMainCalendar.setBackgroundResource(R.drawable.ic_calendar_ring);
-            TvDates.setPadding(5, 5, 5, 5);
-            TvDates.setTextColor(context.getResources().getColor(R.color.white));
-        }
-        return view;
-    }
-
     public int getCurrentDayOfMonth() {
         return currentDayOfMonth;
     }
@@ -167,7 +146,52 @@ public class GridCalendarAdapter extends BaseAdapter {
         this.currentWeekDay = currentWeekDay;
     }
 
-    public int getCurrentWeekDay() {
-        return currentWeekDay;
+    @Override
+    public void onDataSetChanged() {
+    }
+
+    public MediumRemoteView(Context con, Intent intent) {
+        NoteId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+        context = con;
+        System.out.println("-********* NoteId : " + NoteId);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (context != null) {
+            context = null;
+        }
+    }
+
+    @Override
+    public RemoteViews getViewAt(int i) {
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.item_calendar_day);
+
+        String[] DayOfString = strings.get(i).split("-");
+        String Day = DayOfString[0];
+        String Month = DayOfString[2];
+        String Year = DayOfString[3];
+        System.out.println("-********* DayOfString : " + DayOfString[1]);
+        System.out.println("-********* Day : " + Day);
+        if (!DayOfString[1].equals("GREY")) {
+            views.setTextViewText(R.id.TvCalendarDates, Day);
+        } else {
+            views.setTextViewText(R.id.TvCalendarDates, "");
+        }
+
+        if (DayOfString[1].equals("WHITE")) {
+            views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.light_brown));
+        }
+        if (DayOfString[1].equals("BLUE")) {
+            views.setViewPadding(R.id.TvCalendarDates, 4, 4, 4, 4);
+            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 9f);
+            views.setViewVisibility(R.id.IvMainCalendar, View.VISIBLE);
+            views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
+        } else {
+            views.setViewPadding(R.id.TvCalendarDates, 3, 3, 3, 3);
+            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 10f);
+            views.setViewVisibility(R.id.IvMainCalendar, View.GONE);
+        }
+        return views;
     }
 }
