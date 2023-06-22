@@ -3,19 +3,19 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="top|center_vertical|center_horizontal|center"
-    android:layoutDirection="ltr">
+    android:layoutDirection="ltr"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_app_widget_1c1c1e_r25_bg">
+        android:background="@drawable/clock_simple2_bg">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:gravity="center"
             android:layout_alignParentEnd="true"
             android:weightSum="10">
 
@@ -29,20 +29,12 @@
                     android:id="@+id/analog_clock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:dial="@drawable/img_clock_realism3_dial"
-                    android:hand_hour="@drawable/img_clock_realism3_hand_hour"
-                    android:hand_minute="@drawable/img_clock_realism3_hand_minute"
-                    android:hand_second="@drawable/img_clock_realism3_hand_second" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/analog_clock"
-                    android:layout_alignTop="@+id/analog_clock"
-                    android:layout_alignEnd="@+id/analog_clock"
-                    android:layout_alignBottom="@+id/analog_clock"
-                    android:src="@drawable/img_clock_realism3_cap" />
+                    android:dial="@drawable/img_clock_simple2_dial"
+                    android:hand_hour="@drawable/img_clock_simple2_hand_hour"
+                    android:hand_minute="@drawable/img_clock_simple2_hand_minute"
+                    android:hand_second="@drawable/img_clock_simple2_hand_second" />
             </RelativeLayout>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -65,7 +57,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="S"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_4B79A2"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -76,7 +68,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="M"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_4B79A2"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -87,7 +79,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="T"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_4B79A2"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -98,7 +90,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="W"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_4B79A2"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -109,7 +101,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="T"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_4B79A2"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -120,7 +112,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="F"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_4B79A2"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -131,7 +123,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="S"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_4B79A2"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
                 </LinearLayout>

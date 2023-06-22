@@ -22,6 +22,7 @@ public class Constants {
     public static final String TAG_WIDGET_NOTE_ID = "WIDGET_NOTE_ID";
     public static final String TAG_WIDGET_TYPE = "WIDGET_TYPE";
     public static int Widget_Id;
+    public static int Widget_Type_Id;
     public static String WidgetClick="WidgetClick";
 
     public static boolean isConnectingToInternet(Context con) {

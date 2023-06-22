@@ -9,7 +9,6 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.ios.widget.R;
-import com.ios.widget.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,7 +16,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
+public class SmallRemoteView implements RemoteViewsService.RemoteViewsFactory {
     private Calendar calendar;
     private Context context;
     private long NoteId;
@@ -151,7 +150,7 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
     public void onDataSetChanged() {
     }
 
-    public LargeRemoteView(Context con, Intent intent) {
+    public SmallRemoteView(Context con, Intent intent) {
 //        Note note;
         NoteId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -177,49 +176,16 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
         String Year = DayOfString[3];
         System.out.println("-********* DayOfString : " + DayOfString[1]);
         System.out.println("-********* Day : " + Day);
-        System.out.println("-********* Constants.Widget_Type_Id : " + Constants.Widget_Type_Id);
         if (!DayOfString[1].equals("GREY")) {
             views.setTextViewText(R.id.TvCalendarDates, Day);
-        } else {
+        }else {
             views.setTextViewText(R.id.TvCalendarDates, "");
         }
-
+        views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 12f);
         if (DayOfString[1].equals("WHITE")) {
-            switch (Constants.Widget_Type_Id) {
-                case 13:
-                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
-                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 8f);
-                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
-                    break;
-                case 16:
-                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
-                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 15f);
-                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
-                    break;
-                case 14:
-                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
-                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 12f);
-                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.light_brown));
-                    break;
-                case 15:
-                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
-                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 15f);
-                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.black));
-                    break;
-            }
+            views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.black));
         }
         if (DayOfString[1].equals("BLUE")) {
-            switch (Constants.Widget_Type_Id) {
-                case 13:
-                    views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_ring_white);
-                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.color_0263FF));
-                    break;
-                case 14:
-                case 15:
-                case 16:
-                    views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_ring);
-                    break;
-            }
             views.setViewPadding(R.id.TvCalendarDates, 4, 4, 4, 4);
 //            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 9f);
             views.setViewVisibility(R.id.IvMainCalendar, View.VISIBLE);

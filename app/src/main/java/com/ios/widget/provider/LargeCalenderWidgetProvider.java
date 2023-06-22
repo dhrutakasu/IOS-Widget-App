@@ -11,6 +11,7 @@ import android.provider.CalendarContract;
 import android.widget.RemoteViews;
 
 import com.ios.widget.R;
+import com.ios.widget.utils.Constants;
 
 import java.util.Calendar;
 
@@ -20,6 +21,130 @@ public class LargeCalenderWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int i = 0; i < appWidgetIds.length; ++i) {
+
+            RemoteViews rv = null;
+            long startMillis = 0;
+            Uri.Builder builder = null;
+            Intent intent = null;
+            Intent intent1 = null;
+            PendingIntent configPendingIntent = null;
+            switch (Constants.Widget_Type_Id) {
+                case 1:
+                    //todo Dial clock 1 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple1_large);
+                    break;
+                case 2:
+                    //todo Dial clock 2 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple2_large);
+                    break;
+                case 3:
+                    //todo Dial clock 3 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple3_large);
+                    break;
+                case 4:
+                    //todo Dial clock 4 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism1_large);
+                    break;
+                case 5:
+                    //todo Dial clock 5 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism2_large);
+                    break;
+                case 6:
+                    //todo Dial clock 6 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism3_large);
+                    break;
+                case 13:
+                    //todo calender 1 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar1_large);
+                    rv.setImageViewResource(R.id.iv_background, R.drawable.img_calendar1_small_bg);
+                    rv.setCharSequence(R.id.TClockYear, "setFormat12Hour", "yyyy");
+                    rv.setCharSequence(R.id.TClockYear, "setFormat24Hour", "yyyy");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMMM");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
+                    intent = new Intent(context, LargeWidgetService.class);
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+
+                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+                    rv.setRemoteAdapter(appWidgetIds[i], R.id.GridCalendarLargeView, intent);
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                    intent1 = new Intent(Intent.ACTION_VIEW)
+                            .setData(builder.build());
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlLargeCal, configPendingIntent);
+                    break;
+                case 14:
+                    //todo calender 3 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_large);
+                    rv.setImageViewResource(R.id.iv_background, R.drawable.img_calendar2_large_bg);
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM, yyyy");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM, yyyy");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
+                    intent = new Intent(context, LargeWidgetService.class);
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+
+                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+                    rv.setRemoteAdapter(appWidgetIds[i], R.id.GridCalendarLargeView, intent);
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                    intent1 = new Intent(Intent.ACTION_VIEW)
+                            .setData(builder.build());
+                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlLargeCal, configPendingIntent);
+                    break;
+                case 15:
+                    //todo calender 2 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar2_large);
+                    rv.setImageViewResource(R.id.iv_background, R.drawable.shape_app_widget_ffffff_r25_bg);
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM, yyyy");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM, yyyy");
+                    intent = new Intent(context, LargeWidgetService.class);
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+
+                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+                    rv.setRemoteAdapter(appWidgetIds[i], R.id.GridCalendarLargeView, intent);
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                     intent1 = new Intent(Intent.ACTION_VIEW)
+                            .setData(builder.build());
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlLargeCal, configPendingIntent);
+                    break;
+                case 16:
+                    //todo calender 4 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_large);
+                    rv.setImageViewResource(R.id.iv_background, R.drawable.shape_app_widget_1c1c1e_r25_bg);
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM, yyyy");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM, yyyy");
+                    intent = new Intent(context, LargeWidgetService.class);
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+
+                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+                    rv.setRemoteAdapter(appWidgetIds[i], R.id.GridCalendarLargeView, intent);
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                    intent1 = new Intent(Intent.ACTION_VIEW)
+                            .setData(builder.build());
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlLargeCal, configPendingIntent);
+                    break;
+            }
+            appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
             //todo calender 3 medium
            /* RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_medium);
             rv.setImageViewResource(R.id.iv_background, R.drawable.img_calendar2_medium_bg);
@@ -48,7 +173,7 @@ public class LargeCalenderWidgetProvider extends AppWidgetProvider {
             rv.setOnClickPendingIntent(R.id.RlClockMedium, configPendingIntent);
             appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
 */
-            //todo calender 3 large
+           /* //todo calender 3 large
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_large);
             rv.setImageViewResource(R.id.iv_background, R.drawable.img_calendar2_large_bg);
             rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM, yyyy");
@@ -69,7 +194,7 @@ public class LargeCalenderWidgetProvider extends AppWidgetProvider {
             PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE|PendingIntent.FLAG_UPDATE_CURRENT);
 
             rv.setOnClickPendingIntent(R.id.RlLargeCal, configPendingIntent);
-            appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
+            appWidgetManager.updateAppWidget(appWidgetIds[i], rv);*/
 
             /*
             //todo calender 3 small

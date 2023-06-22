@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/transparent"
+    android:gravity="top|center_vertical|center_horizontal|center"
+    android:layoutDirection="ltr">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/shape_app_widget_1c1c1e_r25_bg"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/iv_background"
+            android:layout_alignTop="@+id/iv_background"
+            android:layout_alignEnd="@+id/iv_background"
+            android:layout_alignBottom="@+id/iv_background"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="10">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4.5"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:weightSum="10">
+
+                <TextClock
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:autoSizeMaxTextSize="@dimen/_62ssp"
+                    android:autoSizeMinTextSize="@dimen/_24ssp"
+                    android:autoSizeTextType="uniform"
+                    android:ellipsize="none"
+                    android:format12Hour="d"
+                    android:format24Hour="d"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_62ssp"
+                    android:textStyle="bold"
+                    android:singleLine="true" />
+
+                <TextClock
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:autoSizeMaxTextSize="@dimen/_18ssp"
+                    android:autoSizeMinTextSize="@dimen/_6ssp"
+                    android:autoSizeTextType="uniform"
+                    android:ellipsize="none"
+                    android:format12Hour="EEEE"
+                    android:format24Hour="EEEE"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:textAllCaps="true"
+                    android:textColor="@color/color_F7F7F7"
+                    android:textSize="@dimen/_16ssp"
+                    android:singleLine="true" />
+
+                <TextClock
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:autoSizeMaxTextSize="@dimen/_18ssp"
+                    android:autoSizeMinTextSize="@dimen/_6ssp"
+                    android:autoSizeTextType="uniform"
+                    android:ellipsize="none"
+                    android:format12Hour="MMMM"
+                    android:format24Hour="MMMM"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:textAllCaps="true"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4.5"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:weightSum="10">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/main_semibold"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text="S"
+                    android:textColor="@color/color_8E8E90"
+                    android:textSize="@dimen/_8sdp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/main_semibold"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text="M"
+                    android:textColor="@color/color_8E8E90"
+                    android:textSize="@dimen/_8sdp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/main_semibold"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text="T"
+                    android:textColor="@color/color_8E8E90"
+                    android:textSize="@dimen/_8sdp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/main_semibold"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text="W"
+                    android:textColor="@color/color_8E8E90"
+                    android:textSize="@dimen/_8sdp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/main_semibold"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text="T"
+                    android:textColor="@color/color_8E8E90"
+                    android:textSize="@dimen/_8sdp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/main_semibold"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text="F"
+                    android:textColor="@color/color_8E8E90"
+                    android:textSize="@dimen/_8sdp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/main_semibold"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text="S"
+                    android:textColor="@color/color_8E8E90"
+                    android:textSize="@dimen/_8sdp" />
+            </LinearLayout>
+
+            <GridView
+                android:id="@+id/GridCalendarLargeView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_alignParentStart="true"
+                android:layout_weight="6.5"
+                android:gravity="center"
+                android:numColumns="7"
+                tools:listitem="@layout/item_calendar_day" />
+        </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

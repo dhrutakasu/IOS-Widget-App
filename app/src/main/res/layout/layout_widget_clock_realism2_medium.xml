@@ -11,12 +11,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/shape_app_widget_121212_r25_bg">
 
-<!--        <ImageView-->
-<!--            android:id="@+id/iv_background"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:adjustViewBounds="true">-->
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,10 +61,11 @@
                     android:layout_weight="1"
                     android:autoSizeMaxTextSize="@dimen/_12ssp"
                     android:autoSizeMinTextSize="@dimen/_6ssp"
-                    android:autoSizeTextType="1"
+                    android:autoSizeTextType="uniform"
                     android:ellipsize="none"
                     android:format12Hour="MMM yyyy"
                     android:format24Hour="MMM yyyy"
+                    android:paddingStart="@dimen/_5sdp"
                     android:gravity="left|center_vertical|center_horizontal|center|start"
                     android:includeFontPadding="false"
                     android:textAlignment="viewStart"
@@ -94,7 +89,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="S"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_C888888"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -105,7 +100,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="M"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_C888888"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -116,7 +111,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="T"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_C888888"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -127,7 +122,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="W"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_C888888"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -138,7 +133,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="T"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_C888888"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -149,7 +144,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="F"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_C888888"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -160,7 +155,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="S"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_C888888"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -169,7 +164,7 @@
                     android:id="@+id/GridCalendarMediumView"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="5"
+                    android:layout_weight="6.5"
                     android:gravity="center"
                     android:numColumns="7"
                     tools:listitem="@layout/item_calendar_day" />

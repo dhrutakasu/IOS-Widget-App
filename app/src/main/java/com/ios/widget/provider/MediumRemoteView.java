@@ -9,6 +9,7 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.ios.widget.R;
+import com.ios.widget.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -180,16 +181,48 @@ public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
         }
 
         if (DayOfString[1].equals("WHITE")) {
-            views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.light_brown));
+            switch (Constants.Widget_Type_Id) {
+                case 2:
+                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 10f);
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.color_142230));
+                    break;
+                case 5:
+                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 10f);
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
+                    break;
+                case 6:
+                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 10f);
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.color_CCCCBCE));
+                    break;
+                case 14:
+                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 8f);
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.light_brown));
+                    break;
+            }
         }
         if (DayOfString[1].equals("BLUE")) {
             views.setViewPadding(R.id.TvCalendarDates, 4, 4, 4, 4);
-            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 9f);
+//            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 9f);
+            switch (Constants.Widget_Type_Id) {
+                case 2:
+                    views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_ring_blue);
+                    break;
+                case 5:
+                case 14:
+                    views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_ring);
+                    break;
+                case 6:
+                    views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_ring_stroke_yellow);
+                    break;
+            }
             views.setViewVisibility(R.id.IvMainCalendar, View.VISIBLE);
             views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
         } else {
-            views.setViewPadding(R.id.TvCalendarDates, 3, 3, 3, 3);
-            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 10f);
+//            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 10f);
             views.setViewVisibility(R.id.IvMainCalendar, View.GONE);
         }
         return views;

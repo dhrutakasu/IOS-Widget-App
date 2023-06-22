@@ -42,26 +42,12 @@
         <receiver
             android:name=".provider.SmallCalenderWidgetProvider"
             android:exported="false">
-                <intent-filter>
-                    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                    <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
-                    <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
-                    <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
-                </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_small" />
-        </receiver>
-        <receiver
-            android:name=".provider.SmallClockWidgetProvider"
-            android:exported="false">
-                <intent-filter>
-                    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                    <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
-                    <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
-                    <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
-                </intent-filter>
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
+            </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
@@ -70,11 +56,11 @@
         <receiver
             android:name=".provider.MediumCalenderWidgetProvider"
             android:exported="false">
-                <intent-filter>
-                    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                    <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
-                    <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
-                    <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
             </intent-filter>
 
             <meta-data
@@ -85,10 +71,10 @@
             android:name=".provider.LargeCalenderWidgetProvider"
             android:exported="false">
             <intent-filter>
-                    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                    <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
-                    <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
-                    <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
             </intent-filter>
 
             <meta-data
@@ -112,6 +98,9 @@
             android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service
             android:name=".provider.MediumWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service
+            android:name=".provider.SmallWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 

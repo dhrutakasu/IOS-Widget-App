@@ -26,6 +26,113 @@ public class SmallCalenderWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int i = 0; i < appWidgetIds.length; ++i) {
+            RemoteViews rv = null;
+            long startMillis = 0;
+            Uri.Builder builder = null;
+            Intent intent1 = null;
+            PendingIntent configPendingIntent = null;
+            switch (Constants.Widget_Type_Id) {
+                case 1:
+                    //todo Dial clock 1 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple1_small);
+                    break;
+                case 2:
+                    //todo Dial clock 2 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple2_small);
+                    break;
+                case 3:
+                    //todo Dial clock 3 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple3_small);
+                    break;
+                case 4:
+                    //todo Dial clock 4 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism1_small);
+                    break;
+                case 5:
+                    //todo Dial clock 5 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism2_small);
+                    break;
+                case 6:
+                    //todo Dial clock 6 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism3_small);
+                    break;
+                case 13:
+                    //todo calender 1 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar1_small);
+                    rv.setImageViewResource(R.id.iv_background, R.drawable.img_calendar1_small_bg);
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlSmallCal, configPendingIntent);
+                    break;
+                case 14:
+                    //todo calender 3 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_small);
+                    rv.setImageViewResource(R.id.iv_background2, R.drawable.img_calendar2_small_bg);
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlSmallCal, configPendingIntent);
+                    break;
+                case 15:
+                    //todo calender 2 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar2_small);
+                    rv.setImageViewResource(R.id.iv_background, R.drawable.shape_app_widget_ffffff_r25_bg);
+                    rv.setCharSequence(R.id.TClockMonthYear, "setFormat12Hour", "MMMM yyyy");
+                    rv.setCharSequence(R.id.TClockMonthYear, "setFormat24Hour", "MMMM yyyy");
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+
+                    Intent intent = new Intent(context, SmallWidgetService.class);
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+
+                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+                    rv.setRemoteAdapter(appWidgetIds[i], R.id.GridCalendarSmallView, intent);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlSmallCal, configPendingIntent);
+                    break;
+                case 16:
+                    //todo calender 4 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_small);
+                    rv.setImageViewResource(R.id.iv_background, R.drawable.shape_app_widget_1c1c1e_r25_bg);
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM yyyy");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMMM yyyy");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEEE");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "EEEE");
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlSmallCal, configPendingIntent);
+                    break;
+            }
+            appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
+
             //todo calender 3 medium
             /*  RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_medium);
             rv.setImageViewResource(R.id.iv_background, R.drawable.img_calendar2_medium_bg);
@@ -70,24 +177,11 @@ public class SmallCalenderWidgetProvider extends AppWidgetProvider {
             appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
             */
 
-            //todo calender 3 small
-            RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_small);
-            rv.setImageViewResource(R.id.iv_background2, R.drawable.img_calendar2_small_bg);
-            rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM");
-            rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM");
-            rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
-            rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
-            long startMillis=Calendar.getInstance().getTimeInMillis();
-            Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
-            builder.appendPath("time");
-            ContentUris.appendId(builder, startMillis);
-            Intent intent1   = new Intent(Intent.ACTION_VIEW).setData(builder.build());
-            PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE|PendingIntent.FLAG_UPDATE_CURRENT);
-
-            rv.setOnClickPendingIntent(R.id.RlSmallCal, configPendingIntent);
-            appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
         }
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
+        super.
+
+                onUpdate(context, appWidgetManager, appWidgetIds);
+
     }
 
     @Override

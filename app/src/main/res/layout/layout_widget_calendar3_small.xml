@@ -44,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
-                    android:autoSizeMaxTextSize="@dimen/_16sdp"
+                    android:autoSizeMaxTextSize="@dimen/_12sdp"
                     android:autoSizeMinTextSize="@dimen/_6sdp"
                     android:autoSizeTextType="uniform"
                     android:ellipsize="none"
@@ -56,8 +56,7 @@
                     android:singleLine="true"
                     android:textColor="@color/white"
                     android:textDirection="ltr"
-                    android:textSize="@dimen/_10sdp"
-                    android:textStyle="bold"  />
+                    android:textSize="@dimen/_10sdp"  />
 
                 <TextClock
                     android:id="@+id/TClockDate"
@@ -75,8 +74,7 @@
                     android:includeFontPadding="false"
                     android:singleLine="true"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_60sdp"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/_60sdp" />
 
             </LinearLayout>
         </LinearLayout>
