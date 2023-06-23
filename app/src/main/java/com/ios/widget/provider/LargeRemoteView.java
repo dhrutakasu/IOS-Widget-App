@@ -187,28 +187,29 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
         if (DayOfString[1].equals("WHITE")) {
             switch (Constants.Widget_Type_Id) {
                 case 13:
-                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
+//                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
                     views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 8f);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
                     break;
                 case 16:
-                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
-                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 15f);
+//                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 14f);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
                     break;
                 case 14:
-                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
-                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 12f);
+//                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 7f);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.light_brown));
                     break;
                 case 15:
-                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
-                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 15f);
+//                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 14f);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.black));
                     break;
             }
         }
         if (DayOfString[1].equals("BLUE")) {
+//            views.setViewPadding(R.id.TvCalendarDates, 2, 2, 2, 2);
             switch (Constants.Widget_Type_Id) {
                 case 13:
                     views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_ring_white);
@@ -218,14 +219,15 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
                 case 15:
                 case 16:
                     views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_ring);
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
                     break;
             }
-            views.setViewPadding(R.id.TvCalendarDates, 4, 4, 4, 4);
+
 //            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 9f);
             views.setViewVisibility(R.id.IvMainCalendar, View.VISIBLE);
-            views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
+
         } else {
-            views.setViewPadding(R.id.TvCalendarDates, 3, 3, 3, 3);
+//            views.setViewPadding(R.id.TvCalendarDates, 3, 3, 3, 3);
 //            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 10f);
             views.setViewVisibility(R.id.IvMainCalendar, View.GONE);
         }

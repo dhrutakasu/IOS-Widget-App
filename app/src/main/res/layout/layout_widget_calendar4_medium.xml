@@ -8,6 +8,7 @@
     android:layoutDirection="ltr">
 
     <RelativeLayout
+        android:id="@+id/RlMediumCal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -38,6 +39,7 @@
                 android:weightSum="10">
 
                 <TextClock
+                    android:id="@+id/TClockDate"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="4"
@@ -55,6 +57,7 @@
                     android:singleLine="true" />
 
                 <TextClock
+                    android:id="@+id/TClockDay"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
@@ -72,6 +75,7 @@
                     android:singleLine="true" />
 
                 <TextClock
+                    android:id="@+id/TClockMonth"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
@@ -183,7 +187,7 @@
             </LinearLayout>
 
             <GridView
-                android:id="@+id/GridCalendarLargeView"
+                android:id="@+id/GridCalendarMediumView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_alignParentStart="true"

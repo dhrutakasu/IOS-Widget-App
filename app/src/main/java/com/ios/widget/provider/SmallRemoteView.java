@@ -181,7 +181,7 @@ public class SmallRemoteView implements RemoteViewsService.RemoteViewsFactory {
         }else {
             views.setTextViewText(R.id.TvCalendarDates, "");
         }
-        views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 12f);
+        views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 8f);
         if (DayOfString[1].equals("WHITE")) {
             views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.black));
         }

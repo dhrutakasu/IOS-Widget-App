@@ -8,6 +8,7 @@
     android:layoutDirection="ltr">
 
     <RelativeLayout
+        android:id="@+id/RlMediumCal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -38,6 +39,7 @@
                 android:weightSum="10">
 
                 <TextClock
+                    android:id="@+id/TClockDay"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
@@ -55,6 +57,7 @@
                     android:textStyle="bold" />
 
                 <TextClock
+                    android:id="@+id/TClockDate"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="3"
@@ -74,6 +77,7 @@
                     android:textStyle="bold" />
 
                 <TextClock
+                    android:id="@+id/TClockMonth"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
@@ -102,7 +106,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -112,8 +116,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
-                        android:text="SUN"
-                        android:textColor="@color/white"
+                        android:text="S"
+                        android:textColor="@color/color_667182"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -123,8 +127,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
-                        android:text="MON"
-                        android:textColor="@color/white"
+                        android:text="M"
+                        android:textColor="@color/color_667182"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -134,8 +138,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
-                        android:text="TUE"
-                        android:textColor="@color/white"
+                        android:text="T"
+                        android:textColor="@color/color_667182"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -145,8 +149,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
-                        android:text="WED"
-                        android:textColor="@color/white"
+                        android:text="W"
+                        android:textColor="@color/color_667182"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -156,8 +160,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
-                        android:text="THU"
-                        android:textColor="@color/white"
+                        android:text="T"
+                        android:textColor="@color/color_667182"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -167,8 +171,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
-                        android:text="FRI"
-                        android:textColor="@color/white"
+                        android:text="F"
+                        android:textColor="@color/color_667182"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -178,17 +182,17 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
-                        android:text="SAT"
-                        android:textColor="@color/white"
+                        android:text="S"
+                        android:textColor="@color/color_667182"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
                 <GridView
-                    android:id="@+id/GridCalendarLargeView"
+                    android:id="@+id/GridCalendarMediumView"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="5"
+                    android:layout_weight="6"
                     android:gravity="center"
                     android:numColumns="7"
                     tools:listitem="@layout/item_calendar_day" />
