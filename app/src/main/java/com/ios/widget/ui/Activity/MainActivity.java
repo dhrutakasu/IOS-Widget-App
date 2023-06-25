@@ -1,6 +1,7 @@
 package com.ios.widget.ui.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
 import com.ios.widget.ui.Adapter.MainWidgetListAdapter;
+import com.ios.widget.ui.Adapter.TypeImageAdapter;
 import com.ios.widget.utils.Constants;
 
 import java.util.ArrayList;
@@ -17,8 +19,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private Context context;
-    private RecyclerView RvWidgetList;
-    private ArrayList<WidgetModel> modelArrayList;
+    private RecyclerView RvTypeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         context = this;
-        RvWidgetList = (RecyclerView) findViewById(R.id.RvWidgetList);
+        RvTypeList = (RecyclerView) findViewById(R.id.RvTypeList);
     }
 
     private void iniListeners() {
@@ -39,10 +40,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initActions() {
-        modelArrayList = new ArrayList<>();
-        modelArrayList.addAll(Constants.getWidgetLists());
+        ArrayList<Integer> TypesArrayList=new ArrayList<>();
+        TypesArrayList.add(R.drawable.btn_trendy);
+        TypesArrayList.add(R.drawable.btn_calendar);
+        TypesArrayList.add(R.drawable.btn_weather);
+        TypesArrayList.add(R.drawable.btn_alarm);
+        TypesArrayList.add(R.drawable.btn_x_panel);
+        TypesArrayList.add(R.drawable.btn_photo);
 
-        RvWidgetList.setLayoutManager(new LinearLayoutManager(context));
-        RvWidgetList.setAdapter(new MainWidgetListAdapter(context, modelArrayList));
+        RvTypeList.setLayoutManager(new GridLayoutManager(context,2));
+        RvTypeList.setAdapter(new TypeImageAdapter(context,TypesArrayList));
     }
 }

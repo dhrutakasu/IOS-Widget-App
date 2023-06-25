@@ -118,8 +118,8 @@ public class MediumCalenderWidgetProvider extends AppWidgetProvider {
                     //todo calender 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_medium);
                     rv.setImageViewResource(R.id.iv_background, R.drawable.img_calendar2_medium_bg);
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM, yyyy");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM, yyyy");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE, yyyy");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
                     rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
                     intent = new Intent(context, MediumWidgetService.class);

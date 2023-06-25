@@ -17,25 +17,11 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="2dp">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/TabWidget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_8sdp"
-                android:background="@android:color/transparent"
-                app:tabBackground="@drawable/ic_tab_selector"
-                app:tabGravity="center"
-                app:tabIndicatorHeight="0dp" />
-
             <TextView
                 android:id="@+id/TvAddWidget"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_40sdp"
-                android:layout_below="@+id/TabWidget"
+                android:layout_below="@+id/TabSizeLayout"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="center"
@@ -52,6 +38,38 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_16sdp" />
 
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/TabSizeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_below="@+id/TabWidget"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="@dimen/_25sdp"
+                android:layout_marginEnd="@dimen/_25sdp"
+                android:layout_marginBottom="@dimen/_25sdp"
+                android:background="@drawable/ic_radius_bg"
+                app:tabMode="fixed"
+                app:tabGravity="fill"
+                app:tabIndicatorHeight="0dp"
+                app:tabTextColor="#000000"
+                app:tabSelectedTextColor="#FF3B30"
+                app:tabBackground="@android:color/transparent" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/TabWidget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:background="@android:color/transparent"
+                app:tabBackground="@drawable/ic_tab_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp" />
+
         </RelativeLayout>
 
         <androidx.viewpager.widget.ViewPager
@@ -61,4 +79,5 @@
             android:layout_above="@+id/RlButton"
             android:layout_alignParentTop="true" />
     </RelativeLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

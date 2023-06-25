@@ -133,8 +133,8 @@ public class SmallCalenderWidgetProvider extends AppWidgetProvider {
                     //todo calender 3 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_small);
                     rv.setImageViewResource(R.id.iv_background2, R.drawable.img_calendar2_small_bg);
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
                     rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
                     startMillis = Calendar.getInstance().getTimeInMillis();

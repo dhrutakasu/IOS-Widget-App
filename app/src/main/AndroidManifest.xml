@@ -10,19 +10,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IOSWidgetApp">
         <activity
+            android:name=".ui.Activity.TabActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.Activity.WidgetItemActivity"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.android.calendar.AgendaActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.Activity.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.Activity.TestActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.Activity.SplashActivity"
             android:exported="true"
@@ -37,7 +39,6 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />
-
 
         <receiver
             android:name=".provider.SmallCalenderWidgetProvider"

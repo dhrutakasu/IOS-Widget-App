@@ -205,8 +205,8 @@ public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
                     break;
                 case 14:
                     views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
-                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 8f);
-                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.light_brown));
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 10f);
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.black));
                     break;
                 case 15:
                     views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);

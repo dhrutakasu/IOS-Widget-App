@@ -132,15 +132,15 @@ public class LargeCalenderWidgetProvider extends AppWidgetProvider {
                     //todo calender 3 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_large);
                     rv.setImageViewResource(R.id.iv_background, R.drawable.img_calendar2_large_bg);
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM, yyyy");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM, yyyy");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE, yyyy");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
                     rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
-                    intent = new Intent(context, LargeWidgetService.class);
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-
-                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-                    rv.setRemoteAdapter(appWidgetIds[i], R.id.GridCalendarLargeView, intent);
+//                    intent = new Intent(context, LargeWidgetService.class);
+//                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+//
+//                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+//                    rv.setRemoteAdapter(appWidgetIds[i], R.id.GridCalendarLargeView, intent);
                     startMillis = Calendar.getInstance().getTimeInMillis();
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");

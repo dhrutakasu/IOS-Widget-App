@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">IOS-Widget App</string>
+    <string name="widgets_i16">Widgets <font color="#FF3B30">i16</font></string>
+    <string name="widget_category">Widget Category</string>
 </resources>

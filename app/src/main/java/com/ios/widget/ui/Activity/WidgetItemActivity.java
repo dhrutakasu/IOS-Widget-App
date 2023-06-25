@@ -27,6 +27,7 @@ import com.ios.widget.provider.LargeWidgetService;
 import com.ios.widget.ui.Adapter.WidgetPagerAdapter;
 import com.ios.widget.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -38,8 +39,11 @@ public class WidgetItemActivity extends AppCompatActivity {
     private TextView TvAddWidget;
 
     private Integer[] images;
-    private TabLayout TabWidget;
+    private TabLayout TabWidget,TabSizeLayout;
     private WidgetModel widgetModel;
+    private int TabPos;
+    private ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
+    private WidgetPagerAdapter adapter;
 
     public static void UpdateWidget(int i, String packageName, Context context, int intExtra) {
         @SuppressLint("RemoteViewLayout") RemoteViews WidgetViews = new RemoteViews(packageName, R.layout.layout_widget_calendar3_large);
@@ -79,11 +83,26 @@ public class WidgetItemActivity extends AppCompatActivity {
         PagerWidget = (ViewPager) findViewById(R.id.PagerWidget);
         TvAddWidget = (TextView) findViewById(R.id.TvAddWidget);
         TabWidget = (TabLayout) findViewById(R.id.TabWidget);
+        TabSizeLayout = (TabLayout) findViewById(R.id.TabSizeLayout);
     }
 
     private void initIntents() {
 //        if (getIntent().getIntExtra())
         pos = getIntent().getIntExtra(Constants.ITEM_POSITION, 0);
+        TabPos = getIntent().getIntExtra(Constants.TabPos, 0);
+        if (TabPos == 0) {
+            modelArrayList = Constants.getTrendyWidgetLists();
+        } else if (TabPos == 1) {
+            modelArrayList = Constants.getCalendarWidgetLists();
+        } else if (TabPos == 2) {
+            modelArrayList = Constants.getWeatherWidgetLists();
+        } else if (TabPos == 3) {
+            modelArrayList = Constants.getClockWidgetLists();
+        } else if (TabPos == 4) {
+            modelArrayList = Constants.getXPanelWidgetLists();
+        } else if (TabPos == 5) {
+            modelArrayList = Constants.getPhotoWidgetLists();
+        }
     }
 
     private void iniListeners() {
@@ -152,11 +171,38 @@ public class WidgetItemActivity extends AppCompatActivity {
     }
 
     private void initActions() {
-        widgetModel = Constants.getWidgetLists().get(pos);
-        images = new Integer[]{widgetModel.getSmall(), widgetModel.getMedium(), widgetModel.getLarge()};
+//        widgetModel = Constants.getWidgetLists().get(pos);
+//        images = new Integer[]{widgetModel.getSmall(), widgetModel.getMedium(), widgetModel.getLarge()};
+        TabSizeLayout.addTab(TabSizeLayout.newTab().setText("Small"));
+        TabSizeLayout.addTab(TabSizeLayout.newTab().setText("Medium"));
+        TabSizeLayout.addTab(TabSizeLayout.newTab().setText("Large"));
 
-        WidgetPagerAdapter adapter = new WidgetPagerAdapter(this, images);
+        adapter = new WidgetPagerAdapter(this, modelArrayList, 0);
         PagerWidget.setAdapter(adapter);
         TabWidget.setupWithViewPager(PagerWidget, true);
+        TabSizeLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+//                if (tab.getPosition()==0) {
+//                    adapter = new WidgetPagerAdapter(WidgetItemActivity.this, modelArrayList, 0);
+//                }else if(tab.getPosition()==1){
+//                    adapter = new WidgetPagerAdapter(WidgetItemActivity.this, modelArrayList, 1);
+//                }else {
+//                    adapter = new WidgetPagerAdapter(WidgetItemActivity.this, modelArrayList, 2);
+//                }
+                adapter.setchange(tab.getPosition());
+//                PagerWidget.getAdapter().notifyDataSetChanged();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 }

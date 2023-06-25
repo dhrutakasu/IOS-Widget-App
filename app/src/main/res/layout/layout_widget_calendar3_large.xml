@@ -10,8 +10,8 @@
         android:id="@+id/RlLargeCal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/_40sdp"
-        android:paddingEnd="@dimen/_40sdp">
+        android:paddingStart="@dimen/_20sdp"
+        android:paddingEnd="@dimen/_20sdp">
 
         <ImageView
             android:id="@+id/iv_background"
@@ -34,7 +34,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4.5"
+                android:layout_weight="4"
                 android:gravity="center"
                 android:weightSum="10"
                 android:orientation="vertical">
@@ -44,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1.5"
-                    android:autoSizeMaxTextSize="@dimen/_14sdp"
+                    android:autoSizeMaxTextSize="@dimen/_18sdp"
                     android:autoSizeMinTextSize="@dimen/_2sdp"
                     android:autoSizeTextType="uniform"
                     android:ellipsize="none"
@@ -54,16 +54,18 @@
                     android:gravity="center"
                     android:includeFontPadding="false"
                     android:singleLine="true"
+                    android:textAllCaps="true"
                     android:textColor="@color/white"
                     android:textDirection="ltr"
-                    android:textSize="@dimen/_14sdp" />
+                    android:textSize="@dimen/_18sdp"
+                    android:textStyle="bold" />
 
                 <TextClock
                     android:id="@+id/TClockDate"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="2"
-                    android:autoSizeMaxTextSize="@dimen/_64sdp"
+                    android:layout_weight="5"
+                    android:autoSizeMaxTextSize="@dimen/_110sdp"
                     android:autoSizeMinTextSize="@dimen/_6sdp"
                     android:autoSizeTextType="uniform"
                     android:ellipsize="none"
@@ -73,104 +75,9 @@
                     android:gravity="center"
                     android:includeFontPadding="false"
                     android:singleLine="true"
+                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_48sdp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/main_semibold"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:text="SUN"
-                        android:textColor="@color/brown"
-                        android:textSize="@dimen/_8sdp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/main_semibold"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:text="MON"
-                        android:textColor="@color/brown"
-                        android:textSize="@dimen/_8sdp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/main_semibold"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:text="TUE"
-                        android:textColor="@color/brown"
-                        android:textSize="@dimen/_8sdp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/main_semibold"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:text="WED"
-                        android:textColor="@color/brown"
-                        android:textSize="@dimen/_8sdp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/main_semibold"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:text="THU"
-                        android:textColor="@color/brown"
-                        android:textSize="@dimen/_8sdp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/main_semibold"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:text="FRI"
-                        android:textColor="@color/brown"
-                        android:textSize="@dimen/_8sdp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/main_semibold"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:text="SAT"
-                        android:textColor="@color/brown"
-                        android:textSize="@dimen/_8sdp" />
-                </LinearLayout>
-
-                <GridView
-                    android:id="@+id/GridCalendarLargeView"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_weight="4.5"
-                    android:gravity="center"
-                    android:numColumns="7"
-                    tools:listitem="@layout/item_calendar_day" />
-
+                    android:textSize="@dimen/_110sdp" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
