@@ -186,43 +186,42 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
 
         if (DayOfString[1].equals("WHITE")) {
             switch (Constants.Widget_Type_Id) {
-                case 13:
+                case 4:
 //                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
                     views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 8f);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
                     break;
-                case 16:
-//                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
-                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 14f);
-                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
-                    break;
-                case 14:
+                case 5:
 //                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
                     views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 7f);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.light_brown));
                     break;
-                case 15:
+                case 6:
 //                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
                     views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 14f);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.black));
+                    break;
+                case 7:
+//                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 14f);
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
                     break;
             }
         }
         if (DayOfString[1].equals("BLUE")) {
 //            views.setViewPadding(R.id.TvCalendarDates, 2, 2, 2, 2);
             switch (Constants.Widget_Type_Id) {
-                case 13:
+                case 4:
                     views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_ring_white);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.color_0263FF));
                     break;
-                case 14:
-                case 15:
-                case 16:
+                case 5:
+                case 6:
+                case 7:
                     views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_ring);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
                     break;
             }
-
 //            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 9f);
             views.setViewVisibility(R.id.IvMainCalendar, View.VISIBLE);
 

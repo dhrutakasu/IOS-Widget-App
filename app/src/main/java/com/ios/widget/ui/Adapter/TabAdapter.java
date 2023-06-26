@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+//todo last remove
 public class TabAdapter extends RecyclerView.Adapter<TabAdapter.MyViewHolder> {
     private final Context context;
     private final ArrayList<Integer> arrayList;

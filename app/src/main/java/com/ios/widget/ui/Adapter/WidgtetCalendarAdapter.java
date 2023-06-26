@@ -128,7 +128,6 @@ public class WidgtetCalendarAdapter extends BaseAdapter {
         }
 
         TvDates = (TextView) view.findViewById(R.id.TvCalendarDates);
-//        RlMainCalendar = (RelativeLayout) view.findViewById(R.id.RlMainCalendar);
 
         String[] DayOfString = strings.get(position).split("-");
         String Day = DayOfString[0];

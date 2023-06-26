@@ -2,4 +2,10 @@
     <string name="app_name">IOS-Widget App</string>
     <string name="widgets_i16">Widgets <font color="#FF3B30">i16</font></string>
     <string name="widget_category">Widget Category</string>
+    <string name="str_rate">Rate App</string>
+    <string name="share_app">Share App</string>
+    <string name="policy">Privacy Policy</string>
+    <string name="about">About us</string>
+    <string name="setting">Setting</string>
+    <string name="my_widget">My widget</string>
 </resources>

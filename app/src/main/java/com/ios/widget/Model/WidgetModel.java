@@ -1,7 +1,7 @@
 package com.ios.widget.Model;
 
 public class WidgetModel {
-    int Small, Medium, Large;
+    int Small, Medium, Large,Position;
     String Title;
 
     public WidgetModel(int small, int medium, int large) {
@@ -11,11 +11,12 @@ public class WidgetModel {
     }
 
 
-    public WidgetModel(int small, int medium, int large,String title) {
+    public WidgetModel(int small, int medium, int large,String title,int position) {
         Small = small;
         Medium = medium;
         Large = large;
         Title = title;
+        Position = position;
     }
 
     public int getSmall() {
@@ -48,5 +49,13 @@ public class WidgetModel {
 
     public void setTitle(String title) {
         Title = title;
+    }
+
+    public int getPosition() {
+        return Position;
+    }
+
+    public void setPosition(int position) {
+        Position = position;
     }
 }

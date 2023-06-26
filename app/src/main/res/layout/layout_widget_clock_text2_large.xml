@@ -4,11 +4,13 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:forceDarkAllowed="false"
+    android:paddingStart="@dimen/_40sdp"
+    android:paddingEnd="@dimen/_40sdp"
     android:gravity="top|center_vertical|center_horizontal|center"
     android:layoutDirection="ltr">
 
     <RelativeLayout
-        android:id="@+id/RlSmallClock"
+        android:id="@+id/RlLargeClock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -18,7 +20,7 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/img_clock_text1_bg_small" />
+            android:src="@drawable/img_clock_text2_bg_small" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,7 +52,9 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:padding="@dimen/_5sdp"
-                    android:background="@drawable/img_clock_text1_dial_small"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/img_clock_text2_dial_large"
                     android:orientation="horizontal"
                     android:weightSum="4">
 
@@ -63,14 +67,14 @@
                             android:id="@+id/IvHourMask"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/img_clock_text1_mask_small" />
+                            android:background="@drawable/img_clock_text2_mask_large" />
 
                         <TextClock
                             android:id="@+id/TClockHour"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:autoSizeMaxTextSize="@dimen/_22ssp"
+                            android:autoSizeMaxTextSize="@dimen/_35ssp"
                             android:autoSizeMinTextSize="@dimen/_5ssp"
                             android:autoSizeTextType="uniform"
                             android:ellipsize="none"
@@ -89,7 +93,23 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/img_clock_text1_line_hour_large" />
+                            android:src="@drawable/img_clock_text2_line_large" />
+                        <ImageView
+                            android:id="@+id/IvTextLeftHook"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/img_clock_text2_decor" />
+
+                        <ImageView
+                            android:id="@+id/IvTextLeftHookCenter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/img_clock_text2_decor" />
                     </RelativeLayout>
 
                     <ImageView
@@ -105,14 +125,14 @@
                             android:id="@+id/IvMinuteMask"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/img_clock_text1_mask_small" />
+                            android:background="@drawable/img_clock_text2_mask_large" />
 
                         <TextClock
                             android:id="@+id/TClockMinutes"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:autoSizeMaxTextSize="@dimen/_22ssp"
+                            android:autoSizeMaxTextSize="@dimen/_35ssp"
                             android:autoSizeMinTextSize="@dimen/_5ssp"
                             android:autoSizeTextType="uniform"
                             android:ellipsize="none"
@@ -130,7 +150,24 @@
                             android:id="@+id/IvTextRight"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/img_clock_text1_line_minute_large" />
+                            android:src="@drawable/img_clock_text2_line_large" />
+
+                        <ImageView
+                            android:id="@+id/IvTextRightHook"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/img_clock_text2_decor" />
+
+                        <ImageView
+                            android:id="@+id/IvTextRightHookCenter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/img_clock_text2_decor" />
                     </RelativeLayout>
                 </LinearLayout>
                 <ImageView

@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
@@ -16,9 +19,10 @@ import com.ios.widget.utils.Constants;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Context context;
+    private ImageView IvSettings,IvMyWidget;
     private RecyclerView RvTypeList;
 
     @Override
@@ -32,11 +36,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         context = this;
+        IvSettings = (ImageView) findViewById(R.id.IvSettings);
+        IvMyWidget = (ImageView) findViewById(R.id.IvMyWidget);
         RvTypeList = (RecyclerView) findViewById(R.id.RvTypeList);
     }
 
     private void iniListeners() {
-
+        IvSettings.setOnClickListener(this);
+        IvMyWidget.setOnClickListener(this);
     }
 
     private void initActions() {
@@ -50,5 +57,17 @@ public class MainActivity extends AppCompatActivity {
 
         RvTypeList.setLayoutManager(new GridLayoutManager(context,2));
         RvTypeList.setAdapter(new TypeImageAdapter(context,TypesArrayList));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.IvSettings:
+                startActivity(new Intent(context, SettingActivity.class));
+                break;
+            case R.id.IvMyWidget:
+                startActivity(new Intent(context, MyWidgetsActivity.class));
+                break;
+        }
     }
 }

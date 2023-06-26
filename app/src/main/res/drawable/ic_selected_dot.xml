@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape android:shape="line">
-            <corners android:radius="@dimen/_20sdp" />
-            <stroke
-            android:color="@color/purple_500"
-            android:width="5dp"/>
+        <shape
+            android:innerRadius="0dp"
+            android:shape="ring"
+            android:thickness="5dp"
+            android:useLevel="false">
+            <solid android:color="@color/orange"/>
         </shape>
     </item>
 </layer-list>

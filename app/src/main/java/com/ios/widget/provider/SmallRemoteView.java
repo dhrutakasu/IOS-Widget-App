@@ -9,6 +9,7 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.ios.widget.R;
+import com.ios.widget.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -178,18 +179,26 @@ public class SmallRemoteView implements RemoteViewsService.RemoteViewsFactory {
         System.out.println("-********* Day : " + Day);
         if (!DayOfString[1].equals("GREY")) {
             views.setTextViewText(R.id.TvCalendarDates, Day);
-        }else {
+        } else {
             views.setTextViewText(R.id.TvCalendarDates, "");
         }
         views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 8f);
         if (DayOfString[1].equals("WHITE")) {
-            views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.black));
+            switch (Constants.Widget_Type_Id) {
+                case 6:
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.black));
+                    break;
+            }
         }
         if (DayOfString[1].equals("BLUE")) {
-            views.setViewPadding(R.id.TvCalendarDates, 4, 4, 4, 4);
+            switch (Constants.Widget_Type_Id) {
+                case 6:
+                    views.setViewPadding(R.id.TvCalendarDates, 4, 4, 4, 4);
 //            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 9f);
-            views.setViewVisibility(R.id.IvMainCalendar, View.VISIBLE);
-            views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
+                    views.setViewVisibility(R.id.IvMainCalendar, View.VISIBLE);
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
+                    break;
+            }
         } else {
             views.setViewPadding(R.id.TvCalendarDates, 3, 3, 3, 3);
 //            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 10f);

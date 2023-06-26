@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
@@ -31,19 +32,21 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class WidgetItemActivity extends AppCompatActivity {
+public class WidgetItemActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Context context;
-    private int pos;
+    private ImageView IvBack;
+    private TextView TvTitle;
     private ViewPager PagerWidget;
-    private TextView TvAddWidget;
+    private ImageView IvAddWidget;
 
-    private Integer[] images;
-    private TabLayout TabWidget,TabSizeLayout;
-    private WidgetModel widgetModel;
+    private int pos;
+    private TabLayout TabWidget, TabSizeLayout;
     private int TabPos;
     private ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
     private WidgetPagerAdapter adapter;
+    private AppWidgetManager manager;
+    ComponentName name;
 
     public static void UpdateWidget(int i, String packageName, Context context, int intExtra) {
         @SuppressLint("RemoteViewLayout") RemoteViews WidgetViews = new RemoteViews(packageName, R.layout.layout_widget_calendar3_large);
@@ -77,17 +80,16 @@ public class WidgetItemActivity extends AppCompatActivity {
         iniListeners();
         initActions();
     }
-
     private void initViews() {
         context = this;
+        IvBack = (ImageView) findViewById(R.id.IvBack);
+        TvTitle = (TextView) findViewById(R.id.TvTitle);
         PagerWidget = (ViewPager) findViewById(R.id.PagerWidget);
-        TvAddWidget = (TextView) findViewById(R.id.TvAddWidget);
+        IvAddWidget = (ImageView) findViewById(R.id.IvAddWidget);
         TabWidget = (TabLayout) findViewById(R.id.TabWidget);
         TabSizeLayout = (TabLayout) findViewById(R.id.TabSizeLayout);
     }
-
     private void initIntents() {
-//        if (getIntent().getIntExtra())
         pos = getIntent().getIntExtra(Constants.ITEM_POSITION, 0);
         TabPos = getIntent().getIntExtra(Constants.TabPos, 0);
         if (TabPos == 0) {
@@ -104,75 +106,17 @@ public class WidgetItemActivity extends AppCompatActivity {
             modelArrayList = Constants.getPhotoWidgetLists();
         }
     }
-
     private void iniListeners() {
-        TvAddWidget.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AppWidgetManager manager;
-                ComponentName name;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    Constants.Widget_Id = PagerWidget.getCurrentItem();
-                    Constants.Widget_Type_Id = pos;
-                    switch (PagerWidget.getCurrentItem()) {
-                        case 0:
-                            manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
-                            name = new ComponentName(context, SmallCalenderWidgetProvider.class);
-                            if (manager != null && manager.isRequestPinAppWidgetSupported()) {
-                                new Handler().postDelayed(() -> {
-                                    Intent intent = new Intent(context, NoteWidgetCreatedReceiver.class);
-                                    intent.putExtra(Constants.TAG_WIDGET_NOTE_ID, pos);
-                                    PendingIntent pendingIntent;
-                                    pendingIntent = PendingIntent.getBroadcast(
-                                            context,
-                                            0, intent,
-                                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                                    manager.requestPinAppWidget(name, (Bundle) null, pendingIntent);
-                                }, 100);
-                            }
-                            break;
-                        case 1:
-                            manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
-                            name = new ComponentName(context, MediumCalenderWidgetProvider.class);
-                            if (manager != null && manager.isRequestPinAppWidgetSupported()) {
-                                new Handler().postDelayed(() -> {
-                                    Intent intent = new Intent(context, NoteWidgetCreatedReceiver.class);
-                                    intent.putExtra(Constants.TAG_WIDGET_NOTE_ID, pos);
-                                    PendingIntent pendingIntent;
-                                    pendingIntent = PendingIntent.getBroadcast(
-                                            context,
-                                            0, intent,
-                                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                                    manager.requestPinAppWidget(name, (Bundle) null, pendingIntent);
-                                }, 100);
-                            }
-                            break;
-                        case 2:
-                            manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
-                            name = new ComponentName(context, LargeCalenderWidgetProvider.class);
-                            if (manager != null && manager.isRequestPinAppWidgetSupported()) {
-                                new Handler().postDelayed(() -> {
-                                    Intent intent = new Intent(context, NoteWidgetCreatedReceiver.class);
-                                    intent.putExtra(Constants.TAG_WIDGET_NOTE_ID, pos);
-                                    PendingIntent pendingIntent;
-                                    pendingIntent = PendingIntent.getBroadcast(
-                                            context,
-                                            0, intent,
-                                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                                    manager.requestPinAppWidget(name, (Bundle) null, pendingIntent);
-                                }, 100);
-                            }
-                            break;
-                    }
-
-                }
-            }
-        });
+        IvBack.setOnClickListener(this);
+        IvAddWidget.setOnClickListener(this);
     }
-
     private void initActions() {
-//        widgetModel = Constants.getWidgetLists().get(pos);
-//        images = new Integer[]{widgetModel.getSmall(), widgetModel.getMedium(), widgetModel.getLarge()};
+        if (modelArrayList.size() > 1) {
+            TabWidget.setVisibility(View.VISIBLE);
+        } else {
+            TabWidget.setVisibility(View.GONE);
+        }
+
         TabSizeLayout.addTab(TabSizeLayout.newTab().setText("Small"));
         TabSizeLayout.addTab(TabSizeLayout.newTab().setText("Medium"));
         TabSizeLayout.addTab(TabSizeLayout.newTab().setText("Large"));
@@ -183,15 +127,8 @@ public class WidgetItemActivity extends AppCompatActivity {
         TabSizeLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-//                if (tab.getPosition()==0) {
-//                    adapter = new WidgetPagerAdapter(WidgetItemActivity.this, modelArrayList, 0);
-//                }else if(tab.getPosition()==1){
-//                    adapter = new WidgetPagerAdapter(WidgetItemActivity.this, modelArrayList, 1);
-//                }else {
-//                    adapter = new WidgetPagerAdapter(WidgetItemActivity.this, modelArrayList, 2);
-//                }
                 adapter.setchange(tab.getPosition());
-//                PagerWidget.getAdapter().notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -204,5 +141,47 @@ public class WidgetItemActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.IvBack:
+                onBackPressed();
+                break;
+            case R.id.IvAddWidget:
+                GotoAddWidget();
+                break;
+        }
+    }
+    private void GotoAddWidget() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Constants.Widget_Id = PagerWidget.getCurrentItem();
+            Constants.Widget_Type_Id = modelArrayList.get(PagerWidget.getCurrentItem()).getPosition();
+            manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
+            switch (TabSizeLayout.getSelectedTabPosition()) {
+                case 0:
+                    name = new ComponentName(context, SmallCalenderWidgetProvider.class);
+                    break;
+                case 1:
+                    name = new ComponentName(context, MediumCalenderWidgetProvider.class);
+                    break;
+                case 2:
+                    name = new ComponentName(context, LargeCalenderWidgetProvider.class);
+                    break;
+            }
+            if (manager != null && manager.isRequestPinAppWidgetSupported()) {
+                new Handler().postDelayed(() -> {
+                    Intent intent = new Intent(context, NoteWidgetCreatedReceiver.class);
+                    intent.putExtra(Constants.TAG_WIDGET_NOTE_ID, pos);
+                    PendingIntent pendingIntent;
+                    pendingIntent = PendingIntent.getBroadcast(
+                            context,
+                            0, intent,
+                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    manager.requestPinAppWidget(name, (Bundle) null, pendingIntent);
+                }, 100);
+            }
+        }
     }
 }

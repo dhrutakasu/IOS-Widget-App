@@ -11,6 +11,7 @@ import com.ios.widget.R;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 public class WidgetPagerAdapter extends PagerAdapter {
@@ -31,7 +32,7 @@ public class WidgetPagerAdapter extends PagerAdapter {
 
         View viewItem = inflater.inflate(R.layout.item_pager_list, container, false);
         ImageView IvSlider = viewItem.findViewById(R.id.IvSlider);
-
+        System.out.println("*** pos : "+pos);
         if (pos == 0) {
             IvSlider.setImageResource(imagesArray.get(position).getSmall());
         } else if (pos == 1) {
@@ -59,7 +60,12 @@ public class WidgetPagerAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
     public void setchange(int position) {
+        System.out.println("**** Change Pos : "+position);
         pos = position;
         notifyDataSetChanged();
     }

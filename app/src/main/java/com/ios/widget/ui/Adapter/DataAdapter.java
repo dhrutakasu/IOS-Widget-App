@@ -15,6 +15,7 @@ import com.ios.widget.ui.Activity.TabActivity;
 
 import java.util.ArrayList;
 
+//todo last remove
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> {
     private final ArrayList<String> arrayList;
     private final Context context;

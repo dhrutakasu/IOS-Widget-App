@@ -19,6 +19,7 @@ import com.ios.widget.utils.Constants;
 
 import java.util.ArrayList;
 
+//todo last remove
 public class TabActivity extends AppCompatActivity {
 
     RecyclerView myRecyclerView;

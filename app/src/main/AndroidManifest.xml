@@ -10,21 +10,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IOSWidgetApp">
         <activity
+            android:name=".ui.Activity.MyWidgetsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Activity.SettingActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.Activity.TabActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.Activity.WidgetItemActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.Activity.MainActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.Activity.TestActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.Activity.SplashActivity"
             android:exported="true"

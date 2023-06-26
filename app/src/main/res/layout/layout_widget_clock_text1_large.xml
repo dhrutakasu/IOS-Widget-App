@@ -4,6 +4,8 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:forceDarkAllowed="false"
+    android:paddingStart="@dimen/_40sdp"
+    android:paddingEnd="@dimen/_40sdp"
     android:gravity="top|center_vertical|center_horizontal|center"
     android:layoutDirection="ltr">
 
@@ -50,6 +52,8 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:padding="@dimen/_5sdp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
                     android:background="@drawable/img_clock_text1_dial_small"
                     android:orientation="horizontal"
                     android:weightSum="4">
@@ -70,7 +74,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:autoSizeMaxTextSize="@dimen/_20ssp"
+                            android:autoSizeMaxTextSize="@dimen/_40ssp"
                             android:autoSizeMinTextSize="@dimen/_5ssp"
                             android:autoSizeTextType="uniform"
                             android:ellipsize="none"
@@ -113,7 +117,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:autoSizeMaxTextSize="@dimen/_20ssp"
+                            android:autoSizeMaxTextSize="@dimen/_40ssp"
                             android:autoSizeMinTextSize="@dimen/_5ssp"
                             android:autoSizeTextType="uniform"
                             android:ellipsize="none"
