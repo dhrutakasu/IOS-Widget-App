@@ -9,9 +9,12 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.provider.Settings;
 import android.widget.RemoteViews;
 
+import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
+import com.ios.widget.helper.DatabaseHelper;
 import com.ios.widget.utils.Constants;
 
 import java.util.Calendar;
@@ -34,14 +37,43 @@ public class LargeCalenderWidgetProvider extends AppWidgetProvider {
                 case 0:
                 case 20:
                     //todo x-panel 1 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_large);
 
+//                    rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.shape_app_widget_121212_r25_bg), 30));
+
+                    rv.setCharSequence(R.id.TClockAMPM, "setFormat12Hour", "a");
+                    rv.setCharSequence(R.id.TClockAMPM, "setFormat24Hour", "a");
+                    rv.setCharSequence(R.id.TClockHrMin, "setFormat12Hour", "h:mm");
+                    rv.setCharSequence(R.id.TClockHrMin, "setFormat24Hour", "h:mm");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEE");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "EEE");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMMM");
+
+                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.LlLargeClock, configPendingIntent);
+                    rv.setOnClickPendingIntent(R.id.LlLargeDate, configPendingIntent);
+
+                    intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.LlLargeBattery, configPendingIntent);
+
+                    intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.LlLargeStorage, configPendingIntent);
                     break;
                 case 1:
                 case 18:
                     //todo clock 8 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text2_large);
 
-                    rv.setImageViewResource(R.id.iv_background, R.drawable.img_clock_text2_bg_small);
+                    rv.setImageViewBitmap(R.id.iv_background,Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_clock_text2_bg_small),30));
                     rv.setImageViewResource(R.id.IvTextLeft, R.drawable.img_clock_text2_line_large);
                     rv.setImageViewResource(R.id.IvTextRight, R.drawable.img_clock_text2_line_large);
                     rv.setImageViewResource(R.id.IvTextLeftHook, R.drawable.img_clock_text2_decor);
@@ -73,7 +105,7 @@ public class LargeCalenderWidgetProvider extends AppWidgetProvider {
                 case 4:
                     //todo calender 1 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar1_large);
-                    rv.setImageViewResource(R.id.iv_background, R.drawable.img_calendar1_small_bg);
+                    rv.setImageViewBitmap(R.id.iv_background,Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_calendar1_small_bg),30));
                     rv.setCharSequence(R.id.TClockYear, "setFormat12Hour", "yyyy");
                     rv.setCharSequence(R.id.TClockYear, "setFormat24Hour", "yyyy");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM");
@@ -98,7 +130,7 @@ public class LargeCalenderWidgetProvider extends AppWidgetProvider {
                 case 5:
                     //todo calender 2 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_large);
-                    rv.setImageViewResource(R.id.iv_background, R.drawable.img_calendar2_large_bg);
+                    rv.setImageViewBitmap(R.id.iv_background,Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_calendar2_large_bg),30));
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
@@ -116,9 +148,7 @@ public class LargeCalenderWidgetProvider extends AppWidgetProvider {
                 case 6:
                     //todo calender 3 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar2_large);
-                    rv.setImageViewResource(R.id.iv_background, R.drawable.shape_app_widget_ffffff_r25_bg);
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM, yyyy");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM, yyyy");
+//                    rv.setImageViewResource(R.id.iv_background, R.drawable.shape_app_widget_ffffff_r25_bg);
                     intent = new Intent(context, LargeWidgetService.class);
                     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
 
@@ -137,9 +167,13 @@ public class LargeCalenderWidgetProvider extends AppWidgetProvider {
                 case 7:
                     //todo calender 4 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_large);
-                    rv.setImageViewResource(R.id.iv_background, R.drawable.shape_app_widget_1c1c1e_r25_bg);
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM, yyyy");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM, yyyy");
+//                    rv.setImageViewBitmap(R.id.iv_background,Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.shape_app_widget_1c1c1e_r25_bg),30));
+                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM, yyyy");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMMM, yyyy");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEEE");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "EEEE");
                     intent = new Intent(context, LargeWidgetService.class);
                     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
 
@@ -236,6 +270,20 @@ public class LargeCalenderWidgetProvider extends AppWidgetProvider {
                     break;
                 case 19:
                     //todo clock 9 large
+
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text3_large);
+
+                     rv.setCharSequence(R.id.TClockHour, "setFormat12Hour", "HH");
+                    rv.setCharSequence(R.id.TClockHour, "setFormat24Hour", "HH");
+                    rv.setCharSequence(R.id.TClockMinutes, "setFormat12Hour", "mm");
+                    rv.setCharSequence(R.id.TClockMinutes, "setFormat24Hour", "mm");
+                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat12Hour", "d EEEE");
+                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat24Hour", "d EEEE");
+
+                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlLargeClock, configPendingIntent);
                     break;
                 case 21:
                     //todo x-panel 2 large
@@ -245,6 +293,10 @@ public class LargeCalenderWidgetProvider extends AppWidgetProvider {
                     break;
 
             }
+
+            DatabaseHelper helper = new DatabaseHelper(context);
+            WidgetData widgetData = new WidgetData("L", String.valueOf(Constants.Widget_Type_Id), String.valueOf(appWidgetIds[i]));
+            helper.InsertWidget(widgetData);
             appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
            /* switch (Constants.Widget_Type_Id) {
                 case 1:

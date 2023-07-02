@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:src="@drawable/shape_app_widget_1c1c1e_r25_bg"/>
+            android:src="@drawable/img_calendar4_medium_bg" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -39,24 +39,6 @@
                 android:weightSum="10">
 
                 <TextClock
-                    android:id="@+id/TClockDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="4"
-                    android:autoSizeMaxTextSize="@dimen/_62ssp"
-                    android:autoSizeMinTextSize="@dimen/_24ssp"
-                    android:autoSizeTextType="uniform"
-                    android:ellipsize="none"
-                    android:format12Hour="d"
-                    android:format24Hour="d"
-                    android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_62ssp"
-                    android:textStyle="bold"
-                    android:singleLine="true" />
-
-                <TextClock
                     android:id="@+id/TClockDay"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -70,8 +52,26 @@
                     android:gravity="center"
                     android:includeFontPadding="false"
                     android:textAllCaps="true"
-                    android:textColor="@color/color_F7F7F7"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_16ssp"
+                    android:singleLine="true" />
+
+                <TextClock
+                    android:id="@+id/TClockDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:autoSizeMaxTextSize="@dimen/_62ssp"
+                    android:autoSizeMinTextSize="@dimen/_24ssp"
+                    android:autoSizeTextType="uniform"
+                    android:ellipsize="none"
+                    android:format12Hour="d"
+                    android:format24Hour="d"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/color_C21241"
+                    android:textSize="@dimen/_62ssp"
+                    android:textStyle="bold"
                     android:singleLine="true" />
 
                 <TextClock
@@ -88,7 +88,7 @@
                     android:gravity="center"
                     android:includeFontPadding="false"
                     android:textAllCaps="true"
-                    android:textColor="@color/red"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
                     android:singleLine="true" />
@@ -115,8 +115,8 @@
                     android:fontFamily="@font/main_semibold"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="S"
-                    android:textColor="@color/color_8E8E90"
+                    android:text="Sun"
+                    android:textColor="@color/color_C21241"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
@@ -126,8 +126,8 @@
                     android:fontFamily="@font/main_semibold"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="M"
-                    android:textColor="@color/color_8E8E90"
+                    android:text="Mon"
+                    android:textColor="@color/color_C21241"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
@@ -137,8 +137,8 @@
                     android:fontFamily="@font/main_semibold"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="T"
-                    android:textColor="@color/color_8E8E90"
+                    android:text="Tue"
+                    android:textColor="@color/color_C21241"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
@@ -148,8 +148,8 @@
                     android:fontFamily="@font/main_semibold"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="W"
-                    android:textColor="@color/color_8E8E90"
+                    android:text="Wed"
+                    android:textColor="@color/color_C21241"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
@@ -159,8 +159,8 @@
                     android:fontFamily="@font/main_semibold"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="T"
-                    android:textColor="@color/color_8E8E90"
+                    android:text="Thu"
+                    android:textColor="@color/color_C21241"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
@@ -170,8 +170,8 @@
                     android:fontFamily="@font/main_semibold"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="F"
-                    android:textColor="@color/color_8E8E90"
+                    android:text="Fri"
+                    android:textColor="@color/color_C21241"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
@@ -181,8 +181,8 @@
                     android:fontFamily="@font/main_semibold"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="S"
-                    android:textColor="@color/color_8E8E90"
+                    android:text="Sat"
+                    android:textColor="@color/color_C21241"
                     android:textSize="@dimen/_8sdp" />
             </LinearLayout>
 

@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:gravity="top|center_vertical|center_horizontal|center"
+    android:layoutDirection="ltr">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/shape_app_widget_121212_r25_bg" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/iv_background"
+            android:layout_alignTop="@+id/iv_background"
+            android:layout_alignEnd="@+id/iv_background"
+            android:layout_alignBottom="@+id/iv_background"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="9"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:weightSum="10">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4.5"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <LinearLayout
+                        android:id="@+id/LlMediumClock"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:background="@drawable/img_xpanel1_clock_bg_medium">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="5">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:weightSum="5">
+
+                                <TextClock
+                                    android:id="@+id/TClockAMPM"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1.5"
+                                    android:alpha="0.6"
+                                    android:autoSizeMaxTextSize="@dimen/_16ssp"
+                                    android:autoSizeMinTextSize="@dimen/_2ssp"
+                                    android:autoSizeTextType="uniform"
+                                    android:ellipsize="none"
+                                    android:format12Hour="a"
+                                    android:format24Hour="a"
+                                    android:gravity="bottom"
+                                    android:includeFontPadding="false"
+                                    android:singleLine="true"
+                                    android:text="AM"
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/white"
+                                    android:textDirection="ltr"
+                                    android:textSize="@dimen/_8ssp" />
+
+                                <TextClock
+                                    android:id="@+id/TClockHrMin"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="2"
+                                    android:autoSizeMaxTextSize="@dimen/_22ssp"
+                                    android:autoSizeMinTextSize="@dimen/_4ssp"
+                                    android:autoSizeTextType="uniform"
+                                    android:ellipsize="none"
+                                    android:format12Hour="h:mm"
+                                    android:format24Hour="h:mm"
+                                    android:includeFontPadding="false"
+                                    android:singleLine="true"
+                                    android:text="10:10"
+                                    android:textColor="@color/white"
+                                    android:textDirection="ltr"
+                                    android:textSize="@dimen/_22ssp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:background="@drawable/bg_drawable"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="8">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:weightSum="5">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="2.5"
+                                android:background="@drawable/icon_drawable"
+                                android:backgroundTint="@color/color_0292FE"
+                                android:padding="@dimen/_10sdp"
+                                android:src="@drawable/ic_wifi" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1.2"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Wi-Fi"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/_12sdp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:weightSum="5">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="2.5"
+                                android:background="@drawable/icon_drawable"
+                                android:backgroundTint="@color/color_00C25C"
+                                android:padding="@dimen/_10sdp"
+                                android:src="@drawable/ic_cellular" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1.2"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:weightSum="5">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Cellular"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/_12sdp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:weightSum="5">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="2.5"
+                                android:background="@drawable/icon_drawable"
+                                android:backgroundTint="@color/color_CDC972D"
+                                android:padding="@dimen/_10sdp"
+                                android:src="@drawable/ic_flashlight" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1.2"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:weightSum="5">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Flashlight"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/_12sdp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:weightSum="5">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="2.5"
+                                android:background="@drawable/icon_drawable"
+                                android:backgroundTint="@color/color_0263FF"
+                                android:padding="@dimen/_10sdp"
+                                android:src="@drawable/ic_bluetooth" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1.2"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:weightSum="5">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Bluetooth"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/_12sdp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/LlMediumDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4.5"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:background="@drawable/img_xpanel1_calendar_bg_medium">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="5">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2.5"
+                                android:gravity="center|top"
+                                android:orientation="vertical"
+                                android:weightSum="5">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.5" />
+
+                                <TextClock
+                                    android:id="@+id/TClockDay"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:alpha="0.6"
+                                    android:autoSizeMaxTextSize="@dimen/_16ssp"
+                                    android:autoSizeMinTextSize="@dimen/_2ssp"
+                                    android:autoSizeTextType="uniform"
+                                    android:ellipsize="none"
+                                    android:format12Hour="EEE"
+                                    android:format24Hour="EEE"
+                                    android:includeFontPadding="false"
+                                    android:singleLine="true"
+                                    android:text="Wed"
+                                    android:textColor="@color/white"
+                                    android:textDirection="ltr"
+                                    android:textSize="@dimen/_8ssp" />
+
+                                <TextClock
+                                    android:id="@+id/TClockDate"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1.5"
+                                    android:autoSizeMaxTextSize="@dimen/_30ssp"
+                                    android:autoSizeMinTextSize="@dimen/_4ssp"
+                                    android:autoSizeTextType="uniform"
+                                    android:ellipsize="none"
+                                    android:format12Hour="d"
+                                    android:format24Hour="d"
+                                    android:includeFontPadding="false"
+                                    android:singleLine="true"
+                                    android:text="26"
+                                    android:textColor="@color/white"
+                                    android:textDirection="ltr"
+                                    android:textSize="@dimen/_26ssp"
+                                    android:textStyle="bold" />
+
+                                <TextClock
+                                    android:id="@+id/TClockMonth"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:autoSizeMaxTextSize="@dimen/_16ssp"
+                                    android:autoSizeMinTextSize="@dimen/_4ssp"
+                                    android:autoSizeTextType="uniform"
+                                    android:ellipsize="none"
+                                    android:format12Hour="MMMM"
+                                    android:format24Hour="MMMM"
+                                    android:includeFontPadding="false"
+                                    android:singleLine="true"
+                                    android:text="October"
+                                    android:textColor="@color/white"
+                                    android:textDirection="ltr"
+                                    android:textSize="@dimen/_16ssp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3" />
+
+                    <LinearLayout
+                        android:id="@+id/LlMediumBattery"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4.7"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:weightSum="10">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="4.5"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="10">
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="10">
+
+                                <ProgressBar
+                                    android:id="@+id/progressBar"
+                                    style="?android:attr/progressBarStyleHorizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:minHeight="@dimen/_40sdp"
+                                    android:progress="80"
+                                    android:progressDrawable="@drawable/progressbar_drawable" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignStart="@id/progressBar"
+                                    android:layout_alignTop="@id/progressBar"
+                                    android:layout_alignEnd="@id/progressBar"
+                                    android:layout_alignBottom="@id/progressBar"
+                                    android:gravity="center"
+                                    android:orientation="horizontal"
+                                    android:weightSum="10">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="3"
+                                        android:drawableStart="@drawable/ic_battery_charging"
+                                        android:gravity="center|start"
+                                        android:text="Battery"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_14sdp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="4" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="2"
+                                        android:gravity="center|end"
+                                        android:text="80%"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_16sdp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/LlMediumStorage"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="4.5"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="10">
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="10">
+
+                                <ProgressBar
+                                    android:id="@+id/progressBar_storage"
+                                    style="?android:attr/progressBarStyleHorizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:minHeight="@dimen/_40sdp"
+                                    android:progress="40"
+                                    android:progressDrawable="@drawable/progressbar_drawable_green" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignStart="@id/progressBar_storage"
+                                    android:layout_alignTop="@id/progressBar_storage"
+                                    android:layout_alignEnd="@id/progressBar_storage"
+                                    android:layout_alignBottom="@id/progressBar_storage"
+                                    android:gravity="center"
+                                    android:orientation="horizontal"
+                                    android:weightSum="10">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="3"
+                                        android:drawableStart="@drawable/ic_storage"
+                                        android:gravity="center|start"
+                                        android:text="Storage"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_14sdp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="4" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="2"
+                                        android:gravity="center|end"
+                                        android:text="40%"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_16sdp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

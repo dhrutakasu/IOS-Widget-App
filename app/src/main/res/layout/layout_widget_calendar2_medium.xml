@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:src="@drawable/shape_app_widget_ffffff_r25_bg" />
+            android:src="@drawable/img_calendar3_medium_bg" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
                     android:id="@+id/TClockDay"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1.5"
                     android:autoSizeMaxTextSize="@dimen/_18ssp"
                     android:autoSizeMinTextSize="@dimen/_6ssp"
                     android:autoSizeTextType="uniform"
@@ -52,7 +52,7 @@
                     android:gravity="center"
                     android:includeFontPadding="false"
                     android:singleLine="true"
-                    android:textColor="@color/red"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_15ssp"
                     android:textStyle="bold" />
 
@@ -60,8 +60,8 @@
                     android:id="@+id/TClockDate"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="3"
-                    android:autoSizeMaxTextSize="@dimen/_62ssp"
+                    android:layout_weight="4"
+                    android:autoSizeMaxTextSize="@dimen/_72ssp"
                     android:autoSizeMinTextSize="@dimen/_20ssp"
                     android:autoSizeTextType="uniform"
                     android:ellipsize="none"
@@ -71,7 +71,7 @@
                     android:includeFontPadding="false"
                     android:singleLine="true"
                     android:textAlignment="center"
-                    android:textColor="@color/black"
+                    android:textColor="@color/color_C21271"
                     android:textDirection="ltr"
                     android:textSize="@dimen/_54ssp"
                     android:textStyle="bold" />
@@ -80,7 +80,7 @@
                     android:id="@+id/TClockMonth"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1.5"
                     android:autoSizeMaxTextSize="@dimen/_16ssp"
                     android:autoSizeMinTextSize="@dimen/_2ssp"
                     android:autoSizeTextType="uniform"
@@ -90,7 +90,7 @@
                     android:gravity="center"
                     android:includeFontPadding="false"
                     android:singleLine="true"
-                    android:textColor="@color/color_80000000"
+                    android:textColor="@color/white"
                     android:textDirection="ltr"
                     android:textSize="@dimen/_14ssp" />
             </LinearLayout>
@@ -106,7 +106,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_weight="0.8"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -116,8 +116,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
-                        android:text="S"
-                        android:textColor="@color/color_667182"
+                        android:text="Sun"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -127,8 +127,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
-                        android:text="M"
-                        android:textColor="@color/color_667182"
+                        android:text="Mon"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -138,8 +138,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
-                        android:text="T"
-                        android:textColor="@color/color_667182"
+                        android:text="Tue"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -149,8 +149,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
-                        android:text="W"
-                        android:textColor="@color/color_667182"
+                        android:text="Wed"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -160,8 +160,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
-                        android:text="T"
-                        android:textColor="@color/color_667182"
+                        android:text="Thu"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -171,8 +171,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
-                        android:text="F"
-                        android:textColor="@color/color_667182"
+                        android:text="Fri"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -182,12 +182,19 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
-                        android:text="S"
-                        android:textColor="@color/color_667182"
+                        android:text="Sat"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
                 </LinearLayout>
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:layout_marginBottom="@dimen/_1sdp"
+                    android:layout_weight="0.03"
+                    android:gravity="center"
+                    android:background="@color/white"/>
                 <GridView
                     android:id="@+id/GridCalendarMediumView"
                     android:layout_width="match_parent"

@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:src="@drawable/shape_app_widget_1c1c1e_r25_bg" />
+            android:src="@drawable/shape_app_widget_121212_r25_bg" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,26 +32,88 @@
             android:orientation="vertical"
             android:gravity="center"
             android:weightSum="10">
-
-            <TextClock
-                android:id="@+id/TClockMonth"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:autoSizeMaxTextSize="@dimen/_25ssp"
-                android:autoSizeMinTextSize="@dimen/_2ssp"
-                android:autoSizeTextType="uniform"
-                android:ellipsize="none"
-                android:format12Hour="MMMM yyyy"
-                android:format24Hour="MMMM yyyy"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:textAllCaps="true"
-                android:textColor="@color/red"
-                android:textDirection="ltr"
-                android:textSize="@dimen/_22ssp"
-                android:textStyle="bold"
-                android:singleLine="true" />
+                android:orientation="horizontal"
+                android:weightSum="1"
+                android:layout_weight="2">
+
+                <TextClock
+                    android:id="@+id/TClockDate"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.4"
+                    android:autoSizeMaxTextSize="@dimen/_48ssp"
+                    android:autoSizeMinTextSize="@dimen/_2ssp"
+                    android:autoSizeTextType="uniform"
+                    android:ellipsize="none"
+                    android:format12Hour="d"
+                    android:format24Hour="d"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:textAllCaps="true"
+                    android:text="28"
+                    android:textColor="@color/color_C21241"
+                    android:textDirection="ltr"
+                    android:textSize="@dimen/_28ssp"
+                    android:textStyle="bold"
+                    android:singleLine="true" />
+
+                <LinearLayout
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/color_C21241" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:weightSum="1"
+                    android:layout_weight="0.55">
+
+                <TextClock
+                    android:id="@+id/TClockDay"
+                    android:layout_height="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_weight="0.55"
+                    android:autoSizeMaxTextSize="@dimen/_20ssp"
+                    android:autoSizeMinTextSize="@dimen/_2ssp"
+                    android:autoSizeTextType="uniform"
+                    android:ellipsize="none"
+                    android:format12Hour="EEEE"
+                    android:format24Hour="EEEE"
+                    android:gravity="center_vertical"
+                    android:includeFontPadding="false"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textDirection="ltr"
+                    android:textSize="@dimen/_20ssp"
+                    android:textStyle="bold"
+                    android:singleLine="true" />
+
+                <TextClock
+                    android:id="@+id/TClockMonth"
+                    android:layout_height="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_weight="0.45"
+                    android:autoSizeMaxTextSize="@dimen/_12ssp"
+                    android:autoSizeMinTextSize="@dimen/_2ssp"
+                    android:autoSizeTextType="uniform"
+                    android:ellipsize="none"
+                    android:format12Hour="MMMM yyyy"
+                    android:format24Hour="MMMM yyyy"
+                    android:gravity="center_vertical"
+                    android:includeFontPadding="false"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textDirection="ltr"
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="bold"
+                    android:singleLine="true" />
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -60,6 +122,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -67,8 +130,8 @@
                     android:fontFamily="@font/main_semibold"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="S"
-                    android:textColor="@color/color_8E8E90"
+                    android:text="Sun"
+                    android:textColor="@color/color_C21241"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
@@ -78,8 +141,8 @@
                     android:fontFamily="@font/main_semibold"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="M"
-                    android:textColor="@color/color_8E8E90"
+                    android:text="Mon"
+                    android:textColor="@color/color_C21241"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
@@ -89,8 +152,8 @@
                     android:fontFamily="@font/main_semibold"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="T"
-                    android:textColor="@color/color_8E8E90"
+                    android:text="Tue"
+                    android:textColor="@color/color_C21241"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
@@ -100,8 +163,8 @@
                     android:fontFamily="@font/main_semibold"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="W"
-                    android:textColor="@color/color_8E8E90"
+                    android:text="Wed"
+                    android:textColor="@color/color_C21241"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
@@ -111,8 +174,8 @@
                     android:fontFamily="@font/main_semibold"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="T"
-                    android:textColor="@color/color_8E8E90"
+                    android:text="Thu"
+                    android:textColor="@color/color_C21241"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
@@ -122,8 +185,8 @@
                     android:fontFamily="@font/main_semibold"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="F"
-                    android:textColor="@color/color_8E8E90"
+                    android:text="Fri"
+                    android:textColor="@color/color_C21241"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
@@ -133,8 +196,8 @@
                     android:fontFamily="@font/main_semibold"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="S"
-                    android:textColor="@color/color_8E8E90"
+                    android:text="Sat"
+                    android:textColor="@color/color_C21241"
                     android:textSize="@dimen/_8sdp" />
             </LinearLayout>
 
@@ -143,7 +206,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_alignParentStart="true"
-                android:layout_weight="7"
+                android:layout_weight="6"
                 android:gravity="center"
                 android:numColumns="7"
                 tools:listitem="@layout/item_calendar_day" />

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.google.android.material.tabs.TabLayout;
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
+import com.ios.widget.helper.DatabaseHelper;
 import com.ios.widget.provider.LargeCalenderWidgetProvider;
 import com.ios.widget.provider.MediumCalenderWidgetProvider;
 import com.ios.widget.provider.SmallCalenderWidgetProvider;
@@ -46,7 +47,8 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
     private ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
     private WidgetPagerAdapter adapter;
     private AppWidgetManager manager;
-    ComponentName name;
+    private ComponentName name;
+    private DatabaseHelper helper;
 
     public static void UpdateWidget(int i, String packageName, Context context, int intExtra) {
         @SuppressLint("RemoteViewLayout") RemoteViews WidgetViews = new RemoteViews(packageName, R.layout.layout_widget_calendar3_large);
@@ -111,6 +113,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         IvAddWidget.setOnClickListener(this);
     }
     private void initActions() {
+        helper=new DatabaseHelper(context);
         if (modelArrayList.size() > 1) {
             TabWidget.setVisibility(View.VISIBLE);
         } else {
@@ -182,6 +185,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
                     manager.requestPinAppWidget(name, (Bundle) null, pendingIntent);
                 }, 100);
             }
+
         }
     }
 }

@@ -198,8 +198,8 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
                     break;
                 case 6:
 //                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
-                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 14f);
-                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.black));
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 15f);
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
                     break;
                 case 7:
 //                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
@@ -209,16 +209,23 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
             }
         }
         if (DayOfString[1].equals("BLUE")) {
-//            views.setViewPadding(R.id.TvCalendarDates, 2, 2, 2, 2);
             switch (Constants.Widget_Type_Id) {
                 case 4:
                     views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_ring_white);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.color_0263FF));
                     break;
                 case 5:
-                case 6:
-                case 7:
                     views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_ring);
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
+                    break;
+                case 6:
+                    views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_purple);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 15f);
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
+                    break;
+                case 7:
+                    views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_square);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 15f);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
                     break;
             }

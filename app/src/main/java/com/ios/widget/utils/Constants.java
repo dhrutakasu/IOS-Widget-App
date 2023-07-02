@@ -10,11 +10,20 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
+import android.os.BatteryManager;
+import android.os.Environment;
+import android.os.StatFs;
 
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
 
+import java.io.File;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+
+import static android.content.Context.BATTERY_SERVICE;
 
 public class Constants {
 
@@ -80,7 +89,7 @@ public class Constants {
         modelArrayList.add(widgetModel);
         widgetModel = new WidgetModel(R.drawable.img_calendar_small_2_xxhdpi, R.drawable.img_calendar_medium_2_xxhdpi, R.drawable.img_calendar_large_2_xxhdpi);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_calendar_small_3_xxhdpi, R.drawable.img_calendar_medium_3_xxhdpi, R.drawable.img_calendar_large_3_xxhdpi);
+        widgetModel = new WidgetModel(R.drawable.img_calendar_small_3_xxhdpi, R.drawable.img_calendar_large_3_xxhdpi, R.drawable.img_calendar_medium_3_xxhdpi);
         modelArrayList.add(widgetModel);
         widgetModel = new WidgetModel(R.drawable.img_calendar_small_4_xxhdpi, R.drawable.img_calendar_medium_4_xxhdpi, R.drawable.img_calendar_large_4_xxhdpi);
         modelArrayList.add(widgetModel);
@@ -96,13 +105,13 @@ public class Constants {
 
     public static ArrayList<WidgetModel> getTrendyWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_calendar_small_4_xxhdpi, R.drawable.img_clock_medium_3_xxhdpi, R.drawable.img_xpanel_large_1_xxhdpi, "Trendy",0);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.img_calendar_small_4_xxhdpi, R.drawable.img_clock_medium_3_xxhdpi, R.drawable.img_xpanel_large_1_xxhdpi, "Trendy", 0);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_weather_small_1_xxhdpi, R.drawable.img_calendar_medium_4_xxhdpi, R.drawable.img_clock_large_8_xxhdpi, "Trendy",1);
+        widgetModel = new WidgetModel(R.drawable.img_weather_small_1_xxhdpi, R.drawable.img_calendar_medium_4_xxhdpi, R.drawable.img_clock_large_8_xxhdpi, "Trendy", 1);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_9_xxhdpi, R.drawable.img_xpanel_medium_3_xxhdpi, R.drawable.img_weather_large_2_xxhdpi, "Trendy",2);
+        widgetModel = new WidgetModel(R.drawable.img_clock_small_9_xxhdpi, R.drawable.img_xpanel_medium_3_xxhdpi, R.drawable.img_weather_large_2_xxhdpi, "Trendy", 2);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_photo_s_xxhdpi, R.drawable.img_photo_m_xxhdpi, R.drawable.img_photo_l_xxhdpi, "Trendy",3);
+        widgetModel = new WidgetModel(R.drawable.img_photo_s_xxhdpi, R.drawable.img_photo_m_xxhdpi, R.drawable.img_photo_l_xxhdpi, "Trendy", 3);
         modelArrayList.add(widgetModel);
 
         return modelArrayList;
@@ -110,13 +119,13 @@ public class Constants {
 
     public static ArrayList<WidgetModel> getCalendarWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_calendar_small_1_xxhdpi, R.drawable.img_calendar_medium_1_xxhdpi, R.drawable.img_calendar_large_1_xxhdpi, "Calendar",4);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.img_calendar_small_1_xxhdpi, R.drawable.img_calendar_medium_1_xxhdpi, R.drawable.img_calendar_large_1_xxhdpi, "Calendar", 4);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_calendar_small_2_xxhdpi, R.drawable.img_calendar_medium_2_xxhdpi, R.drawable.img_calendar_large_2_xxhdpi, "Calendar",5);
+        widgetModel = new WidgetModel(R.drawable.img_calendar_small_2_xxhdpi, R.drawable.img_calendar_medium_2_xxhdpi, R.drawable.img_calendar_large_2_xxhdpi, "Calendar", 5);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_calendar_small_3_xxhdpi, R.drawable.img_calendar_medium_3_xxhdpi, R.drawable.img_calendar_large_3_xxhdpi, "Calendar",6);
+        widgetModel = new WidgetModel(R.drawable.img_calendar_small_3_xxhdpi, R.drawable.img_calendar_medium_3_xxhdpi, R.drawable.img_calendar_large_3_xxhdpi, "Calendar", 6);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_calendar_small_4_xxhdpi, R.drawable.img_calendar_medium_4_xxhdpi, R.drawable.img_calendar_large_4_xxhdpi, "Calendar",7);
+        widgetModel = new WidgetModel(R.drawable.img_calendar_small_4_xxhdpi, R.drawable.img_calendar_medium_4_xxhdpi, R.drawable.img_calendar_large_4_xxhdpi, "Calendar", 7);
         modelArrayList.add(widgetModel);
 
         return modelArrayList;
@@ -124,11 +133,11 @@ public class Constants {
 
     public static ArrayList<WidgetModel> getWeatherWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_weather_small_1_xxhdpi, R.drawable.img_weather_medium_1_xxhdpi, R.drawable.img_weather_large_1_xxhdpi, "Weather",8);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.img_weather_small_1_xxhdpi, R.drawable.img_weather_medium_1_xxhdpi, R.drawable.img_weather_large_1_xxhdpi, "Weather", 8);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_weather_small_2_xxhdpi, R.drawable.img_weather_medium_2_xxhdpi, R.drawable.img_weather_large_2_xxhdpi, "Weather",9);
+        widgetModel = new WidgetModel(R.drawable.img_weather_small_2_xxhdpi, R.drawable.img_weather_medium_2_xxhdpi, R.drawable.img_weather_large_2_xxhdpi, "Weather", 9);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_weather_small_3_xxhdpi, R.drawable.img_weather_medium_3_xxhdpi, R.drawable.img_weather_large_3_xxhdpi, "Weather",10);
+        widgetModel = new WidgetModel(R.drawable.img_weather_small_3_xxhdpi, R.drawable.img_weather_medium_3_xxhdpi, R.drawable.img_weather_large_3_xxhdpi, "Weather", 10);
         modelArrayList.add(widgetModel);
 
         return modelArrayList;
@@ -136,23 +145,23 @@ public class Constants {
 
     public static ArrayList<WidgetModel> getClockWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_clock_small_1_xxhdpi, R.drawable.img_clock_medium_1_xxhdpi, R.drawable.img_clock_large_1_xxhdpi, "Clock",11);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.img_clock_small_1_xxhdpi, R.drawable.img_clock_medium_1_xxhdpi, R.drawable.img_clock_large_1_xxhdpi, "Clock", 11);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_2_xxhdpi, R.drawable.img_clock_medium_2_xxhdpi, R.drawable.img_clock_large_2_xxhdpi, "Clock",12);
+        widgetModel = new WidgetModel(R.drawable.img_clock_small_2_xxhdpi, R.drawable.img_clock_medium_2_xxhdpi, R.drawable.img_clock_large_2_xxhdpi, "Clock", 12);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_3_xxhdpi, R.drawable.img_clock_medium_3_xxhdpi, R.drawable.img_clock_large_3_xxhdpi, "Clock",13);
+        widgetModel = new WidgetModel(R.drawable.img_clock_small_3_xxhdpi, R.drawable.img_clock_medium_3_xxhdpi, R.drawable.img_clock_large_3_xxhdpi, "Clock", 13);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_4_xxhdpi, R.drawable.img_clock_medium_4_xxhdpi, R.drawable.img_clock_large_4_xxhdpi, "Clock",14);
+        widgetModel = new WidgetModel(R.drawable.img_clock_small_4_xxhdpi, R.drawable.img_clock_medium_4_xxhdpi, R.drawable.img_clock_large_4_xxhdpi, "Clock", 14);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_5_xxhdpi, R.drawable.img_clock_medium_5_xxhdpi, R.drawable.img_clock_large_5_xxhdpi, "Clock",15);
+        widgetModel = new WidgetModel(R.drawable.img_clock_small_5_xxhdpi, R.drawable.img_clock_medium_5_xxhdpi, R.drawable.img_clock_large_5_xxhdpi, "Clock", 15);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_6_xxhdpi, R.drawable.img_clock_medium_6_xxhdpi, R.drawable.img_clock_large_6_xxhdpi, "Clock",16);
+        widgetModel = new WidgetModel(R.drawable.img_clock_small_6_xxhdpi, R.drawable.img_clock_medium_6_xxhdpi, R.drawable.img_clock_large_6_xxhdpi, "Clock", 16);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_7_xxhdpi, R.drawable.img_clock_medium_7_xxhdpi, R.drawable.img_clock_large_7_xxhdpi, "Clock",17);
+        widgetModel = new WidgetModel(R.drawable.img_clock_small_7_xxhdpi, R.drawable.img_clock_medium_7_xxhdpi, R.drawable.img_clock_large_7_xxhdpi, "Clock", 17);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_8_xxhdpi, R.drawable.img_clock_medium_8_xxhdpi, R.drawable.img_clock_large_8_xxhdpi, "Clock",18);
+        widgetModel = new WidgetModel(R.drawable.img_clock_small_8_xxhdpi, R.drawable.img_clock_medium_8_xxhdpi, R.drawable.img_clock_large_8_xxhdpi, "Clock", 18);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_9_xxhdpi, R.drawable.img_clock_medium_9_xxhdpi, R.drawable.img_clock_large_9_xxhdpi, "Clock",19);
+        widgetModel = new WidgetModel(R.drawable.img_clock_small_9_xxhdpi, R.drawable.img_clock_medium_9_xxhdpi, R.drawable.img_clock_large_9_xxhdpi, "Clock", 19);
         modelArrayList.add(widgetModel);
 
         return modelArrayList;
@@ -160,11 +169,11 @@ public class Constants {
 
     public static ArrayList<WidgetModel> getXPanelWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_xpanel_small_1_xxhdpi, R.drawable.img_xpanel_medium_1_xxhdpi, R.drawable.img_xpanel_large_1_xxhdpi, "X-Panel",20);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.img_xpanel_small_1_xxhdpi, R.drawable.img_xpanel_medium_1_xxhdpi, R.drawable.img_xpanel_large_1_xxhdpi, "X-Panel", 20);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_2_xxhdpi, R.drawable.img_xpanel_medium_2_xxhdpi, R.drawable.img_xpanel_large_2_xxhdpi, "X-Panel",21);
+        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_2_xxhdpi, R.drawable.img_xpanel_medium_2_xxhdpi, R.drawable.img_xpanel_large_2_xxhdpi, "X-Panel", 21);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_3_xxhdpi, R.drawable.img_xpanel_medium_3_xxhdpi, R.drawable.img_xpanel_large_3_xxhdpi, "X-Panel",22);
+        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_3_xxhdpi, R.drawable.img_xpanel_medium_3_xxhdpi, R.drawable.img_xpanel_large_3_xxhdpi, "X-Panel", 22);
         modelArrayList.add(widgetModel);
 
         return modelArrayList;
@@ -172,7 +181,7 @@ public class Constants {
 
     public static ArrayList<WidgetModel> getPhotoWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_photo_s_xxhdpi, R.drawable.img_photo_m_xxhdpi, R.drawable.img_photo_l_xxhdpi, "Trendy",23);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.img_photo_s_xxhdpi, R.drawable.img_photo_m_xxhdpi, R.drawable.img_photo_l_xxhdpi, "Trendy", 23);
         modelArrayList.add(widgetModel);
 
         return modelArrayList;
@@ -212,4 +221,121 @@ public class Constants {
 
         return output;
     }
+
+    public static int getBatteryLevel(Context context) {
+        int level = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            BatteryManager bm = (BatteryManager) context.getSystemService(BATTERY_SERVICE);
+            level = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        }
+        return level;
+    }
+
+    public static int getStorageLevel() {
+        int level = 0;
+        File iPath = Environment.getDataDirectory();
+        StatFs iStat = new StatFs(iPath.getPath());
+        long iBlockSize = iStat.getBlockSizeLong();
+        long iAvailableBlocks = iStat.getFreeBlocksLong();
+        long iTotalBlocks = iStat.getBlockCountLong();
+        long sizee = iTotalBlocks - iAvailableBlocks;
+        String iAvailableSpace = formatSize(iAvailableBlocks * iBlockSize);
+        String iTotalSpace = formatSize(iTotalBlocks * iBlockSize);
+        final float totalSpace = DeviceMemory.getInternalStorageSpace();
+        final float occupiedSpace = DeviceMemory.getInternalUsedSpace();
+        final float freeSpace = DeviceMemory.getInternalFreeSpace();
+
+        System.out.println("****** AVA : " + iAvailableSpace + " * TOT : " + iTotalSpace);
+        System.out.println("****** AVA Totl : " + totalSpace + " * TOT : " + occupiedSpace);
+        System.out.println("****** AVA BYR : " + bytes2String(iAvailableBlocks * iBlockSize) + " * TOT : " + bytes2String(iTotalBlocks * iBlockSize) + " * TOT : " + bytes2String(sizee * iBlockSize));
+        System.out.println("****** AVA Free : " + freeSpace);
+
+        return level;
+    }
+
+    private static double SPACE_KB = 1024;
+    private static double SPACE_MB = 1024 * SPACE_KB;
+    private static double SPACE_GB = 1024 * SPACE_MB;
+    private static double SPACE_TB = 1024 * SPACE_GB;
+
+    public static String bytes2String(long sizeInBytes) {
+
+        NumberFormat nf = new DecimalFormat();
+        nf.setMaximumFractionDigits(2);
+
+        try {
+            if (sizeInBytes < SPACE_KB) {
+                return nf.format(sizeInBytes) + " Byte(s)";
+            } else if (sizeInBytes < SPACE_MB) {
+                return nf.format(sizeInBytes / SPACE_KB) + " KB";
+            } else if (sizeInBytes < SPACE_GB) {
+                return nf.format(sizeInBytes / SPACE_MB) + " MB";
+            } else if (sizeInBytes < SPACE_TB) {
+                return nf.format(sizeInBytes / SPACE_GB) + " GB";
+            } else {
+                return nf.format(sizeInBytes / SPACE_TB) + " TB";
+            }
+        } catch (Exception e) {
+            return sizeInBytes + " Byte(s)";
+        }
+
+    }
+
+
+    public static String formatSize(long size) {
+        String suffix = null;
+
+        if (size >= 1024) {
+            suffix = "KB";
+            size /= 1024;
+            if (size >= 1024) {
+                suffix = "MB";
+                size /= 1024;
+            }
+        }
+
+        StringBuilder resultBuffer = new StringBuilder(Long.toString(size));
+
+        int commaOffset = resultBuffer.length() - 3;
+        while (commaOffset > 0) {
+            resultBuffer.insert(commaOffset, ',');
+            commaOffset -= 3;
+        }
+
+        if (suffix != null) resultBuffer.append(suffix);
+        return resultBuffer.toString();
+    }
+
+    public static class DeviceMemory {
+
+        public static float getInternalStorageSpace() {
+            StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
+            //StatFs statFs = new StatFs("/data");
+            float total = ((float) statFs.getBlockCount() * statFs.getBlockSize()) / 1048576;
+            return total;
+        }
+
+        public static float getInternalFreeSpace() {
+            StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
+            //StatFs statFs = new StatFs("/data");
+            float free = ((float) statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
+            return free;
+        }
+
+        public static float getInternalUsedSpace() {
+            StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
+            //StatFs statFs = new StatFs("/data");
+            float total = ((float) statFs.getBlockCount() * statFs.getBlockSize()) / 1048576;
+            float free = ((float) statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
+            float busy = total - free;
+            return busy;
+        }
+    }
+
+    public static boolean IsWIfiConnected(Context context) {
+        WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+        return wifi.isWifiEnabled();
+    }
 }
+

@@ -26,6 +26,11 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
+//https://github.com/akash-bisariya/Location-Weather
+
+//https://github.com/ZuleMD/WeatherWidget
+
+//https://github.com/TonyChouteau/WeatherWindWidget
 public class App extends Application implements DefaultLifecycleObserver, Application.ActivityLifecycleCallbacks {
 
     private AppOpenAdManager appOpenAdManager;
