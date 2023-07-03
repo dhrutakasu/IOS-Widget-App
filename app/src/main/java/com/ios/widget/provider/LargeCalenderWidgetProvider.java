@@ -37,36 +37,8 @@ public class LargeCalenderWidgetProvider extends AppWidgetProvider {
                 case 0:
                 case 20:
                     //todo x-panel 1 large
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_large);
-
-//                    rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.shape_app_widget_121212_r25_bg), 30));
-
-                    rv.setCharSequence(R.id.TClockAMPM, "setFormat12Hour", "a");
-                    rv.setCharSequence(R.id.TClockAMPM, "setFormat24Hour", "a");
-                    rv.setCharSequence(R.id.TClockHrMin, "setFormat12Hour", "h:mm");
-                    rv.setCharSequence(R.id.TClockHrMin, "setFormat24Hour", "h:mm");
-                    rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEE");
-                    rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "EEE");
-                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
-                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMMM");
-
-                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    rv.setOnClickPendingIntent(R.id.LlLargeClock, configPendingIntent);
-                    rv.setOnClickPendingIntent(R.id.LlLargeDate, configPendingIntent);
-
-                    intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    rv.setOnClickPendingIntent(R.id.LlLargeBattery, configPendingIntent);
-
-                    intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    rv.setOnClickPendingIntent(R.id.LlLargeStorage, configPendingIntent);
+//
+//                   ClickPendingIntent(R.id.LlLargeStorage, configPendingIntent);
                     break;
                 case 1:
                 case 18:

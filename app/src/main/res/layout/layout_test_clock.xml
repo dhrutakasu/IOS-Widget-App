@@ -11,17 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:dial="@drawable/a1"
-        android:hand_hour="@drawable/a2"
-        android:hand_second="@drawable/a3"
-        android:hand_minute="@drawable/a4" />
+        android:dial="@drawable/img_clock_simple1_dial"
+        android:hand_hour="@drawable/img_clock_simple1_hand_hour"
+        android:hand_second="@drawable/img_clock_simple1_hand_second"
+        android:hand_minute="@drawable/img_clock_simple1_hand_minute" />
 
-<!--    <ImageView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignStart="@+id/analog_clock"-->
-<!--        android:layout_alignTop="@+id/analog_clock"-->
-<!--        android:layout_alignEnd="@+id/analog_clock"-->
-<!--        android:layout_alignBottom="@+id/analog_clock"-->
-<!--        android:src="@drawable/img_clock_simple1_ca" />-->
 </RelativeLayout>

@@ -1,56 +1,66 @@
 package com.ios.widget.provider;
 
-import android.Manifest;
-import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProvider;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Paint;
-import android.graphics.Shader;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
-import android.net.wifi.WifiManager;
-import android.os.BatteryManager;
-import android.os.Build;
+import android.os.Handler;
+import android.os.IBinder;
 import android.provider.CalendarContract;
-import android.provider.Settings;
 import android.widget.RemoteViews;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
 
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
 import com.ios.widget.utils.Constants;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Calendar;
+import java.util.Random;
 
-import static android.content.Context.BATTERY_SERVICE;
+public class UpdateWidgetService extends Service {
 
-public class SmallCalenderWidgetProvider extends AppWidgetProvider {
-//    private NotesDatabaseHelper helper;
-
-    private static final String ACTION_TOGGLE_WIFI = "com.example.widget.TOGGLE_WIFI";
+    Intent i;
+    boolean started = false;
+    final Handler h = new Handler();
+    Runnable r;
+    private Context context;
 
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        for (int i = 0; i < appWidgetIds.length; ++i) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (started) {
+            h.removeCallbacks(r);
+        }
+        context = this;
+        started = true;
+        i = intent;
+        r = new Runnable() {
+            @Override
+            public void run() {
+                action();
+                h.postDelayed(this, 5000);
+            }
+        };
+        h.post(r);
+
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        h.removeCallbacks(r);
+    }
+
+    private void action() {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this.getApplicationContext());
+
+        int[] allWidgetIds = i.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+
+        for (int i = 0; i < allWidgetIds.length; ++i) {
             RemoteViews rv = null;
             long startMillis = 0;
             Uri.Builder builder = null;
@@ -178,10 +188,10 @@ public class SmallCalenderWidgetProvider extends AppWidgetProvider {
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
                     rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
                     intents = new Intent(context, MediumWidgetService.class);
-                    intents.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+                    intents.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, allWidgetIds[i]);
 
                     intents.setData(Uri.parse(intents.toUri(Intent.URI_INTENT_SCHEME)));
-                    rv.setRemoteAdapter(appWidgetIds[i], R.id.GridCalendarMediumView, intents);
+                    rv.setRemoteAdapter(allWidgetIds[i], R.id.GridCalendarMediumView, intents);
 
                     startMillis = Calendar.getInstance().getTimeInMillis();
                     builder = CalendarContract.CONTENT_URI.buildUpon();
@@ -354,9 +364,9 @@ public class SmallCalenderWidgetProvider extends AppWidgetProvider {
 
             }
             DatabaseHelper helper = new DatabaseHelper(context);
-            WidgetData widgetData = new WidgetData("S", String.valueOf(Constants.Widget_Type_Id), String.valueOf(appWidgetIds[i]));
+            WidgetData widgetData = new WidgetData("S", String.valueOf(Constants.Widget_Type_Id), String.valueOf(allWidgetIds[i]));
             helper.InsertWidget(widgetData);
-            appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
+            appWidgetManager.updateAppWidget(allWidgetIds[i], rv);
             /*switch (Constants.Widget_Type_Id) {
                 case 1:
                     //todo Dial clock 1 small
@@ -551,93 +561,30 @@ public class SmallCalenderWidgetProvider extends AppWidgetProvider {
             */
 
         }
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
+      /*  for (int widgetId : allWidgetIds) {
+            // create some random data
+            int number = new Random().nextInt(100);
+
+            RemoteViews remoteViews = new RemoteViews(this
+                    .getApplicationContext().getPackageName(),
+                    R.layout.first_widget);
+            remoteViews.setTextViewText(R.id.TvWidgetHeading, String.valueOf(number));
+
+            // register an onClickListener
+            Intent clickIntent = new Intent(this.getApplicationContext(), FirstWidget.class);
+
+            clickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, clickIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+            remoteViews.setOnClickPendingIntent(R.id.TvWidgetHeading, pendingIntent);
+            appWidgetManager.updateAppWidget(widgetId, remoteViews);
+        }*/
+        //stopSelf();
     }
 
     @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        context.unregisterReceiver(receiver);
-    }
-
-    private final BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(ACTION_TOGGLE_WIFI)) {
-                // Get the current Wi-Fi state
-                WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-                boolean wifiEnabled = wifiManager.isWifiEnabled();
-
-                // Toggle the Wi-Fi state
-                wifiManager.setWifiEnabled(!wifiEnabled);
-
-                // Update the widget with the new state
-//                updateWidget(context);
-            }
-        }
-    };
-
-
-    private final BroadcastReceiver receiverBattery = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-            int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-            float batteryPct = level * 100 / (float) scale;
-            System.out.println("****** Battery : " + batteryPct);
-//            finalRv.setTextViewText(R.id.LlSmallBatteryPerccentage, String.valueOf(batteryPct) + "%");
-
-        }
-    };
-
-    private void OnGPS(Context context) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-            }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    private Location getLocation(Context context, LocationManager locationManager) {
-        Location locationGPS = null;
-        if (ActivityCompat.checkSelfPermission(
-                context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        } else {
-            locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (locationGPS != null) {
-                double lat = locationGPS.getLatitude();
-                double longi = locationGPS.getLongitude();
-
-            } else {
-                Toast.makeText(context, "Unable to find location.", Toast.LENGTH_SHORT).show();
-            }
-        }
-        return locationGPS;
-    }
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        super.onReceive(context, intent);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            System.out.println("******* COME RECEIVER :: " + context.getSystemService(AppWidgetManager.class).getAppWidgetIds(new ComponentName(context, SmallCalenderWidgetProvider.class)).length);
-        }
-        if ("TOGGLE_WIFI".equals(intent.getAction())) {
-            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-            if (wifiManager != null) {
-                boolean isWifiEnabled = wifiManager.isWifiEnabled();
-                wifiManager.setWifiEnabled(!isWifiEnabled);
-            }
-        }
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 }
-

@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/clock_simple1_bg">
+        android:background="@drawable/img_clock_simple1_bg_medium">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -31,18 +31,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:dial="@drawable/img_clock_simple1_dial"
+                    android:dial="@drawable/img_clock_simple1_dial_medium"
+                    android:hand_second="@drawable/img_clock_simple1_hand_second"
                     android:hand_hour="@drawable/img_clock_simple1_hand_hour"
                     android:hand_minute="@drawable/img_clock_simple1_hand_minute" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/analog_clock"
-                    android:layout_alignTop="@+id/analog_clock"
-                    android:layout_alignEnd="@+id/analog_clock"
-                    android:layout_alignBottom="@+id/analog_clock"
-                    android:src="@drawable/img_clock_simple1_cap" />
             </RelativeLayout>
 
             <LinearLayout
@@ -67,14 +60,14 @@
                     android:gravity="center"
                     android:includeFontPadding="false"
                     android:singleLine="true"
-                    android:textColor="@color/color_D36C33"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_16ssp"
                     android:textStyle="bold" />
 
                 <TextClock
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="4"
+                    android:layout_weight="5"
                     android:autoSizeMaxTextSize="@dimen/_54ssp"
                     android:autoSizeMinTextSize="@dimen/_20ssp"
                     android:autoSizeTextType="uniform"
@@ -85,7 +78,7 @@
                     android:includeFontPadding="false"
                     android:letterSpacing="0"
                     android:singleLine="true"
-                    android:textColor="@color/color_667182"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_50ssp"
                     android:textStyle="bold" />
 
@@ -102,7 +95,7 @@
                     android:gravity="center"
                     android:includeFontPadding="false"
                     android:singleLine="true"
-                    android:textColor="@color/color_667182"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_12ssp"
                     android:textStyle="bold" />
             </LinearLayout>

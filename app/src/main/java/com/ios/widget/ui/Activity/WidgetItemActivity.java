@@ -21,6 +21,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
+import com.ios.widget.provider.FirstWidget;
 import com.ios.widget.provider.LargeCalenderWidgetProvider;
 import com.ios.widget.provider.MediumCalenderWidgetProvider;
 import com.ios.widget.provider.SmallCalenderWidgetProvider;
@@ -164,9 +165,11 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
             manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
             switch (TabSizeLayout.getSelectedTabPosition()) {
                 case 0:
+//                    name = new ComponentName(context, FirstWidget.class);
                     name = new ComponentName(context, SmallCalenderWidgetProvider.class);
                     break;
                 case 1:
+//                    name = new ComponentName(context, FirstWidget.class);
                     name = new ComponentName(context, MediumCalenderWidgetProvider.class);
                     break;
                 case 2:

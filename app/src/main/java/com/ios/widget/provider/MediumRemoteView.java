@@ -16,6 +16,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
     private Calendar calendar;
@@ -58,7 +60,8 @@ public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onCreate() {
-        System.out.println("-********* NoteId 00000: ");
+        System.out.println("****** Constant :Calendar00 " + Calendar.getInstance(Locale.getDefault()).getTime());
+
 
         calendar = Calendar.getInstance(Locale.getDefault());
         month = calendar.get(Calendar.MONTH) + 1;
@@ -149,6 +152,21 @@ public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onDataSetChanged() {
+//        Timer timer = new Timer();
+//        timer.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//                calendar = Calendar.getInstance(Locale.getDefault());
+//                month = calendar.get(Calendar.MONTH) + 1;
+//                year = calendar.get(Calendar.YEAR);
+//                strings = new ArrayList<String>();
+//                Calendar calendar = Calendar.getInstance();
+//                GotoCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
+//                GotoCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
+//
+//                GotoMonthDetail(month, year);
+//            }
+//        }, 0, 1000);
     }
 
     public MediumRemoteView(Context con, Intent intent) {
