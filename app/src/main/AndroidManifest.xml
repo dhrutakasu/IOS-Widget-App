@@ -2,19 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ios.widget">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IOSWidgetApp">
+        <activity
+            android:name=".TestActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.Activity.MyWidgetsActivity"
             android:exported="false" />
@@ -53,7 +52,7 @@
             android:value="ca-app-pub-3940256099942544~3347511713" />
 
         <receiver
-            android:name=".provider.SmallCalenderWidgetProvider"
+            android:name=".provider.SmallWidgetProvider"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -67,7 +66,7 @@
                 android:resource="@xml/widget_small" />
         </receiver>
         <receiver
-            android:name=".provider.MediumCalenderWidgetProvider"
+            android:name=".provider.MediumWidgetProvider"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -81,7 +80,7 @@
                 android:resource="@xml/widget_medium" />
         </receiver>
         <receiver
-            android:name=".provider.LargeCalenderWidgetProvider"
+            android:name=".provider.LargeWidgetProvider"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -95,24 +94,6 @@
                 android:resource="@xml/widget_large" />
         </receiver>
         <receiver
-            android:name=".provider.FirstWidget"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
-                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
-                <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_medium" />
-        </receiver>
-        <receiver
-            android:name=".provider.NoteWidgetCreatedReceiver"
-            android:enabled="true"
-            android:exported="false" />
-        <receiver
             android:name=".provider.BootReceiver"
             android:exported="false">
             <intent-filter>
@@ -120,13 +101,8 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".provider.MyWidgetReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-        </receiver>
-
+            android:name=".provider.XPanelFlashlightWidgetReceiver"
+            android:exported="false"/>
         <service
             android:name=".provider.LargeWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
@@ -136,13 +112,19 @@
         <service
             android:name=".provider.SmallWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-
-        <service android:name=".provider.UpdateWidgetService"
-            android:enabled="true"
-            android:exported="true"/>
-        <service android:name=".provider.MediumUpdateWidgetService"
-            android:enabled="true"
-            android:exported="true"/>
     </application>
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera.flash" />
 
 </manifest>

@@ -1,8 +1,6 @@
 package com.ios.widget.ui.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -17,21 +15,28 @@ import android.widget.ImageView;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
 import com.google.android.material.tabs.TabLayout;
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
-import com.ios.widget.provider.FirstWidget;
-import com.ios.widget.provider.LargeCalenderWidgetProvider;
-import com.ios.widget.provider.MediumCalenderWidgetProvider;
-import com.ios.widget.provider.SmallCalenderWidgetProvider;
-import com.ios.widget.provider.NoteWidgetCreatedReceiver;
+import com.ios.widget.provider.LargeWidgetProvider;
 import com.ios.widget.provider.LargeWidgetService;
+import com.ios.widget.provider.MediumWidgetProvider;
+import com.ios.widget.provider.SmallWidgetProvider;
 import com.ios.widget.ui.Adapter.WidgetPagerAdapter;
 import com.ios.widget.utils.Constants;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class WidgetItemActivity extends AppCompatActivity implements View.OnClickListener {
@@ -83,6 +88,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         iniListeners();
         initActions();
     }
+
     private void initViews() {
         context = this;
         IvBack = (ImageView) findViewById(R.id.IvBack);
@@ -92,6 +98,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         TabWidget = (TabLayout) findViewById(R.id.TabWidget);
         TabSizeLayout = (TabLayout) findViewById(R.id.TabSizeLayout);
     }
+
     private void initIntents() {
         pos = getIntent().getIntExtra(Constants.ITEM_POSITION, 0);
         TabPos = getIntent().getIntExtra(Constants.TabPos, 0);
@@ -109,12 +116,14 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
             modelArrayList = Constants.getPhotoWidgetLists();
         }
     }
+
     private void iniListeners() {
         IvBack.setOnClickListener(this);
         IvAddWidget.setOnClickListener(this);
     }
+
     private void initActions() {
-        helper=new DatabaseHelper(context);
+        helper = new DatabaseHelper(context);
         if (modelArrayList.size() > 1) {
             TabWidget.setVisibility(View.VISIBLE);
         } else {
@@ -158,37 +167,106 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
                 break;
         }
     }
-    private void GotoAddWidget() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Constants.Widget_Id = PagerWidget.getCurrentItem();
-            Constants.Widget_Type_Id = modelArrayList.get(PagerWidget.getCurrentItem()).getPosition();
-            manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
-            switch (TabSizeLayout.getSelectedTabPosition()) {
-                case 0:
-//                    name = new ComponentName(context, FirstWidget.class);
-                    name = new ComponentName(context, SmallCalenderWidgetProvider.class);
-                    break;
-                case 1:
-//                    name = new ComponentName(context, FirstWidget.class);
-                    name = new ComponentName(context, MediumCalenderWidgetProvider.class);
-                    break;
-                case 2:
-                    name = new ComponentName(context, LargeCalenderWidgetProvider.class);
-                    break;
-            }
-            if (manager != null && manager.isRequestPinAppWidgetSupported()) {
-                new Handler().postDelayed(() -> {
-                    Intent intent = new Intent(context, NoteWidgetCreatedReceiver.class);
-                    intent.putExtra(Constants.TAG_WIDGET_NOTE_ID, pos);
-                    PendingIntent pendingIntent;
-                    pendingIntent = PendingIntent.getBroadcast(
-                            context,
-                            0, intent,
-                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    manager.requestPinAppWidget(name, (Bundle) null, pendingIntent);
-                }, 100);
-            }
 
+    private void GotoAddWidget() {
+        if (modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 20) {
+            String s1 = Manifest.permission.CAMERA;
+            Dexter.withActivity(this)
+                    .withPermissions(s1)
+                    .withListener(new MultiplePermissionsListener() {
+                        public void onPermissionsChecked(MultiplePermissionsReport report) {
+                            if (report.areAllPermissionsGranted()) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    Constants.Item_Id = PagerWidget.getCurrentItem();
+                                    Constants.Widget_Type_Id = modelArrayList.get(PagerWidget.getCurrentItem()).getPosition();
+                                    manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
+                                    switch (TabSizeLayout.getSelectedTabPosition()) {
+                                        case 0:
+//                    name = new ComponentName(context, FirstWidget.class);
+                                            name = new ComponentName(context, SmallWidgetProvider.class);
+                                            break;
+                                        case 1:
+//                    name = new ComponentName(context, FirstWidget.class);
+                                            name = new ComponentName(context, MediumWidgetProvider.class);
+                                            break;
+                                        case 2:
+                                            name = new ComponentName(context, LargeWidgetProvider.class);
+                                            break;
+                                    }
+                                    if (manager != null && manager.isRequestPinAppWidgetSupported()) {
+                                        new Handler().postDelayed(() -> {
+                                            Intent intent = null;
+                                            switch (TabSizeLayout.getSelectedTabPosition()) {
+                                                case 0:
+                                                    intent = new Intent(context, SmallWidgetProvider.class);
+                                                    break;
+                                                case 1:
+                                                    intent = new Intent(context, MediumWidgetProvider.class);
+                                                    break;
+                                                case 2:
+                                                    intent = new Intent(context, LargeWidgetProvider.class);
+                                                    break;
+                                            }
+                                            intent.putExtra(Constants.TAG_WIDGET_NOTE_ID, pos);
+                                            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
+                                                    PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                            manager.requestPinAppWidget(name, (Bundle) null, pendingIntent);
+                                        }, 100);
+                                    }
+                                }
+                            }
+
+                            if (report.isAnyPermissionPermanentlyDenied()) {
+                                Constants.showSettingsDialog(WidgetItemActivity.this);
+                            }
+                        }
+
+                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions,
+                                                                       PermissionToken permissionToken) {
+                            Constants.showPermissionDialog(WidgetItemActivity.this, permissionToken);
+                        }
+                    })
+                    .onSameThread()
+                    .check();
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Constants.Item_Id = PagerWidget.getCurrentItem();
+                Constants.Widget_Type_Id = modelArrayList.get(PagerWidget.getCurrentItem()).getPosition();
+                manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
+                switch (TabSizeLayout.getSelectedTabPosition()) {
+                    case 0:
+                        name = new ComponentName(context, SmallWidgetProvider.class);
+                        break;
+                    case 1:
+                        name = new ComponentName(context, MediumWidgetProvider.class);
+                        break;
+                    case 2:
+                        name = new ComponentName(context, LargeWidgetProvider.class);
+                        break;
+                }
+                if (manager != null && manager.isRequestPinAppWidgetSupported()) {
+                    new Handler().postDelayed(() -> {
+                        Intent intent = null;
+                        switch (TabSizeLayout.getSelectedTabPosition()) {
+                            case 0:
+                                intent = new Intent(context, SmallWidgetProvider.class);
+                                break;
+                            case 1:
+                                intent = new Intent(context, MediumWidgetProvider.class);
+                                break;
+                            case 2:
+                                intent = new Intent(context, LargeWidgetProvider.class);
+                                break;
+                        }
+                        intent.putExtra(Constants.TAG_WIDGET_NOTE_ID, pos);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
+                                PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                        manager.requestPinAppWidget(name, (Bundle) null, pendingIntent);
+                    }, 100);
+                }
+            }
         }
     }
 }

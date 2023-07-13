@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".ui.Activity.MyWidgetsActivity">
+
     <include
         android:id="@+id/ViewHeader"
         layout="@layout/layout_header"
@@ -16,12 +17,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_8sdp"
         android:paddingStart="@dimen/_20sdp"
         android:paddingEnd="@dimen/_20sdp"
-        android:layout_marginTop="@dimen/_8sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ViewHeader">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RvMyWidget"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

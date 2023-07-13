@@ -22,7 +22,7 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
     private Context context;
     private long NoteId;
 
-    private List<String> strings;
+    private List<String> strings = new ArrayList<String>();
     private static final int DAY_OFFSET = 1;
     private final String[] monthsList = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
     private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -59,11 +59,11 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public void onCreate() {
         System.out.println("-********* NoteId 00000: ");
-
+        strings.clear();
         calendar = Calendar.getInstance(Locale.getDefault());
         month = calendar.get(Calendar.MONTH) + 1;
         year = calendar.get(Calendar.YEAR);
-        this.strings = new ArrayList<String>();
+
         Calendar calendar = Calendar.getInstance();
         GotoCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
         GotoCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
@@ -149,6 +149,16 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onDataSetChanged() {
+        strings.clear();
+
+        calendar = Calendar.getInstance(Locale.getDefault());
+        month = calendar.get(Calendar.MONTH) + 1;
+        year = calendar.get(Calendar.YEAR);
+        Calendar calendar = Calendar.getInstance();
+        GotoCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
+        GotoCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
+
+        GotoMonthDetail(month, year);
     }
 
     public LargeRemoteView(Context con, Intent intent) {

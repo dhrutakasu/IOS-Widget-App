@@ -20,10 +20,12 @@
             android:weightSum="10">
 
             <RelativeLayout
+                android:id="@+id/RlMediumClock"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="4.5">
+                android:padding="10dp"
+                android:layout_weight="5">
 
                 <AnalogClock
                     android:id="@+id/analog_clock"
@@ -33,12 +35,22 @@
                     android:hand_hour="@drawable/img_clock_simple2_hand_hour"
                     android:hand_minute="@drawable/img_clock_simple2_hand_minute"
                     android:hand_second="@drawable/img_clock_simple2_hand_second" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/analog_clock"
+                    android:layout_alignTop="@+id/analog_clock"
+                    android:layout_alignEnd="@+id/analog_clock"
+                    android:layout_alignBottom="@+id/analog_clock"
+                    android:src="@drawable/img_clock_simple2_cap" />
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/LlMediumCalendar"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4.5"
+                android:layout_weight="4.8"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:weightSum="10">
@@ -46,95 +58,91 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="2"
+                    android:layout_weight="5"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:weightSum="10">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/main_semibold"
-                        android:gravity="center"
-                        android:text="S"
-                        android:textColor="@color/color_4B79A2"
-                        android:textSize="@dimen/_8sdp"
-                        android:textStyle="bold" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:gravity="center">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/main_semibold"
-                        android:gravity="center"
-                        android:text="M"
-                        android:textColor="@color/color_4B79A2"
-                        android:textSize="@dimen/_8sdp"
-                        android:textStyle="bold" />
+                        <TextClock
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="5"
+                            android:autoSizeMaxTextSize="@dimen/_38ssp"
+                            android:autoSizeMinTextSize="@dimen/_20ssp"
+                            android:autoSizeTextType="uniform"
+                            android:ellipsize="none"
+                            android:format12Hour="d"
+                            android:format24Hour="d"
+                            android:gravity="center|start"
+                            android:includeFontPadding="false"
+                            android:letterSpacing="0"
+                            android:singleLine="true"
+                            android:text="28"
+                            android:textColor="@color/color_C21241"
+                            android:textSize="@dimen/_38ssp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/main_semibold"
-                        android:gravity="center"
-                        android:text="T"
-                        android:textColor="@color/color_4B79A2"
-                        android:textSize="@dimen/_8sdp"
-                        android:textStyle="bold" />
+                        android:layout_height="60dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="0.1"
+                        android:background="@color/color_C21241"
+                        android:gravity="center" />
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/main_semibold"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5.5"
                         android:gravity="center"
-                        android:text="W"
-                        android:textColor="@color/color_4B79A2"
-                        android:textSize="@dimen/_8sdp"
-                        android:textStyle="bold" />
+                        android:orientation="vertical"
+                        android:weightSum="10">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/main_semibold"
-                        android:gravity="center"
-                        android:text="T"
-                        android:textColor="@color/color_4B79A2"
-                        android:textSize="@dimen/_8sdp"
-                        android:textStyle="bold" />
+                        <TextClock
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="5"
+                            android:autoSizeMaxTextSize="@dimen/_16ssp"
+                            android:autoSizeMinTextSize="@dimen/_4ssp"
+                            android:autoSizeTextType="uniform"
+                            android:ellipsize="none"
+                            android:format12Hour="EEEE"
+                            android:format24Hour="EEEE"
+                            android:gravity="center|bottom|start"
+                            android:includeFontPadding="false"
+                            android:letterSpacing="0"
+                            android:singleLine="true"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_16ssp"
+                            android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/main_semibold"
-                        android:gravity="center"
-                        android:text="F"
-                        android:textColor="@color/color_4B79A2"
-                        android:textSize="@dimen/_8sdp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/main_semibold"
-                        android:gravity="center"
-                        android:text="S"
-                        android:textColor="@color/color_4B79A2"
-                        android:textSize="@dimen/_8sdp"
-                        android:textStyle="bold" />
+                        <TextClock
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="5"
+                            android:autoSizeMaxTextSize="@dimen/_12ssp"
+                            android:autoSizeMinTextSize="@dimen/_4ssp"
+                            android:autoSizeTextType="uniform"
+                            android:ellipsize="none"
+                            android:format12Hour="MMMM yyyy"
+                            android:format24Hour="MMMM yyyy"
+                            android:gravity="center|top|start"
+                            android:includeFontPadding="false"
+                            android:letterSpacing="0"
+                            android:singleLine="true"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_12ssp" />
+                    </LinearLayout>
                 </LinearLayout>
-
-                <GridView
-                    android:id="@+id/GridCalendarMediumView"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="6.5"
-                    android:gravity="center"
-                    android:numColumns="7" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

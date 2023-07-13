@@ -10,7 +10,6 @@ public class WidgetModel {
         Large = large;
     }
 
-
     public WidgetModel(int small, int medium, int large,String title,int position) {
         Small = small;
         Medium = medium;

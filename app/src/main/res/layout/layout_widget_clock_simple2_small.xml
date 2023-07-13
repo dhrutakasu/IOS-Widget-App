@@ -9,9 +9,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/clock_simple2_bg"
         android:dial="@drawable/img_clock_simple2_dial"
         android:hand_hour="@drawable/img_clock_simple2_hand_hour"
         android:hand_minute="@drawable/img_clock_simple2_hand_minute"
         android:hand_second="@drawable/img_clock_simple2_hand_second" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/analog_clock"
+        android:layout_alignTop="@+id/analog_clock"
+        android:layout_alignEnd="@+id/analog_clock"
+        android:layout_alignBottom="@+id/analog_clock"
+        android:src="@drawable/img_clock_simple2_cap" />
 </RelativeLayout>
