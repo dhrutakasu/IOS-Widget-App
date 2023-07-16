@@ -1,7 +1,6 @@
 package com.ios.widget;
 
 import androidx.appcompat.app.AppCompatActivity;
-import retrofit2.Retrofit;
 
 import android.os.Bundle;
 

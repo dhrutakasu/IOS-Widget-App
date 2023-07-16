@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -19,6 +21,10 @@ import android.os.BatteryManager;
 import android.os.Environment;
 import android.os.StatFs;
 
+import com.ios.widget.Callback.FilterResultCallback;
+import com.ios.widget.Files.Directory;
+import com.ios.widget.Files.FileFilter;
+import com.ios.widget.Files.ImageFile;
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
 import com.karumi.dexter.PermissionToken;
@@ -27,10 +33,13 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import static android.content.Context.BATTERY_SERVICE;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
 
 public class Constants {
 
@@ -50,6 +59,13 @@ public class Constants {
     public static String TabPos = "TabPos";
 
     public static int Widget_Id = -1;
+
+    public static ArrayList<Directory> list = new ArrayList<>();
+    public static List<Directory<ImageFile>> mAll = new ArrayList<>();
+    public static String MAX_NUMBER = "Max Number";
+    public static ArrayList<ImageFile> mSelectedList = new ArrayList<>();
+    public static ArrayList<ImageFile> getmSelectedList = new ArrayList<>();
+    public static final String EDIT_PERVIEW = "Edit_preview";
 
     public static boolean isConnectingToInternet(Context con) {
         ConnectivityManager connectivity = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -128,8 +144,8 @@ public class Constants {
         modelArrayList.add(widgetModel);
         widgetModel = new WidgetModel(R.drawable.img_clock_small_9_xxhdpi, R.drawable.img_xpanel_medium_3_xxhdpi, R.drawable.img_weather_large_2_xxhdpi, "Trendy", 2);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_photo_s_xxhdpi, R.drawable.img_photo_m_xxhdpi, R.drawable.img_photo_l_xxhdpi, "Trendy", 3);
-        modelArrayList.add(widgetModel);
+//        widgetModel = new WidgetModel(R.drawable.img_photo_s_xxhdpi, R.drawable.img_photo_m_xxhdpi, R.drawable.img_photo_l_xxhdpi, "Trendy", 23);
+//        modelArrayList.add(widgetModel);
 
         return modelArrayList;
     }
@@ -150,12 +166,12 @@ public class Constants {
 
     public static ArrayList<WidgetModel> getWeatherWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_weather_small_1_xxhdpi, R.drawable.img_weather_medium_1_xxhdpi, R.drawable.img_weather_large_1_xxhdpi, "Weather", 8);
-        modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_weather_small_2_xxhdpi, R.drawable.img_weather_medium_2_xxhdpi, R.drawable.img_weather_large_2_xxhdpi, "Weather", 9);
-        modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_weather_small_3_xxhdpi, R.drawable.img_weather_medium_3_xxhdpi, R.drawable.img_weather_large_3_xxhdpi, "Weather", 10);
-        modelArrayList.add(widgetModel);
+//        WidgetModel widgetModel = new WidgetModel(R.drawable.img_weather_small_1_xxhdpi, R.drawable.img_weather_medium_1_xxhdpi, R.drawable.img_weather_large_1_xxhdpi, "Weather", 8);
+//        modelArrayList.add(widgetModel);
+//        widgetModel = new WidgetModel(R.drawable.img_weather_small_2_xxhdpi, R.drawable.img_weather_medium_2_xxhdpi, R.drawable.img_weather_large_2_xxhdpi, "Weather", 9);
+//        modelArrayList.add(widgetModel);
+//        widgetModel = new WidgetModel(R.drawable.img_weather_small_3_xxhdpi, R.drawable.img_weather_medium_3_xxhdpi, R.drawable.img_weather_large_3_xxhdpi, "Weather", 10);
+//        modelArrayList.add(widgetModel);
 
         return modelArrayList;
     }
@@ -166,20 +182,20 @@ public class Constants {
         modelArrayList.add(widgetModel);
         widgetModel = new WidgetModel(R.drawable.img_clock_small_2_xxhdpi, R.drawable.img_clock_medium_2_xxhdpi, R.drawable.img_clock_large_2_xxhdpi, "Clock", 12);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_3_xxhdpi, R.drawable.img_clock_medium_3_xxhdpi, R.drawable.img_clock_large_3_xxhdpi, "Clock", 13);
-        modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_4_xxhdpi, R.drawable.img_clock_medium_4_xxhdpi, R.drawable.img_clock_large_4_xxhdpi, "Clock", 14);
-        modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_5_xxhdpi, R.drawable.img_clock_medium_5_xxhdpi, R.drawable.img_clock_large_5_xxhdpi, "Clock", 15);
-        modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_6_xxhdpi, R.drawable.img_clock_medium_6_xxhdpi, R.drawable.img_clock_large_6_xxhdpi, "Clock", 16);
-        modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_7_xxhdpi, R.drawable.img_clock_medium_7_xxhdpi, R.drawable.img_clock_large_7_xxhdpi, "Clock", 17);
-        modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_8_xxhdpi, R.drawable.img_clock_medium_8_xxhdpi, R.drawable.img_clock_large_8_xxhdpi, "Clock", 18);
-        modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_9_xxhdpi, R.drawable.img_clock_medium_9_xxhdpi, R.drawable.img_clock_large_9_xxhdpi, "Clock", 19);
-        modelArrayList.add(widgetModel);
+//        widgetModel = new WidgetModel(R.drawable.img_clock_small_3_xxhdpi, R.drawable.img_clock_medium_3_xxhdpi, R.drawable.img_clock_large_3_xxhdpi, "Clock", 13);
+//        modelArrayList.add(widgetModel);
+//        widgetModel = new WidgetModel(R.drawable.img_clock_small_4_xxhdpi, R.drawable.img_clock_medium_4_xxhdpi, R.drawable.img_clock_large_4_xxhdpi, "Clock", 14);
+//        modelArrayList.add(widgetModel);
+//        widgetModel = new WidgetModel(R.drawable.img_clock_small_5_xxhdpi, R.drawable.img_clock_medium_5_xxhdpi, R.drawable.img_clock_large_5_xxhdpi, "Clock", 15);
+//        modelArrayList.add(widgetModel);
+//        widgetModel = new WidgetModel(R.drawable.img_clock_small_6_xxhdpi, R.drawable.img_clock_medium_6_xxhdpi, R.drawable.img_clock_large_6_xxhdpi, "Clock", 16);
+//        modelArrayList.add(widgetModel);
+//        widgetModel = new WidgetModel(R.drawable.img_clock_small_7_xxhdpi, R.drawable.img_clock_medium_7_xxhdpi, R.drawable.img_clock_large_7_xxhdpi, "Clock", 17);
+//        modelArrayList.add(widgetModel);
+//        widgetModel = new WidgetModel(R.drawable.img_clock_small_8_xxhdpi, R.drawable.img_clock_medium_8_xxhdpi, R.drawable.img_clock_large_8_xxhdpi, "Clock", 18);
+//        modelArrayList.add(widgetModel);
+//        widgetModel = new WidgetModel(R.drawable.img_clock_small_9_xxhdpi, R.drawable.img_clock_medium_9_xxhdpi, R.drawable.img_clock_large_9_xxhdpi, "Clock", 19);
+//        modelArrayList.add(widgetModel);
 
         return modelArrayList;
     }
@@ -190,8 +206,8 @@ public class Constants {
         modelArrayList.add(widgetModel);
         widgetModel = new WidgetModel(R.drawable.img_xpanel_small_2_xxhdpi, R.drawable.img_xpanel_medium_2_xxhdpi, R.drawable.img_xpanel_large_2_xxhdpi, "X-Panel", 21);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_3_xxhdpi, R.drawable.img_xpanel_medium_3_xxhdpi, R.drawable.img_xpanel_large_3_xxhdpi, "X-Panel", 22);
-        modelArrayList.add(widgetModel);
+//        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_3_xxhdpi, R.drawable.img_xpanel_medium_3_xxhdpi, R.drawable.img_xpanel_large_3_xxhdpi, "X-Panel", 22);
+//        modelArrayList.add(widgetModel);
 
         return modelArrayList;
     }
@@ -398,6 +414,92 @@ public class Constants {
         Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
         intent.setData(Uri.fromParts("package", activity.getPackageName(), (String) null));
         activity.startActivityForResult(intent, 101);
+    }
+
+    public static String extractPathWithoutSeparator(String url) {
+        return url.substring(0, url.lastIndexOf("/"));
+    }
+
+    public static String extractFileSuffix(String url) {
+        if (url.contains(".")) {
+            return url.substring(url.lastIndexOf(".") + 1);
+        } else {
+            return "";
+        }
+    }
+
+    public static String extractFileNameWithSuffix(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
+    }
+
+    public static boolean detectIntent(Context ctx, Intent intent) {
+        final PackageManager packageManager = ctx.getPackageManager();
+        List<ResolveInfo> list = packageManager.queryIntentActivities(
+                intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
+    }
+
+    public static void getFolders(Activity activity) {
+        FileFilter.getImages((FragmentActivity) activity, new FilterResultCallback<ImageFile>() {
+            @Override
+            public void onResult(List<Directory<ImageFile>> directories) {
+                list = new ArrayList<>();
+                Directory all = new Directory();
+                all.setName(activity.getResources().getString(R.string.folder_all));
+                list.add(all);
+                list.addAll(directories);
+                mAll = directories;
+            }
+        });
+    }
+    public static ArrayList<ImageFile> getSelectedImages() {
+        return mSelectedList;
+    }
+
+    public static void addSelectedImage(ImageFile imageFile) {
+        mSelectedList.add(imageFile);
+        getmSelectedList.add(imageFile);
+        imageFile.imageCount++;
+    }
+
+    public static void removeSelectedImage(int imageFile) {
+//        if (imageFile <= mSelectedList.size()) {
+        ImageFile imageFile1 = (ImageFile) mSelectedList.remove(imageFile);
+        ImageFile file = (ImageFile) getmSelectedList.remove(imageFile);
+        imageFile1.imageCount--;
+//        }
+    }
+
+    public static void removeSelectedImages(ImageFile imageFile) {
+        for (int i = 0; i < mSelectedList.size(); i++) {
+            if (mSelectedList.get(i).equals(imageFile)){
+                mSelectedList.remove(imageFile);
+                imageFile.imageCount--;
+            }
+        }
+//        if (imageFile <= mSelectedList.size()) {
+//            ImageFile imageFile1 = (ImageFile) mSelectedList.remove(imageFile);
+//            ImageFile file = (ImageFile) getmSelectedList.remove(imageFile);
+//            imageFile1.imageCount--;
+//        }
+    }
+
+
+    public static void clearAllSelection() {
+        getSelectedImages().clear();
+        mSelectedList.clear();
+        getmSelectedList.clear();
+        mSelectedList=new ArrayList<>();
+        getmSelectedList=new ArrayList<>();
+        System.gc();
+    }
+
+    public static String getUniqueId() {
+        return UUID.randomUUID().toString();
+    }
+
+    public static int dpToPx(Context context, int i) {
+        return Math.round(((float) i) * context.getResources().getDisplayMetrics().density);
     }
 }
 

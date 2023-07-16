@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.Activity.PhotoWidgetActivity">
+
+    <include
+        android:id="@+id/ViewHeader"
+        layout="@layout/layout_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/PagerWidget"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_25sdp"
+        android:layout_marginEnd="@dimen/_25sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        app:layout_constraintBottom_toTopOf="@id/TabSizeLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ViewHeader" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/TabSizeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginStart="@dimen/_25sdp"
+        android:layout_marginEnd="@dimen/_25sdp"
+        android:layout_marginBottom="@dimen/_25sdp"
+        android:background="@drawable/ic_radius_bg"
+        app:layout_constraintBottom_toTopOf="@id/LlUpload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tabBackground="@android:color/transparent"
+        app:tabGravity="fill"
+        app:tabIndicatorHeight="0dp"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="#FF3B30"
+        app:tabTextColor="#000000" />
+
+    <RelativeLayout
+        android:id="@+id/LlUpload"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_25sdp"
+        android:layout_marginEnd="@dimen/_25sdp"
+        android:layout_marginBottom="@dimen/_25sdp"
+        android:background="@drawable/ic_radius_bg"
+        android:padding="@dimen/_15sdp"
+        app:layout_constraintBottom_toTopOf="@id/IvAddWidget"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/TvUploadPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="@font/main_bold"
+            android:gravity="center_vertical"
+            android:text="Upload Photo"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14sdp" />
+
+        <TextView
+            android:id="@+id/TvUploadPhotoSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:fontFamily="@font/main_black"
+            android:gravity="center_vertical"
+            android:text="4/10"
+            android:textColor="@color/orange"
+            android:textSize="@dimen/_14sdp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RvPhotos"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_60sdp"
+            android:layout_below="@id/TvUploadPhotoSize"
+            android:layout_marginTop="@dimen/_10sdp" />
+
+        <TextView
+            android:id="@+id/TvRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/RvPhotos"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:fontFamily="@font/main_bold"
+            android:gravity="center_vertical"
+            android:text="Refresh Interval"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14sdp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/TvRefresh"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/ic_radius_bg"
+            android:backgroundTint="@color/white">
+
+            <Spinner
+                android:id="@+id/SpinnerWidgetInterval"
+                style="@style/SpinnerTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overlapAnchor="false"
+                android:spinnerMode="dropdown"
+                android:popupBackground="@color/white"
+                android:dropDownVerticalOffset="@dimen/_35sdp"
+                android:padding="@dimen/_6sdp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/IvAddWidget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TabSizeLayout"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:src="@drawable/btn_add_widget"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

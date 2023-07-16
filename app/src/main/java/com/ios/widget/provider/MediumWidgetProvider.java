@@ -1,19 +1,21 @@
 package com.ios.widget.provider;
 
 import static com.ios.widget.utils.Constants.Widget_Id;
+import static com.ios.widget.utils.Pref.IS_BATTERY;
+import static com.ios.widget.utils.Pref.IS_DATE;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.bluetooth.BluetoothAdapter;
-import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.hardware.camera2.CameraManager;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.CalendarContract;
@@ -26,8 +28,10 @@ import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
 import com.ios.widget.utils.Constants;
+import com.ios.widget.utils.Pref;
 
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class MediumWidgetProvider extends AppWidgetProvider {
 //    private NotesDatabaseHelper helper;
@@ -41,7 +45,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         System.out.println("******** Constants.Widget_Type_Id : " + Constants.Widget_Type_Id);
         DatabaseHelper helper = new DatabaseHelper(context);
-        WidgetData widgetData = new WidgetData(1, Constants.Widget_Type_Id,-1);
+        WidgetData widgetData = new WidgetData(1, Constants.Widget_Type_Id, -1);
 //            WidgetData widgetData = new WidgetData("0", "M", Constants.getWidgetLists().get(Constants.Widget_Type_Id).getSmall(), Constants.getWidgetLists().get(Constants.Widget_Type_Id).getMedium(), Constants.getWidgetLists().get(Constants.Widget_Type_Id).getLarge(), String.valueOf(Constants.Widget_Type_Id), String.valueOf(appWidgetIds[i]));
         System.out.println("_*_*_*_*_*_*_ 11 :: " + helper.getWidgetCount());
         int insert = helper.InsertWidget(widgetData);
@@ -63,6 +67,10 @@ public class MediumWidgetProvider extends AppWidgetProvider {
             Intent intent = null;
             Intent intent1 = null;
             PendingIntent configPendingIntent = null;
+            Calendar calendar;
+            int currentDay;
+            int currentMonth;
+            int currentYear;
             handler = new Handler();
             switch (helper.getWidgets().get(i).getPosition()) {
                 case 0:
@@ -82,7 +90,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
                     rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
                     RemoteViews finalRv3 = rv;
-                    int finalI3 = i;
                     intent = new Intent(context, MediumWidgetService.class);
                     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
 
@@ -117,17 +124,12 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     //todo x-panel 3 medium
 
                     break;
-                case 3:
-                case 23:
-                    //todo photos medium
-
-                    break;
                 case 4:
                     //todo calender 1 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar1_medium);
-                    rv.setImageViewResource(R.id.iv_background, R.drawable.img_calendar1_medium_bg);
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM, yyyy");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM, yyyy");
+//                    rv.setImageViewResource(R.id.iv_background, R.drawable.img_calendar1_medium_bg);
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM yyyy");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM yyyy");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
                     rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
 
@@ -138,17 +140,22 @@ public class MediumWidgetProvider extends AppWidgetProvider {
 
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
                     finalRv2.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
-
+                    calendar = Calendar.getInstance();
+                    currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+                    currentMonth = calendar.get(Calendar.MONTH);
+                    currentYear = calendar.get(Calendar.YEAR);
+                    new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
                     runnable = new Runnable() {
                         @Override
                         public void run() {
-                            Intent intent = new Intent(context, MediumWidgetService.class);
-                            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
-
-                            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-                            finalRv2.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
-                            appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
-
+                            Calendar NewCalendar = Calendar.getInstance();
+                            int currentDay = NewCalendar.get(Calendar.DAY_OF_MONTH);
+                            int currentMonth = NewCalendar.get(Calendar.MONTH);
+                            int currentYear = NewCalendar.get(Calendar.YEAR);
+                            if (!new Pref(context).getString(IS_DATE, "").equalsIgnoreCase(currentDay + "/" + currentMonth + "/" + currentYear)) {
+                                appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
+                                new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
+                            }
                             handler.postDelayed(this, 5000);
                         }
                     };
@@ -178,16 +185,22 @@ public class MediumWidgetProvider extends AppWidgetProvider {
 
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
                     finalRv1.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
+                    calendar = Calendar.getInstance();
+                    currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+                    currentMonth = calendar.get(Calendar.MONTH);
+                    currentYear = calendar.get(Calendar.YEAR);
+                    new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
                     runnable = new Runnable() {
                         @Override
                         public void run() {
-                            Intent intent = new Intent(context, MediumWidgetService.class);
-                            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
-
-                            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-                            finalRv1.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
-                            appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
-
+                            Calendar NewCalendar = Calendar.getInstance();
+                            int currentDay = NewCalendar.get(Calendar.DAY_OF_MONTH);
+                            int currentMonth = NewCalendar.get(Calendar.MONTH);
+                            int currentYear = NewCalendar.get(Calendar.YEAR);
+                            if (!new Pref(context).getString(IS_DATE, "").equalsIgnoreCase(currentDay + "/" + currentMonth + "/" + currentYear)) {
+                                appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
+                                new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
+                            }
                             handler.postDelayed(this, 5000);
                         }
                     };
@@ -220,18 +233,22 @@ public class MediumWidgetProvider extends AppWidgetProvider {
 
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
                     finalRv.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
+                    calendar = Calendar.getInstance();
+                    currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+                    currentMonth = calendar.get(Calendar.MONTH);
+                    currentYear = calendar.get(Calendar.YEAR);
+                    new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
                     runnable = new Runnable() {
                         @Override
                         public void run() {
-//                    rv.setImageViewBitmap(R.id.iv_background,Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.shape_app_widget_ffffff_r25_bg),30));
-
-                            Intent intent = new Intent(context, MediumWidgetService.class);
-                            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
-
-                            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-                            finalRv.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
-                            appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
-
+                            Calendar NewCalendar = Calendar.getInstance();
+                            int currentDay = NewCalendar.get(Calendar.DAY_OF_MONTH);
+                            int currentMonth = NewCalendar.get(Calendar.MONTH);
+                            int currentYear = NewCalendar.get(Calendar.YEAR);
+                            if (!new Pref(context).getString(IS_DATE, "").equalsIgnoreCase(currentDay + "/" + currentMonth + "/" + currentYear)) {
+                                appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
+                                new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
+                            }
                             handler.postDelayed(this, 5000);
                         }
                     };
@@ -296,11 +313,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                 case 14:
                     //todo clock 4 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism1_medium);
-                    intent = new Intent(context, MediumWidgetService.class);
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
-
-                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-                    rv.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
                     break;
                 case 15:
                     //todo clock 5 medium
@@ -478,6 +490,40 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     break;
                 case 21:
                     //todo x-panel 2 medium
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel2_medium);
+
+                    BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+                    int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+                    new Pref(context).putInt(IS_BATTERY, batLevel);
+                    RemoteViews remoteViews = rv;
+
+                    remoteViews.setTextViewText(R.id.progress_text, batLevel + "%");
+                    remoteViews.setProgressBar(R.id.progress_bar, 100, batLevel, false);
+//                    runnable = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+//                            int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+//                            System.out.println("************ WIFI RECEIVE MMM 100/" + batLevel + " -- : 100/" + new Pref(context).getInt(IS_BATTERY, -1));
+//                            if (new Pref(context).getInt(IS_BATTERY, -1) != batLevel) {
+//                                remoteViews.setTextViewText(R.id.progress_text, batLevel + "%");
+//                                remoteViews.setProgressBar(R.id.progress_bar, 100, batLevel, false);
+//                                new Pref(context).putInt(IS_BATTERY, batLevel);
+//                                appWidgetManager.updateAppWidget(Widget_Id, remoteViews);
+//                            }
+//                            handler.postDelayed(this, 2000);
+//                        }
+//                    };
+//                    handler.postDelayed(runnable,0);
+
+                    if (!new Pref(context).getBoolean(Pref.IS_BATTERY_ALARM,false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new Pref(context).putBoolean(Pref.IS_BATTERY_ALARM, true);
+                        long repeatInterval = TimeUnit.MILLISECONDS.toSeconds(1);
+                        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, (System.currentTimeMillis() + TimeUnit.MILLISECONDS.toSeconds(1)), repeatInterval, broadcast);
+                    }
                     break;
 
             }

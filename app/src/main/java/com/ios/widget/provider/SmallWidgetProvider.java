@@ -1,7 +1,9 @@
 package com.ios.widget.provider;
 
 import static com.ios.widget.utils.Constants.Widget_Id;
+import static com.ios.widget.utils.Pref.IS_BATTERY;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -12,6 +14,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.hardware.camera2.CameraManager;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.CalendarContract;
@@ -24,8 +27,10 @@ import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
 import com.ios.widget.utils.Constants;
+import com.ios.widget.utils.Pref;
 
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class SmallWidgetProvider extends AppWidgetProvider {
     private Handler handler;
@@ -126,11 +131,6 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.RlSmallClock, configPendingIntent);
-                    break;
-                case 3:
-                case 23:
-                    //todo photos small
-
                     break;
                 case 4:
                     //todo calender 1 small
@@ -395,6 +395,39 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     finalRv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
                 case 21:
                     //todo x-panel 2 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel2_small);
+
+                    BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+                    int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+                    new Pref(context).putInt(IS_BATTERY, batLevel);
+                    RemoteViews finalrv = rv;
+
+                    finalrv.setTextViewText(R.id.progress_text, batLevel + "%");
+                    finalrv.setProgressBar(R.id.progress_bar, 100, batLevel, false);
+                    System.out.println("************ WIFI RECEIVE SSSS 100/" + batLevel + " -- : 100/" + new Pref(context).getInt(IS_BATTERY, -1));
+//                    runnable = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+//                            int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+//                            if (new Pref(context).getInt(IS_BATTERY, -1) != batLevel) {
+//                                finalrv.setTextViewText(R.id.progress_text, batLevel + "%");
+//                                finalrv.setProgressBar(R.id.progress_bar, 100, batLevel, false);
+//                                new Pref(context).putInt(IS_BATTERY, batLevel);
+//                                appWidgetManager.updateAppWidget(Widget_Id, finalrv);
+//                            }
+//                            handler.postDelayed(this, 2000);
+//                        }
+//                    };
+//                    handler.postDelayed(runnable, 0);
+                    if (!new Pref(context).getBoolean(Pref.IS_BATTERY_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new Pref(context).putBoolean(Pref.IS_BATTERY_ALARM, true);
+                        long repeatInterval = TimeUnit.MILLISECONDS.toSeconds(1);  
+                        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, (System.currentTimeMillis() + TimeUnit.MILLISECONDS.toSeconds(1)), repeatInterval, broadcast);
+                    }
                     break;
                 case 22:
                     //todo x-panel 3 small

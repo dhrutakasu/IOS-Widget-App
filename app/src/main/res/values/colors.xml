@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="orange">#FF3B30</color>
     <color name="gray">#A3A3AD</color>
+    <color name="black_light">#1A000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="brown">#4C3E37</color>
     <color name="light_brown">#6C6864</color>
@@ -35,4 +36,7 @@
     <color name="color_DADEFF">#DADEFF</color>
     <color name="color_C21241">#C21241</color>
     <color name="color_C21271">#C21271</color>
+    <color name="color_FB4041">#FB4041</color>
+    <color name="color_11B826">#11B826</color>
+    <color name="button1">#FF3B30</color>
 </resources>

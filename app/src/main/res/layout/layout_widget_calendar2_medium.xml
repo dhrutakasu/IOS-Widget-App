@@ -33,7 +33,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4.5"
+                android:layout_weight="4"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:weightSum="10">
@@ -60,7 +60,7 @@
                     android:id="@+id/TClockDate"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="4"
+                    android:layout_weight="5"
                     android:autoSizeMaxTextSize="@dimen/_72ssp"
                     android:autoSizeMinTextSize="@dimen/_20ssp"
                     android:autoSizeTextType="uniform"
@@ -98,7 +98,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4.5"
+                android:layout_weight="5"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:weightSum="10">
@@ -106,7 +106,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="0.8"
+                    android:layout_weight="0.9"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -190,16 +190,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginTop="@dimen/_1sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
-                    android:layout_weight="0.03"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:layout_weight="0.04"
                     android:gravity="center"
                     android:background="@color/white"/>
                 <GridView
                     android:id="@+id/GridCalendarMediumView"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="6"
+                    android:layout_weight="7"
                     android:gravity="center"
                     android:numColumns="7"
                     tools:listitem="@layout/item_calendar_day" />

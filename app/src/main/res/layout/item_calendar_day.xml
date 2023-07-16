@@ -8,9 +8,9 @@
         android:id="@+id/IvMainCalendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_alignTop="@id/TvCalendarDates"
         android:layout_alignBottom="@id/TvCalendarDates"
-        android:visibility="gone"
         android:layout_alignStart="@id/TvCalendarDates"
         android:layout_alignEnd="@id/TvCalendarDates"
         android:src="@drawable/ic_calendar_ring" />
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
-        android:padding="@dimen/_2sdp"
+        android:gravity="center"
         android:fontFamily="@font/main_medium"
         android:textColor="@color/brown"
         android:textSize="@dimen/_7sdp" />

@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:background="@drawable/img_calendar1_medium_bg" />
+            android:src="@drawable/img_calendar1_medium_bg" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4.5"
+                android:layout_weight="3.5"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:weightSum="10">
@@ -63,7 +63,7 @@
                     android:id="@id/TClockDate"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="5"
+                    android:layout_weight="6.5"
                     android:autoSizeMaxTextSize="@dimen/_68ssp"
                     android:autoSizeMinTextSize="@dimen/_40ssp"
                     android:autoSizeTextType="uniform"
@@ -81,7 +81,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4.5"
+                android:layout_weight="5.5"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:weightSum="10">
@@ -175,7 +175,7 @@
                     android:id="@+id/GridCalendarMediumView"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="5"
+                    android:layout_weight="6.5"
                     android:gravity="center"
                     android:numColumns="7"
                     tools:listitem="@layout/item_calendar_day" />

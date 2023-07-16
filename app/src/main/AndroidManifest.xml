@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ios.widget">
 
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -46,6 +44,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.Activity.PhotoWidgetActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.Activity.ImageSelection_Activity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -94,7 +100,47 @@
                 android:resource="@xml/widget_large" />
         </receiver>
         <receiver
+            android:name=".provider.SmallPhotoWidgetProvider"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="left" />
+                <action android:name="right" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/photo_widget_small" />
+        </receiver>
+        <receiver
+            android:name=".provider.MediumPhotoWidgetProvider"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="left" />
+                <action android:name="right" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/photo_widget_medium" />
+        </receiver>
+        <receiver
+            android:name=".provider.LargePhotoWidgetProvider"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="left" />
+                <action android:name="right" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/photo_widget_large" />
+        </receiver>
+        <receiver
             android:name=".provider.BootReceiver"
+            android:enabled="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -102,29 +148,75 @@
         </receiver>
         <receiver
             android:name=".provider.XPanelFlashlightWidgetReceiver"
-            android:exported="false"/>
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".provider.BetteryBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".provider.SmallPhotoWidgetService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service
+            android:name=".provider.MediumPhotoWidgetService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service
+            android:name=".provider.LargePhotoWidgetService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service
             android:name=".provider.LargeWidgetService"
+            android:enabled="true"
+            android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service
             android:name=".provider.MediumWidgetService"
+            android:enabled="true"
+            android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service
             android:name=".provider.SmallWidgetService"
+            android:enabled="true"
+            android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
-
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.camera.flash" />
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 </manifest>

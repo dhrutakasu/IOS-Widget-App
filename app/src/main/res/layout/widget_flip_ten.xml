@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rr1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/fr"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/name_widget"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:id="@+id/flipperMainView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <AdapterViewFlipper
+                    android:id="@+id/flipView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autoStart="true"
+                    android:flipInterval="3600000"
+                    android:inAnimation="@animator/fade_in"
+                    android:loopViews="true"
+                    android:outAnimation="@animator/fade_out"
+                    android:visibility="gone" />
+
+                <include layout="@layout/widget_paging" />
+            </FrameLayout>
+        </FrameLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminate="false"
+            android:indeterminateTint="@color/button1"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/name_widget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+
+</RelativeLayout>
