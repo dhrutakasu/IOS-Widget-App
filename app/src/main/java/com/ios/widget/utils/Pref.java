@@ -18,6 +18,7 @@ public class Pref {
     public static String IS_DATE = "IsDate";
     public static String IS_BATTERY = "IsBattery";
     public static String IS_BATTERY_ALARM = "IsBatteryAlarm";
+    public static String IS_X_PANEL_1_ALARM = "IsXPanel1Alarm";
     public static int AGE = 25;
     static final String MyPref = "widgetPref";
     public static final String SHOW_NEVER = "SHOW_NEVER";

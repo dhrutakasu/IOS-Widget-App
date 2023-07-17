@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rotate xmlns:android="http://schemas.android.com/apk/res/android"
-    android:fromDegrees="270"
-    android:toDegrees="270">
-    <shape
-        android:innerRadiusRatio="3.2"
-        android:shape="ring"
-        android:thickness="18dp"
-        android:useLevel="true">
-        <solid android:color="@color/color_11B826" />
-        <corners android:radius="@dimen/_50sdp" />
-    </shape>
-</rotate>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="@dimen/_15sdp" />
+    <solid android:color="@color/color_11B826" />
+</shape>
+<!--
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item>
+    <bitmap android:src="@drawable/pb_empty"/>
+</item>
+<item>
+    <clip
+        android:clipOrientation="vertical"
+        android:gravity="bottom"
+        android:drawable="@drawable/pb_full"/>
+</item>
+</layer-list>
+-->

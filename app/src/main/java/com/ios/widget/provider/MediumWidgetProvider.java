@@ -396,6 +396,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     RemoteViews finalrv = rv;
                     int finali = i;
 
+
                     CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         cameraManager.registerTorchCallback(new CameraManager.TorchCallback() {
@@ -416,7 +417,32 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                             }
                         }, null);
                     }
-                    appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.IvWifi);
+                    if (Constants.IsWIfiConnected(context)) {
+                        System.out.println("************ WIFI RECEIVE  ON ");
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
+                    } else {
+                        System.out.println("************ WIFI RECEIVE  Off ");
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
+                    }
+                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    if (mBluetoothAdapter != null) {
+                        if (mBluetoothAdapter.isEnabled()) {
+                            System.out.println("************  Bluetooth RECEIVE  ON ");
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
+                        } else if (!mBluetoothAdapter.isEnabled()) {
+                            System.out.println("************  Bluetooth RECEIVE  else ");
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
+                        }
+                    }
+
+                    System.out.println("********* ON / OFF : " + IsTorchOn);
+                    if (IsTorchOn) {
+                        rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
+                    } else {
+                        rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1);
+                    }
+
+                  /*  appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.IvWifi);
                     appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.IvTorch);
 
                     runnable = new Runnable() {
@@ -475,6 +501,14 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         }
                     };
                     handler.postDelayed(runnable, 0);
+*/
+                    if (!new Pref(context).getBoolean(Pref.IS_X_PANEL_1_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new Pref(context).putBoolean(Pref.IS_X_PANEL_1_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    }
 
                     Intent intentWifi = new Intent(Settings.ACTION_WIFI_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentWifi, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
@@ -486,7 +520,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
 
                     Intent intent2 = new Intent(context, XPanelFlashlightWidgetReceiver.class);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    finalrv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
+                    rv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
                     break;
                 case 21:
                     //todo x-panel 2 medium
@@ -534,7 +568,16 @@ public class MediumWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] iArr) {
-
+        for (int id : iArr) {
+            System.out.println("_*_*_*_*_*_*_ uuid " + id);
+            DatabaseHelper helper = new DatabaseHelper(context);
+            WidgetData widgetsId = helper.getWidgetsNumber(id);
+            if (widgetsId!=null) {
+                System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
+                widgetsId.setNumber(-1);
+            }
+            helper.updateWidget(widgetsId);
+        }
     }
 
     @Override

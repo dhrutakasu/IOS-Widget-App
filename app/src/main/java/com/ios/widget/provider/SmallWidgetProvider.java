@@ -315,7 +315,32 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                             }
                         }, null);
                     }
-                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds[finalI], R.id.IvWifi);
+                    if (Constants.IsWIfiConnected(context)) {
+                        System.out.println("************ WIFI RECEIVE  ON ");
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
+                    } else {
+                        System.out.println("************ WIFI RECEIVE  Off ");
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
+                    }
+                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    if (mBluetoothAdapter != null) {
+                        if (mBluetoothAdapter.isEnabled()) {
+                            System.out.println("************  Bluetooth RECEIVE  ON ");
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
+                        } else if (!mBluetoothAdapter.isEnabled()) {
+                            System.out.println("************  Bluetooth RECEIVE  else ");
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
+                        }
+                    }
+
+                    System.out.println("********* ON / OFF : " + IsTorchOn);
+                    if (IsTorchOn) {
+                        rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
+                    } else {
+                        rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1);
+                    }
+
+            /*        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds[finalI], R.id.IvWifi);
                     appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds[finalI], R.id.IvTorch);
 
                     runnable = new Runnable() {
@@ -373,7 +398,14 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                             handler.postDelayed(this, 2000);
                         }
                     };
-                    handler.postDelayed(runnable, 0);
+                    handler.postDelayed(runnable, 0);*/
+                    if (!new Pref(context).getBoolean(Pref.IS_X_PANEL_1_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new Pref(context).putBoolean(Pref.IS_X_PANEL_1_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    }
 
                     Intent intentWifi = new Intent(Settings.ACTION_WIFI_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentWifi, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
@@ -390,9 +422,8 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
 
                     Intent intent2 = new Intent(context, XPanelFlashlightWidgetReceiver.class);
-                    intent2.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds[i]);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    finalRv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
+                    rv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
                 case 21:
                     //todo x-panel 2 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel2_small);
@@ -405,32 +436,17 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     finalrv.setTextViewText(R.id.progress_text, batLevel + "%");
                     finalrv.setProgressBar(R.id.progress_bar, 100, batLevel, false);
                     System.out.println("************ WIFI RECEIVE SSSS 100/" + batLevel + " -- : 100/" + new Pref(context).getInt(IS_BATTERY, -1));
-//                    runnable = new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
-//                            int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-//                            if (new Pref(context).getInt(IS_BATTERY, -1) != batLevel) {
-//                                finalrv.setTextViewText(R.id.progress_text, batLevel + "%");
-//                                finalrv.setProgressBar(R.id.progress_bar, 100, batLevel, false);
-//                                new Pref(context).putInt(IS_BATTERY, batLevel);
-//                                appWidgetManager.updateAppWidget(Widget_Id, finalrv);
-//                            }
-//                            handler.postDelayed(this, 2000);
-//                        }
-//                    };
-//                    handler.postDelayed(runnable, 0);
                     if (!new Pref(context).getBoolean(Pref.IS_BATTERY_ALARM, false)) {
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                         PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                         new Pref(context).putBoolean(Pref.IS_BATTERY_ALARM, true);
-                        long repeatInterval = TimeUnit.MILLISECONDS.toSeconds(1);  
-                        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, (System.currentTimeMillis() + TimeUnit.MILLISECONDS.toSeconds(1)), repeatInterval, broadcast);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                     }
                     break;
                 case 22:
                     //todo x-panel 3 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel3_small);
                     break;
 
             }
@@ -443,13 +459,27 @@ public class SmallWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
+        for (int id : appWidgetIds) {
+            System.out.println("_*_*_*_*_*_*_ uuid " + id);
+            DatabaseHelper helper = new DatabaseHelper(context);
+            WidgetData widgetsId = helper.getWidgetsNumber(id);
+            if (widgetsId!=null) {
+                System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
+                widgetsId.setNumber(-1);
+            }
+            helper.updateWidget(widgetsId);
+        }
+//        System.out.println("_*_*_*_*_*_*_ 22 :: " + appWidgetIds.length);
+//        for (int valueof : appWidgetIds) {
+//            System.out.println("_*_*_*_*_*_*_ 22 appWidgetIds:: " + appWidgetIds[valueof]);
+//        }
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        DatabaseHelper helper = new DatabaseHelper(context);
-        System.out.println("_*_*_*_*_*_*_ 22 :: " + helper.getWidgetCount());
+//        DatabaseHelper helper = new DatabaseHelper(context);
+//        System.out.println("_*_*_*_*_*_*_ 22 :: " + helper.getWidgetCount());
        /* int count;
         if (helper.getWidgetCount() == 0) {
             count = 1;

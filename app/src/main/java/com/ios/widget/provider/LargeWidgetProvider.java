@@ -77,6 +77,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     RemoteViews finalRv = rv;
                     int finalI = i;
 
+
                     CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         cameraManager.registerTorchCallback(new CameraManager.TorchCallback() {
@@ -97,7 +98,31 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                             }
                         }, null);
                     }
-                    appWidgetManager.notifyAppWidgetViewDataChanged(helper.getWidgets().get(finalI).getNumber(), R.id.IvWifi);
+                    if (Constants.IsWIfiConnected(context)) {
+                        System.out.println("************ WIFI RECEIVE  ON ");
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
+                    } else {
+                        System.out.println("************ WIFI RECEIVE  Off ");
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
+                    }
+                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    if (mBluetoothAdapter != null) {
+                        if (mBluetoothAdapter.isEnabled()) {
+                            System.out.println("************  Bluetooth RECEIVE  ON ");
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
+                        } else if (!mBluetoothAdapter.isEnabled()) {
+                            System.out.println("************  Bluetooth RECEIVE  else ");
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
+                        }
+                    }
+
+                    System.out.println("********* ON / OFF : " + IsTorchOn);
+                    if (IsTorchOn) {
+                        rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
+                    } else {
+                        rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1);
+                    }
+                   /* appWidgetManager.notifyAppWidgetViewDataChanged(helper.getWidgets().get(finalI).getNumber(), R.id.IvWifi);
                     appWidgetManager.notifyAppWidgetViewDataChanged(helper.getWidgets().get(finalI).getNumber(), R.id.IvTorch);
 
                     runnable = new Runnable() {
@@ -155,7 +180,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                             handler.postDelayed(this, 2000);
                         }
                     };
-                    handler.postDelayed(runnable, 0);
+                    handler.postDelayed(runnable, 0);*/
 
                     Intent intentWifi = new Intent(Settings.ACTION_WIFI_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentWifi, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
@@ -168,7 +193,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     Intent intent2 = new Intent(context, XPanelFlashlightWidgetReceiver.class);
                     intent2.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, Widget_Id);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    finalRv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
+                    rv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
                     break;
                 case 1:
                 case 18:
@@ -493,6 +518,15 @@ public class LargeWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] iArr) {
-
+        for (int id : iArr) {
+            System.out.println("_*_*_*_*_*_*_ uuid " + id);
+            DatabaseHelper helper = new DatabaseHelper(context);
+            WidgetData widgetsId = helper.getWidgetsNumber(id);
+            if (widgetsId!=null) {
+                System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
+                widgetsId.setNumber(-1);
+            }
+            helper.updateWidget(widgetsId);
+        }
     }
 }

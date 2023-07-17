@@ -103,16 +103,22 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         pos = getIntent().getIntExtra(Constants.ITEM_POSITION, 0);
         TabPos = getIntent().getIntExtra(Constants.TabPos, 0);
         if (TabPos == 0) {
+            TvTitle.setText("Trendy");
             modelArrayList = Constants.getTrendyWidgetLists();
         } else if (TabPos == 1) {
+            TvTitle.setText("Calendar");
             modelArrayList = Constants.getCalendarWidgetLists();
         } else if (TabPos == 2) {
+            TvTitle.setText("Weather");
             modelArrayList = Constants.getWeatherWidgetLists();
         } else if (TabPos == 3) {
+            TvTitle.setText("Clock");
             modelArrayList = Constants.getClockWidgetLists();
         } else if (TabPos == 4) {
+            TvTitle.setText("X-Panel");
             modelArrayList = Constants.getXPanelWidgetLists();
         } else if (TabPos == 5) {
+            TvTitle.setText("Photo");
             modelArrayList = Constants.getPhotoWidgetLists();
         }
     }
