@@ -30,7 +30,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4.5"
+                android:layout_weight="4"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:weightSum="5">
@@ -60,14 +60,12 @@
                             android:weightSum="10">
 
                             <ImageView
-                                android:id="@+id/IvWifi"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="4.5"
                                 android:src="@drawable/ic_xpanel_medium_2_wifi" />
 
                             <ImageView
-                                android:id="@+id/IvBluetooth"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="4.5"
@@ -89,14 +87,12 @@
                             android:weightSum="10">
 
                             <ImageView
-                                android:id="@+id/IvCellular"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="4.5"
                                 android:src="@drawable/ic_xpanel_medium_2_mobiledata" />
 
                             <ImageView
-                                android:id="@+id/IvTorch"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="4.5"
@@ -196,12 +192,14 @@
                                     android:textStyle="bold" />
                             </LinearLayout>
 
+
+
                             <TextClock
-                                android:id="@+id/TClockDay"
+                                android:id="@+id/TClockAMPM"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="0.8"
-                                android:autoSizeMaxTextSize="@dimen/_10ssp"
+                                android:autoSizeMaxTextSize="@dimen/_6ssp"
                                 android:autoSizeMinTextSize="@dimen/_2ssp"
                                 android:autoSizeTextType="uniform"
                                 android:ellipsize="none"
@@ -213,7 +211,7 @@
                                 android:text="October"
                                 android:textColor="@color/white"
                                 android:textDirection="ltr"
-                                android:textSize="@dimen/_10ssp" />
+                                android:textSize="@dimen/_6ssp" />
                         </LinearLayout>
                     </LinearLayout>
 

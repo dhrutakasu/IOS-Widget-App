@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:gravity="top|center_vertical|center_horizontal|center"
+    android:layoutDirection="ltr">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/img_xpanel_large_3_bg" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/iv_background"
+            android:layout_alignEnd="@+id/iv_background"
+            android:layout_alignBottom="@+id/iv_background"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="5">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4.5"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:weightSum="5">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:gravity="center"
+                        android:background="@drawable/ic_xpanel_large_2_bg_box"
+                        android:orientation="vertical"
+                        android:weightSum="5">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2.2"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <TextClock
+                                android:id="@+id/TClockHr"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.8"
+                                android:autoSizeMaxTextSize="@dimen/_60ssp"
+                                android:autoSizeMinTextSize="@dimen/_4ssp"
+                                android:autoSizeTextType="uniform"
+                                android:ellipsize="none"
+                                android:format12Hour="h"
+                                android:format24Hour="h"
+                                android:gravity="center"
+                                android:includeFontPadding="false"
+                                android:singleLine="true"
+                                android:text="10"
+                                android:textColor="@color/white"
+                                android:textDirection="ltr"
+                                android:textSize="@dimen/_60ssp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.2"
+                                android:gravity="center"
+                                android:text=":"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_30ssp"
+                                android:textStyle="bold" />
+
+                            <TextClock
+                                android:id="@+id/TClockMin"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.8"
+                                android:autoSizeMaxTextSize="@dimen/_60ssp"
+                                android:autoSizeMinTextSize="@dimen/_4ssp"
+                                android:autoSizeTextType="uniform"
+                                android:ellipsize="none"
+                                android:format12Hour="h"
+                                android:format24Hour="h"
+                                android:gravity="center"
+                                android:includeFontPadding="false"
+                                android:singleLine="true"
+                                android:text="10"
+                                android:textColor="@color/white"
+                                android:textDirection="ltr"
+                                android:textSize="@dimen/_60ssp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextClock
+                            android:id="@+id/TClockDay"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1.2"
+                            android:autoSizeMaxTextSize="@dimen/_48sdp"
+                            android:autoSizeMinTextSize="@dimen/_2ssp"
+                            android:autoSizeTextType="uniform"
+                            android:ellipsize="none"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:format12Hour="EEEE"
+                            android:format24Hour="EEEE"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:singleLine="true"
+                            android:text="October"
+                            android:textColor="@color/white"
+                            android:textDirection="ltr"
+                            android:textSize="@dimen/_48sdp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2.5"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <LinearLayout
+                        android:id="@+id/LlSmallClock"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="5">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="5"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="10">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="4.7"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:weightSum="10">
+
+                                <ImageView
+                                    android:id="@+id/IvWifi"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="4.3"
+                                    android:layout_margin="@dimen/_4sdp"
+                                    android:src="@drawable/ic_wifi1" />
+
+                                <ImageView
+                                    android:id="@+id/IvBluetooth"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="4.3"
+                                    android:layout_margin="@dimen/_4sdp"
+                                    android:src="@drawable/ic_bluethooth1" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.6" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="4.7"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:weightSum="10">
+
+                                <ImageView
+                                    android:id="@+id/IvCellular"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="4.5"
+                                    android:layout_margin="@dimen/_4sdp"
+                                    android:src="@drawable/ic_celluer1" />
+
+                                <ImageView
+                                    android:id="@+id/IvTorch"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="4.5"
+                                    android:layout_margin="@dimen/_4sdp"
+                                    android:src="@drawable/ic_tourch1" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4.7"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3.5"
+                            android:gravity="start">
+
+                            <ProgressBar
+                                android:id="@+id/progressBarCharge"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/line_shape"
+                                android:progress="50"
+                                android:progressDrawable="@drawable/line_progress_bar_large"
+                                android:textAlignment="center" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="@dimen/_6sdp"
+                                android:src="@drawable/ic_charge_icon_large" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.8" />
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3.5"
+                            android:gravity="start">
+
+                            <ProgressBar
+                                android:id="@+id/progressBarStorage"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/line_shape"
+                                android:progress="50"
+                                android:progressDrawable="@drawable/line_progress_bar_2_large"
+                                android:textAlignment="center" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="@dimen/_6sdp"
+                                android:src="@drawable/ic_save_icon_large" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

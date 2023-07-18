@@ -144,6 +144,137 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     new Pref(context).putInt(Pref.IS_BATTERY, batlevel);
 
                 }
+
+
+                Intent intentBattery = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                configPendingIntent = PendingIntent.getActivity(context, 0, intentBattery, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                rv.setOnClickPendingIntent(R.id.RlBattery, configPendingIntent);
+                System.out.println("************ WIFI RECEIVE COME BROAD W_NUMBER " + widgetData.get(i).getNumber());
+                AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+            } else if (widgetData.get(i).getPosition() == 22) {
+                if (widgetData.get(i).getType() == 0) {
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel3_small);
+                } else if (widgetData.get(i).getType() == 1) {
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel3_medium);
+                } else if (widgetData.get(i).getType() == 2) {
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel3_large);
+                }
+
+                rv.setCharSequence(R.id.TClockHr, "setFormat12Hour", "HH");
+                rv.setCharSequence(R.id.TClockHr, "setFormat24Hour", "HH");
+                rv.setCharSequence(R.id.TClockMin, "setFormat12Hour", "mm");
+                rv.setCharSequence(R.id.TClockMin, "setFormat24Hour", "mm");
+                rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEEE");
+                rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "EEEE");
+
+                BatteryManager systemService = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+                int property = systemService.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+
+                CameraManager manager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    RemoteViews finalRv = rv;
+                    int finalI = i;
+                    manager.registerTorchCallback(new CameraManager.TorchCallback() {
+                        @Override
+                        public void onTorchModeUnavailable(@NonNull String cameraId) {
+                            super.onTorchModeUnavailable(cameraId);
+                        }
+
+                        @Override
+                        public void onTorchModeChanged(@NonNull String cameraId, boolean enabled) {
+                            super.onTorchModeChanged(cameraId, enabled);
+                            IsTorchOn = enabled;
+                       if (widgetData.get(finalI).getType() == 2) {
+                           if (IsTorchOn) {
+                               finalRv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
+                           } else {
+                               finalRv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1);
+                           }
+                       }else {
+                           if (IsTorchOn) {
+                               finalRv.setImageViewResource(R.id.IvTorch, R.drawable.ic_xpanel_medium_2_flashlight_selected);
+                           } else {
+                               finalRv.setImageViewResource(R.id.IvTorch, R.drawable.ic_xpanel_medium_2_flashlight);
+                           }
+                       }
+
+                            AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                            appWidgetManager.updateAppWidget(widgetData.get(finalI).getNumber(), finalRv);
+                        }
+
+                        @Override
+                        public void onTorchStrengthLevelChanged(@NonNull String cameraId, int newStrengthLevel) {
+                            super.onTorchStrengthLevelChanged(cameraId, newStrengthLevel);
+                        }
+                    }, null);
+                }
+                if (widgetData.get(i).getType() == 2) {
+                    if (Constants.IsWIfiConnected(context)) {
+                        System.out.println("************ WIFI RECEIVE  ON ");
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
+                    } else {
+                        System.out.println("************ WIFI RECEIVE  Off ");
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
+                    }
+                    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    if (bluetoothAdapter != null) {
+                        if (bluetoothAdapter.isEnabled()) {
+                            System.out.println("************  Bluetooth RECEIVE  ON ");
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
+                        } else if (!bluetoothAdapter.isEnabled()) {
+                            System.out.println("************  Bluetooth RECEIVE  else ");
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
+                        }
+                    }
+                }else {
+                    if (Constants.IsWIfiConnected(context)) {
+                        System.out.println("************ WIFI RECEIVE  ON ");
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_xpanel_medium_2_wifi_selected);
+                    } else {
+                        System.out.println("************ WIFI RECEIVE  Off ");
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_xpanel_medium_2_wifi);
+                    }
+                    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    if (bluetoothAdapter != null) {
+                        if (bluetoothAdapter.isEnabled()) {
+                            System.out.println("************  Bluetooth RECEIVE  ON ");
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_xpanel_medium_2_bluetooth_selected);
+                        } else if (!bluetoothAdapter.isEnabled()) {
+                            System.out.println("************  Bluetooth RECEIVE  else ");
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_xpanel_medium_2_bluetooth);
+                        }
+                    }
+                }
+                final float totalSpace = Constants.DeviceMemory.getInternalStorageSpace();
+                final float occupiedSpace = Constants.DeviceMemory.getInternalUsedSpace();
+                final float freeSpace = Constants.DeviceMemory.getInternalFreeSpace();
+
+                rv.setProgressBar(R.id.progressBarCharge, 100, property, false);
+                rv.setProgressBar(R.id.progressBarStorage, (int) totalSpace, (int) occupiedSpace, false);
+
+                Intent intentWifi3 = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                configPendingIntent = PendingIntent.getActivity(context, 0, intentWifi3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                rv.setOnClickPendingIntent(R.id.IvWifi, configPendingIntent);
+
+                Intent intentBluetooth3 = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
+
+                Intent intentCellular3 = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
+//                    intentCellular.setClassName("com.android.phone", "com.android.phone.NetworkSetting");
+//                    intentCellular.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+
+                Intent intentTorch3 = new Intent(context, XPanelFlashlight3WidgetReceiver.class);
+                configPendingIntent = PendingIntent.getBroadcast(context, 0, intentTorch3, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                rv.setOnClickPendingIntent(R.id.IvTorch, configPendingIntent);
+
                 System.out.println("************ WIFI RECEIVE COME BROAD W_NUMBER " + widgetData.get(i).getNumber());
                 AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
                 appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);

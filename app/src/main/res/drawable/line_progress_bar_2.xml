@@ -9,7 +9,7 @@
     <item>
         <clip
             android:clipOrientation="vertical"
-            android:drawable="@drawable/ic_progress_1_fill"
+            android:drawable="@drawable/ic_progress_2_fill"
             android:gravity="bottom" />
     </item>
 </layer-list>

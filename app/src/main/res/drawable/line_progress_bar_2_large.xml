@@ -3,13 +3,13 @@
     <item>
         <clip
             android:clipOrientation="vertical"
-            android:drawable="@drawable/ic_progress_unfill"
+            android:drawable="@drawable/ic_progress_unfill_large"
             android:gravity="fill" />
     </item>
     <item>
         <clip
             android:clipOrientation="vertical"
-            android:drawable="@drawable/ic_progress_1_fill"
+            android:drawable="@drawable/ic_progress_2_fill_large"
             android:gravity="bottom" />
     </item>
 </layer-list>

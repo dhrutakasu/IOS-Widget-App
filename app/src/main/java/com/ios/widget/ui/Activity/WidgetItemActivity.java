@@ -175,7 +175,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void GotoAddWidget() {
-        if (modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 20) {
+        if (modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 20 || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 22) {
             String s1 = Manifest.permission.CAMERA;
             Dexter.withActivity(this)
                     .withPermissions(s1)
