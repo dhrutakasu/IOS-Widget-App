@@ -1,8 +1,10 @@
 package com.ios.widget.provider;
 
 import static com.ios.widget.utils.Constants.Widget_Id;
+import static com.ios.widget.utils.Constants.Widget_Type_Id;
 import static com.ios.widget.utils.Pref.IS_BATTERY;
-import static com.ios.widget.utils.Pref.IS_DATE;
+import static com.ios.widget.utils.Pref.IS_DATE_LARGE_1;
+import static com.ios.widget.utils.Pref.IS_DATE_LARGE_4;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -34,8 +36,8 @@ import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 public class LargeWidgetProvider extends AppWidgetProvider {
-    private Handler handler;
-    private Runnable runnable;
+//    private Handler handler;
+//    private Runnable runnable;
     private boolean IsTorchOn;
 
 
@@ -68,7 +70,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
             int currentDay ;
             int currentMonth;
             int currentYear;
-            handler = new Handler();
+//            handler = new Handler();
             switch (helper.getWidgets().get(i).getPosition()) {
                 case 0:
                 case 20:
@@ -235,16 +237,17 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
                     rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
                     intent = new Intent(context, LargeWidgetService.class);
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Type_Id);
+                    intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
 
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
                     rv.setRemoteAdapter(Widget_Id, R.id.GridCalendarLargeView, intent);
-                    calendar = Calendar.getInstance();
+                 calendar = Calendar.getInstance();
                     currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                     currentMonth = calendar.get(Calendar.MONTH);
                     currentYear = calendar.get(Calendar.YEAR);
-                    new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
-                    runnable = new Runnable() {
+                   new Pref(context).putString(IS_DATE_LARGE_1, currentDay + "/" + currentMonth + "/" + currentYear);
+                      /*  runnable = new Runnable() {
                         @Override
                         public void run() {
                             Calendar NewCalendar = Calendar.getInstance();
@@ -258,7 +261,14 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                             handler.postDelayed(this, 5000);
                         }
                     };
-                    handler.postDelayed(runnable, 5000);
+                    handler.postDelayed(runnable, 5000);*/
+                    if (!new Pref(context).getBoolean(Pref.IS_CALENDAR_1_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new Pref(context).putBoolean(Pref.IS_CALENDAR_1_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    }
                     startMillis = Calendar.getInstance().getTimeInMillis();
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
@@ -293,16 +303,17 @@ public class LargeWidgetProvider extends AppWidgetProvider {
 //                    rv.setImageViewResource(R.id.iv_background, R.drawable.shape_app_widget_ffffff_r25_bg);
 
                     intent = new Intent(context, LargeWidgetService.class);
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Type_Id);
+                    intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
 
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
                     rv.setRemoteAdapter(Widget_Id, R.id.GridCalendarLargeView, intent);
-                    calendar = Calendar.getInstance();
+                 calendar = Calendar.getInstance();
                     currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                     currentMonth = calendar.get(Calendar.MONTH);
                     currentYear = calendar.get(Calendar.YEAR);
-                    new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
-                    runnable = new Runnable() {
+                    new Pref(context).putString(Pref.IS_DATE_LARGE_3, currentDay + "/" + currentMonth + "/" + currentYear);
+                   /*    runnable = new Runnable() {
                         @Override
                         public void run() {
                             Calendar NewCalendar = Calendar.getInstance();
@@ -316,7 +327,14 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                             handler.postDelayed(this, 5000);
                         }
                     };
-                    handler.postDelayed(runnable, 5000);
+                    handler.postDelayed(runnable, 5000);*/
+                    if (!new Pref(context).getBoolean(Pref.IS_CALENDAR_3_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new Pref(context).putBoolean(Pref.IS_CALENDAR_3_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    }
                     startMillis = Calendar.getInstance().getTimeInMillis();
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
@@ -339,16 +357,17 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "EEEE");
 
                     intent = new Intent(context, LargeWidgetService.class);
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Type_Id);
+                    intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
 
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
                     rv.setRemoteAdapter(Widget_Id, R.id.GridCalendarLargeView, intent);
-                    calendar = Calendar.getInstance();
+                 calendar = Calendar.getInstance();
                     currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                     currentMonth = calendar.get(Calendar.MONTH);
                     currentYear = calendar.get(Calendar.YEAR);
-                    new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
-                    runnable = new Runnable() {
+                    new Pref(context).putString(IS_DATE_LARGE_4, currentDay + "/" + currentMonth + "/" + currentYear);
+                    /*   runnable = new Runnable() {
                         @Override
                         public void run() {
                             Calendar NewCalendar = Calendar.getInstance();
@@ -362,7 +381,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                             handler.postDelayed(this, 5000);
                         }
                     };
-                    handler.postDelayed(runnable, 5000);
+                    handler.postDelayed(runnable, 5000);*/
                     startMillis = Calendar.getInstance().getTimeInMillis();
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
@@ -612,12 +631,13 @@ public class LargeWidgetProvider extends AppWidgetProvider {
         for (int id : iArr) {
             System.out.println("_*_*_*_*_*_*_ uuid " + id);
             DatabaseHelper helper = new DatabaseHelper(context);
-            WidgetData widgetsId = helper.getWidgetsNumber(id);
-            if (widgetsId!=null) {
-                System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
-                widgetsId.setNumber(-1);
-            }
-            helper.updateWidget(widgetsId);
+//            WidgetData widgetsId = helper.getWidgetsNumber(id);
+//            if (widgetsId!=null) {
+//                System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
+//                widgetsId.setNumber(-1);
+//            }
+//            helper.updateWidget(widgetsId);
+            helper.getDeleteWidgets(id);
         }
     }
 }

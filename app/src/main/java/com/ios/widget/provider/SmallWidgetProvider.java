@@ -3,6 +3,7 @@ package com.ios.widget.provider;
 import static com.ios.widget.utils.Constants.Widget_Id;
 import static com.ios.widget.utils.Pref.IS_BATTERY;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -10,18 +11,26 @@ import android.appwidget.AppWidgetProvider;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.hardware.camera2.CameraManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.CalendarContract;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
@@ -29,17 +38,17 @@ import com.ios.widget.helper.DatabaseHelper;
 import com.ios.widget.utils.Constants;
 import com.ios.widget.utils.Pref;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 public class SmallWidgetProvider extends AppWidgetProvider {
-    private Handler handler;
-    private Runnable runnable;
     private boolean IsTorchOn;
+    private Location location;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        handler = new Handler();
         DatabaseHelper helper = new DatabaseHelper(context);
 //        helper.getDeleteWidgets();
         System.out.println("_*_*_*_*_*_*_ 11 :: " + helper.getWidgetCount());
@@ -89,31 +98,45 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                 case 1:
                 case 8:
                     //todo weather 1 small
-//                    LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-//                    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//                        OnGPS(context);
-//                    } else {
-//                        getLocation(context, locationManager);
-//                    }
-//                    try {
-//                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context
-//                                , Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                            // TODO: Consider calling
-//                            //    ActivityCompat#requestPermissions
-//                            // here to request the missing permissions, and then overriding
-//                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//                            //                                          int[] grantResults)
-//                            // to handle the case where the user grants the permission. See the documentation
-//                            // for ActivityCompat#requestPermissions for more details.
-//                            return;
-//                        }
-//                        Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//                        URL url = new URL("https://api.openweathermap.org/data/2.5/weather?q=" + locationGPS + "&lang=72.5714&APPID=b317aca2e83ad16e219ff2283ca837d5");
-//                        System.out.println("------- catch : " + url.getPath());
-//                    } catch (MalformedURLException e) {
-//                        System.out.println("------- catch : " + e.getMessage());
-//                        throw new RuntimeException(e);
-//                    }
+                    LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        final AlertDialog.Builder DialogBuilder = new AlertDialog.Builder(context);
+                        DialogBuilder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(final DialogInterface dialog, final int id) {
+                                        context.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(final DialogInterface dialog, final int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        final AlertDialog alert = DialogBuilder.create();
+                        alert.show();
+                    } else {
+                        getLocation(context, locationManager);
+                    }
+                    try {
+                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context
+                                , Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            // TODO: Consider calling
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                            return;
+                        }
+                        Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        URL url = new URL("https://api.openweathermap.org/data/2.5/weather?q=" + locationGPS + "&lang=72.5714&APPID=abb0e61bdf12b12ca71bcd2ee74d5d9f");
+                        System.out.println("------- catch : " + url.getPath());
+                    } catch (MalformedURLException e) {
+                        System.out.println("------- catch : " + e.getMessage());
+                        throw new RuntimeException(e);
+                    }
                     break;
                 case 2:
                 case 19:
@@ -340,65 +363,6 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1);
                     }
 
-            /*        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds[finalI], R.id.IvWifi);
-                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds[finalI], R.id.IvTorch);
-
-                    runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            System.out.println("************ WIFI RECEIVE  ");
-                            if (Constants.IsWIfiConnected(context)) {
-                                System.out.println("************ WIFI RECEIVE  ON ");
-                                finalRv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
-                            } else {
-                                System.out.println("************ WIFI RECEIVE  Off ");
-                                finalRv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
-                            }
-
-                            BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                            if (mBluetoothAdapter != null) {
-                                if (mBluetoothAdapter.isEnabled()) {
-                                    System.out.println("************  Bluetooth RECEIVE  ON ");
-                                    finalRv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
-                                } else if (!mBluetoothAdapter.isEnabled()) {
-                                    System.out.println("************  Bluetooth RECEIVE  else ");
-                                    finalRv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
-                                }
-                            }
-
-                            CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                cameraManager.registerTorchCallback(new CameraManager.TorchCallback() {
-                                    @Override
-                                    public void onTorchModeUnavailable(@NonNull String cameraId) {
-                                        super.onTorchModeUnavailable(cameraId);
-                                    }
-
-                                    @Override
-                                    public void onTorchModeChanged(@NonNull String cameraId, boolean enabled) {
-                                        super.onTorchModeChanged(cameraId, enabled);
-                                        IsTorchOn = enabled;
-                                    }
-
-                                    @Override
-                                    public void onTorchStrengthLevelChanged(@NonNull String cameraId, int newStrengthLevel) {
-                                        super.onTorchStrengthLevelChanged(cameraId, newStrengthLevel);
-                                    }
-                                }, null);
-                            }
-
-                            System.out.println("********* ON / OFF : " + IsTorchOn);
-                            if (IsTorchOn) {
-                                finalRv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
-                            } else {
-                                finalRv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1);
-                            }
-                            appWidgetManager.updateAppWidget(appWidgetIds[finalI], finalRv);
-
-                            handler.postDelayed(this, 2000);
-                        }
-                    };
-                    handler.postDelayed(runnable, 0);*/
                     if (!new Pref(context).getBoolean(Pref.IS_X_PANEL_1_ALARM, false)) {
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
@@ -546,17 +510,54 @@ public class SmallWidgetProvider extends AppWidgetProvider {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
+    private void getLocation(Context context, LocationManager locationManager) {
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.requestLocationUpdates(
+                LocationManager.NETWORK_PROVIDER,
+                0,
+                0, new LocationListener() {
+                    @Override
+                    public void onLocationChanged(@NonNull Location location) {
+
+                    }
+                });
+
+        Log.d("Network", "Network");
+        if (locationManager != null) {
+            location = locationManager
+                    .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            if (location != null) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+
+                Log.d("Network", "Network lat : "+latitude+" long : "+longitude);
+            }
+        }
+    }
+
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         for (int id : appWidgetIds) {
             System.out.println("_*_*_*_*_*_*_ uuid " + id);
             DatabaseHelper helper = new DatabaseHelper(context);
-            WidgetData widgetsId = helper.getWidgetsNumber(id);
+       /*     WidgetData widgetsId = helper.getWidgetsNumber(id);
             if (widgetsId != null) {
                 System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
                 widgetsId.setNumber(-1);
             }
-            helper.updateWidget(widgetsId);
+            helper.updateWidget(widgetsId);*/
+            helper.getDeleteWidgets(id);
         }
 //        System.out.println("_*_*_*_*_*_*_ 22 :: " + appWidgetIds.length);
 //        for (int valueof : appWidgetIds) {

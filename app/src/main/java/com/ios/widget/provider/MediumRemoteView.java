@@ -22,7 +22,7 @@ import java.util.TimerTask;
 public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
     private Calendar calendar;
     private Context context;
-    private long NoteId;
+    private int NoteId;
 
     private List<String> strings = new ArrayList<String>();
     ;
@@ -181,8 +181,10 @@ public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
 
     public MediumRemoteView(Context con, Intent intent) {
         NoteId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+        NoteId = intent.getIntExtra("TypeId", -1);
         context = con;
         System.out.println("-********* NoteId : " + NoteId);
+        System.out.println("-********* NoteId :ss " + intent.getStringExtra("TypeId"));
     }
 
     @Override
@@ -210,7 +212,7 @@ public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
 
         System.out.println("-********* Constants.Widget_Type_Id : " + Constants.Widget_Type_Id);
         if (DayOfString[1].equals("WHITE")) {
-            switch (Constants.Widget_Type_Id) {
+            switch (NoteId) {
                 case 1:
                 case 7:
                     views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
@@ -253,7 +255,7 @@ public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
         if (DayOfString[1].equals("BLUE")) {
 //            views.setViewPadding(R.id.TvCalendarDates, 3, 3, 3, 3);
 //            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 9f);
-            switch (Constants.Widget_Type_Id) {
+            switch (NoteId) {
                 case 4:
 //                    views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_ring_white);
                     views.setInt(R.id.TvCalendarDates, "setBackgroundResource", R.drawable.ic_calendar_ring_white);

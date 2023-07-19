@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -283,9 +282,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //todo delete Widget data
-    public void getDeleteWidgets() {
+    public void getDeleteWidgets(int index) {
         SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_NAME+ " WHERE " + WIDGET_NUMBER + "=? ", new String[]{String.valueOf(index)});
         cursor.moveToFirst();
     }
 

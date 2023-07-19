@@ -1,8 +1,9 @@
 package com.ios.widget.provider;
 
 import static com.ios.widget.utils.Constants.Widget_Id;
+import static com.ios.widget.utils.Constants.Widget_Type_Id;
 import static com.ios.widget.utils.Pref.IS_BATTERY;
-import static com.ios.widget.utils.Pref.IS_DATE;
+import static com.ios.widget.utils.Pref.IS_DATE_3;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -36,8 +37,8 @@ import java.util.concurrent.TimeUnit;
 public class MediumWidgetProvider extends AppWidgetProvider {
 //    private NotesDatabaseHelper helper;
 
-    private Handler handler;
-    private Runnable runnable;
+//    private Handler handler;
+//    private Runnable runnable;
     private boolean IsTorchOn;
 
 
@@ -71,7 +72,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
             int currentDay;
             int currentMonth;
             int currentYear;
-            handler = new Handler();
+//            handler = new Handler();
             switch (helper.getWidgets().get(i).getPosition()) {
                 case 0:
                 case 13:
@@ -92,23 +93,37 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     RemoteViews finalRv3 = rv;
                     intent = new Intent(context, MediumWidgetService.class);
                     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
-
+                    intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
                     finalRv3.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
-                    runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            Intent intent = new Intent(context, MediumWidgetService.class);
-                            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
 
-                            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-                            finalRv3.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
-                            appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
+                    calendar = Calendar.getInstance();
+                    currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+                    currentMonth = calendar.get(Calendar.MONTH);
+                    currentYear = calendar.get(Calendar.YEAR);
+                    new Pref(context).putString(Pref.IS_DATE_4, currentDay + "/" + currentMonth + "/" + currentYear);
+//                    runnable = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Intent intent = new Intent(context, MediumWidgetService.class);
+//                            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
+//
+//                            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+//                            finalRv3.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
+//                            appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
+//
+//                            handler.postDelayed(this, 5000);
+//                        }
+//                    };
+//                    handler.postDelayed(runnable, 5000);
 
-                            handler.postDelayed(this, 5000);
-                        }
-                    };
-                    handler.postDelayed(runnable, 5000);
+                    if (!new Pref(context).getBoolean(Pref.IS_CALENDAR_4_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new Pref(context).putBoolean(Pref.IS_CALENDAR_4_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    }
                     startMillis = Calendar.getInstance().getTimeInMillis();
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
@@ -223,29 +238,36 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     int finalI = i;
                     intent = new Intent(context, MediumWidgetService.class);
                     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
-
+                    intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
                     finalRv2.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
                     calendar = Calendar.getInstance();
                     currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                     currentMonth = calendar.get(Calendar.MONTH);
                     currentYear = calendar.get(Calendar.YEAR);
-                    new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
-                    runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            Calendar NewCalendar = Calendar.getInstance();
-                            int currentDay = NewCalendar.get(Calendar.DAY_OF_MONTH);
-                            int currentMonth = NewCalendar.get(Calendar.MONTH);
-                            int currentYear = NewCalendar.get(Calendar.YEAR);
-                            if (!new Pref(context).getString(IS_DATE, "").equalsIgnoreCase(currentDay + "/" + currentMonth + "/" + currentYear)) {
-                                appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
-                                new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
-                            }
-                            handler.postDelayed(this, 5000);
-                        }
-                    };
-                    handler.postDelayed(runnable, 5000);
+                    new Pref(context).putString(Pref.IS_DATE_1, currentDay + "/" + currentMonth + "/" + currentYear);
+//                    runnable = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Calendar NewCalendar = Calendar.getInstance();
+//                            int currentDay = NewCalendar.get(Calendar.DAY_OF_MONTH);
+//                            int currentMonth = NewCalendar.get(Calendar.MONTH);
+//                            int currentYear = NewCalendar.get(Calendar.YEAR);
+//                            if (!new Pref(context).getString(IS_DATE, "").equalsIgnoreCase(currentDay + "/" + currentMonth + "/" + currentYear)) {
+//                                appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
+//                                new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
+//                            }
+//                            handler.postDelayed(this, 5000);
+//                        }
+//                    };
+//                    handler.postDelayed(runnable, 5000);
+                    if (!new Pref(context).getBoolean(Pref.IS_CALENDAR_1_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new Pref(context).putBoolean(Pref.IS_CALENDAR_1_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    }
                     startMillis = Calendar.getInstance().getTimeInMillis();
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
@@ -268,15 +290,15 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     int finalI1 = i;
                     intent = new Intent(context, MediumWidgetService.class);
                     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
-
+                    intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-                    finalRv1.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
-                    calendar = Calendar.getInstance();
+                    finalRv1.setRemoteAdapter(R.id.GridCalendarMediumView, intent);
+                  calendar = Calendar.getInstance();
                     currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                     currentMonth = calendar.get(Calendar.MONTH);
                     currentYear = calendar.get(Calendar.YEAR);
-                    new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
-                    runnable = new Runnable() {
+                    new Pref(context).putString(Pref.IS_DATE_2, currentDay + "/" + currentMonth + "/" + currentYear);
+                  /*    runnable = new Runnable() {
                         @Override
                         public void run() {
                             Calendar NewCalendar = Calendar.getInstance();
@@ -291,7 +313,15 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         }
                     };
                     handler.postDelayed(runnable, 5000);
-
+*/
+                    System.out.println("********** : come PROVIDER ");
+                    if (!new Pref(context).getBoolean(Pref.IS_CALENDAR_2_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new Pref(context).putBoolean(Pref.IS_CALENDAR_2_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    }
                     startMillis = Calendar.getInstance().getTimeInMillis();
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
@@ -316,30 +346,37 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     int finalI2 = i;
                     intent = new Intent(context, MediumWidgetService.class);
                     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
-
+                    intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
                     finalRv.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
                     calendar = Calendar.getInstance();
                     currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                     currentMonth = calendar.get(Calendar.MONTH);
                     currentYear = calendar.get(Calendar.YEAR);
-                    new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
-                    runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            Calendar NewCalendar = Calendar.getInstance();
-                            int currentDay = NewCalendar.get(Calendar.DAY_OF_MONTH);
-                            int currentMonth = NewCalendar.get(Calendar.MONTH);
-                            int currentYear = NewCalendar.get(Calendar.YEAR);
-                            if (!new Pref(context).getString(IS_DATE, "").equalsIgnoreCase(currentDay + "/" + currentMonth + "/" + currentYear)) {
-                                appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
-                                new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
-                            }
-                            handler.postDelayed(this, 5000);
-                        }
-                    };
-                    handler.postDelayed(runnable, 5000);
+                    new Pref(context).putString(IS_DATE_3, currentDay + "/" + currentMonth + "/" + currentYear);
+//                    runnable = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Calendar NewCalendar = Calendar.getInstance();
+//                            int currentDay = NewCalendar.get(Calendar.DAY_OF_MONTH);
+//                            int currentMonth = NewCalendar.get(Calendar.MONTH);
+//                            int currentYear = NewCalendar.get(Calendar.YEAR);
+//                            if (!new Pref(context).getString(IS_DATE, "").equalsIgnoreCase(currentDay + "/" + currentMonth + "/" + currentYear)) {
+//                                appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
+//                                new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
+//                            }
+//                            handler.postDelayed(this, 5000);
+//                        }
+//                    };
+//                    handler.postDelayed(runnable, 5000);
 
+                    if (!new Pref(context).getBoolean(Pref.IS_CALENDAR_3_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new Pref(context).putBoolean(Pref.IS_CALENDAR_3_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    }
                     startMillis = Calendar.getInstance().getTimeInMillis();
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
@@ -405,7 +442,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism2_medium);
                     intent = new Intent(context, MediumWidgetService.class);
                     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
-
+                    intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
                     rv.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
                     break;
@@ -414,7 +451,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism3_medium);
                     intent = new Intent(context, MediumWidgetService.class);
                     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
-
+                    intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
                     rv.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
                     break;
@@ -660,12 +697,13 @@ public class MediumWidgetProvider extends AppWidgetProvider {
         for (int id : iArr) {
             System.out.println("_*_*_*_*_*_*_ uuid " + id);
             DatabaseHelper helper = new DatabaseHelper(context);
-            WidgetData widgetsId = helper.getWidgetsNumber(id);
-            if (widgetsId!=null) {
-                System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
-                widgetsId.setNumber(-1);
-            }
-            helper.updateWidget(widgetsId);
+//            WidgetData widgetsId = helper.getWidgetsNumber(id);
+//            if (widgetsId!=null) {
+//                System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
+//                widgetsId.setNumber(-1);
+//            }
+//            helper.updateWidget(widgetsId);
+            helper.getDeleteWidgets(id);
         }
     }
 
