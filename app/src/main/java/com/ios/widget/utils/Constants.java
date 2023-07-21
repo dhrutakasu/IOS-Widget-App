@@ -84,7 +84,7 @@ public class Constants {
 
     public static ArrayList<WidgetModel> getWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_calendar_small_4_xxhdpi, R.drawable.img_clock_medium_3_xxhdpi, R.drawable.img_xpanel_large_1_xxhdpi, "Trendy", 0);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.img_calendar_small_4_xxhdpi, R.drawable.img_clock_large_3_xxhdpi, R.drawable.img_xpanel_large_1_xxhdpi, "Trendy", 0);
         modelArrayList.add(widgetModel);
         widgetModel = new WidgetModel(R.drawable.img_weather_small_1_xxhdpi, R.drawable.img_calendar_medium_4_xxhdpi, R.drawable.img_clock_large_8_xxhdpi, "Trendy", 1);
         modelArrayList.add(widgetModel);
@@ -166,8 +166,8 @@ public class Constants {
 
     public static ArrayList<WidgetModel> getWeatherWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-//        WidgetModel widgetModel = new WidgetModel(R.drawable.img_weather_small_1_xxhdpi, R.drawable.img_weather_medium_1_xxhdpi, R.drawable.img_weather_large_1_xxhdpi, "Weather", 8);
-//        modelArrayList.add(widgetModel);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.img_weather_small_1_xxhdpi, R.drawable.img_weather_medium_1_xxhdpi, R.drawable.img_weather_large_1_xxhdpi, "Weather", 8);
+        modelArrayList.add(widgetModel);
 //        widgetModel = new WidgetModel(R.drawable.img_weather_small_2_xxhdpi, R.drawable.img_weather_medium_2_xxhdpi, R.drawable.img_weather_large_2_xxhdpi, "Weather", 9);
 //        modelArrayList.add(widgetModel);
 //        widgetModel = new WidgetModel(R.drawable.img_weather_small_3_xxhdpi, R.drawable.img_weather_medium_3_xxhdpi, R.drawable.img_weather_large_3_xxhdpi, "Weather", 10);
@@ -182,10 +182,10 @@ public class Constants {
         modelArrayList.add(widgetModel);
         widgetModel = new WidgetModel(R.drawable.img_clock_small_2_xxhdpi, R.drawable.img_clock_medium_2_xxhdpi, R.drawable.img_clock_large_2_xxhdpi, "Clock", 12);
         modelArrayList.add(widgetModel);
-//        widgetModel = new WidgetModel(R.drawable.img_clock_small_3_xxhdpi, R.drawable.img_clock_medium_3_xxhdpi, R.drawable.img_clock_large_3_xxhdpi, "Clock", 13);
-//        modelArrayList.add(widgetModel);
-//        widgetModel = new WidgetModel(R.drawable.img_clock_small_4_xxhdpi, R.drawable.img_clock_medium_4_xxhdpi, R.drawable.img_clock_large_4_xxhdpi, "Clock", 14);
-//        modelArrayList.add(widgetModel);
+        widgetModel = new WidgetModel(R.drawable.img_clock_small_3_xxhdpi, R.drawable.img_clock_medium_3_xxhdpi, R.drawable.img_clock_large_3_xxhdpi, "Clock", 13);
+        modelArrayList.add(widgetModel);
+        widgetModel = new WidgetModel(R.drawable.img_clock_small_4_xxhdpi, R.drawable.img_clock_medium_4_xxhdpi, R.drawable.img_clock_large_4_xxhdpi, "Clock", 14);
+        modelArrayList.add(widgetModel);
 //        widgetModel = new WidgetModel(R.drawable.img_clock_small_5_xxhdpi, R.drawable.img_clock_medium_5_xxhdpi, R.drawable.img_clock_large_5_xxhdpi, "Clock", 15);
 //        modelArrayList.add(widgetModel);
 //        widgetModel = new WidgetModel(R.drawable.img_clock_small_6_xxhdpi, R.drawable.img_clock_medium_6_xxhdpi, R.drawable.img_clock_large_6_xxhdpi, "Clock", 16);

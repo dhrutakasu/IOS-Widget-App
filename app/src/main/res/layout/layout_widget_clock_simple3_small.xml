@@ -12,14 +12,6 @@
         android:background="@drawable/clock_simple3_bg"
         android:dial="@drawable/img_clock_simple3_dial"
         android:hand_hour="@drawable/img_clock_simple3_hand_hour"
+        android:hand_second="@drawable/img_clock_simple3_hand_second"
         android:hand_minute="@drawable/img_clock_simple3_hand_minute" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/analog_clock"
-        android:layout_alignTop="@+id/analog_clock"
-        android:layout_alignEnd="@+id/analog_clock"
-        android:layout_alignBottom="@+id/analog_clock"
-        android:src="@drawable/img_clock_simple3_cap" />
 </RelativeLayout>

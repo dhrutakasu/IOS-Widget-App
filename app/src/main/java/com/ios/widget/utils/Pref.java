@@ -19,6 +19,7 @@ public class Pref {
     public static String IS_DATE_3 = "IsDate3";
     public static String IS_DATE_4 = "IsDate4";
     public static String IS_DATE_2 = "IsDate2";
+    public static String IS_TIME_3 = "IsTime3";
     public static String IS_DATE_LARGE_1 = "IsDateLarge1";
     public static String IS_DATE_LARGE_3 = "IsDateLarge3";
     public static String IS_DATE_LARGE_4 = "IsDateLarge4";
@@ -30,6 +31,7 @@ public class Pref {
     public static String IS_CALENDAR_1_ALARM = "IsCalendar1Alarm";
     public static String IS_CALENDAR_2_ALARM = "IsCalendar2Alarm";
     public static String IS_CALENDAR_3_ALARM = "IsCalendar3Alarm";
+    public static String IS_CLOCK_3_ALARM = "IsClock3Alarm";
     public static int AGE = 25;
     static final String MyPref = "widgetPref";
     public static final String SHOW_NEVER = "SHOW_NEVER";

@@ -16,6 +16,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.hardware.camera2.CameraManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -27,6 +29,7 @@ import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -41,6 +44,8 @@ import com.ios.widget.utils.Pref;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class SmallWidgetProvider extends AppWidgetProvider {
@@ -100,26 +105,63 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     //todo weather 1 small
                     LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
                     if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        final AlertDialog.Builder DialogBuilder = new AlertDialog.Builder(context);
-                        DialogBuilder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
-                                .setCancelable(false)
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    public void onClick(final DialogInterface dialog, final int id) {
-                                        context.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                                    }
-                                })
-                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                    public void onClick(final DialogInterface dialog, final int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-                        final AlertDialog alert = DialogBuilder.create();
-                        alert.show();
-                    } else {
-                        getLocation(context, locationManager);
-                    }
-                    try {
-                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context
+//                        final AlertDialog.Builder DialogBuilder = new AlertDialog.Builder(context);
+//                        DialogBuilder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+//                                .setCancelable(false)
+//                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                                    public void onClick(final DialogInterface dialog, final int id) {
+//                                        context.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+//                                    }
+//                                })
+//                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                                    public void onClick(final DialogInterface dialog, final int id) {
+//                                        dialog.cancel();
+//                                    }
+//                                });
+//                        final AlertDialog alert = DialogBuilder.create();
+//                        alert.show();
+//                    } else {
+//                        getLocation(context, locationManager);
+
+                        if (ActivityCompat.checkSelfPermission(
+                                context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                            ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                            System.out.println("------- catch Out permission: ");
+
+                        } else {
+                            locationManager.requestLocationUpdates(
+                                    LocationManager.GPS_PROVIDER,
+                                    0,
+                                    0, new LocationListener() {
+                                        @Override
+                                        public void onLocationChanged(@NonNull Location location) {
+                                            System.out.println("------- catch Out: " + "Your Location: " + " " + "Latitude: " + location.getLatitude() + " " + "Longitude: " + location.getLongitude());
+                                        }
+                                    });
+
+                          /*  List<String> providers = locationManager.getProviders(true);
+                            for (String provider : providers) {
+                                Location locationGPS = locationManager.getLastKnownLocation(provider);
+                                if (locationGPS != null) {
+                                    double lat = locationGPS.getLatitude();
+                                    double longi = locationGPS.getLongitude();
+//                                latitude = String.valueOf(lat);
+//                                longitude = String.valueOf(longi);
+//                                showLocation.setText("Your Location: " + "
+//                                        " + "Latitude: " + latitude + "
+//                                " + "Longitude: " + longitude);
+                                    System.out.println("------- catch Out: " + "Your Location: " + " " + "Latitude: " + lat + " " + "Longitude: " + longi);
+                                } else {
+                                    System.out.println("------- catch Out: GPS " + locationGPS);
+
+//                                Toast.makeText(context, "Unable to find location.", Toast.LENGTH_SHORT).show();
+                                }
+                            }*/
+
+                        }
+
+                       /* if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context
                                 , Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                             // TODO: Consider calling
                             //    ActivityCompat#requestPermissions
@@ -130,13 +172,32 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                             // for ActivityCompat#requestPermissions for more details.
                             return;
                         }
+                        locationManager.requestLocationUpdates(
+                                LocationManager.GPS_PROVIDER,
+                                1000 * 60 * 1,
+                                10, new LocationListener() {
+                                    @Override
+                                    public void onLocationChanged(@NonNull Location location) {
+
+                                    }
+                                });
                         Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        URL url = new URL("https://api.openweathermap.org/data/2.5/weather?q=" + locationGPS + "&lang=72.5714&APPID=abb0e61bdf12b12ca71bcd2ee74d5d9f");
-                        System.out.println("------- catch : " + url.getPath());
-                    } catch (MalformedURLException e) {
-                        System.out.println("------- catch : " + e.getMessage());
-                        throw new RuntimeException(e);
+                        Log.d("catch cityEx11", "Error to find the city." + locationManager);
+                        Log.d("catch cityEx", "Error to find the city." + locationGPS);
+                        String city = "";
+                        try {
+                            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                            List<Address> addresses = geocoder.getFromLocation(locationGPS.getLatitude(), locationGPS.getLongitude(), 1);
+                            city = addresses.get(0).getLocality();
+                            Log.d("catch city", city);
+                            URL url = new URL("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&lang=72.5714&APPID=abb0e61bdf12b12ca71bcd2ee74d5d9f");
+                            System.out.println("------- catch Out: " + url.getPath());
+                        } catch (Exception e) {
+                            Log.d("catch cityEx", "Error to find the city." + e.getMessage());
+                        }*/
+
                     }
+
                     break;
                 case 2:
                 case 19:
@@ -245,12 +306,12 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     break;
                 case 14:
                     //todo clock 4 small
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism1_small);
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text1_small);
 
                     intent1 = new Intent(Settings.ACTION_DATE_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    rv.setOnClickPendingIntent(R.id.analog_clock, configPendingIntent);
+                    rv.setOnClickPendingIntent(R.id.LlSmallClock, configPendingIntent);
                     break;
                 case 15:
                     //todo clock 5 small
@@ -507,7 +568,10 @@ public class SmallWidgetProvider extends AppWidgetProvider {
             appWidgetManager.updateAppWidget(Widget_Id, rv);
 
         }
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
+        super.
+
+                onUpdate(context, appWidgetManager, appWidgetIds);
+
     }
 
     private void getLocation(Context context, LocationManager locationManager) {
@@ -541,7 +605,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
 
-                Log.d("Network", "Network lat : "+latitude+" long : "+longitude);
+                Log.d("Network", "Network lat : " + latitude + " long : " + longitude);
             }
         }
     }

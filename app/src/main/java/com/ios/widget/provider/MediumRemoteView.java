@@ -213,6 +213,12 @@ public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
         System.out.println("-********* Constants.Widget_Type_Id : " + Constants.Widget_Type_Id);
         if (DayOfString[1].equals("WHITE")) {
             switch (NoteId) {
+                case 0:
+                case 13:
+                    views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 9f);
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
+                    break;
                 case 1:
                 case 7:
                     views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
@@ -256,12 +262,16 @@ public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
 //            views.setViewPadding(R.id.TvCalendarDates, 3, 3, 3, 3);
 //            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 9f);
             switch (NoteId) {
+                case 0:
+                case 13:
+                    views.setInt(R.id.TvCalendarDates, "setBackgroundResource", R.drawable.ic_calendar_ring_yellow);
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
+                    break;
                 case 4:
 //                    views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_ring_white);
                     views.setInt(R.id.TvCalendarDates, "setBackgroundResource", R.drawable.ic_calendar_ring_white);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.color_0263FF));
                     break;
-                case 1:
                 case 15:
 //                    views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_ring);
                     views.setInt(R.id.TvCalendarDates, "setBackgroundResource", R.drawable.ic_calendar_ring);
@@ -278,6 +288,7 @@ public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
                     views.setInt(R.id.TvCalendarDates, "setBackgroundResource", R.drawable.ic_calendar_purple);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
                     break;
+                case 1:
                 case 7:
 //                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 13f);
 //                    views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_square);

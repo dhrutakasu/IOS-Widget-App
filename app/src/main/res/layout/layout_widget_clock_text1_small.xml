@@ -8,7 +8,6 @@
     android:layoutDirection="ltr">
 
     <RelativeLayout
-        android:id="@+id/RlSmallClock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -31,7 +30,32 @@
             android:orientation="vertical"
             android:weightSum="10">
 
+            <TextClock
+                android:id="@+id/TClockMonthDate"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:autoSizeMaxTextSize="@dimen/_16ssp"
+                android:autoSizeMinTextSize="@dimen/_4ssp"
+                android:autoSizeTextType="uniform"
+                android:ellipsize="none"
+                android:format12Hour="MMMM yyyy"
+                android:format24Hour="MMMM yyyy"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="@dimen/_16ssp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5" />
+
             <LinearLayout
+                android:id="@+id/LlSmallClock"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:weightSum="5"
@@ -50,7 +74,6 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:padding="@dimen/_5sdp"
-                    android:background="@drawable/img_clock_text1_dial_small"
                     android:orientation="horizontal"
                     android:weightSum="4">
 
@@ -84,18 +107,18 @@
                             android:textSize="@dimen/_20ssp"
                             android:textStyle="bold" />
 
-                        <ImageView
-                            android:id="@+id/IvTextLeft"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/img_clock_text1_line_hour_large" />
                     </RelativeLayout>
 
-                    <ImageView
+                    <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:text=":"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_30ssp"
+                        android:textStyle="bold"
+                        android:gravity="center"
                         android:layout_weight="0.5" />
+
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -126,11 +149,6 @@
                             android:textSize="@dimen/_20ssp"
                             android:textStyle="bold" />
 
-                        <ImageView
-                            android:id="@+id/IvTextRight"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/img_clock_text1_line_minute_large" />
                     </RelativeLayout>
                 </LinearLayout>
                 <ImageView
@@ -138,28 +156,31 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.25" />
             </LinearLayout>
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_weight="0.5" />
+
             <TextClock
                 android:id="@+id/TClockDayMonthDate"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:autoSizeMaxTextSize="@dimen/_14ssp"
+                android:autoSizeMaxTextSize="@dimen/_16ssp"
                 android:autoSizeMinTextSize="@dimen/_4ssp"
                 android:autoSizeTextType="uniform"
                 android:ellipsize="none"
-                android:format12Hour="EEEE, MMM d"
-                android:format24Hour="EEEE, MMM d"
+                android:format12Hour="d EEEE"
+                android:format24Hour="d EEEE"
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:singleLine="true"
                 android:textColor="@color/white"
-                android:textDirection="ltr"
-                android:textSize="@dimen/_12ssp" />
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:textSize="@dimen/_16ssp" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

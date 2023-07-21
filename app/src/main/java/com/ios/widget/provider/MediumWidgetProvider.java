@@ -78,6 +78,34 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                 case 13:
                     //todo clock 3 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple3_medium);
+                    intent = new Intent(context, MediumWidgetService.class);
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
+                    intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
+                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+                    rv.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
+
+                    calendar = Calendar.getInstance();
+                    currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+                    currentMonth = calendar.get(Calendar.MONTH);
+                    currentYear = calendar.get(Calendar.YEAR);
+                    new Pref(context).putString(Pref.IS_DATE_4, currentDay + "/" + currentMonth + "/" + currentYear);
+
+                    if (!new Pref(context).getBoolean(Pref.IS_CLOCK_3_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new Pref(context).putBoolean(Pref.IS_CLOCK_3_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    }
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                    intent1 = new Intent(Intent.ACTION_VIEW)
+                            .setData(builder.build());
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
                     break;
                 case 1:
                 case 7:
@@ -297,7 +325,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                     currentMonth = calendar.get(Calendar.MONTH);
                     currentYear = calendar.get(Calendar.YEAR);
-                    new Pref(context).putString(Pref.IS_DATE_2, currentDay + "/" + currentMonth + "/" + currentYear);
+                    new Pref(context).putString(Pref.IS_DATE_3, currentDay + "/" + currentMonth + "/" + currentYear);
                   /*    runnable = new Runnable() {
                         @Override
                         public void run() {
@@ -353,7 +381,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                     currentMonth = calendar.get(Calendar.MONTH);
                     currentYear = calendar.get(Calendar.YEAR);
-                    new Pref(context).putString(IS_DATE_3, currentDay + "/" + currentMonth + "/" + currentYear);
+                    new Pref(context).putString(Pref.IS_DATE_2, currentDay + "/" + currentMonth + "/" + currentYear);
 //                    runnable = new Runnable() {
 //                        @Override
 //                        public void run() {
@@ -435,7 +463,12 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     break;
                 case 14:
                     //todo clock 4 medium
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism1_medium);
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text1_medium);
+
+                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlMediumClock, configPendingIntent);
                     break;
                 case 15:
                     //todo clock 5 medium

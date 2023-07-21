@@ -427,12 +427,12 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     break;
                 case 14:
                     //todo clock 4 large
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism1_large);
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text1_large);
 
                     intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    rv.setOnClickPendingIntent(R.id.analog_clock, configPendingIntent);
+                    rv.setOnClickPendingIntent(R.id.RlLargeClock, configPendingIntent);
                     break;
                 case 15:
                     //todo clock 5 large

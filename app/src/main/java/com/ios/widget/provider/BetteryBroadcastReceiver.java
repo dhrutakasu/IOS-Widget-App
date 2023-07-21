@@ -55,13 +55,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
             System.out.println("********** : come come : " + widgetData.get(i).getPosition());
             if (widgetData.get(i).getPosition() == 0) {
                 if (widgetData.get(i).getType() == 1) {
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_medium);
-                    rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEEE");
-                    rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "EEEE");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMMM");
-                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
-                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple3_medium);
 
                     intent = new Intent(context, MediumWidgetService.class);
                     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetData.get(i).getNumber());
@@ -84,9 +78,9 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     currentDay = NewCalendar.get(Calendar.DAY_OF_MONTH);
                     currentMonth = NewCalendar.get(Calendar.MONTH);
                     currentYear = NewCalendar.get(Calendar.YEAR);
-                    if (!new Pref(context).getString(Pref.IS_DATE_4, "").equalsIgnoreCase(currentDay + "/" + currentMonth + "/" + currentYear)) {
+                    if (!new Pref(context).getString(Pref.IS_TIME_3, "").equalsIgnoreCase(currentDay + "/" + currentMonth + "/" + currentYear)) {
                         appWidgetManager.notifyAppWidgetViewDataChanged(widgetData.get(i).getNumber(), R.id.GridCalendarMediumView);
-                        new Pref(context).putString(Pref.IS_DATE_4, currentDay + "/" + currentMonth + "/" + currentYear);
+                        new Pref(context).putString(Pref.IS_TIME_3, currentDay + "/" + currentMonth + "/" + currentYear);
                     }
                     appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
