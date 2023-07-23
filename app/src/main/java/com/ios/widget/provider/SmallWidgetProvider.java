@@ -1,5 +1,6 @@
 package com.ios.widget.provider;
 
+import static com.ios.widget.utils.Constants.BASE_URL;
 import static com.ios.widget.utils.Constants.Widget_Id;
 import static com.ios.widget.utils.Pref.IS_BATTERY;
 
@@ -35,12 +36,28 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonObject;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
 import com.ios.widget.utils.Constants;
 import com.ios.widget.utils.Pref;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
@@ -104,25 +121,8 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                 case 8:
                     //todo weather 1 small
                     LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//                        final AlertDialog.Builder DialogBuilder = new AlertDialog.Builder(context);
-//                        DialogBuilder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
-//                                .setCancelable(false)
-//                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                                    public void onClick(final DialogInterface dialog, final int id) {
-//                                        context.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-//                                    }
-//                                })
-//                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                                    public void onClick(final DialogInterface dialog, final int id) {
-//                                        dialog.cancel();
-//                                    }
-//                                });
-//                        final AlertDialog alert = DialogBuilder.create();
-//                        alert.show();
-//                    } else {
-//                        getLocation(context, locationManager);
-
+                    System.out.println("------- catch Out permission location: " + locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER));
+                    if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         if (ActivityCompat.checkSelfPermission(
                                 context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                                 context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -130,72 +130,74 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                             System.out.println("------- catch Out permission: ");
 
                         } else {
-                            locationManager.requestLocationUpdates(
-                                    LocationManager.GPS_PROVIDER,
-                                    0,
-                                    0, new LocationListener() {
-                                        @Override
-                                        public void onLocationChanged(@NonNull Location location) {
-                                            System.out.println("------- catch Out: " + "Your Location: " + " " + "Latitude: " + location.getLatitude() + " " + "Longitude: " + location.getLongitude());
-                                        }
-                                    });
+                            String city = "";
 
-                          /*  List<String> providers = locationManager.getProviders(true);
+                            rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_small);
+                            System.out.println("------- catch Out: " + "Your Location: else ");
+//
+                            List<String> providers = locationManager.getProviders(true);
                             for (String provider : providers) {
                                 Location locationGPS = locationManager.getLastKnownLocation(provider);
                                 if (locationGPS != null) {
                                     double lat = locationGPS.getLatitude();
                                     double longi = locationGPS.getLongitude();
-//                                latitude = String.valueOf(lat);
-//                                longitude = String.valueOf(longi);
-//                                showLocation.setText("Your Location: " + "
-//                                        " + "Latitude: " + latitude + "
-//                                " + "Longitude: " + longitude);
+
+                                    try {
+                                        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                                        List<Address> addresses = geocoder.getFromLocation(locationGPS.getLatitude(), locationGPS.getLongitude(), 1);
+                                        city = addresses.get(0).getLocality();
+
+                                        RequestQueue queue = Volley.newRequestQueue(context);
+                                        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=abb0e61bdf12b12ca71bcd2ee74d5d9f";
+                                        RemoteViews finalRv1 = rv;
+                                        StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                System.out.println("------- catch Out response: " + response.toString());
+                                                try {
+                                                    JSONObject obj = new JSONObject(response);
+
+                                                    JSONArray WeatherArray = obj.getJSONArray("weather");
+                                                    for (int j = 0; j < WeatherArray.length(); j++) {
+                                                        JSONObject WeatherObject = WeatherArray.getJSONObject(j);
+
+                                                        WeatherObject.get("main");
+                                                        WeatherObject.get("icon");
+                                                        String Url = "https://openweathermap.org/img/wn/" + WeatherObject.get("icon") + "@2x.png";
+                                                        finalRv1.setTextViewText(R.id.TvDesc, WeatherObject.get("description").toString());
+
+
+                                                    }
+                                                    JSONObject MainObject = obj.getJSONObject("main");
+
+                                                    JSONObject SysObject = obj.getJSONObject("sys");
+                                                    finalRv1.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
+                                                    finalRv1.setTextViewText(R.id.TvTemp, MainObject.get("temp") + "°C");
+                                                    finalRv1.setTextViewText(R.id.TvTempMaxMin, MainObject.get("temp_min").toString().indexOf(2) + "°C" + MainObject.get("temp_max  ").toString().indexOf(2) + "°C");
+
+                                                } catch (JSONException e) {
+                                                    throw new RuntimeException(e);
+                                                }
+                                            }
+                                        }, new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                //displaying the error in toast if occur
+                                                System.out.println("------- catch Out errrr: " + error.getMessage());
+                                            }
+                                        });
+                                        queue.add(stringReq);
+                                    } catch (Exception e) {
+                                        Log.d("------- catch cityEx", "Error to find the city." + e.getMessage());
+                                    }
                                     System.out.println("------- catch Out: " + "Your Location: " + " " + "Latitude: " + lat + " " + "Longitude: " + longi);
                                 } else {
                                     System.out.println("------- catch Out: GPS " + locationGPS);
 
-//                                Toast.makeText(context, "Unable to find location.", Toast.LENGTH_SHORT).show();
                                 }
-                            }*/
+                            }
 
                         }
-
-                       /* if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context
-                                , Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            return;
-                        }
-                        locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                1000 * 60 * 1,
-                                10, new LocationListener() {
-                                    @Override
-                                    public void onLocationChanged(@NonNull Location location) {
-
-                                    }
-                                });
-                        Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        Log.d("catch cityEx11", "Error to find the city." + locationManager);
-                        Log.d("catch cityEx", "Error to find the city." + locationGPS);
-                        String city = "";
-                        try {
-                            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-                            List<Address> addresses = geocoder.getFromLocation(locationGPS.getLatitude(), locationGPS.getLongitude(), 1);
-                            city = addresses.get(0).getLocality();
-                            Log.d("catch city", city);
-                            URL url = new URL("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&lang=72.5714&APPID=abb0e61bdf12b12ca71bcd2ee74d5d9f");
-                            System.out.println("------- catch Out: " + url.getPath());
-                        } catch (Exception e) {
-                            Log.d("catch cityEx", "Error to find the city." + e.getMessage());
-                        }*/
-
                     }
 
                     break;
@@ -646,6 +648,54 @@ public class SmallWidgetProvider extends AppWidgetProvider {
             widgetData.setNumber(Widget_Id);
             helper.updateWidget(widgetData);
         }*/
+    }
+
+    public String getWeatherData(String location, String lang) {
+        HttpURLConnection con = null;
+        InputStream is = null;
+
+        try {
+            String url = BASE_URL + location;
+//            if (lang != null) {
+            url = url + "&APPID=" + "abb0e61bdf12b12ca71bcd2ee74d5d9f";
+//            }
+            Log.d("Tag", "URL " + url);
+            con = (HttpURLConnection) (new URL(url)).openConnection();
+            con.setRequestMethod("GET");
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.connect();
+
+            // Let's read the response
+            StringBuffer buffer = null;
+            try {
+                buffer = new StringBuffer();
+                is = con.getInputStream();
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    buffer.append(line + "\r\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            is.close();
+            con.disconnect();
+
+            return buffer.toString();
+        } catch (Throwable t) {
+            t.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (Throwable t) {
+            }
+            try {
+                con.disconnect();
+            } catch (Throwable t) {
+            }
+        }
+        return null;
     }
 }
 

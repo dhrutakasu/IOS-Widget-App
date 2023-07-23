@@ -49,7 +49,7 @@ public class Constants {
     public static String NOTIFICATION_HOUR = "NotificationHour";
     public static String NOTIFICATION_MINUTES = "NotificationMinutes";
     public static String ExerciseSetTime;
-    public static String BASE_URL = "https://7starinnovation.com/meditationmusic/";
+    public static String BASE_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
     public static String BASE_URL_EXTENSION = ".mp3";
     public static final String TAG_WIDGET_NOTE_ID = "WIDGET_NOTE_ID";
     public static final String TAG_WIDGET_TYPE = "WIDGET_TYPE";
