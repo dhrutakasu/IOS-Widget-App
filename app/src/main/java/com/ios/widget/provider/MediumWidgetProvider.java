@@ -1,10 +1,9 @@
 package com.ios.widget.provider;
 
 import static com.ios.widget.utils.Constants.Widget_Id;
-import static com.ios.widget.utils.Constants.Widget_Type_Id;
 import static com.ios.widget.utils.Pref.IS_BATTERY;
-import static com.ios.widget.utils.Pref.IS_DATE_3;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -13,31 +12,52 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.hardware.camera2.CameraManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
-import android.os.Handler;
 import android.provider.CalendarContract;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
 import com.ios.widget.utils.Constants;
 import com.ios.widget.utils.Pref;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class MediumWidgetProvider extends AppWidgetProvider {
 //    private NotesDatabaseHelper helper;
 
-//    private Handler handler;
+    //    private Handler handler;
 //    private Runnable runnable;
     private boolean IsTorchOn;
 
@@ -46,7 +66,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         System.out.println("******** Constants.Widget_Type_Id : " + Constants.Widget_Type_Id);
         DatabaseHelper helper = new DatabaseHelper(context);
-        WidgetData widgetData = new WidgetData(1, Constants.Widget_Type_Id, -1);
+        WidgetData widgetData = new WidgetData(1, Constants.Widget_Type_Id, -1, "");
 //            WidgetData widgetData = new WidgetData("0", "M", Constants.getWidgetLists().get(Constants.Widget_Type_Id).getSmall(), Constants.getWidgetLists().get(Constants.Widget_Type_Id).getMedium(), Constants.getWidgetLists().get(Constants.Widget_Type_Id).getLarge(), String.valueOf(Constants.Widget_Type_Id), String.valueOf(appWidgetIds[i]));
         System.out.println("_*_*_*_*_*_*_ 11 :: " + helper.getWidgetCount());
         int insert = helper.InsertWidget(widgetData);
@@ -321,7 +341,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
                     finalRv1.setRemoteAdapter(R.id.GridCalendarMediumView, intent);
-                  calendar = Calendar.getInstance();
+                    calendar = Calendar.getInstance();
                     currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                     currentMonth = calendar.get(Calendar.MONTH);
                     currentYear = calendar.get(Calendar.YEAR);
@@ -416,7 +436,190 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     finalRv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
                     break;
                 case 8:
-                    //todo weather 2 medium
+                    //todo weather 1 medium
+                    LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                    System.out.println("------- catch Out permission location: " + locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER));
+                    if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        if (ActivityCompat.checkSelfPermission(
+                                context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                            ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                            System.out.println("------- catch Out permission: ");
+                        } else {
+                            String city = "";
+
+                            rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_medium);
+                            System.out.println("------- catch Out: " + "Your Location: else ");
+//
+                            List<String> providers = locationManager.getProviders(true);
+                            for (String provider : providers) {
+                                Location locationGPS = locationManager.getLastKnownLocation(provider);
+                                if (locationGPS != null) {
+                                    double lat = locationGPS.getLatitude();
+                                    double longi = locationGPS.getLongitude();
+
+                                    try {
+                                        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                                        List<Address> addresses = geocoder.getFromLocation(locationGPS.getLatitude(), locationGPS.getLongitude(), 1);
+                                        city = addresses.get(0).getLocality();
+
+                                        WidgetData widgetsId = helper.getWidgetsId(insert);
+                                        System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
+                                        widgetsId.setCity(city);
+                                        helper.updateWidget(widgetsId);
+
+                                        RemoteViews finalRv4 = rv;
+                                        RequestQueue queue = Volley.newRequestQueue(context);
+                                        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=b7fc383a06f2e5b385f2f811e18192f6";
+                                        StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                System.out.println("------- catch Out response: " + response.toString());
+                                                try {
+                                                    JSONObject obj = new JSONObject(response);
+
+                                                    JSONArray WeatherArray = obj.getJSONArray("weather");
+                                                    for (int j = 0; j < WeatherArray.length(); j++) {
+                                                        JSONObject WeatherObject = WeatherArray.getJSONObject(j);
+
+                                                        WeatherObject.get("main");
+                                                        WeatherObject.get("icon");
+                                                        System.out.println("------- catch Out WeatherObject: " + WeatherObject.getString("description"));
+                                                        finalRv4.setTextViewText(R.id.TvDesc, WeatherObject.get("description").toString());
+                                                        finalRv4.setImageViewResource(R.id.IvWeatherIcon, Constants.getWeatherIcons(WeatherObject.getString("icon")));
+                                                    }
+                                                    JSONObject MainObject = obj.getJSONObject("main");
+
+                                                    JSONObject SysObject = obj.getJSONObject("sys");
+                                                    finalRv4.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
+                                                    String Temp = MainObject.get("temp").toString();
+                                                    System.out.println("------- catch Out response Temp: " + Temp.substring(0, Temp.lastIndexOf(".")));
+                                                    finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + "°C");
+                                                    String MinTemp = MainObject.get("temp_min").toString();
+                                                    String MaxTemp = MainObject.get("temp_max").toString();
+                                                    System.out.println("------- catch Out response TempMin: " + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + " -- " + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")));
+                                                    finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + "°C L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + "°C");
+
+                                                } catch (JSONException e) {
+                                                    throw new RuntimeException(e);
+                                                }
+                                            }
+                                        }, new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                //displaying the error in toast if occur
+                                                System.out.println("------- catch Out errrr: " + error.getMessage());
+                                            }
+                                        });
+                                        queue.add(stringReq);
+
+                                        RequestQueue queue1 = Volley.newRequestQueue(context);
+                                        String url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=metric&APPID=b7fc383a06f2e5b385f2f811e18192f6";
+                                        StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                System.out.println("------- catch Out response: " + response.toString());
+                                                try {
+                                                    JSONObject MainObject=null;
+                                                    JSONArray IconObject=null;
+                                                    String Temp=null;
+
+                                                    JSONObject obj = new JSONObject(response);
+
+                                                    JSONArray WeatherArray = obj.getJSONArray("list");
+                                                    for (int j = 0; j < WeatherArray.length(); j++) {
+                                                        JSONObject WeatherObject = WeatherArray.getJSONObject(j);
+                                                        DateFormat dateFormat = new SimpleDateFormat("HH:mm Z");
+                                                        System.out.println("------- catch Out WeatherObject111: " + WeatherObject.getString("dt"));
+
+                                                        long milliSeconds= Long.parseLong(WeatherObject.getString("dt"));
+                                                        Date res = new Date(milliSeconds);
+
+                                                        switch (j) {
+                                                            case 0:
+                                                                finalRv4.setTextViewText(R.id.TvTimeFirst,dateFormat.format(res).toString());
+                                                                MainObject = WeatherObject.getJSONObject("main");
+                                                                Temp = MainObject.getString("temp").toString();
+                                                                finalRv4.setTextViewText(R.id.TvTempFirst,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                IconObject = WeatherObject.getJSONArray("weather");
+                                                                finalRv4.setImageViewResource(R.id.IvWeatherIconFirst, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                                                break;
+                                                            case 1:
+                                                                finalRv4.setTextViewText(R.id.TvTimeSecond,dateFormat.format(res).toString());
+                                                                MainObject = WeatherObject.getJSONObject("main");
+                                                                Temp = MainObject.getString("temp").toString();
+                                                                finalRv4.setTextViewText(R.id.TvTempSecond,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                IconObject = WeatherObject.getJSONArray("weather");
+                                                                finalRv4.setImageViewResource(R.id.IvWeatherIconSecond, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                                                break;
+                                                            case 2:
+                                                                finalRv4.setTextViewText(R.id.TvTimeThird,dateFormat.format(res).toString());
+                                                                MainObject = WeatherObject.getJSONObject("main");
+                                                                Temp = MainObject.getString("temp").toString();
+                                                                finalRv4.setTextViewText(R.id.TvTempThird,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                IconObject = WeatherObject.getJSONArray("weather");
+                                                                finalRv4.setImageViewResource(R.id.IvWeatherIconThird, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                                                break;
+                                                            case 3:
+                                                                finalRv4.setTextViewText(R.id.TvTimeForth,dateFormat.format(res).toString());
+                                                                MainObject = WeatherObject.getJSONObject("main");
+                                                                Temp = MainObject.getString("temp").toString();
+                                                                finalRv4.setTextViewText(R.id.TvTempForth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                IconObject = WeatherObject.getJSONArray("weather");
+                                                                finalRv4.setImageViewResource(R.id.IvWeatherIconForth, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                                                break;
+                                                            case 4:
+                                                                finalRv4.setTextViewText(R.id.TvTimeFifth,dateFormat.format(res).toString());
+                                                                MainObject = WeatherObject.getJSONObject("main");
+                                                                Temp = MainObject.getString("temp").toString();
+                                                                finalRv4.setTextViewText(R.id.TvTempFifth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                IconObject = WeatherObject.getJSONArray("weather");
+                                                                finalRv4.setImageViewResource(R.id.IvWeatherIconFifth, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                                                break;
+                                                            case 5:
+                                                                finalRv4.setTextViewText(R.id.TvTimeSixth,dateFormat.format(res).toString());
+                                                                MainObject = WeatherObject.getJSONObject("main");
+                                                                Temp = MainObject.getString("temp").toString();
+                                                                finalRv4.setTextViewText(R.id.TvTempSixth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                IconObject = WeatherObject.getJSONArray("weather");
+                                                                finalRv4.setImageViewResource(R.id.IvWeatherIconSixth, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                                                break;
+                                                        }
+                                                    }
+
+//                                                    if (!new Pref(context).getBoolean(Pref.IS_WEATHER_1 _ALARM, false)) {
+                                                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                                                    Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                                                    PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                                    new Pref(context).putBoolean(Pref.IS_WEATHER_1_ALARM, true);
+                                                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+//                                                    }
+                                                    appWidgetManager.updateAppWidget(Widget_Id, finalRv4);
+                                                } catch (JSONException e) {
+                                                    throw new RuntimeException(e);
+                                                }
+                                            }
+                                        }, new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                //displaying the error in toast if occur
+                                                System.out.println("------- catch Out errrr: " + error.getMessage());
+                                            }
+                                        });
+                                        queue1.add(stringReq1);
+                                    } catch (Exception e) {
+                                        Log.d("------- catch cityEx", "Error to find the city." + e.getMessage());
+                                    }
+                                    System.out.println("------- catch Out: " + "Your Location: " + " " + "Latitude: " + lat + " " + "Longitude: " + longi);
+                                } else {
+                                    System.out.println("------- catch Out: GPS " + locationGPS);
+
+                                }
+                            }
+
+                        }
+                    }
+
                     break;
                 case 9:
                     //todo weather 2 medium
@@ -709,7 +912,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     Intent intentBattery = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentBattery, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.RlBattery, configPendingIntent);
-                    if (!new Pref(context).getBoolean(Pref.IS_BATTERY_ALARM,false)) {
+                    if (!new Pref(context).getBoolean(Pref.IS_BATTERY_ALARM, false)) {
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                         PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);

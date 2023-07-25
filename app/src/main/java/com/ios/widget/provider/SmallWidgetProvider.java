@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.camera2.CameraManager;
 import android.location.Address;
@@ -33,6 +34,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
@@ -42,6 +44,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.gson.JsonObject;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
@@ -74,7 +81,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
         DatabaseHelper helper = new DatabaseHelper(context);
 //        helper.getDeleteWidgets();
         System.out.println("_*_*_*_*_*_*_ 11 :: " + helper.getWidgetCount());
-        WidgetData widgetData = new WidgetData(0, Constants.Widget_Type_Id, -1);
+        WidgetData widgetData = new WidgetData(0, Constants.Widget_Type_Id, -1,"");
         int insert = helper.InsertWidget(widgetData);
         System.out.println("_*_*_*_*_*_*_ insert : " + insert);
         for (int id : appWidgetIds) {
@@ -128,7 +135,6 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                 context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 //                            ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                             System.out.println("------- catch Out permission: ");
-
                         } else {
                             String city = "";
 
@@ -147,8 +153,13 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                         List<Address> addresses = geocoder.getFromLocation(locationGPS.getLatitude(), locationGPS.getLongitude(), 1);
                                         city = addresses.get(0).getLocality();
 
+                                        WidgetData widgetsId = helper.getWidgetsId(insert);
+                                        System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
+                                        widgetsId.setCity(city);
+                                        helper.updateWidget(widgetsId);
+
                                         RequestQueue queue = Volley.newRequestQueue(context);
-                                        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=abb0e61bdf12b12ca71bcd2ee74d5d9f";
+                                        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=b7fc383a06f2e5b385f2f811e18192f6";
                                         RemoteViews finalRv1 = rv;
                                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                                             @Override
@@ -163,18 +174,30 @@ public class SmallWidgetProvider extends AppWidgetProvider {
 
                                                         WeatherObject.get("main");
                                                         WeatherObject.get("icon");
-                                                        String Url = "https://openweathermap.org/img/wn/" + WeatherObject.get("icon") + "@2x.png";
+                                                        System.out.println("------- catch Out WeatherObject: " + WeatherObject.getString("description"));
                                                         finalRv1.setTextViewText(R.id.TvDesc, WeatherObject.get("description").toString());
-
-
+                                                        finalRv1.setImageViewResource(R.id.IvWeatherIcon, Constants.getWeatherIcons(WeatherObject.getString("icon")));
                                                     }
                                                     JSONObject MainObject = obj.getJSONObject("main");
 
                                                     JSONObject SysObject = obj.getJSONObject("sys");
                                                     finalRv1.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
-                                                    finalRv1.setTextViewText(R.id.TvTemp, MainObject.get("temp") + "°C");
-                                                    finalRv1.setTextViewText(R.id.TvTempMaxMin, MainObject.get("temp_min").toString().indexOf(2) + "°C" + MainObject.get("temp_max  ").toString().indexOf(2) + "°C");
+                                                    String Temp = MainObject.get("temp").toString();
+                                                    System.out.println("------- catch Out response Temp: " + Temp.substring(0, Temp.lastIndexOf(".")));
+                                                    finalRv1.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + "°C");
+                                                    String MinTemp = MainObject.get("temp_min").toString();
+                                                    String MaxTemp = MainObject.get("temp_max").toString();
+                                                    System.out.println("------- catch Out response TempMin: " + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + " -- " + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")));
+                                                    finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + "°C L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + "°C");
 
+//                                                    if (!new Pref(context).getBoolean(Pref.IS_WEATHER_1 _ALARM, false)) {
+                                                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                                                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                                                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                                        new Pref(context).putBoolean(Pref.IS_WEATHER_1_ALARM, true);
+                                                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+//                                                    }
+                                                    appWidgetManager.updateAppWidget(Widget_Id, finalRv1);
                                                 } catch (JSONException e) {
                                                     throw new RuntimeException(e);
                                                 }
@@ -199,7 +222,6 @@ public class SmallWidgetProvider extends AppWidgetProvider {
 
                         }
                     }
-
                     break;
                 case 2:
                 case 19:

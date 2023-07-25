@@ -24,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String WIDGET_TYPE = "WType";
     private static final String WIDGET_POSITION = "WPosition";
     private static final String WIDGET_NUMBER = "WNumber";
-
+    private static final String WIDGET_CITY = "WCity";
 
 
     private static final String WIDGET_MASTER_TABLE_NAME = "WidgetMaster";
@@ -61,6 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 WIDGET_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 WIDGET_TYPE + " TEXT," +
                 WIDGET_POSITION + " TEXT," +
+                WIDGET_CITY + " TEXT," +
                 WIDGET_NUMBER + " TEXT)";
         db.execSQL(createTableQuery);
 
@@ -108,6 +109,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(WIDGET_TYPE, widgetData.getType());
         values.put(WIDGET_POSITION, widgetData.getPosition());
+        values.put(WIDGET_CITY, widgetData.getCity());
         values.put(WIDGET_NUMBER, widgetData.getNumber());
 
         return (int) db.insert(TABLE_NAME, null, values);
@@ -155,6 +157,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(WIDGET_ID, widgetData.getId());
         values.put(WIDGET_TYPE, widgetData.getType());
         values.put(WIDGET_POSITION, widgetData.getPosition());
+        values.put(WIDGET_CITY, widgetData.getCity());
         values.put(WIDGET_NUMBER, widgetData.getNumber());
 
         db.update(TABLE_NAME, values, WIDGET_ID + " = ?", new String[]{String.valueOf(widgetData.getId())});
@@ -208,15 +211,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             do {
                 @SuppressLint("Range") WidgetData widgetData = new WidgetData(cursor.getInt(cursor.getColumnIndex(WIDGET_TYPE))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_POSITION))
-                        , cursor.getInt(cursor.getColumnIndex(WIDGET_NUMBER)));
+                        , cursor.getInt(cursor.getColumnIndex(WIDGET_NUMBER))
+                        , cursor.getString(cursor.getColumnIndex(WIDGET_CITY)));
 
-//                @SuppressLint("Range") WidgetData widgetData = new WidgetData(cursor.getString(cursor.getColumnIndex(WIDGET_ID))
-//                        , cursor.getString(cursor.getColumnIndex(WIDGET_TYPE))
-//                        , cursor.getInt(cursor.getColumnIndex(WIDGET_SMALL))
-//                        , cursor.getInt(cursor.getColumnIndex(WIDGET_MEDIUM))
-//                        , cursor.getInt(cursor.getColumnIndex(WIDGET_LARGE))
-//                        , cursor.getString(cursor.getColumnIndex(WIDGET_POSITION))
-//                        , cursor.getString(cursor.getColumnIndex(WIDGET_NUMBER)));
                 widgetDataArrayList.add(widgetData);
             } while (cursor.moveToNext());
         }
@@ -232,16 +229,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(table_name, new String[]{String.valueOf(index)});
         if (cursor.moveToFirst()) {
             do {
-//                @SuppressLint("Range") WidgetData widgetData = new WidgetData(cursor.getString(cursor.getColumnIndex(WIDGET_TYPE))
-//                        , cursor.getString(cursor.getColumnIndex(WIDGET_POSITION))
-//                        , cursor.getString(cursor.getColumnIndex(WIDGET_NUMBER)));
 
                 widgetDataArrayList = new WidgetData(cursor.getInt(cursor.getColumnIndex(WIDGET_ID))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_TYPE))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_POSITION))
-                        , cursor.getInt(cursor.getColumnIndex(WIDGET_NUMBER)));
-//                widgetDataArrayList.add(widgetData);
-//                widgetDataArrayList = widgetData;
+                        , cursor.getInt(cursor.getColumnIndex(WIDGET_NUMBER))
+                        , cursor.getString(cursor.getColumnIndex(WIDGET_CITY)));
             } while (cursor.moveToNext());
         }
         return widgetDataArrayList;
@@ -256,16 +249,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(table_name, new String[]{String.valueOf(index)});
         if (cursor.moveToFirst()) {
             do {
-//                @SuppressLint("Range") WidgetData widgetData = new WidgetData(cursor.getString(cursor.getColumnIndex(WIDGET_TYPE))
-//                        , cursor.getString(cursor.getColumnIndex(WIDGET_POSITION))
-//                        , cursor.getString(cursor.getColumnIndex(WIDGET_NUMBER)));
 
                 widgetDataArrayList = new WidgetData(cursor.getInt(cursor.getColumnIndex(WIDGET_ID))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_TYPE))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_POSITION))
-                        , cursor.getInt(cursor.getColumnIndex(WIDGET_NUMBER)));
-//                widgetDataArrayList.add(widgetData);
-//                widgetDataArrayList = widgetData;
+                        , cursor.getInt(cursor.getColumnIndex(WIDGET_NUMBER))
+                        , cursor.getString(cursor.getColumnIndex(WIDGET_CITY)));
             } while (cursor.moveToNext());
         }
         return widgetDataArrayList;
@@ -284,7 +273,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //todo delete Widget data
     public void getDeleteWidgets(int index) {
         SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_NAME+ " WHERE " + WIDGET_NUMBER + "=? ", new String[]{String.valueOf(index)});
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + WIDGET_NUMBER + "=? ", new String[]{String.valueOf(index)});
         cursor.moveToFirst();
     }
 

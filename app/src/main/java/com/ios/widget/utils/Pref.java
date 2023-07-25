@@ -32,6 +32,8 @@ public class Pref {
     public static String IS_CALENDAR_2_ALARM = "IsCalendar2Alarm";
     public static String IS_CALENDAR_3_ALARM = "IsCalendar3Alarm";
     public static String IS_CLOCK_3_ALARM = "IsClock3Alarm";
+    public static String IS_WEATHER_1_ALARM = "IsWeather1Alarm";
+    public static String IS_WEATHER_CITY = "IsWeatherCity";
     public static int AGE = 25;
     static final String MyPref = "widgetPref";
     public static final String SHOW_NEVER = "SHOW_NEVER";

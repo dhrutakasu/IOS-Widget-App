@@ -40,7 +40,7 @@ public class LargePhotoWidgetProvider extends AppWidgetProvider {
         DatabaseHelper helper = new DatabaseHelper(context);
 
         System.out.println("********** insert : " + Constants.Widget_Type_Id);
-        WidgetData widgetData = new WidgetData(2, Constants.Widget_Type_Id, -1);
+        WidgetData widgetData = new WidgetData(2, Constants.Widget_Type_Id, -1,"");
         int insert = helper.InsertWidget(widgetData);
         System.out.println("_*_*_*_*_*_*_ insert : " + insert);
         for (int id : iArr) {

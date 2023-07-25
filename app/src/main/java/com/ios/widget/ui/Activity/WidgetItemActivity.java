@@ -7,9 +7,11 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
@@ -202,14 +204,20 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         } else if ((modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 1 && TabSizeLayout.getSelectedTabPosition() == 0) || (modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 2 && TabSizeLayout.getSelectedTabPosition() == 2) || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 8) {
             System.out.println("---------- Catch Enter: " + modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() + " - " + TabSizeLayout.getSelectedTabPosition());
 
-            String s = Manifest.permission.ACCESS_FINE_LOCATION;
-            String s1 = Manifest.permission.ACCESS_COARSE_LOCATION;
+            String s = Manifest.permission.ACCESS_COARSE_LOCATION;
+            String s1 = Manifest.permission.ACCESS_FINE_LOCATION;
             Dexter.withActivity(this)
                     .withPermissions(s, s1)
                     .withListener(new MultiplePermissionsListener() {
                         public void onPermissionsChecked(MultiplePermissionsReport report) {
                             if (report.areAllPermissionsGranted()) {
-                                setProviderWidgets();
+                                LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                                    setProviderWidgets();
+                                } else {
+                                    Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                    startActivity(myIntent);
+                                }
                             }
 
                             if (report.isAnyPermissionPermanentlyDenied()) {

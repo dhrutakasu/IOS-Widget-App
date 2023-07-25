@@ -339,6 +339,42 @@ public class Constants {
         return resultBuffer.toString();
     }
 
+    public static int getWeatherIcons(String icon) {
+        switch (icon) {
+            case "01d":
+                return R.drawable.ic_per_sunny;
+            case "02d":
+            case "02n":
+                return R.drawable.ic_per_cloudy;
+            case "03d":
+                return R.drawable.ic_per_mostcloudy;
+            case "04d":
+            case "04n":
+                return R.drawable.ic_per_broken_clouds;
+            case "09d":
+            case "09n":
+                return R.drawable.ic_per_shower_rain;
+            case "10d":
+                return R.drawable.ic_per_rain;
+            case "11d":
+            case "11n":
+                return R.drawable.ic_per_rainstorm;
+            case "13d":
+            case "13n":
+                return R.drawable.ic_per_snow;
+            case "50d":
+            case "50n":
+                return R.drawable.ic_per_fog;
+            case "01n":
+                return R.drawable.ic_per_night_clear;
+            case "03n":
+                return R.drawable.ic_per_night_cloudy;
+            case "10n":
+                return R.drawable.ic_per_night_rain;
+        }
+        return 0;
+    }
+
     public static class DeviceMemory {
 
         public static float getInternalStorageSpace() {
@@ -452,6 +488,7 @@ public class Constants {
             }
         });
     }
+
     public static ArrayList<ImageFile> getSelectedImages() {
         return mSelectedList;
     }
@@ -472,7 +509,7 @@ public class Constants {
 
     public static void removeSelectedImages(ImageFile imageFile) {
         for (int i = 0; i < mSelectedList.size(); i++) {
-            if (mSelectedList.get(i).equals(imageFile)){
+            if (mSelectedList.get(i).equals(imageFile)) {
                 mSelectedList.remove(imageFile);
                 imageFile.imageCount--;
             }
@@ -489,8 +526,8 @@ public class Constants {
         getSelectedImages().clear();
         mSelectedList.clear();
         getmSelectedList.clear();
-        mSelectedList=new ArrayList<>();
-        getmSelectedList=new ArrayList<>();
+        mSelectedList = new ArrayList<>();
+        getmSelectedList = new ArrayList<>();
         System.gc();
     }
 

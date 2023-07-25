@@ -1,7 +1,9 @@
 package com.ios.widget.provider;
 
+import static com.ios.widget.utils.Constants.Widget_Id;
 import static com.ios.widget.utils.Constants.Widget_Type_Id;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -10,26 +12,57 @@ import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.camera2.CameraManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.provider.CalendarContract;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
 import com.ios.widget.utils.Constants;
 import com.ios.widget.utils.Pref;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class BetteryBroadcastReceiver extends BroadcastReceiver {
     private boolean IsTorchOn;
@@ -166,9 +199,93 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 }
-            }
-            else if (widgetData.get(i).getPosition() == 1) {
-                if (widgetData.get(i).getType() == 1) {
+            } else if (widgetData.get(i).getPosition() == 1) {
+                if (widgetData.get(i).getType() == 0) {
+                    LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                    System.out.println("------- catch Out permission location: " + locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER));
+                    if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        if (ActivityCompat.checkSelfPermission(
+                                context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                            ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                            System.out.println("------- catch Out permission: ");
+
+                        } else {
+                            String city = "";
+
+                            rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_small);
+                            System.out.println("------- catch Out: " + "Your Location: else ");
+//
+                            List<String> providers = locationManager.getProviders(true);
+                            for (String provider : providers) {
+                                Location locationGPS = locationManager.getLastKnownLocation(provider);
+                                if (locationGPS != null) {
+                                    double lat = locationGPS.getLatitude();
+                                    double longi = locationGPS.getLongitude();
+
+                                    try {
+                                        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                                        List<Address> addresses = geocoder.getFromLocation(locationGPS.getLatitude(), locationGPS.getLongitude(), 1);
+                                        city = addresses.get(0).getLocality();
+
+                                        RequestQueue queue = Volley.newRequestQueue(context);
+                                        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=abb0e61bdf12b12ca71bcd2ee74d5d9f";
+                                        RemoteViews finalRv1 = rv;
+                                        StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                System.out.println("------- catch Out response: " + response.toString());
+                                                try {
+                                                    JSONObject obj = new JSONObject(response);
+
+                                                    JSONArray WeatherArray = obj.getJSONArray("weather");
+                                                    for (int j = 0; j < WeatherArray.length(); j++) {
+                                                        JSONObject WeatherObject = WeatherArray.getJSONObject(j);
+
+                                                        WeatherObject.get("main");
+                                                        WeatherObject.get("icon");
+                                                        String Url = "https://openweathermap.org/img/wn/" + WeatherObject.get("icon") + "@2x.png";
+                                                        finalRv1.setTextViewText(R.id.TvDesc, WeatherObject.get("description").toString());
+
+
+                                                    }
+                                                    JSONObject MainObject = obj.getJSONObject("main");
+
+                                                    JSONObject SysObject = obj.getJSONObject("sys");
+                                                    finalRv1.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
+                                                    finalRv1.setTextViewText(R.id.TvTemp, MainObject.get("temp") + "°C");
+                                                    finalRv1.setTextViewText(R.id.TvTempMaxMin, MainObject.get("temp_min").toString().indexOf(2) + "°C" + MainObject.get("temp_max  ").toString().indexOf(2) + "°C");
+
+                                                } catch (JSONException e) {
+                                                    throw new RuntimeException(e);
+                                                }
+                                            }
+                                        }, new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                //displaying the error in toast if occur
+                                                System.out.println("------- catch Out errrr: " + error.getMessage());
+                                            }
+                                        });
+                                        queue.add(stringReq);
+                                    } catch (Exception e) {
+                                        Log.d("------- catch cityEx", "Error to find the city." + e.getMessage());
+                                    }
+                                    System.out.println("------- catch Out: " + "Your Location: " + " " + "Latitude: " + lat + " " + "Longitude: " + longi);
+                                } else {
+                                    System.out.println("------- catch Out: GPS " + locationGPS);
+
+                                }
+                            }
+                            AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                            appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
+                            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                            Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                            PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+                        }
+                    }
+                } else if (widgetData.get(i).getType() == 1) {
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_medium);
                     rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEEE");
                     rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "EEEE");
@@ -208,8 +325,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 }
-            }
-            else if (widgetData.get(i).getPosition() == 2) {
+            } else if (widgetData.get(i).getPosition() == 2) {
                 if (widgetData.get(i).getType() == 1) {
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel3_medium);
                     rv.setCharSequence(R.id.TClockHr, "setFormat12Hour", "HH");
@@ -603,6 +719,208 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 }
+            } else if (widgetData.get(i).getPosition() == 8) {
+
+                String city = widgetData.get(i).getCity();
+
+                if (widgetData.get(i).getType() == 0) {
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_small);
+                    RequestQueue queue = Volley.newRequestQueue(context);
+                    String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=b7fc383a06f2e5b385f2f811e18192f6";
+                    RemoteViews finalRv1 = rv;
+                    int finalI1 = i;
+                    StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            System.out.println("------- Receiver catch Out response: " + response.toString());
+                            try {
+                                JSONObject obj = new JSONObject(response);
+
+                                JSONArray WeatherArray = obj.getJSONArray("weather");
+                                for (int j = 0; j < WeatherArray.length(); j++) {
+                                    JSONObject WeatherObject = WeatherArray.getJSONObject(j);
+                                    System.out.println("------- Receiver catch Out WeatherObject: " + WeatherObject.getString("description"));
+
+                                    WeatherObject.get("main");
+                                    WeatherObject.get("icon");
+                                    finalRv1.setTextViewText(R.id.TvDesc, WeatherObject.get("description").toString());
+                                    finalRv1.setImageViewResource(R.id.IvWeatherIcon, Constants.getWeatherIcons(WeatherObject.getString("icon")));
+                                }
+                                JSONObject MainObject = obj.getJSONObject("main");
+
+                                JSONObject SysObject = obj.getJSONObject("sys");
+                                finalRv1.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
+                                String Temp = MainObject.get("temp").toString();
+                                System.out.println("------- Receiver catch Out response Temp: " + Temp.substring(0, Temp.lastIndexOf(".")));
+                                finalRv1.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + "°C");
+                                String MinTemp = MainObject.get("temp_min").toString();
+                                String MaxTemp = MainObject.get("temp_max").toString();
+                                System.out.println("------- Receiver catch Out response TempMin: " + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + " -- " + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")));
+                                finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + "°C L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + "°C");
+
+                                AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                                appWidgetManager.updateAppWidget(widgetData.get(finalI1).getNumber(), finalRv1);
+                                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                                Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                                PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //displaying the error in toast if occur
+                            System.out.println("-------Receiver catch Out errrr: " + error.getMessage());
+                        }
+                    });
+                    queue.add(stringReq);
+                } else if (widgetData.get(i).getType() == 1) {
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_medium);
+
+                    RemoteViews finalRv4 = rv;
+                    RequestQueue queue = Volley.newRequestQueue(context);
+                    String url = "https://api.openweathermap.org/data/2.5/weather?q=" +  widgetData.get(i).getCity() + "&units=metric&APPID=b7fc383a06f2e5b385f2f811e18192f6";
+                    StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            System.out.println("-------rere catch Out response: " + response.toString());
+                            try {
+                                JSONObject obj = new JSONObject(response);
+
+                                JSONArray WeatherArray = obj.getJSONArray("weather");
+                                for (int j = 0; j < WeatherArray.length(); j++) {
+                                    JSONObject WeatherObject = WeatherArray.getJSONObject(j);
+
+                                    WeatherObject.get("main");
+                                    WeatherObject.get("icon");
+                                    System.out.println("------- rer catch Out WeatherObject: " + WeatherObject.getString("description"));
+                                    finalRv4.setTextViewText(R.id.TvDesc, WeatherObject.get("description").toString());
+                                    finalRv4.setImageViewResource(R.id.IvWeatherIcon, Constants.getWeatherIcons(WeatherObject.getString("icon")));
+                                }
+                                JSONObject MainObject = obj.getJSONObject("main");
+
+                                JSONObject SysObject = obj.getJSONObject("sys");
+                                finalRv4.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
+                                String Temp = MainObject.get("temp").toString();
+                                System.out.println("-------rere catch Out response Temp: " + Temp.substring(0, Temp.lastIndexOf(".")));
+                                finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + "°C");
+                                String MinTemp = MainObject.get("temp_min").toString();
+                                String MaxTemp = MainObject.get("temp_max").toString();
+                                System.out.println("-------rere catch Out response TempMin: " + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + " -- " + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")));
+                                finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + "°C L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + "°C");
+
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //displaying the error in toast if occur
+                            System.out.println("------- catch Out errrr: " + error.getMessage());
+                        }
+                    });
+                    queue.add(stringReq);
+
+                    RequestQueue queue1 = Volley.newRequestQueue(context);
+                    String url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + widgetData.get(i).getCity() + "&cnt=6&units=metric&APPID=b7fc383a06f2e5b385f2f811e18192f6";
+                    int finalI2 = i;
+                    StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            System.out.println("-------rerer catch Out response: " + response.toString());
+                            try {
+                                JSONObject MainObject=null;
+                                JSONArray IconObject=null;
+                                String Temp=null;
+
+                                JSONObject obj = new JSONObject(response);
+
+                                JSONArray WeatherArray = obj.getJSONArray("list");
+                                for (int j = 0; j < WeatherArray.length(); j++) {
+                                    JSONObject WeatherObject = WeatherArray.getJSONObject(j);
+                                    DateFormat dateFormat = new SimpleDateFormat("HH:mm Z");
+                                    System.out.println("------- rerer catch Out WeatherObject111: " + WeatherObject.getString("dt"));
+
+                                    long milliSeconds= Long.parseLong(WeatherObject.getString("dt"));
+                                    Date res = new Date(milliSeconds);
+
+                                    switch (j) {
+                                        case 0:
+                                            finalRv4.setTextViewText(R.id.TvTimeFirst,dateFormat.format(res).toString());
+                                            MainObject = WeatherObject.getJSONObject("main");
+                                            Temp = MainObject.getString("temp").toString();
+                                            finalRv4.setTextViewText(R.id.TvTempFirst,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            IconObject = WeatherObject.getJSONArray("weather");
+                                            finalRv4.setImageViewResource(R.id.IvWeatherIconFirst, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                            break;
+                                        case 1:
+                                            finalRv4.setTextViewText(R.id.TvTimeSecond,dateFormat.format(res).toString());
+                                            MainObject = WeatherObject.getJSONObject("main");
+                                            Temp = MainObject.getString("temp").toString();
+                                            finalRv4.setTextViewText(R.id.TvTempSecond,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            IconObject = WeatherObject.getJSONArray("weather");
+                                            finalRv4.setImageViewResource(R.id.IvWeatherIconSecond, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                            break;
+                                        case 2:
+                                            finalRv4.setTextViewText(R.id.TvTimeThird,dateFormat.format(res).toString());
+                                            MainObject = WeatherObject.getJSONObject("main");
+                                            Temp = MainObject.getString("temp").toString();
+                                            finalRv4.setTextViewText(R.id.TvTempThird,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            IconObject = WeatherObject.getJSONArray("weather");
+                                            finalRv4.setImageViewResource(R.id.IvWeatherIconThird, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                            break;
+                                        case 3:
+                                            finalRv4.setTextViewText(R.id.TvTimeForth,dateFormat.format(res).toString());
+                                            MainObject = WeatherObject.getJSONObject("main");
+                                            Temp = MainObject.getString("temp").toString();
+                                            finalRv4.setTextViewText(R.id.TvTempForth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            IconObject = WeatherObject.getJSONArray("weather");
+                                            finalRv4.setImageViewResource(R.id.IvWeatherIconForth, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                            break;
+                                        case 4:
+                                            finalRv4.setTextViewText(R.id.TvTimeFifth,dateFormat.format(res).toString());
+                                            MainObject = WeatherObject.getJSONObject("main");
+                                            Temp = MainObject.getString("temp").toString();
+                                            finalRv4.setTextViewText(R.id.TvTempFifth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            IconObject = WeatherObject.getJSONArray("weather");
+                                            finalRv4.setImageViewResource(R.id.IvWeatherIconFifth, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                            break;
+                                        case 5:
+                                            finalRv4.setTextViewText(R.id.TvTimeSixth,dateFormat.format(res).toString());
+                                            MainObject = WeatherObject.getJSONObject("main");
+                                            Temp = MainObject.getString("temp").toString();
+                                            finalRv4.setTextViewText(R.id.TvTempSixth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            IconObject = WeatherObject.getJSONArray("weather");
+                                            finalRv4.setImageViewResource(R.id.IvWeatherIconSixth, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                            break;
+                                    }
+                                }
+                                AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                                appWidgetManager.updateAppWidget(widgetData.get(finalI2).getNumber(), finalRv4);
+                                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                                Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                                PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //displaying the error in toast if occur
+                            System.out.println("------- catch Out errrr: " + error.getMessage());
+                        }
+                    });
+                    queue1.add(stringReq1);
+                } else if (widgetData.get(i).getType() == 2) {
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_large);
+                }
+
             } else if (widgetData.get(i).getPosition() == 20) {
                 if (widgetData.get(i).getType() == 0) {
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_small);
