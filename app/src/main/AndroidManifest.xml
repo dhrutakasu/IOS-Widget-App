@@ -148,6 +148,10 @@
             android:enabled="true"
             android:exported="false" />
         <receiver
+            android:name=".provider.XPanelFlashlight4WidgetReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
             android:name=".provider.XPanelFlashlight3WidgetReceiver"
             android:enabled="true"
             android:exported="false" />

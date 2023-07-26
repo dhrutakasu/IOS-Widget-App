@@ -5,14 +5,19 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.ios.widget.Model.WidgetData;
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
+import com.ios.widget.helper.DatabaseHelper;
+import com.ios.widget.provider.BetteryBroadcastReceiver;
 import com.ios.widget.ui.Adapter.MainWidgetListAdapter;
 import com.ios.widget.ui.Adapter.TypeImageAdapter;
 import com.ios.widget.utils.Constants;
@@ -36,6 +41,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initViews() {
         context = this;
+        DatabaseHelper helper = new DatabaseHelper(context);
+        ArrayList<WidgetData> widgetData = helper.getWidgets();
+        System.out.println("---- -- - - zzzzz : "+widgetData.size());
+        if (widgetData.size()>0){
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+            PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+        }
         IvSettings = (ImageView) findViewById(R.id.IvSettings);
         IvMyWidget = (ImageView) findViewById(R.id.IvMyWidget);
         RvTypeList = (RecyclerView) findViewById(R.id.RvTypeList);

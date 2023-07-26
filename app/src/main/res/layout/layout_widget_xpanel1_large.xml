@@ -44,6 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.8"
                     android:paddingEnd="@dimen/_2sdp"
+                    android:adjustViewBounds="true"
                     android:src="@drawable/ic_wifi1" />
 
                 <ImageView
@@ -56,6 +57,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.8"
+                    android:adjustViewBounds="true"
                     android:paddingStart="@dimen/_2sdp"
                     android:src="@drawable/ic_celluer1" />
             </LinearLayout>
@@ -74,6 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.8"
                     android:paddingEnd="@dimen/_2sdp"
+                    android:adjustViewBounds="true"
                     android:src="@drawable/ic_bluethooth1" />
 
                 <ImageView
@@ -86,6 +89,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.8"
+                    android:adjustViewBounds="true"
                     android:paddingStart="@dimen/_2sdp"
                     android:src="@drawable/ic_tourch1" />
             </LinearLayout>

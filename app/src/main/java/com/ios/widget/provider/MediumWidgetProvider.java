@@ -22,6 +22,8 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.os.Environment;
+import android.os.StatFs;
 import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.util.Log;
@@ -47,6 +49,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -523,21 +526,26 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                                     JSONObject MainObject=null;
                                                     JSONArray IconObject=null;
                                                     String Temp=null;
+                                                    String res=null;
 
                                                     JSONObject obj = new JSONObject(response);
 
                                                     JSONArray WeatherArray = obj.getJSONArray("list");
                                                     for (int j = 0; j < WeatherArray.length(); j++) {
                                                         JSONObject WeatherObject = WeatherArray.getJSONObject(j);
-                                                        DateFormat dateFormat = new SimpleDateFormat("HH:mm Z");
-                                                        System.out.println("------- catch Out WeatherObject111: " + WeatherObject.getString("dt"));
-
-                                                        long milliSeconds= Long.parseLong(WeatherObject.getString("dt"));
-                                                        Date res = new Date(milliSeconds);
-
+                                                        String dateStr = WeatherObject.getString("dt_txt").substring(WeatherObject.getString("dt_txt").lastIndexOf(" "));
+                                                        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                                                        try {
+                                                            Date date = format.parse(dateStr);
+                                                            format = new SimpleDateFormat("HH:mm");
+                                                            res = format.format(date);
+                                                            System.out.println(date);
+                                                        } catch (ParseException e) {
+                                                            e.printStackTrace();
+                                                        }
                                                         switch (j) {
                                                             case 0:
-                                                                finalRv4.setTextViewText(R.id.TvTimeFirst,dateFormat.format(res).toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeFirst,res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
                                                                 finalRv4.setTextViewText(R.id.TvTempFirst,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
@@ -545,7 +553,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconFirst, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 1:
-                                                                finalRv4.setTextViewText(R.id.TvTimeSecond,dateFormat.format(res).toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeSecond,res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
                                                                 finalRv4.setTextViewText(R.id.TvTempSecond,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
@@ -553,7 +561,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconSecond, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 2:
-                                                                finalRv4.setTextViewText(R.id.TvTimeThird,dateFormat.format(res).toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeThird,res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
                                                                 finalRv4.setTextViewText(R.id.TvTempThird,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
@@ -561,7 +569,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconThird, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 3:
-                                                                finalRv4.setTextViewText(R.id.TvTimeForth,dateFormat.format(res).toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeForth,res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
                                                                 finalRv4.setTextViewText(R.id.TvTempForth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
@@ -569,7 +577,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconForth, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 4:
-                                                                finalRv4.setTextViewText(R.id.TvTimeFifth,dateFormat.format(res).toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeFifth,res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
                                                                 finalRv4.setTextViewText(R.id.TvTempFifth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
@@ -577,7 +585,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconFifth, Constants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 5:
-                                                                finalRv4.setTextViewText(R.id.TvTimeSixth,dateFormat.format(res).toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeSixth,res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
                                                                 finalRv4.setTextViewText(R.id.TvTempSixth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
@@ -696,8 +704,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text1_medium);
 
                     rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_clock_text1_bg_medium), 30));
-                    rv.setImageViewResource(R.id.IvTextLeft, R.drawable.img_clock_text1_line_hour_large);
-                    rv.setImageViewResource(R.id.IvTextRight, R.drawable.img_clock_text1_line_minute_large);
                     rv.setCharSequence(R.id.TClockHour, "setFormat12Hour", "HH");
                     rv.setCharSequence(R.id.TClockHour, "setFormat24Hour", "HH");
                     rv.setCharSequence(R.id.TClockMinutes, "setFormat12Hour", "mm");
@@ -711,29 +717,112 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     rv.setOnClickPendingIntent(R.id.RlMediumClock, configPendingIntent);
                     break;
                 case 18:
-                    //todo clock 8 medium
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text2_medium);
+                    //todo clock 9 medium
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_medium);
 
-                    rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_clock_text2_bg_medium), 30));
-                    rv.setImageViewResource(R.id.IvTextLeft, R.drawable.img_clock_text2_line_large);
-                    rv.setImageViewResource(R.id.IvTextRight, R.drawable.img_clock_text2_line_large);
-                    rv.setImageViewResource(R.id.IvTextLeftHook, R.drawable.img_clock_text2_decor);
-                    rv.setImageViewResource(R.id.IvTextRightHook, R.drawable.img_clock_text2_decor);
-                    rv.setImageViewResource(R.id.IvTextLeftHookCenter, R.drawable.img_clock_text2_decor);
-                    rv.setImageViewResource(R.id.IvTextRightHookCenter, R.drawable.img_clock_text2_decor);
-                    rv.setCharSequence(R.id.TClockHour, "setFormat12Hour", "HH");
-                    rv.setCharSequence(R.id.TClockHour, "setFormat24Hour", "HH");
-                    rv.setCharSequence(R.id.TClockMinutes, "setFormat12Hour", "mm");
-                    rv.setCharSequence(R.id.TClockMinutes, "setFormat24Hour", "mm");
-                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat12Hour", "EEEE, MMM d");
-                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat24Hour", "EEEE, MMM d");
+                    rv.setCharSequence(R.id.TClockHr, "setFormat12Hour", "HH");
+                    rv.setCharSequence(R.id.TClockHr, "setFormat24Hour", "HH");
+                    rv.setCharSequence(R.id.TClockMin, "setFormat12Hour", "mm");
+                    rv.setCharSequence(R.id.TClockMin, "setFormat24Hour", "mm");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "d EEEE");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "d EEEE");
 
-                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    BatteryManager batteryManager = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+                    int managerIntProperty = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
 
-                    rv.setOnClickPendingIntent(R.id.RlLargeClock, configPendingIntent);
+                    long KILOBYTE = 1024;
+                    StatFs internalStatFs = new StatFs( Environment.getRootDirectory().getAbsolutePath() );
+                    long internalTotal;
+                    long internalFree;
+
+                    StatFs externalStatFs = new StatFs( Environment.getExternalStorageDirectory().getAbsolutePath() );
+                    long externalTotal;
+                    long externalFree;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                        internalTotal = ( internalStatFs.getBlockCountLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                        internalFree = ( internalStatFs.getAvailableBlocksLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                        externalTotal = ( externalStatFs.getBlockCountLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                        externalFree = ( externalStatFs.getAvailableBlocksLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                    }
+                    else {
+                        internalTotal = ( (long) internalStatFs.getBlockCount() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                        internalFree = ( (long) internalStatFs.getAvailableBlocks() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                        externalTotal = ( (long) externalStatFs.getBlockCount() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                        externalFree = ( (long) externalStatFs.getAvailableBlocks() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                    }
+
+                    long total = internalTotal + externalTotal;
+                    long free = internalFree + externalFree;
+                    long used = total - free;
+                    System.out.println("-----------store TTT : " + Constants.bytes2String(total) + "/" + Constants.bytes2String(free)+ "/" + Constants.bytes2String(used));
+                    rv.setTextViewText(R.id.progress_text, managerIntProperty + "%");
+                    rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
+
+                    CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        RemoteViews finalRv5 = rv;
+                        cameraManager.registerTorchCallback(new CameraManager.TorchCallback() {
+                            @Override
+                            public void onTorchModeUnavailable(@NonNull String cameraId) {
+                                super.onTorchModeUnavailable(cameraId);
+                            }
+
+                            @Override
+                            public void onTorchModeChanged(@NonNull String cameraId, boolean enabled) {
+                                super.onTorchModeChanged(cameraId, enabled);
+                                IsTorchOn = enabled;
+                                System.out.println("------********* ON / OFF : " + IsTorchOn);
+                                if (IsTorchOn) {
+                                    finalRv5.setImageViewResource(R.id.IvTorch, R.drawable.ic_torch4_selected);
+                                } else {
+                                    finalRv5.setImageViewResource(R.id.IvTorch, R.drawable.ic_torch4);
+                                }
+                            }
+
+                            @Override
+                            public void onTorchStrengthLevelChanged(@NonNull String cameraId, int newStrengthLevel) {
+                                super.onTorchStrengthLevelChanged(cameraId, newStrengthLevel);
+                            }
+                        }, null);
+                    }
+                    if (Constants.IsWIfiConnected(context)) {
+                        System.out.println("************ WIFI RECEIVE  ON ");
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi4_selected);
+                    } else {
+                        System.out.println("************ WIFI RECEIVE  Off ");
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi4);
+                    }
+                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    if (mBluetoothAdapter != null) {
+                        if (mBluetoothAdapter.isEnabled()) {
+                            System.out.println("************  Bluetooth RECEIVE  ON ");
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluetooth4_selected);
+                        } else if (!mBluetoothAdapter.isEnabled()) {
+                            System.out.println("************  Bluetooth RECEIVE  else ");
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluetooth4);
+                        }
+                    }
+
+                    if (!new Pref(context).getBoolean(Pref.IS_X_PANEL_4_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new Pref(context).putBoolean(Pref.IS_X_PANEL_4_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    }
+                    Intent intentWifi = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intentWifi, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.IvWifi, configPendingIntent);
+
+                    Intent intentBluetooth = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
+
+                    Intent intent2 = new Intent(context, XPanelFlashlight4WidgetReceiver.class);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
                     break;
-                case 19:
+                    case 19:
                     //todo clock 9 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text3_medium);
 
@@ -752,13 +841,10 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                 case 20:
                     //todo x-panel 1 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_medium);
-                    RemoteViews finalrv = rv;
-                    int finali = i;
 
-
-                    CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
+                    CameraManager service = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        cameraManager.registerTorchCallback(new CameraManager.TorchCallback() {
+                        service.registerTorchCallback(new CameraManager.TorchCallback() {
                             @Override
                             public void onTorchModeUnavailable(@NonNull String cameraId) {
                                 super.onTorchModeUnavailable(cameraId);
@@ -783,12 +869,12 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         System.out.println("************ WIFI RECEIVE  Off ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
                     }
-                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                    if (mBluetoothAdapter != null) {
-                        if (mBluetoothAdapter.isEnabled()) {
+                    BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
+                    if (defaultAdapter != null) {
+                        if (defaultAdapter.isEnabled()) {
                             System.out.println("************  Bluetooth RECEIVE  ON ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
-                        } else if (!mBluetoothAdapter.isEnabled()) {
+                        } else if (!defaultAdapter.isEnabled()) {
                             System.out.println("************  Bluetooth RECEIVE  else ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
                         }
@@ -869,17 +955,17 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                     }
 
-                    Intent intentWifi = new Intent(Settings.ACTION_WIFI_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intentWifi, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    Intent intentWifi1 = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intentWifi1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvWifi, configPendingIntent);
 
-                    Intent intentBluetooth = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    Intent intentBluetooth1 = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
 
-                    Intent intent2 = new Intent(context, XPanelFlashlightWidgetReceiver.class);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    rv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
+                    Intent intentTorch = new Intent(context, XPanelFlashlightWidgetReceiver.class);
+                    PendingIntent broadcast1 = PendingIntent.getBroadcast(context, 0, intentTorch, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.IvTorch, broadcast1);
                     break;
                 case 21:
                     //todo x-panel 2 medium

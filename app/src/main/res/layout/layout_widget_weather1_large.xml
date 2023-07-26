@@ -151,6 +151,22 @@
                         android:orientation="vertical"
                         android:weightSum="5">
 
+                        <TextView
+                            android:id="@+id/TvTimeFirst"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/main_medium"
+                            android:gravity="center"
+                            android:text="1PM"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8sdp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.5" />
+
                         <ImageView
                             android:id="@+id/IvWeatherIconFirst"
                             android:layout_width="match_parent"
@@ -165,22 +181,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.5" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="0.5" />
-
-                        <TextView
-                            android:id="@+id/TvTimeFirst"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/main_medium"
-                            android:gravity="center"
-                            android:text="1PM"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_8sdp" />
 
                         <TextView
                             android:id="@+id/TvTempFirst"
@@ -202,6 +202,22 @@
                         android:orientation="vertical"
                         android:weightSum="5">
 
+                        <TextView
+                            android:id="@+id/TvTimeSecond"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/main_medium"
+                            android:gravity="center"
+                            android:text="1PM"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8sdp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.5" />
+
                         <ImageView
                             android:id="@+id/IvWeatherIconSecond"
                             android:layout_width="match_parent"
@@ -216,22 +232,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.5" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="0.5" />
-
-                        <TextView
-                            android:id="@+id/TvTimeSecond"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/main_medium"
-                            android:gravity="center"
-                            android:text="1PM"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_8sdp" />
 
                         <TextView
                             android:id="@+id/TvTempSecond"
@@ -253,6 +253,22 @@
                         android:orientation="vertical"
                         android:weightSum="5">
 
+                        <TextView
+                            android:id="@+id/TvTimeThird"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/main_medium"
+                            android:gravity="center"
+                            android:text="1PM"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8sdp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.5" />
+
                         <ImageView
                             android:id="@+id/IvWeatherIconThird"
                             android:layout_width="match_parent"
@@ -267,22 +283,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.5" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="0.5" />
-
-                        <TextView
-                            android:id="@+id/TvTimeThird"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/main_medium"
-                            android:gravity="center"
-                            android:text="1PM"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_8sdp" />
 
                         <TextView
                             android:id="@+id/TvTempThird"
@@ -304,6 +304,22 @@
                         android:orientation="vertical"
                         android:weightSum="5">
 
+                        <TextView
+                            android:id="@+id/TvTimeForth"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/main_medium"
+                            android:gravity="center"
+                            android:text="1PM"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8sdp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.5" />
+
                         <ImageView
                             android:id="@+id/IvWeatherIconForth"
                             android:layout_width="match_parent"
@@ -318,22 +334,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.5" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="0.5" />
-
-                        <TextView
-                            android:id="@+id/TvTimeForth"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/main_medium"
-                            android:gravity="center"
-                            android:text="1PM"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_8sdp" />
 
                         <TextView
                             android:id="@+id/TvTempForth"
@@ -355,6 +355,22 @@
                         android:orientation="vertical"
                         android:weightSum="5">
 
+                        <TextView
+                            android:id="@+id/TvTimeFifth"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/main_medium"
+                            android:gravity="center"
+                            android:text="1PM"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8sdp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.5" />
+
                         <ImageView
                             android:id="@+id/IvWeatherIconFifth"
                             android:layout_width="match_parent"
@@ -369,22 +385,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.5" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="0.5" />
-
-                        <TextView
-                            android:id="@+id/TvTimeFifth"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/main_medium"
-                            android:gravity="center"
-                            android:text="1PM"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_8sdp" />
 
                         <TextView
                             android:id="@+id/TvTempFifth"
@@ -406,6 +406,22 @@
                         android:orientation="vertical"
                         android:weightSum="5">
 
+                        <TextView
+                            android:id="@+id/TvTimeSixth"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/main_medium"
+                            android:gravity="center"
+                            android:text="1PM"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8sdp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.5" />
+
                         <ImageView
                             android:id="@+id/IvWeatherIconSixth"
                             android:layout_width="match_parent"
@@ -420,22 +436,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.5" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="0.5" />
-
-                        <TextView
-                            android:id="@+id/TvTimeSixth"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/main_medium"
-                            android:gravity="center"
-                            android:text="1PM"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_8sdp" />
 
                         <TextView
                             android:id="@+id/TvTempSixth"
@@ -492,6 +492,18 @@
                         android:orientation="horizontal"
                         android:weightSum="3">
 
+                        <TextView
+                            android:id="@+id/TvDayFirst"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/main_medium"
+                            android:gravity="start"
+                            android:text="1PM"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8sdp" />
+
                         <ImageView
                             android:id="@+id/IvWeatherIconDayFirst"
                             android:layout_width="0dp"
@@ -508,17 +520,6 @@
                             android:layout_height="match_parent"
                             android:layout_weight="0.5" />
 
-                        <TextView
-                            android:id="@+id/TvDayFirst"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/main_medium"
-                            android:gravity="start"
-                            android:text="1PM"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_8sdp" />
 
                         <TextView
                             android:id="@+id/TvHighTempDayFirst"
@@ -552,6 +553,18 @@
                         android:orientation="horizontal"
                         android:weightSum="3">
 
+                        <TextView
+                            android:id="@+id/TvDaySecond"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/main_medium"
+                            android:gravity="start"
+                            android:text="1PM"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8sdp" />
+
                         <ImageView
                             android:id="@+id/IvWeatherIconDaySecond"
                             android:layout_width="0dp"
@@ -567,18 +580,6 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.5" />
-
-                        <TextView
-                            android:id="@+id/TvDaySecond"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/main_medium"
-                            android:gravity="start"
-                            android:text="1PM"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_8sdp" />
 
                         <TextView
                             android:id="@+id/TvHighTempDaySecond"
@@ -612,6 +613,18 @@
                         android:orientation="horizontal"
                         android:weightSum="3">
 
+                        <TextView
+                            android:id="@+id/TvDayThird"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/main_medium"
+                            android:gravity="start"
+                            android:text="1PM"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8sdp" />
+
                         <ImageView
                             android:id="@+id/IvWeatherIconDayThird"
                             android:layout_width="0dp"
@@ -627,18 +640,6 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.5" />
-
-                        <TextView
-                            android:id="@+id/TvDayThird"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/main_medium"
-                            android:gravity="start"
-                            android:text="1PM"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_8sdp" />
 
                         <TextView
                             android:id="@+id/TvHighTempDayThird"
@@ -672,6 +673,18 @@
                         android:orientation="horizontal"
                         android:weightSum="3">
 
+                        <TextView
+                            android:id="@+id/TvDayForth"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/main_medium"
+                            android:gravity="start"
+                            android:text="1PM"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8sdp" />
+
                         <ImageView
                             android:id="@+id/IvWeatherIconDayForth"
                             android:layout_width="0dp"
@@ -687,18 +700,6 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.5" />
-
-                        <TextView
-                            android:id="@+id/TvDayForth"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/main_medium"
-                            android:gravity="start"
-                            android:text="1PM"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_8sdp" />
 
                         <TextView
                             android:id="@+id/TvHighTempDayForth"
@@ -732,6 +733,18 @@
                         android:orientation="horizontal"
                         android:weightSum="3">
 
+                        <TextView
+                            android:id="@+id/TvDayFifth"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/main_medium"
+                            android:gravity="start"
+                            android:text="1PM"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8sdp" />
+
                         <ImageView
                             android:id="@+id/IvWeatherIconDayFifth"
                             android:layout_width="0dp"
@@ -747,18 +760,6 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.5" />
-
-                        <TextView
-                            android:id="@+id/TvDayFifth"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/main_medium"
-                            android:gravity="start"
-                            android:text="1PM"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_8sdp" />
 
                         <TextView
                             android:id="@+id/TvHighTempDayFifth"

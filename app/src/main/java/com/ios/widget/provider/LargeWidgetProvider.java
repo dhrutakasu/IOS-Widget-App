@@ -25,7 +25,9 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
+import android.os.StatFs;
 import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.util.Log;
@@ -215,30 +217,6 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     intent2.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, Widget_Id);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
-                    break;
-                case 1:
-                case 18:
-                    //todo clock 8 large
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text2_large);
-
-                    rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_clock_text2_bg_small), 30));
-                    rv.setImageViewResource(R.id.IvTextLeft, R.drawable.img_clock_text2_line_large);
-                    rv.setImageViewResource(R.id.IvTextRight, R.drawable.img_clock_text2_line_large);
-                    rv.setImageViewResource(R.id.IvTextLeftHook, R.drawable.img_clock_text2_decor);
-                    rv.setImageViewResource(R.id.IvTextRightHook, R.drawable.img_clock_text2_decor);
-                    rv.setImageViewResource(R.id.IvTextLeftHookCenter, R.drawable.img_clock_text2_decor);
-                    rv.setImageViewResource(R.id.IvTextRightHookCenter, R.drawable.img_clock_text2_decor);
-                    rv.setCharSequence(R.id.TClockHour, "setFormat12Hour", "HH");
-                    rv.setCharSequence(R.id.TClockHour, "setFormat24Hour", "HH");
-                    rv.setCharSequence(R.id.TClockMinutes, "setFormat12Hour", "mm");
-                    rv.setCharSequence(R.id.TClockMinutes, "setFormat24Hour", "mm");
-                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat12Hour", "EEEE, MMM d");
-                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat24Hour", "EEEE, MMM d");
-
-                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    rv.setOnClickPendingIntent(R.id.RlLargeClock, configPendingIntent);
                     break;
                 case 2:
                 case 9:
@@ -512,6 +490,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                 case 10:
                     //todo weather 3 large
                     break;
+                    case 1:
                 case 11:
                     //todo clock 1 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple1_large);
@@ -571,8 +550,6 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text1_large);
 
                     rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_clock_text1_bg_large), 30));
-                    rv.setImageViewResource(R.id.IvTextLeft, R.drawable.img_clock_text1_line_hour_large);
-                    rv.setImageViewResource(R.id.IvTextRight, R.drawable.img_clock_text1_line_minute_large);
                     rv.setCharSequence(R.id.TClockHour, "setFormat12Hour", "HH");
                     rv.setCharSequence(R.id.TClockHour, "setFormat24Hour", "HH");
                     rv.setCharSequence(R.id.TClockMinutes, "setFormat12Hour", "mm");
@@ -732,7 +709,55 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     configPendingIntent = PendingIntent.getBroadcast(context, 0, intentTorch3, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvTorch, configPendingIntent);
                     break;
+                case 18:
+                    //todo x-panel 4 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_large);
 
+                    rv.setCharSequence(R.id.TClockHr, "setFormat12Hour", "HH");
+                    rv.setCharSequence(R.id.TClockHr, "setFormat24Hour", "HH");
+                    rv.setCharSequence(R.id.TClockMin, "setFormat12Hour", "mm");
+                    rv.setCharSequence(R.id.TClockMin, "setFormat24Hour", "mm");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "d EEEE");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "d EEEE");
+
+                    BatteryManager batteryManager = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+                    int managerIntProperty = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+
+                    long KILOBYTE = 1024;
+                    StatFs internalStatFs = new StatFs( Environment.getRootDirectory().getAbsolutePath() );
+                    long internalTotal;
+                    long internalFree;
+
+                    StatFs externalStatFs = new StatFs( Environment.getExternalStorageDirectory().getAbsolutePath() );
+                    long externalTotal;
+                    long externalFree;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                        internalTotal = ( internalStatFs.getBlockCountLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                        internalFree = ( internalStatFs.getAvailableBlocksLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                        externalTotal = ( externalStatFs.getBlockCountLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                        externalFree = ( externalStatFs.getAvailableBlocksLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                    }
+                    else {
+                        internalTotal = ( (long) internalStatFs.getBlockCount() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                        internalFree = ( (long) internalStatFs.getAvailableBlocks() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                        externalTotal = ( (long) externalStatFs.getBlockCount() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                        externalFree = ( (long) externalStatFs.getAvailableBlocks() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                    }
+
+                    long total = internalTotal + externalTotal;
+                    long free = internalFree + externalFree;
+                    long used = total - free;
+                    System.out.println("-----------store TTT : " + Constants.bytes2String(total) + "/" + Constants.bytes2String(free)+ "/" + Constants.bytes2String(used));
+                    rv.setTextViewText(R.id.progress_text, managerIntProperty + "%");
+                    rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
+                    if (!new Pref(context).getBoolean(Pref.IS_X_PANEL_4_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new Pref(context).putBoolean(Pref.IS_X_PANEL_4_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    }
+                    break;
             }
 
             appWidgetManager.updateAppWidget(Widget_Id, rv);

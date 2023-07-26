@@ -27,6 +27,7 @@ public class Pref {
     public static String IS_BATTERY_ALARM = "IsBatteryAlarm";
     public static String IS_X_PANEL_1_ALARM = "IsXPanel1Alarm";
     public static String IS_X_PANEL_3_ALARM = "IsXPanel3Alarm";
+    public static String IS_X_PANEL_4_ALARM = "IsXPanel4Alarm";
     public static String IS_CALENDAR_4_ALARM = "IsCalendar3Alarm";
     public static String IS_CALENDAR_1_ALARM = "IsCalendar1Alarm";
     public static String IS_CALENDAR_2_ALARM = "IsCalendar2Alarm";
