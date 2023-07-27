@@ -10,4 +10,5 @@
     <string name="my_widget">My widget</string>
     <string name="MSG_ASK_PERMISSION">This app needs permissions to use this feature. You can grant them in app settings.</string>
     <string name="folder_all">All</string>
+    <string name="weather_key">b7fc383a06f2e5b385f2f811e18192f6</string>
 </resources>

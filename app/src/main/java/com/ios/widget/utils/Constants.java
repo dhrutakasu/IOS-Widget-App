@@ -205,11 +205,11 @@ public class Constants {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
         WidgetModel widgetModel = new WidgetModel(R.drawable.img_xpanel_small_1_xxhdpi, R.drawable.img_xpanel_medium_1_xxhdpi, R.drawable.img_xpanel_large_1_xxhdpi, "X-Panel", 20);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_2_xxhdpi, R.drawable.img_xpanel_medium_2_xxhdpi, R.drawable.img_xpanel_large_2_xxhdpi, "X-Panel", 21);
+//        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_2_xxhdpi, R.drawable.img_xpanel_medium_2_xxhdpi, R.drawable.img_xpanel_large_2_xxhdpi, "X-Panel", 21);
+//        modelArrayList.add(widgetModel);
+        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_4_xxhdpi, R.drawable.img_xpanel_medium_4_xxhdpi, R.drawable.img_xpanel_large_4_xxhdpi, "X-Panel", 21);
         modelArrayList.add(widgetModel);
         widgetModel = new WidgetModel(R.drawable.img_xpanel_small_3_xxhdpi, R.drawable.img_xpanel_medium_3_xxhdpi, R.drawable.img_xpanel_large_3_xxhdpi, "X-Panel", 22);
-        modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_4_xxhdpi, R.drawable.img_xpanel_medium_4_xxhdpi, R.drawable.img_xpanel_large_4_xxhdpi, "X-Panel", 18);
         modelArrayList.add(widgetModel);
 
         return modelArrayList;

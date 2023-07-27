@@ -161,7 +161,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                         helper.updateWidget(widgetsId);
 
                                         RequestQueue queue = Volley.newRequestQueue(context);
-                                        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=b7fc383a06f2e5b385f2f811e18192f6";
+                                        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID="+context.getString(R.string.weather_key);
                                         RemoteViews finalRv1 = rv;
                                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                                             @Override
@@ -450,7 +450,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     Intent intent2 = new Intent(context, XPanelFlashlightWidgetReceiver.class);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
-                case 21:
+              /*  case 21:
                     //todo x-panel 2 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel2_small);
 
@@ -470,6 +470,55 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                         PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                         new Pref(context).putBoolean(Pref.IS_BATTERY_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    }
+                    break;*/
+                case 21:
+                    //todo x-panel 4 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_small);
+
+                    rv.setCharSequence(R.id.TClockHr, "setFormat12Hour", "HH");
+                    rv.setCharSequence(R.id.TClockHr, "setFormat24Hour", "HH");
+                    rv.setCharSequence(R.id.TClockMin, "setFormat12Hour", "mm");
+                    rv.setCharSequence(R.id.TClockMin, "setFormat24Hour", "mm");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "d EEEE");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "d EEEE");
+
+                    BatteryManager batteryManager = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+                    int managerIntProperty = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+
+                    long KILOBYTE = 1024;
+                    StatFs internalStatFs = new StatFs( Environment.getRootDirectory().getAbsolutePath() );
+                    long internalTotal;
+                    long internalFree;
+
+                    StatFs externalStatFs = new StatFs( Environment.getExternalStorageDirectory().getAbsolutePath() );
+                    long externalTotal;
+                    long externalFree;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                        internalTotal = ( internalStatFs.getBlockCountLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                        internalFree = ( internalStatFs.getAvailableBlocksLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                        externalTotal = ( externalStatFs.getBlockCountLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                        externalFree = ( externalStatFs.getAvailableBlocksLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                    }
+                    else {
+                        internalTotal = ( (long) internalStatFs.getBlockCount() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                        internalFree = ( (long) internalStatFs.getAvailableBlocks() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                        externalTotal = ( (long) externalStatFs.getBlockCount() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                        externalFree = ( (long) externalStatFs.getAvailableBlocks() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                    }
+
+                    long total = internalTotal + externalTotal;
+                    long free = internalFree + externalFree;
+                    long used = total - free;
+                    System.out.println("-----------store TTT : " + Constants.bytes2String(total) + "/" + Constants.bytes2String(free)+ "/" + Constants.bytes2String(used));
+                    rv.setTextViewText(R.id.progress_text, managerIntProperty + "%");
+                    rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
+                    if (!new Pref(context).getBoolean(Pref.IS_X_PANEL_4_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new Pref(context).putBoolean(Pref.IS_X_PANEL_4_ALARM, true);
                         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                     }
                     break;
@@ -563,55 +612,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     configPendingIntent = PendingIntent.getBroadcast(context, 0, intentTorch3, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvTorch, configPendingIntent);
                     break;
-                case 18:
-                    //todo x-panel 4 small
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_small);
 
-                    rv.setCharSequence(R.id.TClockHr, "setFormat12Hour", "HH");
-                    rv.setCharSequence(R.id.TClockHr, "setFormat24Hour", "HH");
-                    rv.setCharSequence(R.id.TClockMin, "setFormat12Hour", "mm");
-                    rv.setCharSequence(R.id.TClockMin, "setFormat24Hour", "mm");
-                    rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "d EEEE");
-                    rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "d EEEE");
-
-                    BatteryManager batteryManager = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
-                    int managerIntProperty = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-
-                    long KILOBYTE = 1024;
-                    StatFs internalStatFs = new StatFs( Environment.getRootDirectory().getAbsolutePath() );
-                    long internalTotal;
-                    long internalFree;
-
-                    StatFs externalStatFs = new StatFs( Environment.getExternalStorageDirectory().getAbsolutePath() );
-                    long externalTotal;
-                    long externalFree;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                        internalTotal = ( internalStatFs.getBlockCountLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                        internalFree = ( internalStatFs.getAvailableBlocksLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                        externalTotal = ( externalStatFs.getBlockCountLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                        externalFree = ( externalStatFs.getAvailableBlocksLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                    }
-                    else {
-                        internalTotal = ( (long) internalStatFs.getBlockCount() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
-                        internalFree = ( (long) internalStatFs.getAvailableBlocks() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
-                        externalTotal = ( (long) externalStatFs.getBlockCount() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
-                        externalFree = ( (long) externalStatFs.getAvailableBlocks() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
-                    }
-
-                    long total = internalTotal + externalTotal;
-                    long free = internalFree + externalFree;
-                    long used = total - free;
-                    System.out.println("-----------store TTT : " + Constants.bytes2String(total) + "/" + Constants.bytes2String(free)+ "/" + Constants.bytes2String(used));
-                    rv.setTextViewText(R.id.progress_text, managerIntProperty + "%");
-                    rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
-                    if (!new Pref(context).getBoolean(Pref.IS_X_PANEL_4_ALARM, false)) {
-                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
-                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                        new Pref(context).putBoolean(Pref.IS_X_PANEL_4_ALARM, true);
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
-                    }
-                    break;
 
             }
             System.out.println("_*_*_*_*_*_*_ Widget_Type_Id :getNumber " + helper.getWidgets().get(i).getNumber());

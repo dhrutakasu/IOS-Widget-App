@@ -473,7 +473,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
 
                                         RemoteViews finalRv4 = rv;
                                         RequestQueue queue = Volley.newRequestQueue(context);
-                                        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=b7fc383a06f2e5b385f2f811e18192f6";
+                                        String url = "https://api.openweathermap.org/data/2.5/we           ather?q=" + city + "&units=metric&APPID="+context.getString(R.string.weather_key);
                                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
@@ -517,7 +517,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                         queue.add(stringReq);
 
                                         RequestQueue queue1 = Volley.newRequestQueue(context);
-                                        String url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=metric&APPID=b7fc383a06f2e5b385f2f811e18192f6";
+                                        String url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=metric&APPID="+context.getString(R.string.weather_key);
                                         StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
@@ -716,7 +716,91 @@ public class MediumWidgetProvider extends AppWidgetProvider {
 
                     rv.setOnClickPendingIntent(R.id.RlMediumClock, configPendingIntent);
                     break;
-                case 18:
+                    case 19:
+                    //todo clock 9 medium
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text3_medium);
+
+                    rv.setCharSequence(R.id.TClockHour, "setFormat12Hour", "HH");
+                    rv.setCharSequence(R.id.TClockHour, "setFormat24Hour", "HH");
+                    rv.setCharSequence(R.id.TClockMinutes, "setFormat12Hour", "mm");
+                    rv.setCharSequence(R.id.TClockMinutes, "setFormat24Hour", "mm");
+                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat12Hour", "d EEEE");
+                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat24Hour", "d EEEE");
+
+                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlMediumClock, configPendingIntent);
+                    break;
+                case 20:
+                    //todo x-panel 1 medium
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_medium);
+
+                    CameraManager service = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        service.registerTorchCallback(new CameraManager.TorchCallback() {
+                            @Override
+                            public void onTorchModeUnavailable(@NonNull String cameraId) {
+                                super.onTorchModeUnavailable(cameraId);
+                            }
+
+                            @Override
+                            public void onTorchModeChanged(@NonNull String cameraId, boolean enabled) {
+                                super.onTorchModeChanged(cameraId, enabled);
+                                IsTorchOn = enabled;
+                            }
+
+                            @Override
+                            public void onTorchStrengthLevelChanged(@NonNull String cameraId, int newStrengthLevel) {
+                                super.onTorchStrengthLevelChanged(cameraId, newStrengthLevel);
+                            }
+                        }, null);
+                    }
+                    if (Constants.IsWIfiConnected(context)) {
+                        System.out.println("************ WIFI RECEIVE  ON ");
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
+                    } else {
+                        System.out.println("************ WIFI RECEIVE  Off ");
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
+                    }
+                    BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
+                    if (defaultAdapter != null) {
+                        if (defaultAdapter.isEnabled()) {
+                            System.out.println("************  Bluetooth RECEIVE  ON ");
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
+                        } else if (!defaultAdapter.isEnabled()) {
+                            System.out.println("************  Bluetooth RECEIVE  else ");
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
+                        }
+                    }
+
+                    System.out.println("********* ON / OFF : " + IsTorchOn);
+                    if (IsTorchOn) {
+                        rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
+                    } else {
+                        rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1);
+                    }
+                    if (!new Pref(context).getBoolean(Pref.IS_X_PANEL_1_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new Pref(context).putBoolean(Pref.IS_X_PANEL_1_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    }
+
+                    Intent intentWifi1 = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intentWifi1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.IvWifi, configPendingIntent);
+
+                    Intent intentBluetooth1 = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
+
+                    Intent intentTorch = new Intent(context, XPanelFlashlightWidgetReceiver.class);
+                    PendingIntent broadcast1 = PendingIntent.getBroadcast(context, 0, intentTorch, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.IvTorch, broadcast1);
+                    break;
+                case 21:
                     //todo clock 9 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_medium);
 
@@ -822,152 +906,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
                     break;
-                    case 19:
-                    //todo clock 9 medium
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text3_medium);
-
-                    rv.setCharSequence(R.id.TClockHour, "setFormat12Hour", "HH");
-                    rv.setCharSequence(R.id.TClockHour, "setFormat24Hour", "HH");
-                    rv.setCharSequence(R.id.TClockMinutes, "setFormat12Hour", "mm");
-                    rv.setCharSequence(R.id.TClockMinutes, "setFormat24Hour", "mm");
-                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat12Hour", "d EEEE");
-                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat24Hour", "d EEEE");
-
-                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    rv.setOnClickPendingIntent(R.id.RlMediumClock, configPendingIntent);
-                    break;
-                case 20:
-                    //todo x-panel 1 medium
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_medium);
-
-                    CameraManager service = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        service.registerTorchCallback(new CameraManager.TorchCallback() {
-                            @Override
-                            public void onTorchModeUnavailable(@NonNull String cameraId) {
-                                super.onTorchModeUnavailable(cameraId);
-                            }
-
-                            @Override
-                            public void onTorchModeChanged(@NonNull String cameraId, boolean enabled) {
-                                super.onTorchModeChanged(cameraId, enabled);
-                                IsTorchOn = enabled;
-                            }
-
-                            @Override
-                            public void onTorchStrengthLevelChanged(@NonNull String cameraId, int newStrengthLevel) {
-                                super.onTorchStrengthLevelChanged(cameraId, newStrengthLevel);
-                            }
-                        }, null);
-                    }
-                    if (Constants.IsWIfiConnected(context)) {
-                        System.out.println("************ WIFI RECEIVE  ON ");
-                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
-                    } else {
-                        System.out.println("************ WIFI RECEIVE  Off ");
-                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
-                    }
-                    BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
-                    if (defaultAdapter != null) {
-                        if (defaultAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  ON ");
-                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
-                        } else if (!defaultAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  else ");
-                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
-                        }
-                    }
-
-                    System.out.println("********* ON / OFF : " + IsTorchOn);
-                    if (IsTorchOn) {
-                        rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
-                    } else {
-                        rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1);
-                    }
-
-                  /*  appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.IvWifi);
-                    appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.IvTorch);
-
-                    runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            System.out.println("************ WIFI RECEIVE  ");
-                            if (Constants.IsWIfiConnected(context)) {
-                                System.out.println("************ WIFI RECEIVE  ON ");
-                                finalrv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
-                            } else {
-                                System.out.println("************ WIFI RECEIVE  Off ");
-                                finalrv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
-                            }
-
-                            BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                            if (mBluetoothAdapter != null) {
-                                if (mBluetoothAdapter.isEnabled()) {
-                                    System.out.println("************  Bluetooth RECEIVE  ON ");
-                                    finalrv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
-                                } else if (!mBluetoothAdapter.isEnabled()) {
-                                    System.out.println("************  Bluetooth RECEIVE  else ");
-                                    finalrv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
-                                }
-                            }
-
-                            CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                cameraManager.registerTorchCallback(new CameraManager.TorchCallback() {
-                                    @Override
-                                    public void onTorchModeUnavailable(@NonNull String cameraId) {
-                                        super.onTorchModeUnavailable(cameraId);
-                                    }
-
-                                    @Override
-                                    public void onTorchModeChanged(@NonNull String cameraId, boolean enabled) {
-                                        super.onTorchModeChanged(cameraId, enabled);
-                                        IsTorchOn = enabled;
-                                    }
-
-                                    @Override
-                                    public void onTorchStrengthLevelChanged(@NonNull String cameraId, int newStrengthLevel) {
-                                        super.onTorchStrengthLevelChanged(cameraId, newStrengthLevel);
-                                    }
-                                }, null);
-                            }
-
-                            System.out.println("********* ON / OFF : " + IsTorchOn);
-                            if (IsTorchOn) {
-                                finalrv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
-                            } else {
-                                finalrv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1);
-                            }
-                            appWidgetManager.updateAppWidget(Widget_Id, finalrv);
-
-                            handler.postDelayed(this, 2000);
-                        }
-                    };
-                    handler.postDelayed(runnable, 0);
-*/
-                    if (!new Pref(context).getBoolean(Pref.IS_X_PANEL_1_ALARM, false)) {
-                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
-                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                        new Pref(context).putBoolean(Pref.IS_X_PANEL_1_ALARM, true);
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
-                    }
-
-                    Intent intentWifi1 = new Intent(Settings.ACTION_WIFI_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intentWifi1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    rv.setOnClickPendingIntent(R.id.IvWifi, configPendingIntent);
-
-                    Intent intentBluetooth1 = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
-
-                    Intent intentTorch = new Intent(context, XPanelFlashlightWidgetReceiver.class);
-                    PendingIntent broadcast1 = PendingIntent.getBroadcast(context, 0, intentTorch, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    rv.setOnClickPendingIntent(R.id.IvTorch, broadcast1);
-                    break;
-                case 21:
+                /*case 21:
                     //todo x-panel 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel2_medium);
 
@@ -978,22 +917,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
 
                     remoteViews.setTextViewText(R.id.progress_text, batLevel + "%");
                     remoteViews.setProgressBar(R.id.progress_bar, 100, batLevel, false);
-//                    runnable = new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
-//                            int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-//                            System.out.println("************ WIFI RECEIVE MMM 100/" + batLevel + " -- : 100/" + new Pref(context).getInt(IS_BATTERY, -1));
-//                            if (new Pref(context).getInt(IS_BATTERY, -1) != batLevel) {
-//                                remoteViews.setTextViewText(R.id.progress_text, batLevel + "%");
-//                                remoteViews.setProgressBar(R.id.progress_bar, 100, batLevel, false);
-//                                new Pref(context).putInt(IS_BATTERY, batLevel);
-//                                appWidgetManager.updateAppWidget(Widget_Id, remoteViews);
-//                            }
-//                            handler.postDelayed(this, 2000);
-//                        }
-//                    };
-//                    handler.postDelayed(runnable,0);
 
                     Intent intentBattery = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentBattery, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
@@ -1006,7 +929,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         long repeatInterval = TimeUnit.MILLISECONDS.toSeconds(1);
                         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, (System.currentTimeMillis() + TimeUnit.MILLISECONDS.toSeconds(1)), repeatInterval, broadcast);
                     }
-                    break;
+                    break;*/
 
             }
             appWidgetManager.updateAppWidget(Widget_Id, rv);
