@@ -34,7 +34,6 @@ public class MainWidgetListAdapter extends RecyclerView.Adapter<MainWidgetListAd
         ArrayList<Integer> models = new ArrayList<>();
         models.add(mList.get(position).getSmall());
         models.add(mList.get(position).getMedium());
-//        models.add(mList.get(position).getLarge());
         holder.RvChildWidgetList.setLayoutManager(new LinearLayoutManager(con, RecyclerView.HORIZONTAL, false));
         holder.RvChildWidgetList.setAdapter(new ChildWidgetAdapter(con, models,position));
     }

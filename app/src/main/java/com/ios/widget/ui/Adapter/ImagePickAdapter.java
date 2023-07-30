@@ -49,7 +49,6 @@ public class ImagePickAdapter extends BaseAdapter<ImageFile, ImagePickAdapter.Im
         int i;
         ImageFile file;
         file = mList.get(position);
-        System.out.println("****** imageCount : " + mSelectedList.size());
         if (file.imageCount == 0) {
             charSequence = "";
             i = 0;
@@ -65,9 +64,6 @@ public class ImagePickAdapter extends BaseAdapter<ImageFile, ImagePickAdapter.Im
                 if (index != -1) {
             }
         }
-//        holder.tv_folder_title.setBackgroundColor(i);
-//        holder.tv_folder_title.setText(charSequence);
-        System.out.println("****** : " + mList.get(position).isSelected());
         if (mList.get(position).isSelected()) {
             holder.mShadow.setVisibility(View.VISIBLE);
             holder.iv_thumbnailChecked.setImageResource(R.drawable.ic_checked);
@@ -90,7 +86,6 @@ public class ImagePickAdapter extends BaseAdapter<ImageFile, ImagePickAdapter.Im
             @Override
             public void onClick(View view) {
                 int index = holder.getAdapterPosition();
-                System.out.println("****** mSelectedList Adapter : " + mSelectedList.size());
                 if (mSelectedList.size() != 10) {
                     if (holder.mShadow.getVisibility() == View.VISIBLE) {
                         holder.mShadow.setVisibility(View.INVISIBLE);
@@ -102,7 +97,6 @@ public class ImagePickAdapter extends BaseAdapter<ImageFile, ImagePickAdapter.Im
                         mList.get(position).setSelected(true);
                         holder.iv_thumbnailChecked.setImageResource(R.drawable.ic_checked);
                     }
-//                    notifyItemChanged(position);
                 }
                 if (mListener != null) {
                     mListener.OnSelectStateChanged(true, mList.get(position));

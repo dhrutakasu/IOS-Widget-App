@@ -58,29 +58,19 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class MediumWidgetProvider extends AppWidgetProvider {
-//    private NotesDatabaseHelper helper;
-
-    //    private Handler handler;
-//    private Runnable runnable;
     private boolean IsTorchOn;
 
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        System.out.println("******** Constants.Widget_Type_Id : " + Constants.Widget_Type_Id);
         DatabaseHelper helper = new DatabaseHelper(context);
-        WidgetData widgetData = new WidgetData(1, Constants.Widget_Type_Id, -1, "");
-//            WidgetData widgetData = new WidgetData("0", "M", Constants.getWidgetLists().get(Constants.Widget_Type_Id).getSmall(), Constants.getWidgetLists().get(Constants.Widget_Type_Id).getMedium(), Constants.getWidgetLists().get(Constants.Widget_Type_Id).getLarge(), String.valueOf(Constants.Widget_Type_Id), String.valueOf(appWidgetIds[i]));
-        System.out.println("_*_*_*_*_*_*_ 11 :: " + helper.getWidgetCount());
+        WidgetData widgetData = new WidgetData(1, Constants.Widget_Type_Id, -1, "",Constants.Temp_Id);
         int insert = helper.InsertWidget(widgetData);
-        System.out.println("_*_*_*_*_*_*_ insert : " + insert);
         for (int id : appWidgetIds) {
             Widget_Id = id;
-            System.out.println("_*_*_*_*_*_*_ uuid " + id);
         }
         if (helper.getWidgetCount() != 0) {
             WidgetData widgetsId = helper.getWidgetsId(insert);
-            System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
             widgetsId.setNumber(Widget_Id);
             helper.updateWidget(widgetsId);
         }
@@ -95,7 +85,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
             int currentDay;
             int currentMonth;
             int currentYear;
-//            handler = new Handler();
             switch (helper.getWidgets().get(i).getPosition()) {
                 case 0:
                 case 13:
@@ -134,7 +123,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                 case 7:
                     //todo calender 4 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_medium);
-//                    rv.setImageViewResource(R.id.iv_background, R.drawable.shape_app_widget_1c1c1e_r25_bg);
                     rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEEE");
                     rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "EEEE");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM");
@@ -153,20 +141,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     currentMonth = calendar.get(Calendar.MONTH);
                     currentYear = calendar.get(Calendar.YEAR);
                     new Pref(context).putString(Pref.IS_DATE_4, currentDay + "/" + currentMonth + "/" + currentYear);
-//                    runnable = new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Intent intent = new Intent(context, MediumWidgetService.class);
-//                            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
-//
-//                            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-//                            finalRv3.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
-//                            appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
-//
-//                            handler.postDelayed(this, 5000);
-//                        }
-//                    };
-//                    handler.postDelayed(runnable, 5000);
 
                     if (!new Pref(context).getBoolean(Pref.IS_CALENDAR_4_ALARM, false)) {
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -221,24 +195,19 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         }, null);
                     }
                     if (Constants.IsWIfiConnected(context)) {
-                        System.out.println("************ WIFI RECEIVE  ON ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_xpanel_medium_2_wifi_selected);
                     } else {
-                        System.out.println("************ WIFI RECEIVE  Off ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_xpanel_medium_2_wifi);
                     }
                     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     if (bluetoothAdapter != null) {
                         if (bluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  ON ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_xpanel_medium_2_bluetooth_selected);
                         } else if (!bluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  else ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_xpanel_medium_2_bluetooth);
                         }
                     }
 
-                    System.out.println("********* ON / OFF : " + IsTorchOn);
                     if (IsTorchOn) {
                         rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_xpanel_medium_2_flashlight_selected);
                     } else {
@@ -267,8 +236,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
 
                     Intent intentCellular3 = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
-//                    intentCellular.setClassName("com.android.phone", "com.android.phone.NetworkSetting");
-//                    intentCellular.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
 
@@ -279,7 +246,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                 case 4:
                     //todo calender 1 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar1_medium);
-//                    rv.setImageViewResource(R.id.iv_background, R.drawable.img_calendar1_medium_bg);
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM yyyy");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM yyyy");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
@@ -297,21 +263,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     currentMonth = calendar.get(Calendar.MONTH);
                     currentYear = calendar.get(Calendar.YEAR);
                     new Pref(context).putString(Pref.IS_DATE_1, currentDay + "/" + currentMonth + "/" + currentYear);
-//                    runnable = new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Calendar NewCalendar = Calendar.getInstance();
-//                            int currentDay = NewCalendar.get(Calendar.DAY_OF_MONTH);
-//                            int currentMonth = NewCalendar.get(Calendar.MONTH);
-//                            int currentYear = NewCalendar.get(Calendar.YEAR);
-//                            if (!new Pref(context).getString(IS_DATE, "").equalsIgnoreCase(currentDay + "/" + currentMonth + "/" + currentYear)) {
-//                                appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
-//                                new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
-//                            }
-//                            handler.postDelayed(this, 5000);
-//                        }
-//                    };
-//                    handler.postDelayed(runnable, 5000);
                     if (!new Pref(context).getBoolean(Pref.IS_CALENDAR_1_ALARM, false)) {
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
@@ -349,23 +300,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     currentMonth = calendar.get(Calendar.MONTH);
                     currentYear = calendar.get(Calendar.YEAR);
                     new Pref(context).putString(Pref.IS_DATE_3, currentDay + "/" + currentMonth + "/" + currentYear);
-                  /*    runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            Calendar NewCalendar = Calendar.getInstance();
-                            int currentDay = NewCalendar.get(Calendar.DAY_OF_MONTH);
-                            int currentMonth = NewCalendar.get(Calendar.MONTH);
-                            int currentYear = NewCalendar.get(Calendar.YEAR);
-                            if (!new Pref(context).getString(IS_DATE, "").equalsIgnoreCase(currentDay + "/" + currentMonth + "/" + currentYear)) {
-                                appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
-                                new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
-                            }
-                            handler.postDelayed(this, 5000);
-                        }
-                    };
-                    handler.postDelayed(runnable, 5000);
-*/
-                    System.out.println("********** : come PROVIDER ");
                     if (!new Pref(context).getBoolean(Pref.IS_CALENDAR_2_ALARM, false)) {
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
@@ -377,8 +311,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
                     ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
@@ -405,21 +338,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     currentMonth = calendar.get(Calendar.MONTH);
                     currentYear = calendar.get(Calendar.YEAR);
                     new Pref(context).putString(Pref.IS_DATE_2, currentDay + "/" + currentMonth + "/" + currentYear);
-//                    runnable = new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Calendar NewCalendar = Calendar.getInstance();
-//                            int currentDay = NewCalendar.get(Calendar.DAY_OF_MONTH);
-//                            int currentMonth = NewCalendar.get(Calendar.MONTH);
-//                            int currentYear = NewCalendar.get(Calendar.YEAR);
-//                            if (!new Pref(context).getString(IS_DATE, "").equalsIgnoreCase(currentDay + "/" + currentMonth + "/" + currentYear)) {
-//                                appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarMediumView);
-//                                new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
-//                            }
-//                            handler.postDelayed(this, 5000);
-//                        }
-//                    };
-//                    handler.postDelayed(runnable, 5000);
 
                     if (!new Pref(context).getBoolean(Pref.IS_CALENDAR_3_ALARM, false)) {
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -441,19 +359,14 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                 case 8:
                     //todo weather 1 medium
                     LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                    System.out.println("------- catch Out permission location: " + locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER));
                     if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         if (ActivityCompat.checkSelfPermission(
                                 context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                                 context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                            ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                            System.out.println("------- catch Out permission: ");
                         } else {
                             String city = "";
 
                             rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_medium);
-                            System.out.println("------- catch Out: " + "Your Location: else ");
-//
                             List<String> providers = locationManager.getProviders(true);
                             for (String provider : providers) {
                                 Location locationGPS = locationManager.getLastKnownLocation(provider);
@@ -467,17 +380,22 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                         city = addresses.get(0).getLocality();
 
                                         WidgetData widgetsId = helper.getWidgetsId(insert);
-                                        System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
                                         widgetsId.setCity(city);
                                         helper.updateWidget(widgetsId);
 
                                         RemoteViews finalRv4 = rv;
                                         RequestQueue queue = Volley.newRequestQueue(context);
-                                        String url = "https://api.openweathermap.org/data/2.5/we           ather?q=" + city + "&units=metric&APPID="+context.getString(R.string.weather_key);
+                                        String url,tempExt;
+                                        if (widgetData.getTemp()==0) {
+                                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=" + context.getString(R.string.weather_key);
+                                            tempExt="°C";
+                                        }else {
+                                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                                            tempExt="°F";
+                                        }
                                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
-                                                System.out.println("------- catch Out response: " + response.toString());
                                                 try {
                                                     JSONObject obj = new JSONObject(response);
 
@@ -487,7 +405,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
 
                                                         WeatherObject.get("main");
                                                         WeatherObject.get("icon");
-                                                        System.out.println("------- catch Out WeatherObject: " + WeatherObject.getString("description"));
                                                         finalRv4.setTextViewText(R.id.TvDesc, WeatherObject.get("description").toString());
                                                         finalRv4.setImageViewResource(R.id.IvWeatherIcon, Constants.getWeatherIcons(WeatherObject.getString("icon")));
                                                     }
@@ -496,12 +413,10 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                                     JSONObject SysObject = obj.getJSONObject("sys");
                                                     finalRv4.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
                                                     String Temp = MainObject.get("temp").toString();
-                                                    System.out.println("------- catch Out response Temp: " + Temp.substring(0, Temp.lastIndexOf(".")));
-                                                    finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + "°C");
+                                                    finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + tempExt);
                                                     String MinTemp = MainObject.get("temp_min").toString();
                                                     String MaxTemp = MainObject.get("temp_max").toString();
-                                                    System.out.println("------- catch Out response TempMin: " + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + " -- " + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")));
-                                                    finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + "°C L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + "°C");
+                                                    finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt+" L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
 
                                                 } catch (JSONException e) {
                                                     throw new RuntimeException(e);
@@ -511,7 +426,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
                                                 //displaying the error in toast if occur
-                                                System.out.println("------- catch Out errrr: " + error.getMessage());
                                             }
                                         });
                                         queue.add(stringReq);
@@ -521,7 +435,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                         StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
-                                                System.out.println("------- catch Out response: " + response.toString());
                                                 try {
                                                     JSONObject MainObject=null;
                                                     JSONArray IconObject=null;
@@ -539,7 +452,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                                             Date date = format.parse(dateStr);
                                                             format = new SimpleDateFormat("HH:mm");
                                                             res = format.format(date);
-                                                            System.out.println(date);
                                                         } catch (ParseException e) {
                                                             e.printStackTrace();
                                                         }
@@ -595,13 +507,11 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                                         }
                                                     }
 
-//                                                    if (!new Pref(context).getBoolean(Pref.IS_WEATHER_1 _ALARM, false)) {
                                                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                                                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                                                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                                                     new Pref(context).putBoolean(Pref.IS_WEATHER_1_ALARM, true);
                                                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
-//                                                    }
                                                     appWidgetManager.updateAppWidget(Widget_Id, finalRv4);
                                                 } catch (JSONException e) {
                                                     throw new RuntimeException(e);
@@ -611,16 +521,12 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
                                                 //displaying the error in toast if occur
-                                                System.out.println("------- catch Out errrr: " + error.getMessage());
                                             }
                                         });
                                         queue1.add(stringReq1);
                                     } catch (Exception e) {
-                                        Log.d("------- catch cityEx", "Error to find the city." + e.getMessage());
                                     }
-                                    System.out.println("------- catch Out: " + "Your Location: " + " " + "Latitude: " + lat + " " + "Longitude: " + longi);
                                 } else {
-                                    System.out.println("------- catch Out: GPS " + locationGPS);
 
                                 }
                             }
@@ -681,41 +587,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
 
                     rv.setOnClickPendingIntent(R.id.RlMediumClock, configPendingIntent);
                     break;
-                case 15:
-                    //todo clock 5 medium
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism2_medium);
-                    intent = new Intent(context, MediumWidgetService.class);
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
-                    intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
-                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-                    rv.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
-                    break;
-                case 16:
-                    //todo clock 6 medium
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism3_medium);
-                    intent = new Intent(context, MediumWidgetService.class);
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
-                    intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
-                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-                    rv.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
-                    break;
-                case 17:
-                    //todo clock 7 medium
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text1_medium);
-
-                    rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_clock_text1_bg_medium), 30));
-                    rv.setCharSequence(R.id.TClockHour, "setFormat12Hour", "HH");
-                    rv.setCharSequence(R.id.TClockHour, "setFormat24Hour", "HH");
-                    rv.setCharSequence(R.id.TClockMinutes, "setFormat12Hour", "mm");
-                    rv.setCharSequence(R.id.TClockMinutes, "setFormat24Hour", "mm");
-                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat12Hour", "EEEE, MMM d");
-                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat24Hour", "EEEE, MMM d");
-
-                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    rv.setOnClickPendingIntent(R.id.RlMediumClock, configPendingIntent);
-                    break;
                     case 19:
                     //todo clock 9 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text3_medium);
@@ -757,24 +628,19 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         }, null);
                     }
                     if (Constants.IsWIfiConnected(context)) {
-                        System.out.println("************ WIFI RECEIVE  ON ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
                     } else {
-                        System.out.println("************ WIFI RECEIVE  Off ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
                     }
                     BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
                     if (defaultAdapter != null) {
                         if (defaultAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  ON ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
                         } else if (!defaultAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  else ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
                         }
                     }
 
-                    System.out.println("********* ON / OFF : " + IsTorchOn);
                     if (IsTorchOn) {
                         rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
                     } else {
@@ -838,7 +704,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     long total = internalTotal + externalTotal;
                     long free = internalFree + externalFree;
                     long used = total - free;
-                    System.out.println("-----------store TTT : " + Constants.bytes2String(total) + "/" + Constants.bytes2String(free)+ "/" + Constants.bytes2String(used));
                     rv.setTextViewText(R.id.progress_text, managerIntProperty + "%");
                     rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
 
@@ -855,7 +720,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                             public void onTorchModeChanged(@NonNull String cameraId, boolean enabled) {
                                 super.onTorchModeChanged(cameraId, enabled);
                                 IsTorchOn = enabled;
-                                System.out.println("------********* ON / OFF : " + IsTorchOn);
                                 if (IsTorchOn) {
                                     finalRv5.setImageViewResource(R.id.IvTorch, R.drawable.ic_torch4_selected);
                                 } else {
@@ -870,19 +734,15 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         }, null);
                     }
                     if (Constants.IsWIfiConnected(context)) {
-                        System.out.println("************ WIFI RECEIVE  ON ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi4_selected);
                     } else {
-                        System.out.println("************ WIFI RECEIVE  Off ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi4);
                     }
                     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     if (mBluetoothAdapter != null) {
                         if (mBluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  ON ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluetooth4_selected);
                         } else if (!mBluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  else ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluetooth4);
                         }
                     }
@@ -906,31 +766,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
                     break;
-                /*case 21:
-                    //todo x-panel 2 medium
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel2_medium);
-
-                    BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
-                    int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-                    new Pref(context).putInt(IS_BATTERY, batLevel);
-                    RemoteViews remoteViews = rv;
-
-                    remoteViews.setTextViewText(R.id.progress_text, batLevel + "%");
-                    remoteViews.setProgressBar(R.id.progress_bar, 100, batLevel, false);
-
-                    Intent intentBattery = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intentBattery, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    rv.setOnClickPendingIntent(R.id.RlBattery, configPendingIntent);
-                    if (!new Pref(context).getBoolean(Pref.IS_BATTERY_ALARM, false)) {
-                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
-                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                        new Pref(context).putBoolean(Pref.IS_BATTERY_ALARM, true);
-                        long repeatInterval = TimeUnit.MILLISECONDS.toSeconds(1);
-                        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, (System.currentTimeMillis() + TimeUnit.MILLISECONDS.toSeconds(1)), repeatInterval, broadcast);
-                    }
-                    break;*/
-
             }
             appWidgetManager.updateAppWidget(Widget_Id, rv);
         }
@@ -940,14 +775,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] iArr) {
         for (int id : iArr) {
-            System.out.println("_*_*_*_*_*_*_ uuid " + id);
             DatabaseHelper helper = new DatabaseHelper(context);
-//            WidgetData widgetsId = helper.getWidgetsNumber(id);
-//            if (widgetsId!=null) {
-//                System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
-//                widgetsId.setNumber(-1);
-//            }
-//            helper.updateWidget(widgetsId);
             helper.getDeleteWidgets(id);
         }
     }

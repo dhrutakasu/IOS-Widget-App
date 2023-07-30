@@ -147,7 +147,6 @@ public class WidgtetCalendarAdapter extends BaseAdapter {
             TvDates.setTextColor(context.getResources().getColor(R.color.light_brown));
         }
         if (DayOfString[1].equals("BLUE")) {
-//            RlMainCalendar.setBackgroundResource(R.drawable.ic_calendar_ring);
             TvDates.setPadding(5, 5, 5, 5);
             TvDates.setTextColor(context.getResources().getColor(R.color.white));
         }

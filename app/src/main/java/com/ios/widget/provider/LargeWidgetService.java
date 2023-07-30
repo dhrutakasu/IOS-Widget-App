@@ -6,7 +6,6 @@ import android.widget.RemoteViewsService;
 public class LargeWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        System.out.println("-********* NoteId : "+intent);
         return new LargeRemoteView(getApplicationContext(), intent);
     }
 }

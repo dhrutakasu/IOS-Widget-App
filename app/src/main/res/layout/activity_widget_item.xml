@@ -7,13 +7,6 @@
     android:background="@color/white"
     tools:context=".ui.Activity.WidgetItemActivity">
 
-    <include
-        android:id="@+id/ViewHeader"
-        layout="@layout/layout_header"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -37,16 +30,55 @@
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_20sdp"
                 android:layout_marginBottom="@dimen/_8sdp"
                 android:src="@drawable/btn_add_widget" />
+
+            <LinearLayout
+                android:id="@+id/LlTemp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_below="@+id/TabWidget"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="@dimen/_25sdp"
+                android:layout_marginEnd="@dimen/_25sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:background="@drawable/ic_radius_bg"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <TextView
+                    android:id="@+id/progress_text"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="2.5"
+                    android:text="Temperature"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_18sdp" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/TabTempLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.5"
+                    android:background="@drawable/ic_radius_bg"
+                    app:tabBackground="@android:color/transparent"
+                    app:tabGravity="fill"
+                    app:tabIndicatorHeight="0dp"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="#FF3B30"
+                    app:tabTextColor="#000000" />
+            </LinearLayout>
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/TabSizeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:layout_below="@+id/TabWidget"
+                android:layout_below="@+id/LlTemp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="@dimen/_25sdp"
@@ -83,5 +115,12 @@
             android:layout_above="@+id/RlButton"
             android:layout_alignParentTop="true" />
     </RelativeLayout>
+
+    <include
+        android:id="@+id/ViewHeader"
+        layout="@layout/layout_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

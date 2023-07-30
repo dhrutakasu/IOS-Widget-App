@@ -73,11 +73,8 @@ public class LargePhotoWidgetService extends RemoteViewsService {
             this.imageUriList = instance.getImageList(this.mAppWidgetId);
             this.widgetMaster = this.database.getWidgetMaster(this.mAppWidgetId);
             Bundle appWidgetOptions = AppWidgetManager.getInstance(this.mContext).getAppWidgetOptions(this.mAppWidgetId);
-//            this.width = appWidgetOptions.getInt("appWidgetMinWidth");
-//            this.height = appWidgetOptions.getInt("appWidgetMaxHeight");
             this.width = 320;
             this.height = 320;
-            System.out.println("********** : " + width + " - " + height);
             this.columns = LargePhotoWidgetProvider.getCellsForSize(this.width);
             this.custPadding = this.widgetMaster.getSpaceBorder();
             if (this.widgetMaster.getShape() == 3 || this.widgetMaster.getShape() == 4) {

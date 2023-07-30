@@ -40,7 +40,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.setIsRecyclable(false);
-        System.out.println("*********** getUri = " +photoLists.get(position).getUri());
         if (position != 0) {
             if (photoLists.get(position).getUri().contains("content://")) {
                 ((RequestBuilder) Glide.with(context)

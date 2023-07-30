@@ -50,36 +50,13 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
     private ImageView IvAddWidget;
 
     private int pos;
-    private TabLayout TabWidget, TabSizeLayout;
+    private TabLayout TabWidget, TabTempLayout,TabSizeLayout;
     private int TabPos;
     private ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
     private WidgetPagerAdapter adapter;
     private AppWidgetManager manager;
     private ComponentName name;
     private DatabaseHelper helper;
-
-    public static void UpdateWidget(int i, String packageName, Context context, int intExtra) {
-        @SuppressLint("RemoteViewLayout") RemoteViews WidgetViews = new RemoteViews(packageName, R.layout.layout_widget_calendar3_large);
-
-        Calendar calendar = Calendar.getInstance(Locale.getDefault());
-        int month = calendar.get(Calendar.MONTH) + 1;
-        int year = calendar.get(Calendar.YEAR);
-        Intent svcIntent = new Intent(context, LargeWidgetService.class);
-
-        svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, intExtra);
-        WidgetViews.setRemoteAdapter(R.id.GridCalendarLargeView, svcIntent);
-//        long eventID = 208;
-//        Uri uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
-//        Intent clickIntent = new Intent(Intent.ACTION_VIEW).setData(uri);
-//        PendingIntent clickPI = PendingIntent.getActivity(context, 0, clickIntent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        WidgetViews.setOnClickPendingIntent(R.id.GridCalendarLargeView, clickPI);
-
-        AppWidgetManager.getInstance(context).updateAppWidget(intExtra, WidgetViews);
-//        gridCalendarAdapter = new GridCalendarAdapter(context, month, year, 0);
-//        gridCalendarAdapter.notifyDataSetChanged();
-//        GridCalendarLargeView.setAdapter(gridCalendarAdapter);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +75,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         PagerWidget = (ViewPager) findViewById(R.id.PagerWidget);
         IvAddWidget = (ImageView) findViewById(R.id.IvAddWidget);
         TabWidget = (TabLayout) findViewById(R.id.TabWidget);
+        TabTempLayout = (TabLayout) findViewById(R.id.TabTempLayout);
         TabSizeLayout = (TabLayout) findViewById(R.id.TabSizeLayout);
     }
 
@@ -138,6 +116,9 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
             TabWidget.setVisibility(View.GONE);
         }
 
+        TabTempLayout.addTab(TabTempLayout.newTab().setText("°C"));
+        TabTempLayout.addTab(TabTempLayout.newTab().setText("°F"));
+
         TabSizeLayout.addTab(TabSizeLayout.newTab().setText("Small"));
         TabSizeLayout.addTab(TabSizeLayout.newTab().setText("Medium"));
         TabSizeLayout.addTab(TabSizeLayout.newTab().setText("Large"));
@@ -145,6 +126,22 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         adapter = new WidgetPagerAdapter(this, modelArrayList, 0);
         PagerWidget.setAdapter(adapter);
         TabWidget.setupWithViewPager(PagerWidget, true);
+        TabTempLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Constants.Temp_Id=tab.getPosition();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
         TabSizeLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -177,7 +174,6 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void GotoAddWidget() {
-        System.out.println("---------- Catch : " + modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() + " - " + TabSizeLayout.getSelectedTabPosition());
         if ((modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 0 && TabSizeLayout.getSelectedTabPosition() == 2) || (modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 2 && TabSizeLayout.getSelectedTabPosition() == 1) || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 20 || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 22) {
             String s1 = Manifest.permission.CAMERA;
             Dexter.withActivity(this)
@@ -202,8 +198,6 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
                     .onSameThread()
                     .check();
         } else if ((modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 1 && TabSizeLayout.getSelectedTabPosition() == 0) || (modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 2 && TabSizeLayout.getSelectedTabPosition() == 2) || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 8) {
-            System.out.println("---------- Catch Enter: " + modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() + " - " + TabSizeLayout.getSelectedTabPosition());
-
             String s = Manifest.permission.ACCESS_COARSE_LOCATION;
             String s1 = Manifest.permission.ACCESS_FINE_LOCATION;
             Dexter.withActivity(this)

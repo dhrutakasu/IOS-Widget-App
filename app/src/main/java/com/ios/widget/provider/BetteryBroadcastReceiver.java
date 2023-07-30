@@ -73,7 +73,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onReceive(Context context, Intent intentReceiver) {
-        System.out.println("********** : come come");
         DatabaseHelper helper = new DatabaseHelper(context);
         ArrayList<WidgetData> widgetData = helper.getWidgets();
         RemoteViews rv = null;
@@ -88,7 +87,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
         int currentMonth;
         int currentYear;
         for (int i = 0; i < widgetData.size(); i++) {
-            System.out.println("********** : come come : " + widgetData.get(i).getPosition());
             if (widgetData.get(i).getPosition() == 0) {
                 if (widgetData.get(i).getType() == 1) {
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple3_medium);
@@ -127,20 +125,16 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_large);
 
                     if (Constants.IsWIfiConnected(context)) {
-                        System.out.println("************ WIFI RECEIVE  ON ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
                     } else {
-                        System.out.println("************ WIFI RECEIVE  Off ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
                     }
 
                     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     if (mBluetoothAdapter != null) {
                         if (mBluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  ON ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
                         } else if (!mBluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  else ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
                         }
                     }
@@ -159,8 +153,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                             public void onTorchModeChanged(@NonNull String cameraId, boolean enabled) {
                                 super.onTorchModeChanged(cameraId, enabled);
                                 IsTorchOn = enabled;
-                                System.out.println("********* IsTorchOn ON / OFF : " + IsTorchOn);
-                                System.out.println("********* ON / OFF : " + IsTorchOn);
                                 if (IsTorchOn) {
                                     finalRv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
                                 } else {
@@ -205,20 +197,14 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
             } else if (widgetData.get(i).getPosition() == 1) {
                 if (widgetData.get(i).getType() == 0) {
                     LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                    System.out.println("------- catch Out permission location: " + locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER));
                     if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         if (ActivityCompat.checkSelfPermission(
                                 context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                                 context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                            ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                            System.out.println("------- catch Out permission: ");
-
                         } else {
                             String city = "";
 
                             rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_small);
-                            System.out.println("------- catch Out: " + "Your Location: else ");
-//
                             List<String> providers = locationManager.getProviders(true);
                             for (String provider : providers) {
                                 Location locationGPS = locationManager.getLastKnownLocation(provider);
@@ -232,12 +218,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                         city = addresses.get(0).getLocality();
 
                                         RequestQueue queue = Volley.newRequestQueue(context);
-                                        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=abb0e61bdf12b12ca71bcd2ee74d5d9f";
+                                        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID="+context.getString(R.string.weather_key);
                                         RemoteViews finalRv1 = rv;
                                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
-                                                System.out.println("------- catch Out response: " + response.toString());
                                                 try {
                                                     JSONObject obj = new JSONObject(response);
 
@@ -249,7 +234,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                         WeatherObject.get("icon");
                                                         String Url = "https://openweathermap.org/img/wn/" + WeatherObject.get("icon") + "@2x.png";
                                                         finalRv1.setTextViewText(R.id.TvDesc, WeatherObject.get("description").toString());
-
 
                                                     }
                                                     JSONObject MainObject = obj.getJSONObject("main");
@@ -266,17 +250,12 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                         }, new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
-                                                //displaying the error in toast if occur
-                                                System.out.println("------- catch Out errrr: " + error.getMessage());
                                             }
                                         });
                                         queue.add(stringReq);
                                     } catch (Exception e) {
-                                        Log.d("------- catch cityEx", "Error to find the city." + e.getMessage());
                                     }
-                                    System.out.println("------- catch Out: " + "Your Location: " + " " + "Latitude: " + lat + " " + "Longitude: " + longi);
                                 } else {
-                                    System.out.println("------- catch Out: GPS " + locationGPS);
 
                                 }
                             }
@@ -381,37 +360,29 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     }
                     if (widgetData.get(i).getType() == 2) {
                         if (Constants.IsWIfiConnected(context)) {
-                            System.out.println("************ WIFI RECEIVE  ON ");
                             rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
                         } else {
-                            System.out.println("************ WIFI RECEIVE  Off ");
                             rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
                         }
                         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                         if (bluetoothAdapter != null) {
                             if (bluetoothAdapter.isEnabled()) {
-                                System.out.println("************  Bluetooth RECEIVE  ON ");
                                 rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
                             } else if (!bluetoothAdapter.isEnabled()) {
-                                System.out.println("************  Bluetooth RECEIVE  else ");
                                 rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
                             }
                         }
                     } else {
                         if (Constants.IsWIfiConnected(context)) {
-                            System.out.println("************ WIFI RECEIVE  ON ");
                             rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_xpanel_medium_2_wifi_selected);
                         } else {
-                            System.out.println("************ WIFI RECEIVE  Off ");
                             rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_xpanel_medium_2_wifi);
                         }
                         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                         if (bluetoothAdapter != null) {
                             if (bluetoothAdapter.isEnabled()) {
-                                System.out.println("************  Bluetooth RECEIVE  ON ");
                                 rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_xpanel_medium_2_bluetooth_selected);
                             } else if (!bluetoothAdapter.isEnabled()) {
-                                System.out.println("************  Bluetooth RECEIVE  else ");
                                 rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_xpanel_medium_2_bluetooth);
                             }
                         }
@@ -432,8 +403,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
 
                     Intent intentCellular3 = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
-//                    intentCellular.setClassName("com.android.phone", "com.android.phone.NetworkSetting");
-//                    intentCellular.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
 
@@ -441,7 +410,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     configPendingIntent = PendingIntent.getBroadcast(context, 0, intentTorch3, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvTorch, configPendingIntent);
 
-                    System.out.println("************ WIFI RECEIVE COME BROAD W_NUMBER " + widgetData.get(i).getNumber());
                     AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
                     appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -452,7 +420,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
             } else if (widgetData.get(i).getPosition() == 4) {
                 if (widgetData.get(i).getType() == 1) {
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar1_medium);
-//                    rv.setImageViewResource(R.id.iv_background, R.drawable.img_calendar1_medium_bg);
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM yyyy");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM yyyy");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
@@ -729,20 +696,18 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 if (widgetData.get(i).getType() == 0) {
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_small);
                     RequestQueue queue = Volley.newRequestQueue(context);
-                    String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=b7fc383a06f2e5b385f2f811e18192f6";
+                    String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID="+context.getString(R.string.weather_key);
                     RemoteViews finalRv1 = rv;
                     int finalI1 = i;
                     StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            System.out.println("------- Receiver catch Out response: " + response.toString());
                             try {
                                 JSONObject obj = new JSONObject(response);
 
                                 JSONArray WeatherArray = obj.getJSONArray("weather");
                                 for (int j = 0; j < WeatherArray.length(); j++) {
                                     JSONObject WeatherObject = WeatherArray.getJSONObject(j);
-                                    System.out.println("------- Receiver catch Out WeatherObject: " + WeatherObject.getString("description"));
 
                                     WeatherObject.get("main");
                                     WeatherObject.get("icon");
@@ -754,11 +719,9 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                 JSONObject SysObject = obj.getJSONObject("sys");
                                 finalRv1.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
                                 String Temp = MainObject.get("temp").toString();
-                                System.out.println("------- Receiver catch Out response Temp: " + Temp.substring(0, Temp.lastIndexOf(".")));
                                 finalRv1.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + "°C");
                                 String MinTemp = MainObject.get("temp_min").toString();
                                 String MaxTemp = MainObject.get("temp_max").toString();
-                                System.out.println("------- Receiver catch Out response TempMin: " + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + " -- " + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")));
                                 finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + "°C L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + "°C");
 
                                 AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
@@ -771,11 +734,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                 throw new RuntimeException(e);
                             }
                         }
+                         
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             //displaying the error in toast if occur
-                            System.out.println("-------Receiver catch Out errrr: " + error.getMessage());
                         }
                     });
                     queue.add(stringReq);
@@ -784,11 +747,10 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
 
                     RemoteViews finalRv4 = rv;
                     RequestQueue queue = Volley.newRequestQueue(context);
-                    String url = "https://api.openweathermap.org/data/2.5/weather?q=" + widgetData.get(i).getCity() + "&units=metric&APPID=b7fc383a06f2e5b385f2f811e18192f6";
+                    String url = "https://api.openweathermap.org/data/2.5/weather?q=" + widgetData.get(i).getCity() + "&units=metric&APPID="+context.getString(R.string.weather_key);
                     StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            System.out.println("-------rere catch Out response: " + response.toString());
                             try {
                                 JSONObject obj = new JSONObject(response);
 
@@ -798,7 +760,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
 
                                     WeatherObject.get("main");
                                     WeatherObject.get("icon");
-                                    System.out.println("------- rer catch Out WeatherObject: " + WeatherObject.getString("description"));
                                     finalRv4.setTextViewText(R.id.TvDesc, WeatherObject.get("description").toString());
                                     finalRv4.setImageViewResource(R.id.IvWeatherIcon, Constants.getWeatherIcons(WeatherObject.getString("icon")));
                                 }
@@ -807,11 +768,9 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                 JSONObject SysObject = obj.getJSONObject("sys");
                                 finalRv4.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
                                 String Temp = MainObject.get("temp").toString();
-                                System.out.println("-------rere catch Out response Temp: " + Temp.substring(0, Temp.lastIndexOf(".")));
                                 finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + "°C");
                                 String MinTemp = MainObject.get("temp_min").toString();
                                 String MaxTemp = MainObject.get("temp_max").toString();
-                                System.out.println("-------rere catch Out response TempMin: " + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + " -- " + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")));
                                 finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + "°C L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + "°C");
 
                             } catch (JSONException e) {
@@ -822,18 +781,16 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             //displaying the error in toast if occur
-                            System.out.println("------- catch Out errrr: " + error.getMessage());
                         }
                     });
                     queue.add(stringReq);
 
                     RequestQueue queue1 = Volley.newRequestQueue(context);
-                    String url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + widgetData.get(i).getCity() + "&cnt=6&units=metric&APPID=b7fc383a06f2e5b385f2f811e18192f6";
+                    String url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + widgetData.get(i).getCity() + "&cnt=6&units=metric&APPID="+context.getString(R.string.weather_key);
                     int finalI2 = i;
                     StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            System.out.println("-------rerer catch Out response: " + response.toString());
                             try {
                                 JSONObject MainObject = null;
                                 JSONArray IconObject = null;
@@ -852,11 +809,9 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                         Date date = format.parse(dateStr);
                                         format = new SimpleDateFormat("HH:mm");
                                          res = format.format(date);
-                                        System.out.println(date);
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
-                                    System.out.println("------- rerer catch Out WeatherObject111: " + res);
                                     switch (j) {
                                         case 0:
                                             finalRv4.setTextViewText(R.id.TvTimeFirst, res.toString());
@@ -923,7 +878,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             //displaying the error in toast if occur
-                            System.out.println("------- catch Out errrr: " + error.getMessage());
                         }
                     });
                     queue1.add(stringReq1);
@@ -937,7 +891,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                System.out.println("------- catch Out response: " + response.toString());
                                 try {
                                     JSONObject obj = new JSONObject(response);
 
@@ -947,7 +900,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
 
                                         WeatherObject.get("main");
                                         WeatherObject.get("icon");
-                                        System.out.println("------- catch Out WeatherObject: " + WeatherObject.getString("description"));
                                         finalRv4.setTextViewText(R.id.TvDesc, WeatherObject.get("description").toString());
                                         finalRv4.setImageViewResource(R.id.IvWeatherIcon, Constants.getWeatherIcons(WeatherObject.getString("icon")));
                                     }
@@ -965,11 +917,9 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                     finalRv4.setTextViewText(R.id.TvWind, mps_to_kmph(millisecondWind)+"km/h");
                                     finalRv4.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
                                     String Temp = MainObject.get("temp").toString();
-                                    System.out.println("-------rr catch Out response Temp: " + Temp.substring(0, Temp.lastIndexOf(".")));
                                     finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + "°C");
                                     String MinTemp = MainObject.get("temp_min").toString();
                                     String MaxTemp = MainObject.get("temp_max").toString();
-                                    System.out.println("-------rr catch Out response TempMin: " + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + " -- " + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")));
                                     finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + "°C L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + "°C");
                                     finalRv4.setTextViewText(R.id.TvHumidity, MainObject.get("humidity").toString()+ "%" );
                                     finalRv4.setTextViewText(R.id.TvPressure, MainObject.get("pressure").toString()+ "%" );
@@ -982,7 +932,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 //displaying the error in toast if occur
-                                System.out.println("-------rr catch Out errrr: " + error.getMessage());
                             }
                         });
                         queue.add(stringReq);
@@ -993,7 +942,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                System.out.println("------- catch Out response: " + response.toString());
                                 try {
                                     JSONObject MainObject=null;
                                     JSONArray IconObject=null;
@@ -1011,7 +959,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             Date date = format.parse(dateStr);
                                             format = new SimpleDateFormat("HH:mm");
                                             res = format.format(date);
-                                            System.out.println(date);
                                         } catch (ParseException e) {
                                             e.printStackTrace();
                                         }
@@ -1083,12 +1030,10 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 //displaying the error in toast if occur
-                                System.out.println("------- catch Out errrr: " + error.getMessage());
                             }
                         });
                         queue1.add(stringReq1);
                     } catch (Exception e) {
-                        Log.d("------- catch cityEx", "Error to find the city." + e.getMessage());
                     }
                 }
 
@@ -1101,20 +1046,16 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_large);
                 }
                 if (Constants.IsWIfiConnected(context)) {
-                    System.out.println("************ WIFI RECEIVE  ON ");
                     rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
                 } else {
-                    System.out.println("************ WIFI RECEIVE  Off ");
                     rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
                 }
 
                 BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                 if (mBluetoothAdapter != null) {
                     if (mBluetoothAdapter.isEnabled()) {
-                        System.out.println("************  Bluetooth RECEIVE  ON ");
                         rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
                     } else if (!mBluetoothAdapter.isEnabled()) {
-                        System.out.println("************  Bluetooth RECEIVE  else ");
                         rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
                     }
                 }
@@ -1133,8 +1074,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         public void onTorchModeChanged(@NonNull String cameraId, boolean enabled) {
                             super.onTorchModeChanged(cameraId, enabled);
                             IsTorchOn = enabled;
-                            System.out.println("********* IsTorchOn ON / OFF : " + IsTorchOn);
-                            System.out.println("********* ON / OFF : " + IsTorchOn);
                             if (IsTorchOn) {
                                 finalRv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
                             } else {
@@ -1211,7 +1150,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     long total = internalTotal + externalTotal;
                     long free = internalFree + externalFree;
                     long used = total - free;
-                    System.out.println("-----------reee store TTT : " + Constants.bytes2String(total) + "/" + Constants.bytes2String(free) + "/" + Constants.bytes2String(used));
                     rv.setTextViewText(R.id.progress_text, managerIntProperty + "%");
                     rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
 
@@ -1252,7 +1190,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     long total = internalTotal + externalTotal;
                     long free = internalFree + externalFree;
                     long used = total - free;
-                    System.out.println("-----------store TTT : " + Constants.bytes2String(total) + "/" + Constants.bytes2String(free) + "/" + Constants.bytes2String(used));
                     rv.setTextViewText(R.id.progress_text, managerIntProperty + "%");
                     rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
 
@@ -1270,7 +1207,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                             public void onTorchModeChanged(@NonNull String cameraId, boolean enabled) {
                                 super.onTorchModeChanged(cameraId, enabled);
                                 IsTorchOn = enabled;
-                                System.out.println("------********* ON / OFF : " + IsTorchOn);
                                 if (IsTorchOn) {
                                     finalRv2.setImageViewResource(R.id.IvTorch, R.drawable.ic_torch4_selected);
                                 } else {
@@ -1287,19 +1223,15 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }, null);
                     }
                     if (Constants.IsWIfiConnected(context)) {
-                        System.out.println("************ WIFI RECEIVE  ON ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi4_selected);
                     } else {
-                        System.out.println("************ WIFI RECEIVE  Off ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi4);
                     }
                     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     if (mBluetoothAdapter != null) {
                         if (mBluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  ON ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluetooth4_selected);
                         } else if (!mBluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  else ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluetooth4);
                         }
                     }
@@ -1312,7 +1244,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     Intent intentBluetooth = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
-                    System.out.println("*********** WIDGET _IDD Number : " + widgetData.get(i).getNumber());
 
                     Intent intent2 = new Intent(context, XPanelFlashlight4WidgetReceiver.class);
                     intent2.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetData.get(i).getNumber());
@@ -1353,7 +1284,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     long total = internalTotal + externalTotal;
                     long free = internalFree + externalFree;
                     long used = total - free;
-                    System.out.println("-----------ree store TTT : " + Constants.bytes2String(total) + "/" + Constants.bytes2String(free) + "/" + Constants.bytes2String(used));
                     rv.setTextViewText(R.id.progress_text, managerIntProperty + "%");
                     rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
 
@@ -1376,13 +1306,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
 
                 BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
                 int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-                System.out.println("************ WIFI RECEIVE COME BROAD 100/" + batLevel + " -- : 100/" + new Pref(context).getInt(Pref.IS_BATTERY, -1));
                 new Pref(context).putInt(Pref.IS_BATTERY, batLevel);
 
                 rv.setTextViewText(R.id.progress_text, batLevel + "%");
                 rv.setProgressBar(R.id.progress_bar, 100, batLevel, false);
                 if (new Pref(context).getInt(Pref.IS_BATTERY, -1) != batLevel) {
-                    System.out.println("************ WIFI RECEIVE BROAD 100/" + batLevel + " -- : 100/" + new Pref(context).getInt(Pref.IS_BATTERY, -1));
                     BatteryManager systemService = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
                     int batlevel = systemService.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
                     rv.setTextViewText(R.id.progress_text, batLevel + "%");
@@ -1395,7 +1323,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 Intent intentBattery = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
                 configPendingIntent = PendingIntent.getActivity(context, 0, intentBattery, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 rv.setOnClickPendingIntent(R.id.RlBattery, configPendingIntent);
-                System.out.println("************ WIFI RECEIVE COME BROAD W_NUMBER " + widgetData.get(i).getNumber());
                 AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
                 appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
                 AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -1461,37 +1388,29 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 }
                 if (widgetData.get(i).getType() == 2) {
                     if (Constants.IsWIfiConnected(context)) {
-                        System.out.println("************ WIFI RECEIVE  ON ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
                     } else {
-                        System.out.println("************ WIFI RECEIVE  Off ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
                     }
                     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     if (bluetoothAdapter != null) {
                         if (bluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  ON ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
                         } else if (!bluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  else ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
                         }
                     }
                 } else {
                     if (Constants.IsWIfiConnected(context)) {
-                        System.out.println("************ WIFI RECEIVE  ON ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_xpanel_medium_2_wifi_selected);
                     } else {
-                        System.out.println("************ WIFI RECEIVE  Off ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_xpanel_medium_2_wifi);
                     }
                     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     if (bluetoothAdapter != null) {
                         if (bluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  ON ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_xpanel_medium_2_bluetooth_selected);
                         } else if (!bluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  else ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_xpanel_medium_2_bluetooth);
                         }
                     }
@@ -1521,7 +1440,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 configPendingIntent = PendingIntent.getBroadcast(context, 0, intentTorch3, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 rv.setOnClickPendingIntent(R.id.IvTorch, configPendingIntent);
 
-                System.out.println("************ WIFI RECEIVE COME BROAD W_NUMBER " + widgetData.get(i).getNumber());
                 AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
                 appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
                 AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

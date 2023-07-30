@@ -58,7 +58,6 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onCreate() {
-        System.out.println("-********* NoteId 00000: ");
         strings.clear();
         calendar = Calendar.getInstance(Locale.getDefault());
         month = calendar.get(Calendar.MONTH) + 1;
@@ -162,13 +161,10 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
     }
 
     public LargeRemoteView(Context con, Intent intent) {
-//        Note note;
         NoteId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
         NoteId = intent.getIntExtra("TypeId", -1);
         context = con;
-        System.out.println("-********* NoteId : " + NoteId);
-        System.out.println("-********* NoteId :ss " + intent.getStringExtra("TypeId"));
     }
 
     @Override
@@ -180,16 +176,12 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public RemoteViews getViewAt(int i) {
-//        Note note = helper.getNoteRecord((int) NoteId);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.item_calendar_day);
 
         String[] DayOfString = strings.get(i).split("-");
         String Day = DayOfString[0];
         String Month = DayOfString[2];
         String Year = DayOfString[3];
-        System.out.println("-********* DayOfString : " + DayOfString[1]);
-        System.out.println("-********* Day : " + Day);
-        System.out.println("-********* Constants.Widget_Type_Id : " + Constants.Widget_Type_Id);
         if (!DayOfString[1].equals("GREY")) {
             views.setTextViewText(R.id.TvCalendarDates, Day);
         } else {
@@ -219,29 +211,19 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
         if (DayOfString[1].equals("BLUE")) {
             switch (NoteId) {
                 case 4:
-//                    views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_ring_white);
                     views.setInt(R.id.TvCalendarDates, "setBackgroundResource", R.drawable.ic_calendar_ring_white);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.color_0263FF));
                     break;
                 case 6:
-//                    views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_purple);
-//                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 12f);
                     views.setInt(R.id.TvCalendarDates, "setBackgroundResource", R.drawable.ic_calendar_purple);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
                     break;
                 case 7:
-//                    views.setImageViewResource(R.id.IvMainCalendar, R.drawable.ic_calendar_square);
-//                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 12f);
                     views.setInt(R.id.TvCalendarDates, "setBackgroundResource", R.drawable.ic_calendar_square);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
                     break;
             }
-//            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 9f);
-//            views.setViewVisibility(R.id.IvMainCalendar, View.VISIBLE);
-
         } else {
-//            views.setViewPadding(R.id.TvCalendarDates, 3, 3, 3, 3);
-//            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 10f);
             views.setViewVisibility(R.id.IvMainCalendar, View.GONE);
         }
         return views;

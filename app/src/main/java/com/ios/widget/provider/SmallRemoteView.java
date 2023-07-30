@@ -59,7 +59,6 @@ public class SmallRemoteView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onCreate() {
-        System.out.println("-********* NoteId 00000: ");
         strings.clear();
         calendar = Calendar.getInstance(Locale.getDefault());
         month = calendar.get(Calendar.MONTH) + 1;
@@ -161,11 +160,9 @@ public class SmallRemoteView implements RemoteViewsService.RemoteViewsFactory {
     }
 
     public SmallRemoteView(Context con, Intent intent) {
-//        Note note;
         NoteId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
         context = con;
-        System.out.println("-********* NoteId : " + NoteId);
     }
 
     @Override
@@ -177,15 +174,12 @@ public class SmallRemoteView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public RemoteViews getViewAt(int i) {
-//        Note note = helper.getNoteRecord((int) NoteId);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.item_calendar_day);
 
         String[] DayOfString = strings.get(i).split("-");
         String Day = DayOfString[0];
         String Month = DayOfString[2];
         String Year = DayOfString[3];
-        System.out.println("-********* DayOfString : " + DayOfString[1]);
-        System.out.println("-********* Day : " + Day);
         if (!DayOfString[1].equals("GREY")) {
             views.setTextViewText(R.id.TvCalendarDates, Day);
         } else {
@@ -203,14 +197,12 @@ public class SmallRemoteView implements RemoteViewsService.RemoteViewsFactory {
             switch (Constants.Widget_Type_Id) {
                 case 6:
                     views.setViewPadding(R.id.TvCalendarDates, 4, 4, 4, 4);
-//            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 9f);
                     views.setViewVisibility(R.id.IvMainCalendar, View.VISIBLE);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
                     break;
             }
         } else {
             views.setViewPadding(R.id.TvCalendarDates, 3, 3, 3, 3);
-//            views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 10f);
             views.setViewVisibility(R.id.IvMainCalendar, View.GONE);
         }
         return views;

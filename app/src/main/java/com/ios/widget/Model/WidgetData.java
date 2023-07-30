@@ -1,22 +1,24 @@
 package com.ios.widget.Model;
 
 public class WidgetData {
-    int id, Type, Position, Number;
+    int id, Type, Position, Number,Temp;
     String City;
 
-    public WidgetData(int id, int type, int position, int number, String city) {
+    public WidgetData(int id, int type, int position, int number, String city, int temp) {
         this.id = id;
         Type = type;
         Position = position;
         Number = number;
         City = city;
+        Temp = temp;
     }
 
-    public WidgetData(int type, int position, int number, String city) {
+    public WidgetData(int type, int position, int number, String city, int temp) {
         Type = type;
         Position = position;
         Number = number;
         City = city;
+        Temp = temp;
     }
 
     public int getId() {
@@ -57,5 +59,13 @@ public class WidgetData {
 
     public void setCity(String city) {
         City = city;
+    }
+
+    public int getTemp() {
+        return Temp;
+    }
+
+    public void setTemp(int temp) {
+        Temp = temp;
     }
 }

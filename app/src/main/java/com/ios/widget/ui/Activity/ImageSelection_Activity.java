@@ -103,11 +103,8 @@ public class ImageSelection_Activity extends AppCompatActivity implements View.O
             @Override
             public void OnSelectStateChanged(boolean state, ImageFile file) {
                 if (state) {
-                    System.out.println("****** mSelectedList : " + mSelectedList.size());
                     if (mSelectedList.size() == 10) {
-                        Snackbar snackbar = Snackbar
-                                .make(rl_main_img_selection, "Select up to 10 images", Snackbar.LENGTH_LONG);
-
+                        Snackbar snackbar = Snackbar.make(rl_main_img_selection, "Select up to 10 images", Snackbar.LENGTH_LONG);
                         snackbar.show();
                     } else {
                         if (file.isSelected()) {
@@ -180,16 +177,9 @@ public class ImageSelection_Activity extends AppCompatActivity implements View.O
 
     private void GotoEditActivity() {
         for (int i = 0; i < mSelectedList.size(); i++) {
-            System.out.println("---------IMAGe :: " + mSelectedList.get(i).getPath());
         }
         setResult(RESULT_OK);
         finish();
-//        if (isPreview) {
-//            startActivityForResult(new Intent(context, ArrangeImagesActivity.class)
-//                    .putExtra(ImageSelection_Activity.EXTRA_FROM_PREVIEW, true), ARRANGE_IMAGE);
-//        } else {
-//            startActivity(new Intent(context, EditImagesListActivity.class));
-//        }
     }
 
     private void refreshData(List<Directory<ImageFile>> directories) {

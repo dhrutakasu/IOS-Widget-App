@@ -1,11 +1,14 @@
 package com.ios.widget.provider;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.ios.widget.utils.Pref;
+
 public class BootReceiver extends BroadcastReceiver {
-//    private DatabaseHelper helper;
 
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
@@ -14,11 +17,9 @@ public class BootReceiver extends BroadcastReceiver {
     }
 
     public void AllRestartWidgets(Context context) {
-//        helper = new NotesDatabaseHelper(context);
-//        Iterator<Note> it =  helper.getAllWidget(0).iterator();
-//        while (it.hasNext()) {
-//            Note note = (Note) it.next();
-//            NewCreateNotesActivity.NoteUpdateWidget(note.getCreateWidgetId(), context.getPackageName(), context, note.getNoteTitle(), note.getNoteContent(), note.getId());
-//        }
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
     }
 }

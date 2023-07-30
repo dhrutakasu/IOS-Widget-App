@@ -62,26 +62,19 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class LargeWidgetProvider extends AppWidgetProvider {
-//    private Handler handler;
-//    private Runnable runnable;
     private boolean IsTorchOn;
 
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         DatabaseHelper helper = new DatabaseHelper(context);
-        WidgetData widgetData = new WidgetData(2, Constants.Widget_Type_Id, -1,"");
-//            WidgetData widgetData = new WidgetData("0", "L", Constants.getWidgetLists().get(Constants.Widget_Type_Id).getSmall(), Constants.getWidgetLists().get(Constants.Widget_Type_Id).getMedium(), Constants.getWidgetLists().get(Constants.Widget_Type_Id).getLarge(), String.valueOf(Constants.Widget_Type_Id), String.valueOf(Widget_Id));
-        System.out.println("_*_*_*_*_*_*_ 11 :: " + helper.getWidgetCount());
+        WidgetData widgetData = new WidgetData(2, Constants.Widget_Type_Id, -1,"",Constants.Temp_Id);
         int insert = helper.InsertWidget(widgetData);
-        System.out.println("_*_*_*_*_*_*_ insert : " + insert);
         for (int id : appWidgetIds) {
             Widget_Id = id;
-            System.out.println("_*_*_*_*_*_*_ uuid " + id);
         }
         if (helper.getWidgetCount() != 0) {
             WidgetData widgetsId = helper.getWidgetsId(insert);
-            System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
             widgetsId.setNumber(Widget_Id);
             helper.updateWidget(widgetsId);
         }
@@ -96,7 +89,6 @@ public class LargeWidgetProvider extends AppWidgetProvider {
             int currentDay ;
             int currentMonth;
             int currentYear;
-//            handler = new Handler();
             switch (helper.getWidgets().get(i).getPosition()) {
                 case 0:
                 case 20:
@@ -126,88 +118,24 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                         }, null);
                     }
                     if (Constants.IsWIfiConnected(context)) {
-                        System.out.println("************ WIFI RECEIVE  ON ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
                     } else {
-                        System.out.println("************ WIFI RECEIVE  Off ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
                     }
                     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     if (mBluetoothAdapter != null) {
                         if (mBluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  ON ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
                         } else if (!mBluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  else ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
                         }
                     }
 
-                    System.out.println("********* ON / OFF : " + IsTorchOn);
                     if (IsTorchOn) {
                         rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
                     } else {
                         rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1);
                     }
-                   /* appWidgetManager.notifyAppWidgetViewDataChanged(helper.getWidgets().get(finalI).getNumber(), R.id.IvWifi);
-                    appWidgetManager.notifyAppWidgetViewDataChanged(helper.getWidgets().get(finalI).getNumber(), R.id.IvTorch);
-
-                    runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            System.out.println("************ WIFI RECEIVE  ");
-                            if (Constants.IsWIfiConnected(context)) {
-                                System.out.println("************ WIFI RECEIVE  ON ");
-                                finalRv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
-                            } else {
-                                System.out.println("************ WIFI RECEIVE  Off ");
-                                finalRv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
-                            }
-
-                            BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                            if (mBluetoothAdapter != null) {
-                                if (mBluetoothAdapter.isEnabled()) {
-                                    System.out.println("************  Bluetooth RECEIVE  ON ");
-                                    finalRv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
-                                } else if (!mBluetoothAdapter.isEnabled()) {
-                                    System.out.println("************  Bluetooth RECEIVE  else ");
-                                    finalRv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
-                                }
-                            }
-
-                            CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                cameraManager.registerTorchCallback(new CameraManager.TorchCallback() {
-                                    @Override
-                                    public void onTorchModeUnavailable(@NonNull String cameraId) {
-                                        super.onTorchModeUnavailable(cameraId);
-                                    }
-
-                                    @Override
-                                    public void onTorchModeChanged(@NonNull String cameraId, boolean enabled) {
-                                        super.onTorchModeChanged(cameraId, enabled);
-                                        IsTorchOn = enabled;
-                                    }
-
-                                    @Override
-                                    public void onTorchStrengthLevelChanged(@NonNull String cameraId, int newStrengthLevel) {
-                                        super.onTorchStrengthLevelChanged(cameraId, newStrengthLevel);
-                                    }
-                                }, null);
-                            }
-
-                            System.out.println("********* ON / OFF : " + IsTorchOn);
-                            if (IsTorchOn) {
-                                finalRv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
-                            } else {
-                                finalRv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1);
-                            }
-                            appWidgetManager.updateAppWidget(helper.getWidgets().get(finalI).getNumber(), finalRv);
-
-                            handler.postDelayed(this, 2000);
-                        }
-                    };
-                    handler.postDelayed(runnable, 0);*/
 
                     Intent intentWifi = new Intent(Settings.ACTION_WIFI_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentWifi, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
@@ -301,8 +229,6 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                 case 6:
                     //todo calender 3 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar2_large);
-//                    rv.setImageViewResource(R.id.iv_background, R.drawable.shape_app_widget_ffffff_r25_bg);
-
                     intent = new Intent(context, LargeWidgetService.class);
                     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Type_Id);
                     intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
@@ -349,7 +275,6 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                 case 7:
                     //todo calender 4 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_large);
-//                    rv.setImageViewBitmap(R.id.iv_background,Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.shape_app_widget_1c1c1e_r25_bg),30));
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
                     rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM, yyyy");
@@ -396,19 +321,14 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                 case 8:
                     //todo weather 1 large
                     LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                    System.out.println("------- catch Out permission location: " + locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER));
                     if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         if (ActivityCompat.checkSelfPermission(
                                 context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                                 context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                            ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                            System.out.println("------- catch Out permission: ");
                         } else {
                             String city = "";
 
                             rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_large);
-                            System.out.println("------- catch Out: " + "Your Location: else ");
-//
                             List<String> providers = locationManager.getProviders(true);
                             for (String provider : providers) {
                                 Location locationGPS = locationManager.getLastKnownLocation(provider);
@@ -422,17 +342,22 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                         city = addresses.get(0).getLocality();
 
                                         WidgetData widgetsId = helper.getWidgetsId(insert);
-                                        System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
                                         widgetsId.setCity(city);
                                         helper.updateWidget(widgetsId);
 
                                         RemoteViews finalRv4 = rv;
                                         RequestQueue queue = Volley.newRequestQueue(context);
-                                        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID="+context.getString(R.string.weather_key);
+                                        String url,tempExt;
+                                        if (widgetData.getTemp()==0) {
+                                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=" + context.getString(R.string.weather_key);
+                                            tempExt="°C";
+                                        }else {
+                                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                                            tempExt="°F";
+                                        }
                                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
-                                                System.out.println("------- catch Out response: " + response.toString());
                                                 try {
                                                     JSONObject obj = new JSONObject(response);
 
@@ -442,7 +367,6 @@ public class LargeWidgetProvider extends AppWidgetProvider {
 
                                                         WeatherObject.get("main");
                                                         WeatherObject.get("icon");
-                                                        System.out.println("------- catch Out WeatherObject: " + WeatherObject.getString("description"));
                                                         finalRv4.setTextViewText(R.id.TvDesc, WeatherObject.get("description").toString());
                                                         finalRv4.setImageViewResource(R.id.IvWeatherIcon, Constants.getWeatherIcons(WeatherObject.getString("icon")));
                                                     }
@@ -460,12 +384,10 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                                     finalRv4.setTextViewText(R.id.TvWind, mps_to_kmph(millisecondWind)+"km/h");
                                                     finalRv4.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
                                                     String Temp = MainObject.get("temp").toString();
-                                                    System.out.println("------- catch Out response Temp: " + Temp.substring(0, Temp.lastIndexOf(".")));
-                                                    finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + "°C");
+                                                    finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) +tempExt);
                                                     String MinTemp = MainObject.get("temp_min").toString();
                                                     String MaxTemp = MainObject.get("temp_max").toString();
-                                                    System.out.println("------- catch Out response TempMin: " + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + " -- " + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")));
-                                                    finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + "°C L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + "°C");
+                                                    finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) +tempExt+ " L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
                                                     finalRv4.setTextViewText(R.id.TvHumidity, MainObject.get("humidity").toString()+ "%" );
                                                     finalRv4.setTextViewText(R.id.TvPressure, MainObject.get("pressure").toString()+ "%" );
 
@@ -477,17 +399,21 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
                                                 //displaying the error in toast if occur
-                                                System.out.println("------- catch Out errrr: " + error.getMessage());
                                             }
                                         });
                                         queue.add(stringReq);
 
                                         RequestQueue queue1 = Volley.newRequestQueue(context);
-                                        String url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=metric&APPID="+context.getString(R.string.weather_key);
+
+                                        String url1;
+                                        if (widgetData.getTemp()==0) {
+                                            url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=metric&APPID=" + context.getString(R.string.weather_key);
+                                        }else {
+                                            url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                                        }
                                         StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
-                                                System.out.println("------- catch Out response: " + response.toString());
                                                 try {
                                                     JSONObject MainObject=null;
                                                     JSONArray IconObject=null;
@@ -505,7 +431,6 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                                             Date date = format.parse(dateStr);
                                                             format = new SimpleDateFormat("HH:mm");
                                                             res = format.format(date);
-                                                            System.out.println(date);
                                                         } catch (ParseException e) {
                                                             e.printStackTrace();
                                                         }
@@ -561,13 +486,11 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                                         }
                                                     }
 
-//                                                    if (!new Pref(context).getBoolean(Pref.IS_WEATHER_1 _ALARM, false)) {
                                                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                                                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                                                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                                                     new Pref(context).putBoolean(Pref.IS_WEATHER_1_ALARM, true);
                                                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
-//                                                    }
                                                     appWidgetManager.updateAppWidget(Widget_Id, finalRv4);
                                                 } catch (JSONException e) {
                                                     throw new RuntimeException(e);
@@ -577,16 +500,12 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
                                                 //displaying the error in toast if occur
-                                                System.out.println("------- catch Out errrr: " + error.getMessage());
                                             }
                                         });
                                         queue1.add(stringReq1);
                                     } catch (Exception e) {
-                                        Log.d("------- catch cityEx", "Error to find the city." + e.getMessage());
                                     }
-                                    System.out.println("------- catch Out: " + "Your Location: " + " " + "Latitude: " + lat + " " + "Longitude: " + longi);
                                 } else {
-                                    System.out.println("------- catch Out: GPS " + locationGPS);
 
                                 }
                             }
@@ -634,41 +553,6 @@ public class LargeWidgetProvider extends AppWidgetProvider {
 
                     rv.setOnClickPendingIntent(R.id.RlLargeClock, configPendingIntent);
                     break;
-                case 15:
-                    //todo clock 5 large
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism2_large);
-
-                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    rv.setOnClickPendingIntent(R.id.analog_clock, configPendingIntent);
-                    break;
-                case 16:
-                    //todo clock 6 large
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_realism3_large);
-
-                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    rv.setOnClickPendingIntent(R.id.analog_clock, configPendingIntent);
-                    break;
-                case 17:
-                    //todo clock 7 large
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text1_large);
-
-                    rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_clock_text1_bg_large), 30));
-                    rv.setCharSequence(R.id.TClockHour, "setFormat12Hour", "HH");
-                    rv.setCharSequence(R.id.TClockHour, "setFormat24Hour", "HH");
-                    rv.setCharSequence(R.id.TClockMinutes, "setFormat12Hour", "mm");
-                    rv.setCharSequence(R.id.TClockMinutes, "setFormat24Hour", "mm");
-                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat12Hour", "EEEE, MMM d");
-                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat24Hour", "EEEE, MMM d");
-
-                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    rv.setOnClickPendingIntent(R.id.RlLargeClock, configPendingIntent);
-                    break;
                 case 19:
                     //todo clock 9 large
 
@@ -686,30 +570,6 @@ public class LargeWidgetProvider extends AppWidgetProvider {
 
                     rv.setOnClickPendingIntent(R.id.RlLargeClock, configPendingIntent);
                     break;
-               /* case 21:
-                    //todo x-panel 2 large
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel2_large);
-
-                    BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
-                    int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-                    new Pref(context).putInt(IS_BATTERY, batLevel);
-                    RemoteViews finalrv = rv;
-
-                    finalrv.setTextViewText(R.id.progress_text, batLevel + "%");
-                    finalrv.setProgressBar(R.id.progress_bar, 100, batLevel, false);
-
-                    Intent intentBattery = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intentBattery, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    rv.setOnClickPendingIntent(R.id.RlBattery, configPendingIntent);
-                    if (!new Pref(context).getBoolean(Pref.IS_BATTERY_ALARM,false)) {
-                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
-                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                        new Pref(context).putBoolean(Pref.IS_BATTERY_ALARM, true);
-                        long repeatInterval = TimeUnit.MILLISECONDS.toSeconds(1);
-                        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, (System.currentTimeMillis() + TimeUnit.MILLISECONDS.toSeconds(1)), repeatInterval, broadcast);
-                    }
-                    break;*/
                 case 21:
                     //todo x-panel 4 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_large);
@@ -748,7 +608,6 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     long total = internalTotal + externalTotal;
                     long free = internalFree + externalFree;
                     long used = total - free;
-                    System.out.println("-----------store TTT : " + Constants.bytes2String(total) + "/" + Constants.bytes2String(free)+ "/" + Constants.bytes2String(used));
                     rv.setTextViewText(R.id.progress_text, managerIntProperty + "%");
                     rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
                     if (!new Pref(context).getBoolean(Pref.IS_X_PANEL_4_ALARM, false)) {
@@ -794,24 +653,19 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                         }, null);
                     }
                     if (Constants.IsWIfiConnected(context)) {
-                        System.out.println("************ WIFI RECEIVE  ON ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
                     } else {
-                        System.out.println("************ WIFI RECEIVE  Off ");
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
                     }
                     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     if (bluetoothAdapter != null) {
                         if (bluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  ON ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1_selected);
                         } else if (!bluetoothAdapter.isEnabled()) {
-                            System.out.println("************  Bluetooth RECEIVE  else ");
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
                         }
                     }
 
-                    System.out.println("********* ON / OFF : " + IsTorchOn);
                     if (IsTorchOn) {
                         rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
                     } else {
@@ -840,8 +694,6 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
 
                     Intent intentCellular3 = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
-//                    intentCellular.setClassName("com.android.phone", "com.android.phone.NetworkSetting");
-//                    intentCellular.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
 
@@ -862,14 +714,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] iArr) {
         for (int id : iArr) {
-            System.out.println("_*_*_*_*_*_*_ uuid " + id);
             DatabaseHelper helper = new DatabaseHelper(context);
-//            WidgetData widgetsId = helper.getWidgetsNumber(id);
-//            if (widgetsId!=null) {
-//                System.out.println("_*_*_*_*_*_*_ 33 :: " + widgetsId);
-//                widgetsId.setNumber(-1);
-//            }
-//            helper.updateWidget(widgetsId);
             helper.getDeleteWidgets(id);
         }
     }

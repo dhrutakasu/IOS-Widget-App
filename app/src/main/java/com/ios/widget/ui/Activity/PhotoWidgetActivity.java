@@ -121,7 +121,6 @@ public class PhotoWidgetActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         int intExtra = intent.getIntExtra("widgetId", 0);
-        System.out.println("*********** widgetId = " + intExtra);
         this.widgetId = intExtra;
         if (intExtra != 0) {
             WidgetMaster mainWidget = this.database.getWidgetMaster(this.widgetId);
@@ -135,20 +134,16 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                     imageFile.setPath(imageUriList.get(i).getUri());
                     mSelectedList.add(imageFile);
                 }
-                System.out.println("************ Path Constants----: "+Constants.mSelectedList.size());
                 imageUriList.add(0, new WidgetImages("", String.valueOf(R.drawable.ic_upload), -1));
-                System.out.println("*********** UriList = " + imageUriList.size());
                 SpinnerWidgetInterval.setSelection(mainWidget.getInterval());
 
                 WidgetData widgetData = database.getWidgetsNumber(widgetId);
 
-                System.out.println("*********** widgetData.getType() = " + widgetData.getType());
                 TabLayout.Tab tab = TabSizeLayout.getTabAt(widgetData.getType());
                 tab.select();
                 adapter.setchange(tab.getPosition());
                 adapter.notifyDataSetChanged();
 
-                System.out.println("*********** mSelectedList = " + mSelectedList.size());
             } else {
                 this.widgetMaster = new WidgetMaster();
             }
@@ -161,8 +156,6 @@ public class PhotoWidgetActivity extends AppCompatActivity {
             imageUriList.add(new WidgetImages("", String.valueOf(R.drawable.ic_upload), -1));
             this.widgetMaster = new WidgetMaster();
             widgetMaster.setWidgetId(0);
-//            Toast.makeText(this, "Widget Is Invalid..", Toast.LENGTH_SHORT).show();
-//            finish();
         }
     }
 
@@ -176,7 +169,6 @@ public class PhotoWidgetActivity extends AppCompatActivity {
         SpinnerWidgetInterval.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                System.out.println("@@@@@@@@@ pos : " + position);
                 new Pref(context).setWidgetInterval(context, position);
             }
 
@@ -189,14 +181,9 @@ public class PhotoWidgetActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Constants.Widget_Type_Id = 23;
-                System.out.println("******* imageUriList : " + TabSizeLayout.getSelectedTabPosition());
                 if (mSelectedList.size() < 2) {
                     Toast.makeText(context, "Select at least two photo", Toast.LENGTH_SHORT).show();
                 } else {
-//                    if (widgetMaster.getWidgetId() != 0) {
-//                        widgetMaster.setInterval(SpinnerWidgetInterval.getSelectedItemPosition());
-//                        database.updateWidget(widgetMaster);
-//                    } else {
                     if (widgetMaster.getWidgetId() == 0) {
                         if (TabSizeLayout.getSelectedTabPosition() == 0) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -245,16 +232,12 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        System.out.println("************ Path Constants: "+Constants.mSelectedList.size());
 
                         for (int i = 0; i < Constants.mSelectedList.size(); i++) {
-                            System.out.println("************ Path : "+database.CheckIsAlreadyDBorNot(Constants.mSelectedList.get(i).getPath().toString(), String.valueOf(widgetId)));
                             if (database.CheckIsAlreadyDBorNot(Constants.mSelectedList.get(i).getPath().toString(), String.valueOf(widgetId))) {
-                                System.out.println("************ Path Constants--iiiii: "+i);
                                 WidgetImages widgetImages1 = new WidgetImages(database.getImageListData(widgetId).getImageId(), String.valueOf(Constants.mSelectedList.get(i).getPath()), widgetId);
                                 database.updateWidgetImages(widgetImages1);
                             } else {
-                                System.out.println("************ Path Constants--iieee: "+i);
                                 WidgetImages widgetImages = new WidgetImages("0", Constants.mSelectedList.get(i).getPath(), widgetId);
                                 database.InsertWidgetImage(widgetImages);
                             }
@@ -437,7 +420,6 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                System.out.println("******* mSele : " + mSelectedList.size());
                                 startActivityForResult(new Intent(PhotoWidgetActivity.this, ImageSelection_Activity.class)
                                         .putExtra(Constants.MAX_NUMBER, 10), GET_PHOTO);
                             }
@@ -456,34 +438,19 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                     case RESULT_OK:
                         imageUriList.clear();
                         imageUriList.add(0, new WidgetImages("", String.valueOf(R.drawable.ic_upload), -1));
-                        System.out.println("---------IMAGe imageUriList :: " + imageUriList.size());
                         for (int i = 0; i < mSelectedList.size(); i++) {
-                            System.out.println("---------IMAGe :: " + mSelectedList.get(i).getPath());
                             String uri = mSelectedList.get(i).getPath().toString();
                             Bitmap bitmap2 = null;
                             try {
-                                System.out.println("**************bitmap uri: ");
                                 bitmap2 = getThumbnail(Uri.fromFile(new File(uri)), context, true);
                             } catch (IOException e2) {
-                                System.out.println("**************bitmap EXCEPTION: " + e2.getMessage());
                                 e2.printStackTrace();
                             }
                             bitmapList.add(bitmap2);
 
                             WidgetImages widgetImages2 = new WidgetImages(Constants.getUniqueId(), storeImage(context, bitmap2).toString(), 0);
                             model = widgetImages2;
-//                            if (widgetMaster.getWidgetId() != 0) {
-//                                for (int k = 0; k < imageUriList.size(); k++) {
-//                                        if (!mSelectedList.get(i).getPath().equalsIgnoreCase(imageUriList.get(k).getUri())){
-//                                            System.out.println("******* mSele : " + mSelectedList.get(i).getPath());
-//                                            System.out.println("******* imageUriList : " + imageUriList.get(k).getUri());
-////                                            imageUriList.add(widgetImages2);
-//                                        }
-//                                }
-//                            } else {
                             imageUriList.add(widgetImages2);
-//                            }
-                            System.out.println("---------IMAGe imageUriList 222:: " + imageUriList.size());
                             TvUploadPhotoSize.setText((imageUriList.size() - 1) + "/10");
                             photoAdapter.notifyDataSetChanged();
                         }

@@ -55,7 +55,6 @@ public class XPanelFlashlight4WidgetReceiver extends BroadcastReceiver {
         }
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        System.out.println("*********** WIDGET _IDD : " + intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, -1));
 
         appWidgetManager.updateAppWidget(intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, -1),
                 views);

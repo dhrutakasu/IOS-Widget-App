@@ -73,11 +73,8 @@ public class SmallPhotoWidgetService extends RemoteViewsService {
             this.imageUriList = instance.getImageList(this.mAppWidgetId);
             this.widgetMaster = this.database.getWidgetMaster(this.mAppWidgetId);
             Bundle appWidgetOptions = AppWidgetManager.getInstance(this.mContext).getAppWidgetOptions(this.mAppWidgetId);
-//            this.width = appWidgetOptions.getInt("appWidgetMinWidth");
-//            this.height = appWidgetOptions.getInt("appWidgetMaxHeight");
             this.width = 180;
             this.height = 180;
-            System.out.println("********** : " + width + " - " + height);
             this.columns = SmallPhotoWidgetProvider.getCellsForSize(this.width);
             this.custPadding = this.widgetMaster.getSpaceBorder();
             if (this.widgetMaster.getShape() == 3 || this.widgetMaster.getShape() == 4) {
@@ -151,7 +148,6 @@ public class SmallPhotoWidgetService extends RemoteViewsService {
             Log.d("WidgetServiceCalled", "Destroy GridRemoteViewsFactory ");
         }
 
-        /* access modifiers changed from: package-private */
         public int maxNumberOfCell(int i) {
             return i / 90;
         }
@@ -269,8 +265,6 @@ public class SmallPhotoWidgetService extends RemoteViewsService {
                                     i11 = i9;
                                     i10 = i8;
                                 }
-                                System.out.println("************** Corner border 11 = : " + i3 + " -- : " + i2);
-                                System.out.println("************** Corner border 22 = : " + i11 + " -- : " + i10);
                                 remoteViews.setImageViewBitmap(R.id.image_item_full, getCenterCropRectangle(createBitmap, i3, i2, i11, i10, this.widgetMaster.getCornerBorder()));
                                 break;
                             }
@@ -284,27 +278,6 @@ public class SmallPhotoWidgetService extends RemoteViewsService {
             return remoteViews;
         }
 
-        public Bitmap getRoundedBitmap(Bitmap bitmap, int i, int i2, int i3, int i4) {
-            Bitmap createScaledBitmap = Bitmap.createScaledBitmap(bitmap, i3, i4, true);
-            Bitmap createBitmap = Bitmap.createBitmap(i, i2, createScaledBitmap.getConfig());
-            Canvas canvas = new Canvas(createBitmap);
-            Paint paint = new Paint();
-            int i5 = (int) ((((double) i3) / 2.0d) - (((double) i) / 2.0d));
-            int i6 = (int) ((((double) i4) / 2.0d) - (((double) i2) / 2.0d));
-            paint.setAntiAlias(true);
-            paint.setFilterBitmap(true);
-            paint.setDither(true);
-            canvas.drawARGB(0, 0, 0, 0);
-            paint.setColor(Color.parseColor("#BAB399"));
-            float f = (((float) i) * 1.0f) / 2.0f;
-            float f2 = 0.7f + f;
-            canvas.drawCircle(f2, f2, f + 0.1f, paint);
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-            canvas.drawBitmap(createScaledBitmap, new Rect(i5, i6, i + i5, i2 + i6), new Rect(0, 0, i, i2), paint);
-            return createBitmap;
-        }
-
-        /* access modifiers changed from: package-private */
         public Bitmap  getCenterCropRectangle(Bitmap bitmap, int i, int i2, int i3, int i4, int i5) {
             int i6 = i;
             int i7 = i2;

@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         context = this;
         DatabaseHelper helper = new DatabaseHelper(context);
         ArrayList<WidgetData> widgetData = helper.getWidgets();
-        System.out.println("---- -- - - zzzzz : "+widgetData.size());
         if (widgetData.size()>0){
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);

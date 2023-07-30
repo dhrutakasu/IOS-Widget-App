@@ -66,6 +66,7 @@ public class Constants {
     public static ArrayList<ImageFile> mSelectedList = new ArrayList<>();
     public static ArrayList<ImageFile> getmSelectedList = new ArrayList<>();
     public static final String EDIT_PERVIEW = "Edit_preview";
+    public static int Temp_Id = -1;
 
     public static boolean isConnectingToInternet(Context con) {
         ConnectivityManager connectivity = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -90,8 +91,6 @@ public class Constants {
         modelArrayList.add(widgetModel);
         widgetModel = new WidgetModel(R.drawable.img_clock_small_9_xxhdpi, R.drawable.img_xpanel_medium_3_xxhdpi, R.drawable.img_weather_large_2_xxhdpi, "Trendy", 2);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_photo_s_xxhdpi, R.drawable.img_photo_m_xxhdpi, R.drawable.img_photo_l_xxhdpi, "Trendy", 3);
-        modelArrayList.add(widgetModel);
         widgetModel = new WidgetModel(R.drawable.img_calendar_small_1_xxhdpi, R.drawable.img_calendar_medium_1_xxhdpi, R.drawable.img_calendar_large_1_xxhdpi, "Calendar", 4);
         modelArrayList.add(widgetModel);
         widgetModel = new WidgetModel(R.drawable.img_calendar_small_2_xxhdpi, R.drawable.img_calendar_medium_2_xxhdpi, R.drawable.img_calendar_large_2_xxhdpi, "Calendar", 5);
@@ -113,14 +112,6 @@ public class Constants {
         widgetModel = new WidgetModel(R.drawable.img_clock_small_3_xxhdpi, R.drawable.img_clock_medium_3_xxhdpi, R.drawable.img_clock_large_3_xxhdpi, "Clock", 13);
         modelArrayList.add(widgetModel);
         widgetModel = new WidgetModel(R.drawable.img_clock_small_4_xxhdpi, R.drawable.img_clock_medium_4_xxhdpi, R.drawable.img_clock_large_4_xxhdpi, "Clock", 14);
-        modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_5_xxhdpi, R.drawable.img_clock_medium_5_xxhdpi, R.drawable.img_clock_large_5_xxhdpi, "Clock", 15);
-        modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_6_xxhdpi, R.drawable.img_clock_medium_6_xxhdpi, R.drawable.img_clock_large_6_xxhdpi, "Clock", 16);
-        modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_7_xxhdpi, R.drawable.img_clock_medium_7_xxhdpi, R.drawable.img_clock_large_7_xxhdpi, "Clock", 17);
-        modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_8_xxhdpi, R.drawable.img_clock_medium_8_xxhdpi, R.drawable.img_clock_large_8_xxhdpi, "Clock", 18);
         modelArrayList.add(widgetModel);
         widgetModel = new WidgetModel(R.drawable.img_clock_small_9_xxhdpi, R.drawable.img_clock_medium_9_xxhdpi, R.drawable.img_clock_large_9_xxhdpi, "Clock", 19);
         modelArrayList.add(widgetModel);
@@ -144,9 +135,6 @@ public class Constants {
         modelArrayList.add(widgetModel);
         widgetModel = new WidgetModel(R.drawable.img_clock_small_9_xxhdpi, R.drawable.img_xpanel_medium_3_xxhdpi, R.drawable.img_weather_large_2_xxhdpi, "Trendy", 2);
         modelArrayList.add(widgetModel);
-//        widgetModel = new WidgetModel(R.drawable.img_photo_s_xxhdpi, R.drawable.img_photo_m_xxhdpi, R.drawable.img_photo_l_xxhdpi, "Trendy", 23);
-//        modelArrayList.add(widgetModel);
-
         return modelArrayList;
     }
 
@@ -188,16 +176,6 @@ public class Constants {
         modelArrayList.add(widgetModel);
         widgetModel = new WidgetModel(R.drawable.img_clock_small_9_xxhdpi, R.drawable.img_clock_medium_9_xxhdpi, R.drawable.img_clock_large_9_xxhdpi, "Clock", 19);
         modelArrayList.add(widgetModel);
-//        widgetModel = new WidgetModel(R.drawable.img_clock_small_5_xxhdpi, R.drawable.img_clock_medium_5_xxhdpi, R.drawable.img_clock_large_5_xxhdpi, "Clock", 15);
-//        modelArrayList.add(widgetModel);
-//        widgetModel = new WidgetModel(R.drawable.img_clock_small_6_xxhdpi, R.drawable.img_clock_medium_6_xxhdpi, R.drawable.img_clock_large_6_xxhdpi, "Clock", 16);
-//        modelArrayList.add(widgetModel);
-//        widgetModel = new WidgetModel(R.drawable.img_clock_small_7_xxhdpi, R.drawable.img_clock_medium_7_xxhdpi, R.drawable.img_clock_large_7_xxhdpi, "Clock", 17);
-//        modelArrayList.add(widgetModel);
-//        widgetModel = new WidgetModel(R.drawable.img_clock_small_8_xxhdpi, R.drawable.img_clock_medium_8_xxhdpi, R.drawable.img_clock_large_8_xxhdpi, "Clock", 18);
-//        modelArrayList.add(widgetModel);
-
-
         return modelArrayList;
     }
 
@@ -280,11 +258,6 @@ public class Constants {
         final float totalSpace = DeviceMemory.getInternalStorageSpace();
         final float occupiedSpace = DeviceMemory.getInternalUsedSpace();
         final float freeSpace = DeviceMemory.getInternalFreeSpace();
-
-        System.out.println("****** AVA : " + iAvailableSpace + " * TOT : " + iTotalSpace);
-        System.out.println("****** AVA Totl : " + totalSpace + " * TOT : " + occupiedSpace);
-        System.out.println("****** AVA BYR : " + bytes2String(iAvailableBlocks * iBlockSize) + " * TOT : " + bytes2String(iTotalBlocks * iBlockSize) + " * TOT : " + bytes2String(sizee * iBlockSize));
-        System.out.println("****** AVA Free : " + freeSpace);
 
         return level;
     }
@@ -382,21 +355,18 @@ public class Constants {
 
         public static float getInternalStorageSpace() {
             StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
-            //StatFs statFs = new StatFs("/data");
             float total = ((float) statFs.getBlockCount() * statFs.getBlockSize()) / 1048576;
             return total;
         }
 
         public static float getInternalFreeSpace() {
             StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
-            //StatFs statFs = new StatFs("/data");
             float free = ((float) statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
             return free;
         }
 
         public static float getInternalUsedSpace() {
             StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
-            //StatFs statFs = new StatFs("/data");
             float total = ((float) statFs.getBlockCount() * statFs.getBlockSize()) / 1048576;
             float free = ((float) statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
             float busy = total - free;
