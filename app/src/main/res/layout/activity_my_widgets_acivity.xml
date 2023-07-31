@@ -26,7 +26,11 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RvMyWidget"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
+            tools:listitem="@layout/item_my_widget" />
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

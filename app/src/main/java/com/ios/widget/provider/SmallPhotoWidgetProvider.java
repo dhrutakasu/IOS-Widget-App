@@ -38,7 +38,7 @@ public class SmallPhotoWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] iArr) {
         DatabaseHelper helper = new DatabaseHelper(context);
-        WidgetData widgetData = new WidgetData(0, Constants.Widget_Type_Id, -1,"");
+        WidgetData widgetData = new WidgetData(0, Constants.Widget_Type_Id, -1,"",Constants.Temp_Id);
         int insert = helper.InsertWidget(widgetData);
         for (int id : iArr) {
             Widget_Id = id;

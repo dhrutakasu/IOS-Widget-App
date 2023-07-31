@@ -41,6 +41,7 @@
                 android:layout_height="@dimen/_35sdp"
                 android:layout_below="@+id/TabWidget"
                 android:layout_alignParentStart="true"
+                android:visibility="gone"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="@dimen/_25sdp"
                 android:layout_marginEnd="@dimen/_25sdp"
@@ -56,9 +57,9 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:layout_weight="2.5"
-                    android:text="Temperature"
+                    android:text="Temperature :"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_18sdp" />
+                    android:textSize="@dimen/_14sdp" />
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/TabTempLayout"

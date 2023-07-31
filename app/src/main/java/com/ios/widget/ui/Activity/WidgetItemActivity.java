@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
@@ -50,13 +51,14 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
     private ImageView IvAddWidget;
 
     private int pos;
-    private TabLayout TabWidget, TabTempLayout,TabSizeLayout;
+    private TabLayout TabWidget, TabTempLayout, TabSizeLayout;
     private int TabPos;
     private ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
     private WidgetPagerAdapter adapter;
     private AppWidgetManager manager;
     private ComponentName name;
     private DatabaseHelper helper;
+    private LinearLayout LlTemp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         TabWidget = (TabLayout) findViewById(R.id.TabWidget);
         TabTempLayout = (TabLayout) findViewById(R.id.TabTempLayout);
         TabSizeLayout = (TabLayout) findViewById(R.id.TabSizeLayout);
+        LlTemp = (LinearLayout) findViewById(R.id.LlTemp);
     }
 
     private void initIntents() {
@@ -91,6 +94,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         } else if (TabPos == 2) {
             TvTitle.setText("Weather");
             modelArrayList = Constants.getWeatherWidgetLists();
+            LlTemp.setVisibility(View.VISIBLE);
         } else if (TabPos == 3) {
             TvTitle.setText("Clock");
             modelArrayList = Constants.getClockWidgetLists();
@@ -129,7 +133,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         TabTempLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Constants.Temp_Id=tab.getPosition();
+                Constants.Temp_Id = tab.getPosition();
             }
 
             @Override
@@ -147,6 +151,41 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
             public void onTabSelected(TabLayout.Tab tab) {
                 adapter.setchange(tab.getPosition());
                 adapter.notifyDataSetChanged();
+                System.out.println("___________ Tab 1: " + TabPos + " - " + tab.getPosition() + " - " + TabWidget.getSelectedTabPosition());
+                if (TabPos == 0) {
+                    if ((TabWidget.getSelectedTabPosition() == 1 && tab.getPosition() == 0)) {
+                        LlTemp.setVisibility(View.VISIBLE);
+                    } else if ((TabWidget.getSelectedTabPosition() == 2 && tab.getPosition() == 2)) {
+                        LlTemp.setVisibility(View.VISIBLE);
+                    } else {
+                        LlTemp.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        TabWidget.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                System.out.println("___________ Tab 2: " + TabPos + " - " + tab.getPosition() + " - " + TabSizeLayout.getSelectedTabPosition());
+                if (TabPos == 0) {
+                    if ((TabSizeLayout.getSelectedTabPosition() == 0 && tab.getPosition() == 1)) {
+                        LlTemp.setVisibility(View.VISIBLE);
+                    } else if ((TabSizeLayout.getSelectedTabPosition() == 2 && tab.getPosition() == 2)) {
+                        LlTemp.setVisibility(View.VISIBLE);
+                    } else {
+                        LlTemp.setVisibility(View.GONE);
+                    }
+                }
             }
 
             @Override
