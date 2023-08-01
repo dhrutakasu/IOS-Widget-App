@@ -199,6 +199,12 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     } else {
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_xpanel_medium_2_wifi);
                     }
+
+                    if (Constants.isNetworkAvailable(context)) {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_xpanel_medium_2_mobiledata_selected);
+                    } else {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_xpanel_medium_2_mobiledata);
+                    }
                     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     if (bluetoothAdapter != null) {
                         if (bluetoothAdapter.isEnabled()) {
@@ -235,9 +241,11 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
 
-                    Intent intentCellular3 = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+                    Intent intentCellular3 = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+                    if (intentCellular3.resolveActivity(context.getPackageManager()) != null) {
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+                    }
 
                     Intent intentTorch3 = new Intent(context, XPanelFlashlight3WidgetReceiver.class);
                     configPendingIntent = PendingIntent.getBroadcast(context, 0, intentTorch3, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
@@ -431,7 +439,14 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                         queue.add(stringReq);
 
                                         RequestQueue queue1 = Volley.newRequestQueue(context);
-                                        String url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=metric&APPID="+context.getString(R.string.weather_key);
+                                        String url1,tempExt1;
+                                        if (widgetData.getTemp()==0) {
+                                            url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=metric&APPID="+context.getString(R.string.weather_key);
+                                            tempExt1="°C";
+                                        }else {
+                                            url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=imperial&APPID="+context.getString(R.string.weather_key);
+                                            tempExt1="°F";
+                                        }
                                         StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
@@ -641,6 +656,11 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         }
                     }
 
+                    if (Constants.isNetworkAvailable(context)) {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1_selected);
+                    } else {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1);
+                    }
                     if (IsTorchOn) {
                         rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
                     } else {
@@ -661,6 +681,12 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     Intent intentBluetooth1 = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
+
+                    Intent intentCellular = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+                    if (intentCellular.resolveActivity(context.getPackageManager()) != null) {
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+                    }
 
                     Intent intentTorch = new Intent(context, XPanelFlashlightWidgetReceiver.class);
                     PendingIntent broadcast1 = PendingIntent.getBroadcast(context, 0, intentTorch, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);

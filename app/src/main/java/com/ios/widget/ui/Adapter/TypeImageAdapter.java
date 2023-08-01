@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
 import com.ios.widget.ui.Activity.PhotoWidgetActivity;
+import com.ios.widget.ui.Activity.ShowItemActivity;
 import com.ios.widget.ui.Activity.TabActivity;
 import com.ios.widget.ui.Activity.WidgetItemActivity;
 import com.ios.widget.utils.Constants;
@@ -45,9 +46,12 @@ public class TypeImageAdapter extends RecyclerView.Adapter<TypeImageAdapter.MyVi
                     Constants.clearAllSelection();
                     con.startActivity(new Intent(con, PhotoWidgetActivity.class));
                 }else {
-                    Intent intent = new Intent(con, WidgetItemActivity.class);
+                    Intent intent = new Intent(con, ShowItemActivity.class);
                     intent.putExtra(Constants.TabPos, position);
                     con.startActivity(intent);
+//                    Intent intent = new Intent(con, WidgetItemActivity.class);
+//                    intent.putExtra(Constants.TabPos, position);
+//                    con.startActivity(intent);
                 }
             }
         });

@@ -1,5 +1,6 @@
 package com.ios.widget.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,12 +15,17 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 
 import com.ios.widget.Callback.FilterResultCallback;
 import com.ios.widget.Files.Directory;
@@ -38,12 +44,15 @@ import java.util.UUID;
 
 import static android.content.Context.BATTERY_SERVICE;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 public class Constants {
 
     public static final String ITEM_POSITION = "ITEM_POSITION";
+    public static final String WIDGET_ITEM_POSITION = "WIDGET_ITEM_POSITION";
     public static String ItemName = "ItemName";
     public static String ItemIcon = "ItemIcon";
     public static String NOTIFICATION_HOUR = "NotificationHour";
@@ -213,7 +222,6 @@ public class Constants {
         return TypesArrayList;
     }
 
-
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
                 .getHeight(), Bitmap.Config.ARGB_8888);
@@ -234,32 +242,6 @@ public class Constants {
         canvas.drawBitmap(bitmap, rect, rect, paint);
 
         return output;
-    }
-
-    public static int getBatteryLevel(Context context) {
-        int level = 0;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            BatteryManager bm = (BatteryManager) context.getSystemService(BATTERY_SERVICE);
-            level = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-        }
-        return level;
-    }
-
-    public static int getStorageLevel() {
-        int level = 0;
-        File iPath = Environment.getDataDirectory();
-        StatFs iStat = new StatFs(iPath.getPath());
-        long iBlockSize = iStat.getBlockSizeLong();
-        long iAvailableBlocks = iStat.getFreeBlocksLong();
-        long iTotalBlocks = iStat.getBlockCountLong();
-        long sizee = iTotalBlocks - iAvailableBlocks;
-        String iAvailableSpace = formatSize(iAvailableBlocks * iBlockSize);
-        String iTotalSpace = formatSize(iTotalBlocks * iBlockSize);
-        final float totalSpace = DeviceMemory.getInternalStorageSpace();
-        final float occupiedSpace = DeviceMemory.getInternalUsedSpace();
-        final float freeSpace = DeviceMemory.getInternalFreeSpace();
-
-        return level;
     }
 
     private static double SPACE_KB = 1024;
@@ -287,32 +269,6 @@ public class Constants {
         } catch (Exception e) {
             return sizeInBytes + " Byte(s)";
         }
-
-    }
-
-
-    public static String formatSize(long size) {
-        String suffix = null;
-
-        if (size >= 1024) {
-            suffix = "KB";
-            size /= 1024;
-            if (size >= 1024) {
-                suffix = "MB";
-                size /= 1024;
-            }
-        }
-
-        StringBuilder resultBuffer = new StringBuilder(Long.toString(size));
-
-        int commaOffset = resultBuffer.length() - 3;
-        while (commaOffset > 0) {
-            resultBuffer.insert(commaOffset, ',');
-            commaOffset -= 3;
-        }
-
-        if (suffix != null) resultBuffer.append(suffix);
-        return resultBuffer.toString();
     }
 
     public static int getWeatherIcons(String icon) {
@@ -379,7 +335,6 @@ public class Constants {
 
         return wifi.isWifiEnabled();
     }
-
 
     public static void showSettingsDialog(final Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -510,6 +465,83 @@ public class Constants {
 
     public static int dpToPx(Context context, int i) {
         return Math.round(((float) i) * context.getResources().getDisplayMetrics().density);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
+    public static boolean hasSIMCard(Context context) {
+        TelephonyManager telephonyManager =
+                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+
+        // Check if the device supports telephony (has a SIM card slot)
+        if (telephonyManager != null && telephonyManager.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE) {
+            SubscriptionManager subscriptionManager =
+                    null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+                subscriptionManager = (SubscriptionManager) context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
+            }
+
+            // Get a list of active SIM cards (subscriptions)
+            if (subscriptionManager != null) {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return false;
+                }
+                final int activeSubscriptionInfoCount = subscriptionManager.getActiveSubscriptionInfoCount();
+                return activeSubscriptionInfoCount > 0;
+            }
+        }
+
+        // Device does not have telephony capabilities or unable to access SubscriptionManager
+        return false;
+    }
+
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            Network network = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                network = connectivityManager.getActiveNetwork();
+            }
+            if (network != null) {
+                NetworkCapabilities networkCapabilities =
+                        connectivityManager.getNetworkCapabilities(network);
+                return networkCapabilities != null
+                        && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR));
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkDataRoamingEnabled(Context context) {
+        TelephonyManager telephonyManager =
+                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephonyManager != null && telephonyManager.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return false;
+            }
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                return telephonyManager.isDataRoamingEnabled();
+            }
+            // Use isDataRoamingEnabled as needed
+        } else {
+            // TelephonyManager not available or device does not support telephony
+            // Handle the case gracefully
+        }
+        return false;
     }
 }
 

@@ -82,13 +82,13 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
         Uri.Builder builder = null;
         Intent intent = null;
         Intent intent1 = null;
-        Calendar calendar;
         int currentDay;
         int currentMonth;
         int currentYear;
         for (int i = 0; i < widgetData.size(); i++) {
             if (widgetData.get(i).getPosition() == 0) {
                 if (widgetData.get(i).getType() == 1) {
+                    //todo clock 3 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple3_medium);
 
                     intent = new Intent(context, MediumWidgetService.class);
@@ -122,6 +122,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 } else if (widgetData.get(i).getType() == 2) {
+                    //todo x-panel 1 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_large);
 
                     if (Constants.IsWIfiConnected(context)) {
@@ -139,6 +140,12 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }
                     }
 
+
+                    if (Constants.isNetworkAvailable(context)) {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1_selected);
+                    } else {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1);
+                    }
                     CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         RemoteViews finalRv = rv;
@@ -178,9 +185,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
 
-                    Intent intentCellular = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+                    Intent intentCellular = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+                    if (intentCellular.resolveActivity(context.getPackageManager()) != null) {
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+                    }
 
                     Intent intent2 = new Intent(context, XPanelFlashlightWidgetReceiver.class);
                     intent2.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetData.get(i).getNumber());
@@ -196,6 +205,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 }
             } else if (widgetData.get(i).getPosition() == 1) {
                 if (widgetData.get(i).getType() == 0) {
+
+                    //todo weather 1 small
                     LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
                     if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         if (ActivityCompat.checkSelfPermission(
@@ -209,16 +220,20 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                             for (String provider : providers) {
                                 Location locationGPS = locationManager.getLastKnownLocation(provider);
                                 if (locationGPS != null) {
-                                    double lat = locationGPS.getLatitude();
-                                    double longi = locationGPS.getLongitude();
-
                                     try {
                                         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
                                         List<Address> addresses = geocoder.getFromLocation(locationGPS.getLatitude(), locationGPS.getLongitude(), 1);
                                         city = addresses.get(0).getLocality();
 
                                         RequestQueue queue = Volley.newRequestQueue(context);
-                                        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID="+context.getString(R.string.weather_key);
+                                        String url,tempExt;
+                                        if (widgetData.get(i).getTemp()==0) {
+                                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=" + context.getString(R.string.weather_key);
+                                            tempExt="°C";
+                                        }else {
+                                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                                            tempExt="°F";
+                                        }
                                         RemoteViews finalRv1 = rv;
                                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                                             @Override
@@ -240,8 +255,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
 
                                                     JSONObject SysObject = obj.getJSONObject("sys");
                                                     finalRv1.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
-                                                    finalRv1.setTextViewText(R.id.TvTemp, MainObject.get("temp") + "°C");
-                                                    finalRv1.setTextViewText(R.id.TvTempMaxMin, MainObject.get("temp_min").toString().indexOf(2) + "°C" + MainObject.get("temp_max  ").toString().indexOf(2) + "°C");
+                                                    finalRv1.setTextViewText(R.id.TvTemp, MainObject.get("temp") + tempExt);
+
+                                                    String MinTemp = MainObject.get("temp_min").toString();
+                                                    String MaxTemp = MainObject.get("temp_max").toString();
+                                                    finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt+" L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
 
                                                 } catch (JSONException e) {
                                                     throw new RuntimeException(e);
@@ -268,6 +286,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }
                     }
                 } else if (widgetData.get(i).getType() == 1) {
+                    //todo calender 4 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_medium);
                     rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEEE");
                     rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "EEEE");
@@ -309,6 +328,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 }
             } else if (widgetData.get(i).getPosition() == 2) {
                 if (widgetData.get(i).getType() == 1) {
+
+                    //todo x-panel 3 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel3_medium);
                     rv.setCharSequence(R.id.TClockHr, "setFormat12Hour", "HH");
                     rv.setCharSequence(R.id.TClockHr, "setFormat24Hour", "HH");
@@ -402,9 +423,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
 
-                    Intent intentCellular3 = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+                    Intent intentCellular3 = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+                    if (intentCellular3.resolveActivity(context.getPackageManager()) != null) {
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+                    }
 
                     Intent intentTorch3 = new Intent(context, XPanelFlashlight3WidgetReceiver.class);
                     configPendingIntent = PendingIntent.getBroadcast(context, 0, intentTorch3, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
@@ -419,6 +442,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 }
             } else if (widgetData.get(i).getPosition() == 4) {
                 if (widgetData.get(i).getType() == 1) {
+
+                    //todo calender 1 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar1_medium);
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM yyyy");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM yyyy");
@@ -456,6 +481,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 } else if (widgetData.get(i).getType() == 2) {
+
+                    //todo calender 1 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar1_large);
                     rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_calendar1_small_bg), 30));
                     rv.setCharSequence(R.id.TClockYear, "setFormat12Hour", "yyyy");
@@ -498,6 +525,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 }
             } else if (widgetData.get(i).getPosition() == 5) {
                 if (widgetData.get(i).getType() == 1) {
+
+                    //todo calender 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_medium);
                     rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_calendar2_medium_bg), 30));
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE, yyyy");
@@ -538,6 +567,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 }
             } else if (widgetData.get(i).getPosition() == 6) {
                 if (widgetData.get(i).getType() == 1) {
+
+                    //todo calender 3 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar2_medium);
                     rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEEE");
                     rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "EEEE");
@@ -576,6 +607,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 } else if (widgetData.get(i).getType() == 2) {
+
+                    //todo calender 3 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar2_large);
 
                     intent = new Intent(context, LargeWidgetService.class);
@@ -612,6 +645,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 }
             } else if (widgetData.get(i).getPosition() == 7) {
                 if (widgetData.get(i).getType() == 1) {
+
+                    //todo calender 4 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_medium);
                     rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEEE");
                     rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "EEEE");
@@ -650,6 +685,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 } else if (widgetData.get(i).getType() == 2) {
+
+                    //todo calender 4 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_large);
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
                     rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
@@ -690,13 +727,20 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 }
             } else if (widgetData.get(i).getPosition() == 8) {
-
                 String city = widgetData.get(i).getCity();
-
                 if (widgetData.get(i).getType() == 0) {
+
+                    //todo weather 1 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_small);
                     RequestQueue queue = Volley.newRequestQueue(context);
-                    String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID="+context.getString(R.string.weather_key);
+                    String url,tempExt;
+                    if (widgetData.get(i).getTemp()==0) {
+                        url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=" + context.getString(R.string.weather_key);
+                        tempExt="°C";
+                    }else {
+                        url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                        tempExt="°F";
+                    }
                     RemoteViews finalRv1 = rv;
                     int finalI1 = i;
                     StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -719,10 +763,10 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                 JSONObject SysObject = obj.getJSONObject("sys");
                                 finalRv1.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
                                 String Temp = MainObject.get("temp").toString();
-                                finalRv1.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + "°C");
+                                finalRv1.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + tempExt);
                                 String MinTemp = MainObject.get("temp_min").toString();
                                 String MaxTemp = MainObject.get("temp_max").toString();
-                                finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + "°C L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + "°C");
+                                finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt+" L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) +tempExt);
 
                                 AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
                                 appWidgetManager.updateAppWidget(widgetData.get(finalI1).getNumber(), finalRv1);
@@ -743,11 +787,20 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     });
                     queue.add(stringReq);
                 } else if (widgetData.get(i).getType() == 1) {
+
+                    //todo weather 1 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_medium);
 
                     RemoteViews finalRv4 = rv;
                     RequestQueue queue = Volley.newRequestQueue(context);
-                    String url = "https://api.openweathermap.org/data/2.5/weather?q=" + widgetData.get(i).getCity() + "&units=metric&APPID="+context.getString(R.string.weather_key);
+                    String url,tempExt;
+                    if (widgetData.get(i).getTemp()==0) {
+                        url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=" + context.getString(R.string.weather_key);
+                        tempExt="°C";
+                    }else {
+                        url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                        tempExt="°F";
+                    }
                     StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -768,10 +821,10 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                 JSONObject SysObject = obj.getJSONObject("sys");
                                 finalRv4.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
                                 String Temp = MainObject.get("temp").toString();
-                                finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + "°C");
+                                finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + tempExt);
                                 String MinTemp = MainObject.get("temp_min").toString();
                                 String MaxTemp = MainObject.get("temp_max").toString();
-                                finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + "°C L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + "°C");
+                                finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt+" L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) +tempExt);
 
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
@@ -786,7 +839,14 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     queue.add(stringReq);
 
                     RequestQueue queue1 = Volley.newRequestQueue(context);
-                    String url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + widgetData.get(i).getCity() + "&cnt=6&units=metric&APPID="+context.getString(R.string.weather_key);
+                    String url1,tempExt1;
+                    if (widgetData.get(i).getTemp()==0) {
+                        url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + widgetData.get(i).getCity() + "&cnt=6&units=metric&APPID="+context.getString(R.string.weather_key);
+                        tempExt1="°C";
+                    }else {
+                        url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + widgetData.get(i).getCity() + "&cnt=6&units=imperial&APPID="+context.getString(R.string.weather_key);
+                        tempExt1="°F";
+                    }
                     int finalI2 = i;
                     StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
                         @Override
@@ -882,12 +942,21 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     });
                     queue1.add(stringReq1);
                 } else if (widgetData.get(i).getType() == 2) {
+
+                    //todo weather 1 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_large);
                     try {
 
                         RemoteViews finalRv4 = rv;
                         RequestQueue queue = Volley.newRequestQueue(context);
-                        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID="+context.getString(R.string.weather_key);
+                        String url,tempExt;
+                        if (widgetData.get(i).getTemp()==0) {
+                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=" + context.getString(R.string.weather_key);
+                            tempExt="°C";
+                        }else {
+                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                            tempExt="°F";
+                        }
                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -917,10 +986,10 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                     finalRv4.setTextViewText(R.id.TvWind, mps_to_kmph(millisecondWind)+"km/h");
                                     finalRv4.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
                                     String Temp = MainObject.get("temp").toString();
-                                    finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + "°C");
+                                    finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) +tempExt);
                                     String MinTemp = MainObject.get("temp_min").toString();
                                     String MaxTemp = MainObject.get("temp_max").toString();
-                                    finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + "°C L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + "°C");
+                                    finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) +tempExt+ " L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
                                     finalRv4.setTextViewText(R.id.TvHumidity, MainObject.get("humidity").toString()+ "%" );
                                     finalRv4.setTextViewText(R.id.TvPressure, MainObject.get("pressure").toString()+ "%" );
 
@@ -937,7 +1006,14 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         queue.add(stringReq);
 
                         RequestQueue queue1 = Volley.newRequestQueue(context);
-                        String url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=metric&APPID="+context.getString(R.string.weather_key);
+                        String url1,tempExt1;
+                        if (widgetData.get(i).getTemp()==0) {
+                            url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=metric&APPID=" + context.getString(R.string.weather_key);
+                            tempExt1="°C";
+                        }else {
+                            url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                            tempExt1="°F";
+                        }
                         int finalI4 = i;
                         StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
                             @Override
@@ -1039,10 +1115,15 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
 
             } else if (widgetData.get(i).getPosition() == 20) {
                 if (widgetData.get(i).getType() == 0) {
+                    //todo x-panel 1 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_small);
                 } else if (widgetData.get(i).getType() == 1) {
+
+                    //todo x-panel 1 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_medium);
                 } else if (widgetData.get(i).getType() == 2) {
+
+                    //todo x-panel 1 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_large);
                 }
                 if (Constants.IsWIfiConnected(context)) {
@@ -1059,7 +1140,12 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
                     }
                 }
-
+                System.out.println("------------ rrrr :: "+Constants.hasSIMCard(context));
+                if (Constants.isNetworkAvailable(context)) {
+                    rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1_selected);
+                } else {
+                    rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1);
+                }
                 CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     RemoteViews finalRv = rv;
@@ -1099,9 +1185,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
 
-                Intent intentCellular = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
-                configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+                Intent intentCellular = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+                if (intentCellular.resolveActivity(context.getPackageManager()) != null) {
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+                }
 
                 Intent intent2 = new Intent(context, XPanelFlashlightWidgetReceiver.class);
                 intent2.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetData.get(i).getNumber());
@@ -1116,6 +1204,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
             } else if (widgetData.get(i).getPosition() == 18) {
                 if (widgetData.get(i).getType() == 0) {
+
+                    //todo x-panel 4 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_small);
                     rv.setCharSequence(R.id.TClockHr, "setFormat12Hour", "HH");
                     rv.setCharSequence(R.id.TClockHr, "setFormat24Hour", "HH");
@@ -1154,7 +1244,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
 
                 } else if (widgetData.get(i).getType() == 1) {
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_medium);
+
+                    //todo x-panel 4 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_medium);
 
                     rv.setCharSequence(R.id.TClockHr, "setFormat12Hour", "HH");
@@ -1237,6 +1328,13 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     }
 
 
+                    if (Constants.isNetworkAvailable(context)) {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_cellular4_selected);
+                    } else {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_cellular4);
+                    }
+
+
                     Intent intentWifi = new Intent(Settings.ACTION_WIFI_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentWifi, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvWifi, configPendingIntent);
@@ -1249,7 +1347,15 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     intent2.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetData.get(i).getNumber());
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
+
+                    Intent intentCellular3 = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+                    if (intentCellular3.resolveActivity(context.getPackageManager()) != null) {
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+                    }
                 } else if (widgetData.get(i).getType() == 2) {
+
+                    //todo x-panel 4 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_large);
                     rv.setCharSequence(R.id.TClockHr, "setFormat12Hour", "HH");
                     rv.setCharSequence(R.id.TClockHr, "setFormat24Hour", "HH");
@@ -1297,10 +1403,16 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
             } else if (widgetData.get(i).getPosition() == 21) {
                 if (widgetData.get(i).getType() == 0) {
+
+                    //todo x-panel 2 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel2_small);
                 } else if (widgetData.get(i).getType() == 1) {
+
+                    //todo x-panel 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel2_medium);
                 } else if (widgetData.get(i).getType() == 2) {
+
+                    //todo x-panel 2 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel2_large);
                 }
 
@@ -1319,7 +1431,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
 
                 }
 
-
                 Intent intentBattery = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
                 configPendingIntent = PendingIntent.getActivity(context, 0, intentBattery, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 rv.setOnClickPendingIntent(R.id.RlBattery, configPendingIntent);
@@ -1331,10 +1442,16 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
             } else if (widgetData.get(i).getPosition() == 22) {
                 if (widgetData.get(i).getType() == 0) {
+
+                    //todo x-panel 3 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel3_small);
                 } else if (widgetData.get(i).getType() == 1) {
+
+                    //todo x-panel 3 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel3_medium);
                 } else if (widgetData.get(i).getType() == 2) {
+
+                    //todo x-panel 3 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel3_large);
                 }
 
@@ -1400,6 +1517,12 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
                         }
                     }
+
+                    if (Constants.isNetworkAvailable(context)) {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1_selected);
+                    } else {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1);
+                    }
                 } else {
                     if (Constants.IsWIfiConnected(context)) {
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_xpanel_medium_2_wifi_selected);
@@ -1413,6 +1536,13 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         } else if (!bluetoothAdapter.isEnabled()) {
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_xpanel_medium_2_bluetooth);
                         }
+                    }
+
+
+                    if (Constants.isNetworkAvailable(context)) {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_xpanel_medium_2_mobiledata_selected);
+                    } else {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_xpanel_medium_2_mobiledata);
                     }
                 }
                 final float totalSpace = Constants.DeviceMemory.getInternalStorageSpace();
@@ -1430,11 +1560,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
 
-                Intent intentCellular3 = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
-//                    intentCellular.setClassName("com.android.phone", "com.android.phone.NetworkSetting");
-//                    intentCellular.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+                Intent intentCellular3 = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+                if (intentCellular3.resolveActivity(context.getPackageManager()) != null) {
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+                }
 
                 Intent intentTorch3 = new Intent(context, XPanelFlashlight3WidgetReceiver.class);
                 configPendingIntent = PendingIntent.getBroadcast(context, 0, intentTorch3, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
@@ -1449,6 +1579,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
             }
         }
     }
+
     public int mps_to_kmph(double mps)
     {
         return(int) (3.6 * mps);

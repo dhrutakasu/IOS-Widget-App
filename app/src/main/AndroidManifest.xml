@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IOSWidgetApp">
         <activity
+            android:name=".ui.Activity.ShowItemActivity"
+            android:exported="false" />
+        <activity
             android:name=".TestActivity"
             android:exported="false" />
         <activity
@@ -57,6 +60,15 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
         <receiver
             android:name=".provider.SmallWidgetProvider"
             android:exported="false">
@@ -103,6 +115,7 @@
                 <action android:name="left" />
                 <action android:name="right" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/photo_widget_small" />
@@ -117,6 +130,7 @@
                 <action android:name="left" />
                 <action android:name="right" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/photo_widget_medium" />
@@ -131,6 +145,7 @@
                 <action android:name="left" />
                 <action android:name="right" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/photo_widget_large" />
@@ -155,9 +170,13 @@
             android:name=".provider.XPanelFlashlight3WidgetReceiver"
             android:enabled="true"
             android:exported="false" />
+
         <receiver
             android:name=".provider.BetteryBroadcastReceiver"
             android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".provider.LocationBroadcastReceiver"
             android:exported="false" />
         <service
             android:name=".provider.SmallPhotoWidgetService"
@@ -179,52 +198,38 @@
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
         <service
             android:name=".provider.MediumWidgetService"
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
         <service
             android:name=".provider.SmallWidgetService"
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-        <receiver android:name=".provider.LocationBroadcastReceiver"
-            android:exported="false"/>
     </application>
-
     <uses-feature android:name="android.hardware.camera" />
-
     <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-feature android:name="android.hardware.camera.flash" />
 
+    <uses-feature android:name="android.hardware.camera.flash" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-
     <uses-permission android:name="android.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 </manifest>

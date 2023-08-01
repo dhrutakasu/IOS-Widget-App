@@ -50,7 +50,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
     private ViewPager PagerWidget;
     private ImageView IvAddWidget;
 
-    private int pos;
+    private int pos,WidgetPos;
     private TabLayout TabWidget, TabTempLayout, TabSizeLayout;
     private int TabPos;
     private ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
@@ -84,7 +84,9 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
 
     private void initIntents() {
         pos = getIntent().getIntExtra(Constants.ITEM_POSITION, 0);
+        WidgetPos = getIntent().getIntExtra(Constants.WIDGET_ITEM_POSITION, 0);
         TabPos = getIntent().getIntExtra(Constants.TabPos, 0);
+        System.out.println("______ pos  ::: "+pos);
         if (TabPos == 0) {
             TvTitle.setText("Trendy");
             modelArrayList = Constants.getTrendyWidgetLists();
@@ -130,6 +132,15 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         adapter = new WidgetPagerAdapter(this, modelArrayList, 0);
         PagerWidget.setAdapter(adapter);
         TabWidget.setupWithViewPager(PagerWidget, true);
+
+        TabLayout.Tab tab = TabSizeLayout.getTabAt(pos);
+        tab.select();
+        adapter.setchange(tab.getPosition());
+        adapter.notifyDataSetChanged();
+        TabLayout.Tab tabWidgetTabAt = TabWidget.getTabAt(WidgetPos);
+        tabWidgetTabAt.select();
+        PagerWidget.setCurrentItem(WidgetPos);
+
         TabTempLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

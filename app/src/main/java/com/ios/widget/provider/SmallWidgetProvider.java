@@ -134,9 +134,6 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                             for (String provider : providers) {
                                 Location locationGPS = locationManager.getLastKnownLocation(provider);
                                 if (locationGPS != null) {
-                                    double lat = locationGPS.getLatitude();
-                                    double longi = locationGPS.getLongitude();
-
                                     try {
                                         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
                                         List<Address> addresses = geocoder.getFromLocation(locationGPS.getLatitude(), locationGPS.getLongitude(), 1);
@@ -357,7 +354,12 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
                         }
                     }
-
+                    System.out.println("------------ ppppp :: "+Constants.hasSIMCard(context));
+                    if (Constants.isNetworkAvailable(context)) {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1_selected);
+                    } else {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1);
+                    }
                     if (IsTorchOn) {
                         rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1_selected);
                     } else {
@@ -380,9 +382,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
 
-                    Intent intentCellular = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+                    Intent intentCellular = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+                    if (intentCellular.resolveActivity(context.getPackageManager()) != null) {
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+                    }
 
                     Intent intent2 = new Intent(context, XPanelFlashlightWidgetReceiver.class);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
@@ -483,6 +487,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         }
                     }
 
+                    if (Constants.isNetworkAvailable(context)) {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_xpanel_medium_2_mobiledata_selected);
+                    } else {
+                        rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_xpanel_medium_2_mobiledata);
+                    }
                     if (IsTorchOn) {
                         rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_xpanel_medium_2_flashlight_selected);
                     } else {
@@ -510,10 +519,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
 
-                    Intent intentCellular3 = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
-
+                    Intent intentCellular3 = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+                    if (intentCellular3.resolveActivity(context.getPackageManager()) != null) {
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
+                    }
                     Intent intentTorch3 = new Intent(context, XPanelFlashlight3WidgetReceiver.class);
                     configPendingIntent = PendingIntent.getBroadcast(context, 0, intentTorch3, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvTorch, configPendingIntent);
