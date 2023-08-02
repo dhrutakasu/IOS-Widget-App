@@ -42,7 +42,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initViews() {
         context = this;
         DatabaseHelper helper = new DatabaseHelper(context);
+        helper.getWritableDatabase();
         ArrayList<WidgetData> widgetData = helper.getWidgets();
+        System.out.println("____+++_ Table : "+widgetData.size());
         if (widgetData.size()>0){
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);

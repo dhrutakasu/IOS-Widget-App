@@ -43,7 +43,6 @@
             android:paddingBottom="@dimen/_3sdp"
             android:src="@drawable/ic_remove" />
 
-
         <ImageView
             android:id="@+id/IvPhotoUpload"
             android:layout_width="@dimen/_40sdp"

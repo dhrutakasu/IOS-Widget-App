@@ -164,59 +164,6 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     //todo weather 2 large
 
                     break;
-                case 4:
-                    //todo calender 1 large
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar1_large);
-                    rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_calendar1_small_bg), 30));
-                    rv.setCharSequence(R.id.TClockYear, "setFormat12Hour", "yyyy");
-                    rv.setCharSequence(R.id.TClockYear, "setFormat24Hour", "yyyy");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMMM");
-                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
-                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
-                    intent = new Intent(context, LargeWidgetService.class);
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Type_Id);
-                    intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
-
-                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-                    rv.setRemoteAdapter(Widget_Id, R.id.GridCalendarLargeView, intent);
-                 calendar = Calendar.getInstance();
-                    currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-                    currentMonth = calendar.get(Calendar.MONTH);
-                    currentYear = calendar.get(Calendar.YEAR);
-                   new Pref(context).putString(IS_DATE_LARGE_1, currentDay + "/" + currentMonth + "/" + currentYear);
-                      /*  runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            Calendar NewCalendar = Calendar.getInstance();
-                            int currentDay = NewCalendar.get(Calendar.DAY_OF_MONTH);
-                            int currentMonth = NewCalendar.get(Calendar.MONTH);
-                            int currentYear = NewCalendar.get(Calendar.YEAR);
-                            if (!new Pref(context).getString(IS_DATE, "").equalsIgnoreCase(currentDay + "/" + currentMonth + "/" + currentYear)) {
-                                appWidgetManager.notifyAppWidgetViewDataChanged(Widget_Id, R.id.GridCalendarLargeView);
-                                new Pref(context).putString(IS_DATE, currentDay + "/" + currentMonth + "/" + currentYear);
-                            }
-                            handler.postDelayed(this, 5000);
-                        }
-                    };
-                    handler.postDelayed(runnable, 5000);*/
-                    if (!new Pref(context).getBoolean(Pref.IS_CALENDAR_1_ALARM, false)) {
-                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
-                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                        new Pref(context).putBoolean(Pref.IS_CALENDAR_1_ALARM, true);
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
-                    }
-                    startMillis = Calendar.getInstance().getTimeInMillis();
-                    builder = CalendarContract.CONTENT_URI.buildUpon();
-                    builder.appendPath("time");
-                    ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    rv.setOnClickPendingIntent(R.id.RlLargeCal, configPendingIntent);
-                    break;
                 case 5:
                     //todo calender 2 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_large);

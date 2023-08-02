@@ -251,43 +251,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     configPendingIntent = PendingIntent.getBroadcast(context, 0, intentTorch3, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvTorch, configPendingIntent);
                     break;
-                case 4:
-                    //todo calender 1 medium
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar1_medium);
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM yyyy");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM yyyy");
-                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
-                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
-
-                    RemoteViews finalRv2 = rv;
-                    int finalI = i;
-                    intent = new Intent(context, MediumWidgetService.class);
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
-                    intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
-                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-                    finalRv2.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
-                    calendar = Calendar.getInstance();
-                    currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-                    currentMonth = calendar.get(Calendar.MONTH);
-                    currentYear = calendar.get(Calendar.YEAR);
-                    new Pref(context).putString(Pref.IS_DATE_1, currentDay + "/" + currentMonth + "/" + currentYear);
-                    if (!new Pref(context).getBoolean(Pref.IS_CALENDAR_1_ALARM, false)) {
-                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
-                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                        new Pref(context).putBoolean(Pref.IS_CALENDAR_1_ALARM, true);
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
-                    }
-                    startMillis = Calendar.getInstance().getTimeInMillis();
-                    builder = CalendarContract.CONTENT_URI.buildUpon();
-                    builder.appendPath("time");
-                    ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    rv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
-                    break;
                 case 5:
                     //todo calender 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_medium);

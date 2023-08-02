@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/_5sdp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/_5sdp">
+
     <ImageView
         android:id="@+id/IvMyWidget"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@drawable/img_weather_small_1_xxhdpi"
-        android:elevation="@dimen/_5sdp"
-        android:adjustViewBounds="true" />
-</LinearLayout>
+        android:layout_marginTop="@dimen/_3sdp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/img_weather_small_1_xxhdpi" />
+
+    <ImageView
+        android:id="@+id/IvPhotoWidget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/img_weather_small_1_xxhdpi" />
+
+    <ImageView
+        android:id="@+id/IvWidgetRemove"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_gravity="end"
+        android:paddingTop="@dimen/_3sdp"
+        android:paddingRight="@dimen/_3sdp"
+        android:paddingBottom="@dimen/_3sdp"
+        android:src="@drawable/ic_remove" />
+</FrameLayout>

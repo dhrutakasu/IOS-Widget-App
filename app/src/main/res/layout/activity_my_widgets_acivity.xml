@@ -14,6 +14,69 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <HorizontalScrollView
+        android:id="@+id/ScrollMyWidget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ViewHeader">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_58sdp">
+
+            <ImageView
+                android:id="@+id/IvMyWidgetTrendy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
+                android:layout_weight="1"
+                android:src="@drawable/bttn_trendy" />
+
+            <ImageView
+                android:id="@+id/IvMyWidgetCalendar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
+                android:layout_weight="1"
+                android:src="@drawable/bttn_calendar" />
+
+            <ImageView
+                android:id="@+id/IvMyWidgetWeather"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
+                android:layout_weight="1"
+                android:src="@drawable/bttn_weather" />
+
+            <ImageView
+                android:id="@+id/IvMyWidgetAlarm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
+                android:layout_weight="1"
+                android:src="@drawable/bttn_alarm" />
+
+            <ImageView
+                android:id="@+id/IvMyWidgetXPanel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
+                android:layout_weight="1"
+                android:src="@drawable/bttn_x_panel" />
+
+            <ImageView
+                android:id="@+id/IvMyWidgetPhoto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
+                android:layout_weight="1"
+                android:src="@drawable/bttn_photo" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -21,16 +84,27 @@
         android:paddingStart="@dimen/_20sdp"
         android:paddingEnd="@dimen/_20sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ViewHeader">
+        app:layout_constraintTop_toBottomOf="@id/ScrollMyWidget"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="-77dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RvMyWidget"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
+            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
             tools:listitem="@layout/item_my_widget" />
+
+        <ImageView
+            android:id="@+id/IvNotFoundRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/img_not_found" />
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

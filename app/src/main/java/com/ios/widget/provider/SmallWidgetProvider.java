@@ -76,7 +76,6 @@ import java.util.concurrent.TimeUnit;
 
 public class SmallWidgetProvider extends AppWidgetProvider {
     private boolean IsTorchOn;
-    private Location location;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -222,23 +221,6 @@ public class SmallWidgetProvider extends AppWidgetProvider {
 
                     rv.setOnClickPendingIntent(R.id.RlSmallClock, configPendingIntent);
                     break;
-                case 4:
-                    //todo calender 1 small
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar1_small);
-                    rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_calendar1_small_bg), 30));
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM");
-                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
-                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
-                    startMillis = Calendar.getInstance().getTimeInMillis();
-                    builder = CalendarContract.CONTENT_URI.buildUpon();
-                    builder.appendPath("time");
-                    ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    rv.setOnClickPendingIntent(R.id.RlSmallCal, configPendingIntent);
-                    break;
                 case 5:
                     //todo calender 2 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_small);
@@ -354,7 +336,9 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                             rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
                         }
                     }
-                    System.out.println("------------ ppppp :: "+Constants.hasSIMCard(context));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                        System.out.println("------------ ppppp :: "+Constants.hasSIMCard(context));
+                    }
                     if (Constants.isNetworkAvailable(context)) {
                         rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1_selected);
                     } else {
@@ -539,6 +523,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         for (int id : appWidgetIds) {
+            System.out.println("_____ delete : "+id);
             DatabaseHelper helper = new DatabaseHelper(context);
 
             helper.getDeleteWidgets(id);
@@ -547,8 +532,15 @@ public class SmallWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        super.onReceive(context, intent);
 
+        if (intent != null && intent.getAction() != null && intent.getAction().equals("APPWIDGET_DELETED")) {
+            int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+                // Show a confirmation dialog to the user for widget removal
+                onDeleted(context, new int[] { appWidgetId });
+            }
+        }
+        super.onReceive(context, intent);
     }
 }
 
