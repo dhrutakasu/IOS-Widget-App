@@ -54,7 +54,7 @@ public class ImagePickAdapter extends BaseAdapter<ImageFile, ImagePickAdapter.Im
             i = 0;
         } else {
             charSequence = String.format("%02d", new Object[]{Integer.valueOf(file.imageCount)});
-            i = mContext.getResources().getColor(R.color.orange);
+            i = mContext.getResources().getColor(R.color.widget_orange);
         }
         for (ImageFile imageFile : mSelectedList) {
             if (imageFile.equals(file)) {
@@ -74,10 +74,10 @@ public class ImagePickAdapter extends BaseAdapter<ImageFile, ImagePickAdapter.Im
         RequestOptions options = new RequestOptions();
         Glide.with(mContext)
                 .load(file.getPath())
-                .error(R.drawable.placeholder_img)
+                .error(R.drawable.ic_widget_placeholder_img)
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .placeholder(R.drawable.placeholder_img)
+                .placeholder(R.drawable.ic_widget_placeholder_img)
                 .apply(options.centerCrop())
                 .transition(withCrossFade())
                 .into(holder.mIvThumbnail);
@@ -118,9 +118,9 @@ public class ImagePickAdapter extends BaseAdapter<ImageFile, ImagePickAdapter.Im
 
         public ImagePickViewHolder(View itemView) {
             super(itemView);
-            mIvThumbnail = itemView.findViewById(R.id.iv_thumbnail);
-            mShadow = itemView.findViewById(R.id.shadow);
-            iv_thumbnailChecked = itemView.findViewById(R.id.iv_thumbnailChecked);
+            mIvThumbnail = itemView.findViewById(R.id.IvThumbnail);
+            mShadow = itemView.findViewById(R.id.ViewShadow);
+            iv_thumbnailChecked = itemView.findViewById(R.id.IvThumbnailChecked);
 //            tv_folder_title = itemView.findViewById(R.id.tv_folder_title);
         }
     }

@@ -4,7 +4,7 @@
     android:minHeight="90dp"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/layout_widget_default_medium"
-    android:previewImage="@drawable/img_app_widget_preview_medium"
+    android:previewImage="@drawable/ic_widget_preview_medium"
     android:resizeMode="horizontal"
     android:widgetCategory="home_screen"
     android:previewLayout="@layout/layout_widget_preview_medium"

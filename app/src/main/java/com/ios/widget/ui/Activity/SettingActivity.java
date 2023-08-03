@@ -47,7 +47,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initActions() {
-        TvTitle.setText(getResources().getString(R.string.setting));
+        TvTitle.setText(getResources().getString(R.string.str_setting));
     }
 
     @Override

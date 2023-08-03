@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LlFlipperPaging"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:tag="layout/widget_paging_0"
+    android:visibility="gone">
+
+    <FrameLayout
+        android:id="@+id/FlPreView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@android:color/transparent" />
+
+    <FrameLayout
+        android:id="@+id/FlSettingView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:backgroundTint="@android:color/transparent" />
+
+    <FrameLayout
+        android:id="@+id/FlNextView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:backgroundTint="@android:color/transparent" />
+</LinearLayout>

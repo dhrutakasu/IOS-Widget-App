@@ -3,7 +3,7 @@
     android:initialLayout="@layout/layout_widget_default_small"
     android:minWidth="110dp"
     android:minHeight="90dp"
-    android:previewImage="@drawable/img_app_widget_preview_small"
+    android:previewImage="@drawable/ic_widget_preview_small"
     android:previewLayout="@layout/layout_widget_preview_small"
     android:targetCellWidth="2"
     android:targetCellHeight="2"

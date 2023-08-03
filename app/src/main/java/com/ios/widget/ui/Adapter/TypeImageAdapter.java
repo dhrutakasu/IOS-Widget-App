@@ -1,33 +1,45 @@
 package com.ios.widget.ui.Adapter;
 
+import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
+import android.os.Build;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
+import com.ios.widget.provider.BetteryBroadcastReceiver;
 import com.ios.widget.ui.Activity.PhotoWidgetActivity;
 import com.ios.widget.ui.Activity.ShowItemActivity;
-import com.ios.widget.ui.Activity.TabActivity;
 import com.ios.widget.ui.Activity.WidgetItemActivity;
 import com.ios.widget.utils.Constants;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TypeImageAdapter extends RecyclerView.Adapter<TypeImageAdapter.MyViewHolder> {
     private final Context con;
     private final ArrayList<Integer> mList;
+    private final setClickListener listner;
 
-    public TypeImageAdapter(Context context, ArrayList<Integer> modelArrayList) {
+    public TypeImageAdapter(Context context, ArrayList<Integer> modelArrayList, setClickListener clickListener) {
         con = context;
         mList = modelArrayList;
+        listner = clickListener;
     }
 
     @NonNull
@@ -42,19 +54,13 @@ public class TypeImageAdapter extends RecyclerView.Adapter<TypeImageAdapter.MyVi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (position==5){
-                    Constants.clearAllSelection();
-                    con.startActivity(new Intent(con, PhotoWidgetActivity.class));
-                }else {
-                    Intent intent = new Intent(con, ShowItemActivity.class);
-                    intent.putExtra(Constants.TabPos, position);
-                    con.startActivity(intent);
-//                    Intent intent = new Intent(con, WidgetItemActivity.class);
-//                    intent.putExtra(Constants.TabPos, position);
-//                    con.startActivity(intent);
-                }
+                listner.ClickListener(position);
             }
         });
+    }
+
+    public interface setClickListener {
+        void ClickListener(int position);
     }
 
     @Override

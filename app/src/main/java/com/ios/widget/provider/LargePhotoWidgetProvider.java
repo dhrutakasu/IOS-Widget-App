@@ -38,7 +38,7 @@ public class LargePhotoWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] iArr) {
         DatabaseHelper helper = new DatabaseHelper(context);
-
+        System.out.println("******** LargePhotoWidgetProvider::");
         WidgetData widgetData = new WidgetData(2, Constants.Widget_Type_Id, -1,"",Constants.Temp_Id);
         int insert = helper.InsertWidget(widgetData);
         for (int id : iArr) {
@@ -114,25 +114,25 @@ public class LargePhotoWidgetProvider extends AppWidgetProvider {
         boolean booleanExtra = intent.getBooleanExtra("flip", false);
         WidgetMaster mainWidget = instance.getWidgetMaster(i3);
         if (i3 != -1) {
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_widget_photo_widget);
             if (mainWidget != null) {
                 switch (mainWidget.getShape()) {
                     case 0:
                         switch (mainWidget.getInterval()) {
                             case 0:
-                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_no_flip);
+                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_widget_no_flip);
                                 break;
                             case 1:
-                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_flip_three);
+                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_widget_flip_three);
                                 break;
                             case 2:
-                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_flip_five);
+                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_widget_flip_five);
                                 break;
                             case 3:
-                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_flip_ten);
+                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_widget_flip_ten);
                                 break;
                             case 4:
-                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_flip_fifteen);
+                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_widget_flip_fifteen);
                                 break;
                         }
                 }
@@ -142,13 +142,13 @@ public class LargePhotoWidgetProvider extends AppWidgetProvider {
             if (LeftClick.equals(intent.getAction()) || RightClick.equals(intent.getAction())) {
                 appWidgetManager = instance2;
                 if (LeftClick.equals(intent.getAction())) {
-                    remoteViews.showPrevious(R.id.flipView);
+                    remoteViews.showPrevious(R.id.FlipView);
                 } else if (RightClick.equals(intent.getAction())) {
-                    remoteViews.showNext(R.id.flipView);
+                    remoteViews.showNext(R.id.FlipView);
                 }
             } else {
-                remoteViews.setViewVisibility(R.id.rl1, View.VISIBLE);
-                remoteViews.setViewVisibility(R.id.fr, View.VISIBLE);
+                remoteViews.setViewVisibility(R.id.RlPhoto1, View.VISIBLE);
+                remoteViews.setViewVisibility(R.id.FlPhoto, View.VISIBLE);
                 if (mainWidget == null || !mainWidget.isFlipControl()) {
                     appWidgetManager = instance2;
                     Intent intent2 = new Intent(context2, PhotoWidgetActivity.class);
@@ -157,8 +157,8 @@ public class LargePhotoWidgetProvider extends AppWidgetProvider {
                     intent2.setAction(WidgetSettingAction);
                     intent2.setData(Uri.parse(Constants.getUniqueId()));
                     PendingIntent activity = PendingIntent.getActivity(context2, 0, intent2, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    remoteViews.setViewVisibility(R.id.linFlipperPaging, View.GONE);
-                    remoteViews.setOnClickPendingIntent(R.id.rl1, activity);
+                    remoteViews.setViewVisibility(R.id.LlFlipperPaging, View.GONE);
+                    remoteViews.setOnClickPendingIntent(R.id.RlPhoto1, activity);
                 } else {
                     Intent intent3 = new Intent(context2, PhotoWidgetActivity.class);
                     intent3.putExtra("widgetId", i3);
@@ -180,10 +180,10 @@ public class LargePhotoWidgetProvider extends AppWidgetProvider {
                     intent5.putExtra("appWidgetId", i3);
                     intent5.setData(Uri.parse(Constants.getUniqueId()));
                     PendingIntent broadcast2 = PendingIntent.getBroadcast(context2, 0, intent5, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    remoteViews.setViewVisibility(R.id.linFlipperPaging, View.VISIBLE);
-                    remoteViews.setOnClickPendingIntent(R.id.settingView, activity2);
-                    remoteViews.setOnClickPendingIntent(R.id.preView, broadcast);
-                    remoteViews.setOnClickPendingIntent(R.id.nextView, broadcast2);
+                    remoteViews.setViewVisibility(R.id.LlFlipperPaging, View.VISIBLE);
+                    remoteViews.setOnClickPendingIntent(R.id.FlSettingView, activity2);
+                    remoteViews.setOnClickPendingIntent(R.id.FlPreView, broadcast);
+                    remoteViews.setOnClickPendingIntent(R.id.FlNextView, broadcast2);
                 }
             }
             Intent intent8 = new Intent(context2, LargePhotoWidgetService.class);
@@ -193,18 +193,18 @@ public class LargePhotoWidgetProvider extends AppWidgetProvider {
                 switch (mainWidget.getShape()) {
                     case 0:
 
-                        remoteViews.setViewVisibility(R.id.rl1, View.VISIBLE);
-                        remoteViews.setViewVisibility(R.id.fr, View.VISIBLE);
-                        remoteViews.setViewVisibility(R.id.flipperMainView, View.VISIBLE);
-                        remoteViews.setViewVisibility(R.id.flipView, View.VISIBLE);
+                        remoteViews.setViewVisibility(R.id.RlPhoto1, View.VISIBLE);
+                        remoteViews.setViewVisibility(R.id.FlPhoto, View.VISIBLE);
+                        remoteViews.setViewVisibility(R.id.FlipperMainView, View.VISIBLE);
+                        remoteViews.setViewVisibility(R.id.FlipView, View.VISIBLE);
                         if (!booleanExtra) {
-                            remoteViews.setRemoteAdapter(R.id.flipView, intent8);
+                            remoteViews.setRemoteAdapter(R.id.FlipView, intent8);
                             break;
                         }
                         break;
                 }
             }
-            appWidgetManager.notifyAppWidgetViewDataChanged(i3, R.id.flipView);
+            appWidgetManager.notifyAppWidgetViewDataChanged(i3, R.id.FlipView);
 
             appWidgetManager.updateAppWidget(i3, remoteViews);
         }

@@ -5,5 +5,5 @@
     android:background="@android:color/transparent"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView android:id="@+id/preview_layout" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/img_app_widget_default_medium" android:adjustViewBounds="true"/>
+    <ImageView android:id="@+id/preview_layout" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/ic_widget_default_medium" android:adjustViewBounds="true"/>
 </LinearLayout>

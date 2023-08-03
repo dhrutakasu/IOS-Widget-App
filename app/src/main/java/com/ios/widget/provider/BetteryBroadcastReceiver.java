@@ -1,8 +1,5 @@
 package com.ios.widget.provider;
 
-import static com.ios.widget.utils.Constants.Widget_Id;
-import static com.ios.widget.utils.Constants.Widget_Type_Id;
-
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -13,13 +10,11 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.camera2.CameraManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.BatteryManager;
@@ -29,11 +24,9 @@ import android.os.StatFs;
 import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 
@@ -43,22 +36,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
 import com.ios.widget.utils.Constants;
+import com.ios.widget.utils.NotificationHelper;
 import com.ios.widget.utils.Pref;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,6 +61,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onReceive(Context context, Intent intentReceiver) {
+        NotificationHelper.showNonCancelableNotification(context,context.getString(R.string.app_name)+"Now",context.getString(R.string.app_name));
         DatabaseHelper helper = new DatabaseHelper(context);
         ArrayList<WidgetData> widgetData = helper.getWidgets();
         RemoteViews rv = null;
@@ -228,10 +217,10 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                         RequestQueue queue = Volley.newRequestQueue(context);
                                         String url,tempExt;
                                         if (widgetData.get(i).getTemp()==0) {
-                                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=" + context.getString(R.string.weather_key);
+                                            url = Constants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
                                             tempExt="°C";
                                         }else {
-                                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                                            url = Constants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
                                             tempExt="°F";
                                         }
                                         RemoteViews finalRv1 = rv;
@@ -439,6 +428,17 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+                }else if (widgetData.get(i).getType() == 2) {
+
+                    //todo weather 2 medium
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather2_large);
+
+                    AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                    appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                    PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 }
             } else if (widgetData.get(i).getPosition() == 4) {
                 if (widgetData.get(i).getType() == 1) {
@@ -484,7 +484,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
 
                     //todo calender 1 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar1_large);
-                    rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_calendar1_small_bg), 30));
+                    rv.setImageViewBitmap(R.id.IvBackground, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar1_small_bg), 30));
                     rv.setCharSequence(R.id.TClockYear, "setFormat12Hour", "yyyy");
                     rv.setCharSequence(R.id.TClockYear, "setFormat24Hour", "yyyy");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM");
@@ -528,7 +528,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
 
                     //todo calender 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_medium);
-                    rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_calendar2_medium_bg), 30));
+                    rv.setImageViewBitmap(R.id.IvBackground, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_medium_bg), 30));
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
@@ -735,10 +735,10 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     RequestQueue queue = Volley.newRequestQueue(context);
                     String url,tempExt;
                     if (widgetData.get(i).getTemp()==0) {
-                        url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=" + context.getString(R.string.weather_key);
+                        url = Constants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
                         tempExt="°C";
                     }else {
-                        url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                        url = Constants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
                         tempExt="°F";
                     }
                     RemoteViews finalRv1 = rv;
@@ -795,10 +795,10 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     RequestQueue queue = Volley.newRequestQueue(context);
                     String url,tempExt;
                     if (widgetData.get(i).getTemp()==0) {
-                        url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=" + context.getString(R.string.weather_key);
+                        url = Constants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
                         tempExt="°C";
                     }else {
-                        url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                        url = Constants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
                         tempExt="°F";
                     }
                     StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -841,10 +841,10 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     RequestQueue queue1 = Volley.newRequestQueue(context);
                     String url1,tempExt1;
                     if (widgetData.get(i).getTemp()==0) {
-                        url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + widgetData.get(i).getCity() + "&cnt=6&units=metric&APPID="+context.getString(R.string.weather_key);
+                        url1 = Constants.BASE_URL_FORECAST + widgetData.get(i).getCity() + "&cnt=6&units=metric&APPID="+context.getString(R.string.str_weather_key);
                         tempExt1="°C";
                     }else {
-                        url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + widgetData.get(i).getCity() + "&cnt=6&units=imperial&APPID="+context.getString(R.string.weather_key);
+                        url1 = Constants.BASE_URL_FORECAST + widgetData.get(i).getCity() + "&cnt=6&units=imperial&APPID="+context.getString(R.string.str_weather_key);
                         tempExt1="°F";
                     }
                     int finalI2 = i;
@@ -951,10 +951,10 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         RequestQueue queue = Volley.newRequestQueue(context);
                         String url,tempExt;
                         if (widgetData.get(i).getTemp()==0) {
-                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=" + context.getString(R.string.weather_key);
+                            url = Constants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
                             tempExt="°C";
                         }else {
-                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                            url = Constants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
                             tempExt="°F";
                         }
                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -1008,10 +1008,10 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         RequestQueue queue1 = Volley.newRequestQueue(context);
                         String url1,tempExt1;
                         if (widgetData.get(i).getTemp()==0) {
-                            url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=metric&APPID=" + context.getString(R.string.weather_key);
+                            url1 = Constants.BASE_URL_FORECAST + city + "&cnt=6&units=metric&APPID=" + context.getString(R.string.str_weather_key);
                             tempExt1="°C";
                         }else {
-                            url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                            url1 = Constants.BASE_URL_FORECAST + city + "&cnt=6&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
                             tempExt1="°F";
                         }
                         int finalI4 = i;
@@ -1113,7 +1113,47 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     }
                 }
 
-            } else if (widgetData.get(i).getPosition() == 20) {
+            } else if (widgetData.get(i).getPosition() == 9) {
+                if (widgetData.get(i).getType() == 0) {
+                    //todo weather 2 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather2_small);
+                } else if (widgetData.get(i).getType() == 1) {
+
+                    //todo weather 2 medium
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather2_medium);
+                } else if (widgetData.get(i).getType() == 2) {
+
+                    //todo weather 2 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather2_large);
+                }
+                AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+
+            }else if (widgetData.get(i).getPosition() == 10) {
+                if (widgetData.get(i).getType() == 0) {
+                    //todo weather 3 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather3_small);
+                } else if (widgetData.get(i).getType() == 1) {
+
+                    //todo weather 3 medium
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather3_medium);
+                } else if (widgetData.get(i).getType() == 2) {
+
+                    //todo weather 3 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather3_large);
+                }
+                AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+
+            }else if (widgetData.get(i).getPosition() == 20) {
                 if (widgetData.get(i).getType() == 0) {
                     //todo x-panel 1 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_small);
@@ -1240,7 +1280,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     long total = internalTotal + externalTotal;
                     long free = internalFree + externalFree;
                     long used = total - free;
-                    rv.setTextViewText(R.id.progress_text, managerIntProperty + "%");
+                    rv.setTextViewText(R.id.TvProgressText, managerIntProperty + "%");
                     rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
 
                 } else if (widgetData.get(i).getType() == 1) {
@@ -1281,7 +1321,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     long total = internalTotal + externalTotal;
                     long free = internalFree + externalFree;
                     long used = total - free;
-                    rv.setTextViewText(R.id.progress_text, managerIntProperty + "%");
+                    rv.setTextViewText(R.id.TvProgressText, managerIntProperty + "%");
                     rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
 
                     CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
@@ -1390,7 +1430,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     long total = internalTotal + externalTotal;
                     long free = internalFree + externalFree;
                     long used = total - free;
-                    rv.setTextViewText(R.id.progress_text, managerIntProperty + "%");
+                    rv.setTextViewText(R.id.TvProgressText, managerIntProperty + "%");
                     rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
 
                 }
@@ -1420,13 +1460,13 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
                 new Pref(context).putInt(Pref.IS_BATTERY, batLevel);
 
-                rv.setTextViewText(R.id.progress_text, batLevel + "%");
-                rv.setProgressBar(R.id.progress_bar, 100, batLevel, false);
+                rv.setTextViewText(R.id.TvProgressText, batLevel + "%");
+                rv.setProgressBar(R.id.ProgressBarWidget2, 100, batLevel, false);
                 if (new Pref(context).getInt(Pref.IS_BATTERY, -1) != batLevel) {
                     BatteryManager systemService = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
                     int batlevel = systemService.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-                    rv.setTextViewText(R.id.progress_text, batLevel + "%");
-                    rv.setProgressBar(R.id.progress_bar, 100, batLevel, false);
+                    rv.setTextViewText(R.id.TvProgressText, batLevel + "%");
+                    rv.setProgressBar(R.id.ProgressBarWidget2, 100, batLevel, false);
                     new Pref(context).putInt(Pref.IS_BATTERY, batlevel);
 
                 }

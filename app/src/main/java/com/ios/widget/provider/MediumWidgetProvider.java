@@ -1,7 +1,6 @@
 package com.ios.widget.provider;
 
 import static com.ios.widget.utils.Constants.Widget_Id;
-import static com.ios.widget.utils.Pref.IS_BATTERY;
 
 import android.Manifest;
 import android.app.AlarmManager;
@@ -26,7 +25,6 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.provider.CalendarContract;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
@@ -48,14 +46,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class MediumWidgetProvider extends AppWidgetProvider {
     private boolean IsTorchOn;
@@ -64,6 +60,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         DatabaseHelper helper = new DatabaseHelper(context);
+        System.out.println("******** MediumWidgetProvider::");
         WidgetData widgetData = new WidgetData(1, Constants.Widget_Type_Id, -1, "",Constants.Temp_Id);
         int insert = helper.InsertWidget(widgetData);
         for (int id : appWidgetIds) {
@@ -254,7 +251,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                 case 5:
                     //todo calender 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_medium);
-                    rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_calendar2_medium_bg), 30));
+                    rv.setImageViewBitmap(R.id.IvBackground, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_medium_bg), 30));
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
@@ -358,10 +355,10 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                         RequestQueue queue = Volley.newRequestQueue(context);
                                         String url,tempExt;
                                         if (widgetData.getTemp()==0) {
-                                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=" + context.getString(R.string.weather_key);
+                                            url = Constants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
                                             tempExt="°C";
                                         }else {
-                                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                                            url = Constants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
                                             tempExt="°F";
                                         }
                                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -404,10 +401,10 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                         RequestQueue queue1 = Volley.newRequestQueue(context);
                                         String url1,tempExt1;
                                         if (widgetData.getTemp()==0) {
-                                            url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=metric&APPID="+context.getString(R.string.weather_key);
+                                            url1 = Constants.BASE_URL_FORECAST + city + "&cnt=6&units=metric&APPID="+context.getString(R.string.str_weather_key);
                                             tempExt1="°C";
                                         }else {
-                                            url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=imperial&APPID="+context.getString(R.string.weather_key);
+                                            url1 = Constants.BASE_URL_FORECAST + city + "&cnt=6&units=imperial&APPID="+context.getString(R.string.str_weather_key);
                                             tempExt1="°F";
                                         }
                                         StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
@@ -515,9 +512,11 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     break;
                 case 9:
                     //todo weather 2 medium
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather2_medium);
                     break;
                 case 10:
                     //todo weather 3 medium
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather3_medium);
                     break;
                 case 11:
                     //todo clock 1 medium
@@ -693,7 +692,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     long total = internalTotal + externalTotal;
                     long free = internalFree + externalFree;
                     long used = total - free;
-                    rv.setTextViewText(R.id.progress_text, managerIntProperty + "%");
+                    rv.setTextViewText(R.id.TvProgressText, managerIntProperty + "%");
                     rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
 
                     CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);

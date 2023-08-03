@@ -140,6 +140,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         TabLayout.Tab tabWidgetTabAt = TabWidget.getTabAt(WidgetPos);
         tabWidgetTabAt.select();
         PagerWidget.setCurrentItem(WidgetPos);
+        Constants.Temp_Id = TabTempLayout.getSelectedTabPosition();
 
         TabTempLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -283,16 +284,15 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
 
     private void setProviderWidgets() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            System.out.println("******** WidgetItemActivity::");
             Constants.Item_Id = PagerWidget.getCurrentItem();
             Constants.Widget_Type_Id = modelArrayList.get(PagerWidget.getCurrentItem()).getPosition();
             manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
             switch (TabSizeLayout.getSelectedTabPosition()) {
                 case 0:
-//                    name = new ComponentName(context, FirstWidget.class);
                     name = new ComponentName(context, SmallWidgetProvider.class);
                     break;
                 case 1:
-//                    name = new ComponentName(context, FirstWidget.class);
                     name = new ComponentName(context, MediumWidgetProvider.class);
                     break;
                 case 2:
@@ -314,8 +314,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
                             break;
                     }
                     intent.putExtra(Constants.TAG_WIDGET_NOTE_ID, pos);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
-                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     manager.requestPinAppWidget(name, (Bundle) null, pendingIntent);
                 }, 100);

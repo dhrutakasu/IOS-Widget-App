@@ -2,13 +2,13 @@
     <!-- Base application theme. -->
     <style name="Theme.IOSWidgetApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryVariant">@color/white</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/widget_white</item>
+        <item name="colorPrimaryVariant">@color/widget_white</item>
+        <item name="colorOnPrimary">@color/widget_black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">@color/widget_teal_200</item>
+        <item name="colorSecondaryVariant">@color/widget_teal_200</item>
+        <item name="colorOnSecondary">@color/widget_black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->

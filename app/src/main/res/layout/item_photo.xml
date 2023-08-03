@@ -23,7 +23,7 @@
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_50sdp"
                 app:cardCornerRadius="@dimen/_10sdp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@color/widget_white"
                 app:cardElevation="0dp">
 
                 <ImageView

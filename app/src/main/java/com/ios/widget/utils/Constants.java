@@ -20,7 +20,6 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
-import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
@@ -35,14 +34,11 @@ import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
 import com.karumi.dexter.PermissionToken;
 
-import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import static android.content.Context.BATTERY_SERVICE;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -53,19 +49,11 @@ public class Constants {
 
     public static final String ITEM_POSITION = "ITEM_POSITION";
     public static final String WIDGET_ITEM_POSITION = "WIDGET_ITEM_POSITION";
-    public static final String ACTION_REMOVE_WIDGET = "APPWIDGET_DELETED";
-    public static String ItemName = "ItemName";
-    public static String ItemIcon = "ItemIcon";
-    public static String NOTIFICATION_HOUR = "NotificationHour";
-    public static String NOTIFICATION_MINUTES = "NotificationMinutes";
-    public static String ExerciseSetTime;
-    public static String BASE_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-    public static String BASE_URL_EXTENSION = ".mp3";
+    public static String BASE_URL_WEATHER = "http://api.openweathermap.org/data/2.5/weather?q=";
+    public static String BASE_URL_FORECAST = "http://api.openweathermap.org/data/2.5/forecast?q=";
     public static final String TAG_WIDGET_NOTE_ID = "WIDGET_NOTE_ID";
-    public static final String TAG_WIDGET_TYPE = "WIDGET_TYPE";
     public static int Item_Id;
     public static int Widget_Type_Id;
-    public static String WidgetClick = "WidgetClick";
     public static String TabPos = "TabPos";
 
     public static int Widget_Id = -1;
@@ -96,59 +84,63 @@ public class Constants {
 
     public static ArrayList<WidgetModel> getWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_calendar_small_4_xxhdpi, R.drawable.img_clock_medium_3_xxhdpi, R.drawable.img_xpanel_large_1_xxhdpi, "Trendy", 0);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.ic_widget_calendar_small_4, R.drawable.ic_widget_clock_medium_3, R.drawable.ic_widget_xpanel_large_1, "Trendy", 0);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_weather_small_1_xxhdpi, R.drawable.img_calendar_medium_4_xxhdpi, R.drawable.img_clock_large_1_xxhdpi, "Trendy", 1);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_weather_small_1, R.drawable.ic_widget_calendar_medium_4, R.drawable.ic_widget_clock_large_1, "Trendy", 1);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_9_xxhdpi, R.drawable.img_xpanel_medium_3_xxhdpi, R.drawable.img_weather_large_2_xxhdpi, "Trendy", 2);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_clock_small_9, R.drawable.ic_widget_xpanel_medium_3, R.drawable.ic_widget_weather_large_2, "Trendy", 2);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_calendar_small_2_xxhdpi, R.drawable.img_calendar_medium_2_xxhdpi, R.drawable.img_calendar_large_2_xxhdpi, "Calendar", 5);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_calendar_small_2, R.drawable.ic_widget_calendar_medium_2, R.drawable.ic_widget_calendar_large_2, "Calendar", 5);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_calendar_small_3_xxhdpi, R.drawable.img_calendar_medium_3_xxhdpi, R.drawable.img_calendar_large_3_xxhdpi, "Calendar", 6);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_calendar_small_3, R.drawable.ic_widget_calendar_medium_3, R.drawable.ic_widget_calendar_large_3, "Calendar", 6);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_calendar_small_4_xxhdpi, R.drawable.img_calendar_medium_4_xxhdpi, R.drawable.img_calendar_large_4_xxhdpi, "Calendar", 7);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_calendar_small_4, R.drawable.ic_widget_calendar_medium_4, R.drawable.ic_widget_calendar_large_4, "Calendar", 7);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_weather_small_1_xxhdpi, R.drawable.img_weather_medium_1_xxhdpi, R.drawable.img_weather_large_1_xxhdpi, "Weather", 8);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_weather_small_1, R.drawable.ic_widget_weather_medium_1, R.drawable.ic_widget_weather_large_1, "Weather", 8);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_1_xxhdpi, R.drawable.img_clock_medium_1_xxhdpi, R.drawable.img_clock_large_1_xxhdpi, "Clock", 11);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_weather_small_2, R.drawable.ic_widget_weather_medium_2, R.drawable.ic_widget_weather_large_2, "Weather", 9);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_2_xxhdpi, R.drawable.img_clock_medium_2_xxhdpi, R.drawable.img_clock_large_2_xxhdpi, "Clock", 12);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_weather_small_3, R.drawable.ic_widget_weather_medium_3, R.drawable.ic_widget_weather_large_3, "Weather", 10);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_3_xxhdpi, R.drawable.img_clock_medium_3_xxhdpi, R.drawable.img_clock_large_3_xxhdpi, "Clock", 13);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_clock_small_1, R.drawable.ic_widget_clock_medium_1, R.drawable.ic_widget_clock_large_1, "Clock", 11);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_4_xxhdpi, R.drawable.img_clock_medium_4_xxhdpi, R.drawable.img_clock_large_4_xxhdpi, "Clock", 14);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_clock_small_2, R.drawable.ic_widget_clock_medium_2, R.drawable.ic_widget_clock_large_2, "Clock", 12);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_9_xxhdpi, R.drawable.img_clock_medium_9_xxhdpi, R.drawable.img_clock_large_9_xxhdpi, "Clock", 19);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_clock_small_3, R.drawable.ic_widget_clock_medium_3, R.drawable.ic_widget_clock_large_3, "Clock", 13);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_1_xxhdpi, R.drawable.img_xpanel_medium_1_xxhdpi, R.drawable.img_xpanel_large_1_xxhdpi, "X-Panel", 20);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_clock_small_4, R.drawable.ic_widget_clock_medium_4, R.drawable.ic_widget_clock_large_4, "Clock", 14);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_4_xxhdpi, R.drawable.img_xpanel_medium_4_xxhdpi, R.drawable.img_xpanel_large_4_xxhdpi, "X-Panel", 21);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_clock_small_9, R.drawable.ic_widget_clock_medium_9, R.drawable.ic_widget_clock_large_9, "Clock", 19);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_3_xxhdpi, R.drawable.img_xpanel_medium_3_xxhdpi, R.drawable.img_xpanel_large_3_xxhdpi, "X-Panel", 22);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_xpanel_small_1, R.drawable.ic_widget_xpanel_medium_1, R.drawable.ic_widget_xpanel_large_1, "X-Panel", 20);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_photo_s_xxhdpi, R.drawable.img_photo_m_xxhdpi, R.drawable.img_photo_l_xxhdpi, "Trendy", 23);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_xpanel_small_4, R.drawable.ic_widget_xpanel_medium_4, R.drawable.ic_widget_xpanel_large_4, "X-Panel", 21);
+        modelArrayList.add(widgetModel);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_xpanel_small_3, R.drawable.ic_widget_xpanel_medium_3, R.drawable.ic_widget_xpanel_large_3, "X-Panel", 22);
+        modelArrayList.add(widgetModel);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_photo_small, R.drawable.ic_widget_photo_medium, R.drawable.ic_widget_photo_large, "Trendy", 23);
         modelArrayList.add(widgetModel);
         return modelArrayList;
     }
 
     public static ArrayList<WidgetModel> getTrendyWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_calendar_small_4_xxhdpi, R.drawable.img_clock_medium_3_xxhdpi, R.drawable.img_xpanel_large_1_xxhdpi, "Trendy", 0);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.ic_widget_calendar_small_4, R.drawable.ic_widget_clock_medium_3, R.drawable.ic_widget_xpanel_large_1, "Trendy", 0);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_weather_small_1_xxhdpi, R.drawable.img_calendar_medium_4_xxhdpi, R.drawable.img_clock_large_1_xxhdpi, "Trendy", 1);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_weather_small_1, R.drawable.ic_widget_calendar_medium_4, R.drawable.ic_widget_clock_large_1, "Trendy", 1);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_9_xxhdpi, R.drawable.img_xpanel_medium_3_xxhdpi, R.drawable.img_weather_large_2_xxhdpi, "Trendy", 2);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_clock_small_9, R.drawable.ic_widget_xpanel_medium_3, R.drawable.ic_widget_weather_large_2, "Trendy", 2);
         modelArrayList.add(widgetModel);
         return modelArrayList;
     }
 
     public static ArrayList<WidgetModel> getCalendarWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_calendar_small_2_xxhdpi, R.drawable.img_calendar_medium_2_xxhdpi, R.drawable.img_calendar_large_2_xxhdpi, "Calendar", 5);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.ic_widget_calendar_small_2, R.drawable.ic_widget_calendar_medium_2, R.drawable.ic_widget_calendar_large_2, "Calendar", 5);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_calendar_small_3_xxhdpi, R.drawable.img_calendar_medium_3_xxhdpi, R.drawable.img_calendar_large_3_xxhdpi, "Calendar", 6);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_calendar_small_3, R.drawable.ic_widget_calendar_medium_3, R.drawable.ic_widget_calendar_large_3, "Calendar", 6);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_calendar_small_4_xxhdpi, R.drawable.img_calendar_medium_4_xxhdpi, R.drawable.img_calendar_large_4_xxhdpi, "Calendar", 7);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_calendar_small_4, R.drawable.ic_widget_calendar_medium_4, R.drawable.ic_widget_calendar_large_4, "Calendar", 7);
         modelArrayList.add(widgetModel);
 
         return modelArrayList;
@@ -156,40 +148,38 @@ public class Constants {
 
     public static ArrayList<WidgetModel> getWeatherWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_weather_small_1_xxhdpi, R.drawable.img_weather_medium_1_xxhdpi, R.drawable.img_weather_large_1_xxhdpi, "Weather", 8);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.ic_widget_weather_small_1, R.drawable.ic_widget_weather_medium_1, R.drawable.ic_widget_weather_large_1, "Weather", 8);
         modelArrayList.add(widgetModel);
-//        widgetModel = new WidgetModel(R.drawable.img_weather_small_2_xxhdpi, R.drawable.img_weather_medium_2_xxhdpi, R.drawable.img_weather_large_2_xxhdpi, "Weather", 9);
-//        modelArrayList.add(widgetModel);
-//        widgetModel = new WidgetModel(R.drawable.img_weather_small_3_xxhdpi, R.drawable.img_weather_medium_3_xxhdpi, R.drawable.img_weather_large_3_xxhdpi, "Weather", 10);
-//        modelArrayList.add(widgetModel);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_weather_small_2, R.drawable.ic_widget_weather_medium_2, R.drawable.ic_widget_weather_large_2, "Weather", 9);
+        modelArrayList.add(widgetModel);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_weather_small_3, R.drawable.ic_widget_weather_medium_3, R.drawable.ic_widget_weather_large_3, "Weather", 10);
+        modelArrayList.add(widgetModel);
 
         return modelArrayList;
     }
 
     public static ArrayList<WidgetModel> getClockWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_clock_small_1_xxhdpi, R.drawable.img_clock_medium_1_xxhdpi, R.drawable.img_clock_large_1_xxhdpi, "Clock", 11);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.ic_widget_clock_small_1, R.drawable.ic_widget_clock_medium_1, R.drawable.ic_widget_clock_large_1, "Clock", 11);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_2_xxhdpi, R.drawable.img_clock_medium_2_xxhdpi, R.drawable.img_clock_large_2_xxhdpi, "Clock", 12);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_clock_small_2, R.drawable.ic_widget_clock_medium_2, R.drawable.ic_widget_clock_large_2, "Clock", 12);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_3_xxhdpi, R.drawable.img_clock_medium_3_xxhdpi, R.drawable.img_clock_large_3_xxhdpi, "Clock", 13);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_clock_small_3, R.drawable.ic_widget_clock_medium_3, R.drawable.ic_widget_clock_large_3, "Clock", 13);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_4_xxhdpi, R.drawable.img_clock_medium_4_xxhdpi, R.drawable.img_clock_large_4_xxhdpi, "Clock", 14);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_clock_small_4, R.drawable.ic_widget_clock_medium_4, R.drawable.ic_widget_clock_large_4, "Clock", 14);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_clock_small_9_xxhdpi, R.drawable.img_clock_medium_9_xxhdpi, R.drawable.img_clock_large_9_xxhdpi, "Clock", 19);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_clock_small_9, R.drawable.ic_widget_clock_medium_9, R.drawable.ic_widget_clock_large_9, "Clock", 19);
         modelArrayList.add(widgetModel);
         return modelArrayList;
     }
 
     public static ArrayList<WidgetModel> getXPanelWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_xpanel_small_1_xxhdpi, R.drawable.img_xpanel_medium_1_xxhdpi, R.drawable.img_xpanel_large_1_xxhdpi, "X-Panel", 20);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.ic_widget_xpanel_small_1, R.drawable.ic_widget_xpanel_medium_1, R.drawable.ic_widget_xpanel_large_1, "X-Panel", 20);
         modelArrayList.add(widgetModel);
-//        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_2_xxhdpi, R.drawable.img_xpanel_medium_2_xxhdpi, R.drawable.img_xpanel_large_2_xxhdpi, "X-Panel", 21);
-//        modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_4_xxhdpi, R.drawable.img_xpanel_medium_4_xxhdpi, R.drawable.img_xpanel_large_4_xxhdpi, "X-Panel", 21);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_xpanel_small_4, R.drawable.ic_widget_xpanel_medium_4, R.drawable.ic_widget_xpanel_large_4, "X-Panel", 21);
         modelArrayList.add(widgetModel);
-        widgetModel = new WidgetModel(R.drawable.img_xpanel_small_3_xxhdpi, R.drawable.img_xpanel_medium_3_xxhdpi, R.drawable.img_xpanel_large_3_xxhdpi, "X-Panel", 22);
+        widgetModel = new WidgetModel(R.drawable.ic_widget_xpanel_small_3, R.drawable.ic_widget_xpanel_medium_3, R.drawable.ic_widget_xpanel_large_3, "X-Panel", 22);
         modelArrayList.add(widgetModel);
 
         return modelArrayList;
@@ -197,7 +187,7 @@ public class Constants {
 
     public static ArrayList<WidgetModel> getPhotoWidgetLists() {
         ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_photo_s_xxhdpi, R.drawable.img_photo_m_xxhdpi, R.drawable.img_photo_l_xxhdpi, "Trendy", 23);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.ic_widget_photo_small, R.drawable.ic_widget_photo_medium, R.drawable.ic_widget_photo_large, "Trendy", 23);
         modelArrayList.add(widgetModel);
 
         return modelArrayList;
@@ -402,7 +392,7 @@ public class Constants {
             public void onResult(List<Directory<ImageFile>> directories) {
                 list = new ArrayList<>();
                 Directory all = new Directory();
-                all.setName(activity.getResources().getString(R.string.folder_all));
+                all.setName(activity.getResources().getString(R.string.str_folder_all));
                 list.add(all);
                 list.addAll(directories);
                 mAll = directories;

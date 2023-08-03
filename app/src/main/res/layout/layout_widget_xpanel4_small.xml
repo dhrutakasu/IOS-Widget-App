@@ -11,7 +11,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_background"
+            android:id="@+id/IvBackground"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
@@ -20,10 +20,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/iv_background"
-            android:layout_alignEnd="@+id/iv_background"
-            android:layout_alignBottom="@+id/iv_background"
-            android:layout_alignTop="@+id/iv_background"
+            android:layout_alignStart="@+id/IvBackground"
+            android:layout_alignEnd="@+id/IvBackground"
+            android:layout_alignBottom="@+id/IvBackground"
+            android:layout_alignTop="@+id/IvBackground"
             android:gravity="center"
             android:orientation="horizontal"
             android:weightSum="5">
@@ -69,7 +69,7 @@
                             android:singleLine="true"
                             android:paddingEnd="10dp"
                             android:text="10"
-                            android:textColor="@color/color_FD6B01"
+                            android:textColor="@color/widget_color_FD6B01"
                             android:textDirection="ltr"
                             android:textSize="@dimen/_15ssp"
                             android:textStyle="bold" />
@@ -80,7 +80,7 @@
                             android:layout_weight="0.2"
                             android:gravity="center"
                             android:text=":"
-                            android:textColor="@color/color_FD6B01"
+                            android:textColor="@color/widget_color_FD6B01"
                             android:textSize="@dimen/_15ssp"
                             android:textStyle="bold" />
 
@@ -100,7 +100,7 @@
                             android:includeFontPadding="false"
                             android:singleLine="true"
                             android:text="10"
-                            android:textColor="@color/color_FD6B01"
+                            android:textColor="@color/widget_color_FD6B01"
                             android:textDirection="ltr"
                             android:textSize="@dimen/_15ssp"
                             android:textStyle="bold" />
@@ -121,7 +121,7 @@
                         android:includeFontPadding="false"
                         android:singleLine="true"
                         android:text="28 October"
-                        android:textColor="@color/black"
+                        android:textColor="@color/widget_black"
                         android:textDirection="ltr"
                         android:textSize="@dimen/_12ssp" />
                 </LinearLayout>
@@ -154,7 +154,7 @@
                             android:layout_weight="5"
                             android:gravity="center"
                             android:background="@drawable/ic_radius_bg"
-                            android:backgroundTint="@color/color_FF8A00"
+                            android:backgroundTint="@color/widget_color_FF8A00"
                             android:orientation="horizontal"
                             android:weightSum="5">
 
@@ -185,12 +185,12 @@
                                     android:layout_weight="0.1"/>
 
                                 <TextView
-                                    android:id="@+id/progress_text"
+                                    android:id="@+id/TvProgressText"
                                     android:layout_width="match_parent"
                                     android:layout_height="0dp"
                                     android:layout_weight="1.5"
                                     android:text="50%"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/widget_white"
                                     android:textSize="@dimen/_12sdp"
                                     android:textStyle="bold" />
 
@@ -200,7 +200,7 @@
                                     android:layout_weight="1"
                                     android:gravity="center|start|top"
                                     android:text="Batteries"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/widget_white"
                                     android:textSize="@dimen/_8sdp" />
                             </LinearLayout>
                         </LinearLayout>
@@ -225,7 +225,7 @@
                             android:layout_weight="5"
                             android:gravity="center"
                             android:background="@drawable/ic_radius_bg"
-                            android:backgroundTint="@color/color_0053F5"
+                            android:backgroundTint="@color/widget_color_0053F5"
                             android:orientation="horizontal"
                             android:weightSum="5">
 
@@ -262,7 +262,7 @@
                                     android:layout_weight="1.5"
                                     android:text="50%"
                                     android:gravity="center|start|bottom"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/widget_white"
                                     android:textSize="@dimen/_7sdp"
                                     android:textStyle="bold" />
 
@@ -272,7 +272,7 @@
                                     android:layout_weight="1"
                                     android:gravity="center|start|top"
                                     android:text="Storage"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/widget_white"
                                     android:textSize="@dimen/_8sdp" />
                             </LinearLayout>
                         </LinearLayout>

@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/img_clock_simple1_bg_medium">
+        android:background="@drawable/ic_widget_clock_simple1_bg_medium">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -28,14 +28,14 @@
                 android:layout_weight="4.5">
 
                 <AnalogClock
-                    android:id="@+id/analog_clock"
+                    android:id="@+id/AnalogClock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:dial="@drawable/img_clock_simple1_dial_medium"
-                    android:hand_hour="@drawable/img_clock_simple1_hand_hour"
-                    android:hand_minute="@drawable/img_clock_simple1_hand_minute"
-                    android:hand_second="@drawable/img_clock_simple1_hand_second" />
+                    android:dial="@drawable/ic_widget_clock1_dial_medium"
+                    android:hand_hour="@drawable/ic_widget_clock1_hand_hour"
+                    android:hand_minute="@drawable/ic_widget_clock1_hand_minute"
+                    android:hand_second="@drawable/ic_widget_clock1_hand_second" />
 
             </RelativeLayout>
 
@@ -61,7 +61,7 @@
                     android:gravity="center"
                     android:includeFontPadding="false"
                     android:singleLine="true"
-                    android:textColor="@color/white"
+                    android:textColor="@color/widget_white"
                     android:textSize="@dimen/_16ssp"
                     android:textStyle="bold" />
 
@@ -79,7 +79,7 @@
                     android:includeFontPadding="false"
                     android:letterSpacing="0"
                     android:singleLine="true"
-                    android:textColor="@color/white"
+                    android:textColor="@color/widget_white"
                     android:textSize="@dimen/_50ssp"
                     android:textStyle="bold" />
 
@@ -96,7 +96,7 @@
                     android:gravity="center"
                     android:includeFontPadding="false"
                     android:singleLine="true"
-                    android:textColor="@color/white"
+                    android:textColor="@color/widget_white"
                     android:textSize="@dimen/_12ssp"
                     android:textStyle="bold" />
             </LinearLayout>

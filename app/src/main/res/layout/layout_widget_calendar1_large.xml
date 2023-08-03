@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_background"
+            android:id="@+id/IvBackground"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
@@ -22,10 +22,10 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/iv_background"
-            android:layout_alignTop="@+id/iv_background"
-            android:layout_alignEnd="@+id/iv_background"
-            android:layout_alignBottom="@+id/iv_background"
+            android:layout_alignStart="@+id/IvBackground"
+            android:layout_alignTop="@+id/IvBackground"
+            android:layout_alignEnd="@+id/IvBackground"
+            android:layout_alignBottom="@+id/IvBackground"
             android:gravity="center"
             android:orientation="vertical"
             android:weightSum="10">
@@ -52,7 +52,7 @@
                     android:gravity="center|start"
                     android:includeFontPadding="false"
                     android:singleLine="true"
-                    android:textColor="@color/white"
+                    android:textColor="@color/widget_white"
                     android:textSize="@dimen/_60ssp"
                     android:textStyle="bold" />
 
@@ -79,7 +79,7 @@
                         android:gravity="center_vertical|center_horizontal|center"
                         android:includeFontPadding="false"
                         android:singleLine="true"
-                        android:textColor="@color/white"
+                        android:textColor="@color/widget_white"
                         android:textDirection="ltr"
                         android:textSize="@dimen/_15ssp"
                         android:textStyle="bold" />
@@ -98,7 +98,7 @@
                         android:gravity="center_vertical|center_horizontal|center"
                         android:includeFontPadding="false"
                         android:singleLine="true"
-                        android:textColor="@color/white"
+                        android:textColor="@color/widget_white"
                         android:textDirection="ltr"
                         android:textSize="@dimen/_15ssp"
                         android:textStyle="bold" />
@@ -129,7 +129,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="S"
-                        android:textColor="@color/white"
+                        android:textColor="@color/widget_white"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -140,7 +140,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="M"
-                        android:textColor="@color/white"
+                        android:textColor="@color/widget_white"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -151,7 +151,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="T"
-                        android:textColor="@color/white"
+                        android:textColor="@color/widget_white"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -162,7 +162,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="W"
-                        android:textColor="@color/white"
+                        android:textColor="@color/widget_white"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -173,7 +173,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="T"
-                        android:textColor="@color/white"
+                        android:textColor="@color/widget_white"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -184,7 +184,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="F"
-                        android:textColor="@color/white"
+                        android:textColor="@color/widget_white"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
 
@@ -195,7 +195,7 @@
                         android:fontFamily="@font/main_semibold"
                         android:gravity="center"
                         android:text="S"
-                        android:textColor="@color/white"
+                        android:textColor="@color/widget_white"
                         android:textSize="@dimen/_8sdp"
                         android:textStyle="bold" />
                 </LinearLayout>

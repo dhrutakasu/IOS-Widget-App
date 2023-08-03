@@ -3,12 +3,12 @@
     <string name="widgets_i16">Widgets <font color="#FF3B30">i16</font></string>
     <string name="widget_category">Widget Category</string>
     <string name="str_rate">Rate App</string>
-    <string name="share_app">Share App</string>
-    <string name="policy">Privacy Policy</string>
-    <string name="about">About us</string>
-    <string name="setting">Setting</string>
-    <string name="my_widget">My widget</string>
+    <string name="str_share_app">Share App</string>
+    <string name="str_policy">Privacy Policy</string>
+    <string name="str_about">About us</string>
+    <string name="str_setting">Setting</string>
+    <string name="str_my_widget">My widget</string>
     <string name="MSG_ASK_PERMISSION">This app needs permissions to use this feature. You can grant them in app settings.</string>
-    <string name="folder_all">All</string>
-    <string name="weather_key">b7fc383a06f2e5b385f2f811e18192f6</string>
+    <string name="str_folder_all">All</string>
+    <string name="str_weather_key">b7fc383a06f2e5b385f2f811e18192f6</string>
 </resources>

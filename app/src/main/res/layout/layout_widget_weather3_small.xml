@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:gravity="top|center_vertical|center_horizontal|center"
+    android:layoutDirection="ltr">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/IvBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_weather3_small_bg" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/IvBackground"
+            android:layout_alignTop="@+id/IvBackground"
+            android:layout_alignEnd="@+id/IvBackground"
+            android:layout_alignBottom="@+id/IvBackground"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:weightSum="5">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <TextView
+                    android:id="@+id/TvTemp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|end"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_weight="2"
+                    android:fontFamily="@font/main_bold"
+                    android:gravity="center|end"
+                    android:text="@string/app_name"
+                    android:textColor="@color/widget_black"
+                    android:textSize="@dimen/_14sdp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:weightSum="5">
+                    <TextView
+                        android:id="@+id/TvDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:fontFamily="@font/main_bold"
+                        android:gravity="center_vertical"
+                        android:text="@string/app_name"
+                        android:textColor="@color/widget_black"
+                        android:textSize="@dimen/_10sdp"/>
+
+                    <TextView
+                        android:id="@+id/TvCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/main_bold"
+                        android:gravity="top"
+                        android:text="@string/app_name"
+                        android:textColor="@color/widget_black"
+                        android:textSize="@dimen/_10sdp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:weightSum="5">
+
+                <ImageView
+                    android:id="@+id/IvWeatherIcon"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:gravity="top"
+                    android:src="@drawable/ic_per_sunny" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/TvTempMaxMin"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:fontFamily="@font/main_bold"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="@color/widget_black"
+                android:textSize="@dimen/_10sdp"/>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

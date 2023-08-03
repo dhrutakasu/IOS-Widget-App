@@ -63,9 +63,9 @@ public class MyWidgetAdapter extends RecyclerView.Adapter<MyWidgetAdapter.MyView
                 if (Constants.getWidgetLists().get(i).getPosition() == myWidgetLists.get(position).getPosition()) {
                     holder.IvMyWidget.setImageResource(Constants.getWidgetLists().get(i).getSmall());
                     if (myWidgetLists.get(position).getPosition() == 23) {
-                        System.out.println("+++++ "+FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(helper.getImageList(myWidgetLists.get(position).getNumber()).get(0).getUri())).toString());
-                        Bitmap bitmap= BitmapFactory.decodeFile(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(helper.getImageList(myWidgetLists.get(position).getNumber()).get(0).getUri())).toString());
-                        holder.IvPhotoWidget.setImageURI(Uri.parse(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(helper.getImageList(myWidgetLists.get(position).getNumber()).get(0).getUri())).toString()));
+                        holder.IvPhotoWidget.setImageURI(Uri.parse(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(helper.getImageList(myWidgetLists.get(position).getNumber()).get(helper.getImageList(myWidgetLists.get(position).getNumber()).size()-1).getUri())).toString()));
+                    }else {
+                        holder.IvPhotoWidget.setVisibility(View.GONE);
                     }
                 }
             }
@@ -75,8 +75,9 @@ public class MyWidgetAdapter extends RecyclerView.Adapter<MyWidgetAdapter.MyView
                     System.out.println("_____  _ _ CONSSS : " + Constants.getWidgetLists().get(i).getPosition() + " ..... : " + myWidgetLists.get(position).getPosition());
                     holder.IvMyWidget.setImageResource(Constants.getWidgetLists().get(i).getMedium());
                     if (myWidgetLists.get(position).getPosition() == 23) {
-                        Bitmap bitmap= BitmapFactory.decodeFile(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(helper.getImageList(myWidgetLists.get(position).getNumber()).get(0).getUri().toString())).toString());
-                        holder.IvPhotoWidget.setImageBitmap(bitmap);
+                        holder.IvPhotoWidget.setImageURI(Uri.parse(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(helper.getImageList(myWidgetLists.get(position).getNumber()).get(helper.getImageList(myWidgetLists.get(position).getNumber()).size()-1).getUri())).toString()));
+                    }else {
+                        holder.IvPhotoWidget.setVisibility(View.GONE);
                     }
                 }
             }
@@ -85,8 +86,9 @@ public class MyWidgetAdapter extends RecyclerView.Adapter<MyWidgetAdapter.MyView
                 if (Constants.getWidgetLists().get(i).getPosition() == myWidgetLists.get(position).getPosition()) {
                     holder.IvMyWidget.setImageResource(Constants.getWidgetLists().get(i).getLarge());
                     if (myWidgetLists.get(position).getPosition() == 23) {
-                        Bitmap bitmap= BitmapFactory.decodeFile(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(helper.getImageList(myWidgetLists.get(position).getNumber()).get(0).getUri().toString())).toString());
-                        holder.IvPhotoWidget.setImageBitmap(bitmap);
+                        holder.IvPhotoWidget.setImageURI(Uri.parse(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(helper.getImageList(myWidgetLists.get(position).getNumber()).get(helper.getImageList(myWidgetLists.get(position).getNumber()).size()-1).getUri())).toString()));
+                    }else {
+                        holder.IvPhotoWidget.setVisibility(View.GONE);
                     }
                 }
             }

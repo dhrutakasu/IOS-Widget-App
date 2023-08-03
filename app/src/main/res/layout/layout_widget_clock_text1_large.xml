@@ -15,20 +15,20 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_background"
+            android:id="@+id/IvBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/img_clock_text1_bg_large" />
+            android:src="@drawable/ic_widget_clock_text1_bg_large" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/iv_background"
-            android:layout_alignTop="@+id/iv_background"
-            android:layout_alignEnd="@+id/iv_background"
-            android:layout_alignBottom="@+id/iv_background"
+            android:layout_alignStart="@+id/IvBackground"
+            android:layout_alignTop="@+id/IvBackground"
+            android:layout_alignEnd="@+id/IvBackground"
+            android:layout_alignBottom="@+id/IvBackground"
             android:gravity="center"
             android:orientation="vertical"
             android:weightSum="10">
@@ -48,7 +48,7 @@
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:singleLine="true"
-                android:textColor="@color/white"
+                android:textColor="@color/widget_white"
                 android:textStyle="bold"
                 android:textSize="@dimen/_34ssp" />
 
@@ -85,7 +85,7 @@
                             android:id="@+id/IvHourMask"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/img_clock_text1_mask_small" />
+                            android:background="@drawable/ic_widget_clock_text1_mask_small" />
 
                         <TextClock
                             android:id="@+id/TClockHour"
@@ -102,7 +102,7 @@
                             android:includeFontPadding="false"
                             android:singleLine="true"
                             android:text="20"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_20ssp"
                             android:textStyle="bold" />
 
@@ -112,7 +112,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:text=":"
-                        android:textColor="@color/white"
+                        android:textColor="@color/widget_white"
                         android:textSize="@dimen/_30ssp"
                         android:textStyle="bold"
                         android:gravity="center"
@@ -126,7 +126,7 @@
                             android:id="@+id/IvMinuteMask"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/img_clock_text1_mask_small" />
+                            android:background="@drawable/ic_widget_clock_text1_mask_small" />
 
                         <TextClock
                             android:id="@+id/TClockMinutes"
@@ -143,7 +143,7 @@
                             android:includeFontPadding="false"
                             android:singleLine="true"
                             android:text="20"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_20ssp"
                             android:textStyle="bold" />
 
@@ -171,7 +171,7 @@
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:singleLine="true"
-                android:textColor="@color/white"
+                android:textColor="@color/widget_white"
                 android:textStyle="bold"
                 android:textAllCaps="true"
                 android:textSize="@dimen/_30ssp" />

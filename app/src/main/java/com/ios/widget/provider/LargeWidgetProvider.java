@@ -2,8 +2,6 @@ package com.ios.widget.provider;
 
 import static com.ios.widget.utils.Constants.Widget_Id;
 import static com.ios.widget.utils.Constants.Widget_Type_Id;
-import static com.ios.widget.utils.Pref.IS_BATTERY;
-import static com.ios.widget.utils.Pref.IS_DATE_LARGE_1;
 import static com.ios.widget.utils.Pref.IS_DATE_LARGE_4;
 
 import android.Manifest;
@@ -26,12 +24,10 @@ import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.StatFs;
 import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
@@ -59,7 +55,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class LargeWidgetProvider extends AppWidgetProvider {
     private boolean IsTorchOn;
@@ -162,12 +157,13 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                 case 2:
                 case 9:
                     //todo weather 2 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather2_large);
 
                     break;
                 case 5:
                     //todo calender 2 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_large);
-                    rv.setImageViewBitmap(R.id.iv_background, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_calendar2_large_bg), 30));
+                    rv.setImageViewBitmap(R.id.IvBackground, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_large_bg), 30));
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
@@ -305,10 +301,10 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                         RequestQueue queue = Volley.newRequestQueue(context);
                                         String url,tempExt;
                                         if (widgetData.getTemp()==0) {
-                                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=" + context.getString(R.string.weather_key);
+                                            url = Constants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
                                             tempExt="°C";
                                         }else {
-                                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                                            url = Constants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
                                             tempExt="°F";
                                         }
                                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -363,9 +359,9 @@ public class LargeWidgetProvider extends AppWidgetProvider {
 
                                         String url1;
                                         if (widgetData.getTemp()==0) {
-                                            url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=metric&APPID=" + context.getString(R.string.weather_key);
+                                            url1 = Constants.BASE_URL_FORECAST + city + "&cnt=6&units=metric&APPID=" + context.getString(R.string.str_weather_key);
                                         }else {
-                                            url1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&cnt=6&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                                            url1 = Constants.BASE_URL_FORECAST + city + "&cnt=6&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
                                         }
                                         StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
                                             @Override
@@ -471,6 +467,8 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     break;
                 case 10:
                     //todo weather 3 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather3_large);
+
                     break;
                     case 1:
                 case 11:
@@ -480,7 +478,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    rv.setOnClickPendingIntent(R.id.analog_clock, configPendingIntent);
+                    rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
                     break;
                 case 12:
                     //todo clock 2 large
@@ -489,7 +487,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    rv.setOnClickPendingIntent(R.id.analog_clock, configPendingIntent);
+                    rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
                     break;
                 case 13:
                     //todo clock 3 large
@@ -498,7 +496,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    rv.setOnClickPendingIntent(R.id.analog_clock, configPendingIntent);
+                    rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
                     break;
                 case 14:
                     //todo clock 4 large
@@ -564,7 +562,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     long total = internalTotal + externalTotal;
                     long free = internalFree + externalFree;
                     long used = total - free;
-                    rv.setTextViewText(R.id.progress_text, managerIntProperty + "%");
+                    rv.setTextViewText(R.id.TvProgressText, managerIntProperty + "%");
                     rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
                     if (!new Pref(context).getBoolean(Pref.IS_X_PANEL_4_ALARM, false)) {
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

@@ -11,18 +11,18 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_background"
+            android:id="@+id/IvBackground"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:src="@drawable/img_xpanel_large_3_bg" />
+            android:src="@drawable/ic_widget_xpanel_large_3_bg" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/iv_background"
-            android:layout_alignEnd="@+id/iv_background"
-            android:layout_alignBottom="@+id/iv_background"
+            android:layout_alignStart="@+id/IvBackground"
+            android:layout_alignEnd="@+id/IvBackground"
+            android:layout_alignBottom="@+id/IvBackground"
             android:gravity="center"
             android:orientation="horizontal"
             android:weightSum="5">
@@ -75,7 +75,7 @@
                                 android:includeFontPadding="false"
                                 android:singleLine="true"
                                 android:text="10"
-                                android:textColor="@color/white"
+                                android:textColor="@color/widget_white"
                                 android:textDirection="ltr"
                                 android:textSize="@dimen/_60ssp"
                                 android:textStyle="bold" />
@@ -86,7 +86,7 @@
                                 android:layout_weight="0.2"
                                 android:gravity="center"
                                 android:text=":"
-                                android:textColor="@color/white"
+                                android:textColor="@color/widget_white"
                                 android:textSize="@dimen/_30ssp"
                                 android:textStyle="bold" />
 
@@ -105,7 +105,7 @@
                                 android:includeFontPadding="false"
                                 android:singleLine="true"
                                 android:text="10"
-                                android:textColor="@color/white"
+                                android:textColor="@color/widget_white"
                                 android:textDirection="ltr"
                                 android:textSize="@dimen/_60ssp"
                                 android:textStyle="bold" />
@@ -127,7 +127,7 @@
                             android:includeFontPadding="false"
                             android:singleLine="true"
                             android:text="October"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textDirection="ltr"
                             android:textSize="@dimen/_48sdp" />
                     </LinearLayout>
@@ -236,9 +236,9 @@
                                 style="?android:attr/progressBarStyleHorizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:background="@drawable/line_shape"
+                                android:background="@drawable/ic_widget_line_shape"
                                 android:progress="50"
-                                android:progressDrawable="@drawable/line_progress_bar_large"
+                                android:progressDrawable="@drawable/ic_widget_line_progress_bar_large"
                                 android:textAlignment="center" />
 
                             <ImageView
@@ -266,9 +266,9 @@
                                 style="?android:attr/progressBarStyleHorizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:background="@drawable/line_shape"
+                                android:background="@drawable/ic_widget_line_shape"
                                 android:progress="50"
-                                android:progressDrawable="@drawable/line_progress_bar_2_large"
+                                android:progressDrawable="@drawable/ic_widget_line_progress_bar_2_large"
                                 android:textAlignment="center" />
 
                             <ImageView

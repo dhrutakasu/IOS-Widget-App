@@ -1,8 +1,6 @@
 package com.ios.widget.provider;
 
-import static com.ios.widget.utils.Constants.BASE_URL;
 import static com.ios.widget.utils.Constants.Widget_Id;
-import static com.ios.widget.utils.Pref.IS_BATTERY;
 
 import android.Manifest;
 import android.app.AlarmManager;
@@ -12,32 +10,24 @@ import android.appwidget.AppWidgetProvider;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.camera2.CameraManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.StatFs;
 import android.provider.CalendarContract;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
 import com.android.volley.Request;
@@ -46,12 +36,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.google.gson.JsonObject;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
@@ -62,17 +46,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class SmallWidgetProvider extends AppWidgetProvider {
     private boolean IsTorchOn;
@@ -80,6 +56,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         DatabaseHelper helper = new DatabaseHelper(context);
+        System.out.println("******** SmallWidgetProvider::"+Constants.Temp_Id);
         WidgetData widgetData = new WidgetData(0, Constants.Widget_Type_Id, -1, "",Constants.Temp_Id);
         int insert = helper.InsertWidget(widgetData);
         for (int id : appWidgetIds) {
@@ -145,10 +122,10 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                         RequestQueue queue = Volley.newRequestQueue(context);
                                         String url,tempExt;
                                         if (widgetData.getTemp()==0) {
-                                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=" + context.getString(R.string.weather_key);
+                                            url = Constants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
                                             tempExt="°C";
                                         }else {
-                                            url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=" + context.getString(R.string.weather_key);
+                                            url = Constants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
                                             tempExt="°F";
                                         }
                                         RemoteViews finalRv1 = rv;
@@ -224,7 +201,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                 case 5:
                     //todo calender 2 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_small);
-                    rv.setImageViewBitmap(R.id.iv_background2, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.img_calendar2_small_bg), 30));
+                    rv.setImageViewBitmap(R.id.IvBackground2, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_small_bg), 30));
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
@@ -260,9 +237,171 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     break;
                 case 9:
                     //todo weather 2 small
+                    LocationManager manager1 = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                    if (manager1.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        if (ActivityCompat.checkSelfPermission(
+                                context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        } else {
+                            String city = "";
+
+                            rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather2_small);
+                            List<String> providers = manager1.getProviders(true);
+                            for (String provider : providers) {
+                                Location locationGPS = manager1.getLastKnownLocation(provider);
+                                if (locationGPS != null) {
+                                    try {
+                                        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                                        List<Address> addresses = geocoder.getFromLocation(locationGPS.getLatitude(), locationGPS.getLongitude(), 1);
+                                        city = addresses.get(0).getLocality();
+
+                                        WidgetData widgetsId = helper.getWidgetsId(insert);
+                                        widgetsId.setCity(city);
+                                        helper.updateWidget(widgetsId);
+
+                                        RequestQueue queue = Volley.newRequestQueue(context);
+                                        String url,tempExt;
+                                        if (widgetData.getTemp()==0) {
+                                            url = Constants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
+                                            tempExt="°C";
+                                        }else {
+                                            url = Constants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
+                                            tempExt="°F";
+                                        }
+                                        RemoteViews finalRv1 = rv;
+                                        StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                try {
+                                                    JSONObject obj = new JSONObject(response);
+                                                    System.out.println("******** weather res:: "+obj.toString());
+                                                    JSONArray WeatherArray = obj.getJSONArray("weather");
+                                                    for (int j = 0; j < WeatherArray.length(); j++) {
+                                                        JSONObject WeatherObject = WeatherArray.getJSONObject(j);
+
+                                                        finalRv1.setTextViewText(R.id.TvDesc, WeatherObject.get("main").toString());
+                                                        finalRv1.setImageViewResource(R.id.IvWeatherIcon, Constants.getWeatherIcons(WeatherObject.getString("icon")));
+                                                    }
+                                                    JSONObject MainObject = obj.getJSONObject("main");
+
+                                                    JSONObject SysObject = obj.getJSONObject("sys");
+                                                    finalRv1.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
+                                                    String Temp = MainObject.get("temp").toString();
+                                                    finalRv1.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + tempExt);
+
+                                                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                                                    Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                                                    PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                                    new Pref(context).putBoolean(Pref.IS_WEATHER_1_ALARM, true);
+                                                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                                                    appWidgetManager.updateAppWidget(Widget_Id, finalRv1);
+                                                } catch (JSONException e) {
+                                                    System.out.println("******** weather:ex: "+e.getMessage());
+                                                    throw new RuntimeException(e);
+                                                }
+                                            }
+                                        }, new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                System.out.println("******** Wather :err : "+error.getLocalizedMessage());
+                                                //displaying the error in toast if occur
+                                             }
+                                        });
+                                        queue.add(stringReq);
+                                    } catch (Exception e) {
+                                        System.out.println("******** weather :eee : "+e.getMessage());
+                                    }
+                                } else {
+
+                                }
+                            }
+
+                        }
+                    }
                     break;
                 case 10:
                     //todo weather 3 small
+                    LocationManager service = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                    if (service.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        if (ActivityCompat.checkSelfPermission(
+                                context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        } else {
+                            String city = "";
+
+                            rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather3_small);
+                            List<String> providers = service.getProviders(true);
+                            for (String provider : providers) {
+                                Location locationGPS = service.getLastKnownLocation(provider);
+                                if (locationGPS != null) {
+                                    try {
+                                        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                                        List<Address> addresses = geocoder.getFromLocation(locationGPS.getLatitude(), locationGPS.getLongitude(), 1);
+                                        city = addresses.get(0).getLocality();
+
+                                        WidgetData widgetsId = helper.getWidgetsId(insert);
+                                        widgetsId.setCity(city);
+                                        helper.updateWidget(widgetsId);
+
+                                        RequestQueue queue = Volley.newRequestQueue(context);
+                                        String url,tempExt;
+                                        if (widgetData.getTemp()==0) {
+                                            url = Constants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
+                                            tempExt="°C";
+                                        }else {
+                                            url = Constants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
+                                            tempExt="°F";
+                                        }
+                                        RemoteViews finalRv1 = rv;
+                                        StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                try {
+                                                    JSONObject obj = new JSONObject(response);
+
+                                                    JSONArray WeatherArray = obj.getJSONArray("weather");
+                                                    for (int j = 0; j < WeatherArray.length(); j++) {
+                                                        JSONObject WeatherObject = WeatherArray.getJSONObject(j);
+
+                                                        finalRv1.setTextViewText(R.id.TvDesc, WeatherObject.get("main").toString());
+                                                        finalRv1.setImageViewResource(R.id.IvWeatherIcon, Constants.getWeatherIcons(WeatherObject.getString("icon")));
+                                                    }
+                                                    JSONObject MainObject = obj.getJSONObject("main");
+
+                                                    JSONObject SysObject = obj.getJSONObject("sys");
+                                                    finalRv1.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
+                                                    String Temp = MainObject.get("temp").toString();
+                                                    finalRv1.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + tempExt);
+                                                    String MinTemp = MainObject.get("temp_min").toString();
+                                                    String MaxTemp = MainObject.get("temp_max").toString();
+                                                    finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt+" L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
+
+                                                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                                                    Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                                                    PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                                    new Pref(context).putBoolean(Pref.IS_WEATHER_1_ALARM, true);
+                                                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                                                    appWidgetManager.updateAppWidget(Widget_Id, finalRv1);
+                                                } catch (JSONException e) {
+                                                    throw new RuntimeException(e);
+                                                }
+                                            }
+                                        }, new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                //displaying the error in toast if occur
+                                            }
+                                        });
+                                        queue.add(stringReq);
+                                    } catch (Exception e) {
+                                    }
+                                } else {
+
+                                }
+                            }
+
+                        }
+                    }
                     break;
                 case 11:
                     //todo clock 1 small
@@ -270,7 +409,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     intent1 = new Intent(Settings.ACTION_DATE_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    rv.setOnClickPendingIntent(R.id.analog_clock, configPendingIntent);
+                    rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
                     break;
                 case 12:
                     //todo clock 2 small
@@ -279,7 +418,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     intent1 = new Intent(Settings.ACTION_DATE_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    rv.setOnClickPendingIntent(R.id.analog_clock, configPendingIntent);
+                    rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
                     break;
                 case 13:
                     //todo clock 3 small
@@ -288,7 +427,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     intent1 = new Intent(Settings.ACTION_DATE_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    rv.setOnClickPendingIntent(R.id.analog_clock, configPendingIntent);
+                    rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
                     break;
                 case 14:
                     //todo clock 4 small
@@ -413,7 +552,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     long total = internalTotal + externalTotal;
                     long free = internalFree + externalFree;
                     long used = total - free;
-                    rv.setTextViewText(R.id.progress_text, managerIntProperty + "%");
+                    rv.setTextViewText(R.id.TvProgressText, managerIntProperty + "%");
                     rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
                     if (!new Pref(context).getBoolean(Pref.IS_X_PANEL_4_ALARM, false)) {
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

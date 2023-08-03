@@ -13,19 +13,19 @@
         android:paddingEnd="@dimen/_20sdp">
 
         <ImageView
-            android:id="@+id/iv_background"
+            android:id="@+id/IvBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:src="@drawable/img_calendar2_large_bg" />
+            android:src="@drawable/ic_widget_calendar2_large_bg" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/iv_background"
-            android:layout_alignTop="@+id/iv_background"
-            android:layout_alignEnd="@+id/iv_background"
-            android:layout_alignBottom="@+id/iv_background"
+            android:layout_alignStart="@+id/IvBackground"
+            android:layout_alignTop="@+id/IvBackground"
+            android:layout_alignEnd="@+id/IvBackground"
+            android:layout_alignBottom="@+id/IvBackground"
             android:gravity="center"
             android:orientation="horizontal"
             android:weightSum="5">
@@ -54,7 +54,7 @@
                     android:includeFontPadding="false"
                     android:singleLine="true"
                     android:textAllCaps="true"
-                    android:textColor="@color/white"
+                    android:textColor="@color/widget_white"
                     android:textDirection="ltr"
                     android:textSize="@dimen/_18sdp"
                     android:textStyle="bold" />
@@ -75,7 +75,7 @@
                     android:includeFontPadding="false"
                     android:singleLine="true"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
+                    android:textColor="@color/widget_black"
                     android:textSize="@dimen/_110sdp" />
             </LinearLayout>
         </LinearLayout>

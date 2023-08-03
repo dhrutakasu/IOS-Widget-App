@@ -10,11 +10,6 @@ import java.util.List;
 
 public class Pref {
     private SharedPreferences preferences;
-
-    public static String CALCULATOR_AGE = "CalculatorAge";
-    public static String COUNT_TIMER = "CounterTimer";
-    public static String REST_TIMER = "RestTimer";
-    public static String IS_SOUND = "IsSound";
     public static String IS_DATE_1 = "IsDate1";
     public static String IS_DATE_3 = "IsDate3";
     public static String IS_DATE_4 = "IsDate4";
@@ -24,12 +19,10 @@ public class Pref {
     public static String IS_DATE_LARGE_3 = "IsDateLarge3";
     public static String IS_DATE_LARGE_4 = "IsDateLarge4";
     public static String IS_BATTERY = "IsBattery";
-    public static String IS_BATTERY_ALARM = "IsBatteryAlarm";
-    public static String IS_X_PANEL_1_ALARM = "IsXPanel1Alarm";
+  public static String IS_X_PANEL_1_ALARM = "IsXPanel1Alarm";
     public static String IS_X_PANEL_3_ALARM = "IsXPanel3Alarm";
     public static String IS_X_PANEL_4_ALARM = "IsXPanel4Alarm";
     public static String IS_CALENDAR_4_ALARM = "IsCalendar3Alarm";
-    public static String IS_CALENDAR_1_ALARM = "IsCalendar1Alarm";
     public static String IS_CALENDAR_2_ALARM = "IsCalendar2Alarm";
     public static String IS_CALENDAR_3_ALARM = "IsCalendar3Alarm";
     public static String IS_CLOCK_3_ALARM = "IsClock3Alarm";
@@ -37,14 +30,12 @@ public class Pref {
     public static String IS_WEATHER_CITY = "IsWeatherCity";
     public static int AGE = 25;
     static final String MyPref = "widgetPref";
-    public static final String SHOW_NEVER = "SHOW_NEVER";
     static final String Widget_LIST = "WIDGET_LIST";
     static final String Widget_LISTInterval = "WIDGET_LISTInterval";
 
     public static final String AD_BACK = "AD_BACK";
     public static final String AD_BANNER = "AD_BANNER";
     public static final String AD_INTER = "AD_INTER";
-    public static final String AD_INTER1 = "AD_INTER1";
     public static final String AD_NATIVE = "AD_NATIVE";
     public static final String AD_OPEN = "AD_OPEN";
     public static final String SHOW = "AdShow";
@@ -52,7 +43,7 @@ public class Pref {
     public static String openads;
 
     public Pref(Context context) {
-        preferences = context.getSharedPreferences("work_out_pref", Context.MODE_PRIVATE);
+        preferences = context.getSharedPreferences("widget_pref", Context.MODE_PRIVATE);
     }
 
     public int getInt(String str, int i) {

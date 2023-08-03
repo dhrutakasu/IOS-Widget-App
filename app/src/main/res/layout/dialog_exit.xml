@@ -38,7 +38,7 @@
             android:background="@drawable/ic_item_background_color"
             android:layout_marginBottom="5dp"
             android:text="Tap On Exit"
-            android:textColor="@color/white"
+            android:textColor="@color/widget_white"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

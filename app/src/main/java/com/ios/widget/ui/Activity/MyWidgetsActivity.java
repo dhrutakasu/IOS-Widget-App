@@ -1,34 +1,23 @@
 package com.ios.widget.ui.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ios.widget.Model.WidgetData;
-import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
-import com.ios.widget.provider.LargeWidgetProvider;
-import com.ios.widget.provider.MediumWidgetProvider;
-import com.ios.widget.provider.SmallWidgetProvider;
 import com.ios.widget.ui.Adapter.MyWidgetAdapter;
 import com.ios.widget.utils.Constants;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class MyWidgetsActivity extends AppCompatActivity implements View.OnClickListener, MyWidgetAdapter.deleteWidget {
 
@@ -78,8 +67,7 @@ public class MyWidgetsActivity extends AppCompatActivity implements View.OnClick
     private void initActions() {
         iv_done.setImageResource(R.drawable.ic_delete);
         helper = new DatabaseHelper(context);
-//        myWidgetLists = helper.getWidgets();
-        TvTitle.setText(getResources().getString(R.string.my_widget));
+        TvTitle.setText(getResources().getString(R.string.str_my_widget));
         myWidgetLists = new ArrayList<>();
         for (int j = 0; j < Constants.getTrendyWidgetLists().size(); j++) {
             System.out.println("_______%%%% PPPP: " + helper.getWidgetsType(Constants.getTrendyWidgetLists().get(j).getPosition()).toString());

@@ -67,9 +67,9 @@ public class FolderListAdapter extends BaseAdapter<Directory, FolderListAdapter.
         }
 
         if (selectedPosition == position) {
-            holder.mTvTitle.setTextColor(mContext.getResources().getColor(R.color.black));
+            holder.mTvTitle.setTextColor(mContext.getResources().getColor(R.color.widget_black));
         } else {
-            holder.mTvTitle.setTextColor(mContext.getResources().getColor(R.color.white));
+            holder.mTvTitle.setTextColor(mContext.getResources().getColor(R.color.widget_white));
         }
 
         holder.mTvTitle.setText(mList.get(position).getName());
@@ -104,8 +104,8 @@ public class FolderListAdapter extends BaseAdapter<Directory, FolderListAdapter.
 
         public FolderListViewHolder(View itemView) {
             super(itemView);
-            mTvTitle = itemView.findViewById(R.id.tv_folder_title);
-            iv_image = itemView.findViewById(R.id.iv_image);
+            mTvTitle = itemView.findViewById(R.id.TvFolderTitle);
+            iv_image = itemView.findViewById(R.id.IvImage);
         }
     }
 }

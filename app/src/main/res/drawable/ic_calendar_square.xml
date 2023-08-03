@@ -9,7 +9,7 @@
             <size
                 android:width="@dimen/_2sdp"
                 android:height="@dimen/_2sdp" />
-            <solid android:color="@color/color_C21241" />
+            <solid android:color="@color/widget_color_C21241" />
         </shape>
     </item>
 </layer-list>

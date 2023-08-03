@@ -22,7 +22,7 @@
         android:fontFamily="@font/main_bold"
         android:gravity="center_vertical"
         android:text="@string/app_name"
-        android:textColor="@color/black"
+        android:textColor="@color/widget_black"
         android:textSize="@dimen/_14sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

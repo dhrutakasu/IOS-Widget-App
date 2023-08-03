@@ -7,13 +7,13 @@
     android:paddingEnd="@dimen/_40sdp">
 
     <AnalogClock
-        android:id="@+id/analog_clock"
+        android:id="@+id/AnalogClock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:dial="@drawable/img_clock_simple1_dial"
-        android:hand_second="@drawable/img_clock_simple1_hand_second"
-        android:hand_hour="@drawable/img_clock_simple1_hand_hour"
-        android:hand_minute="@drawable/img_clock_simple1_hand_minute" />
+        android:dial="@drawable/ic_widget_clock1_dial"
+        android:hand_second="@drawable/ic_widget_clock1_hand_second"
+        android:hand_hour="@drawable/ic_widget_clock1_hand_hour"
+        android:hand_minute="@drawable/ic_widget_clock1_hand_minute" />
 
 </RelativeLayout>

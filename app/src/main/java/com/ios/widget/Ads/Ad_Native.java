@@ -60,7 +60,7 @@ public class Ad_Native {
 
     public void showNativeMedium(Activity activity, FrameLayout frameLayout) {
         if (this.nativeAd != null) {
-            NativeAdView nativeAdView = (NativeAdView) activity.getLayoutInflater().inflate(R.layout.item_ad_unified, (ViewGroup) null);
+            NativeAdView nativeAdView = (NativeAdView) activity.getLayoutInflater().inflate(R.layout.layout_ads_item_ad_unified, (ViewGroup) null);
             populateUnifiedNativeAdView(this.nativeAd, nativeAdView);
             frameLayout.removeAllViews();
             frameLayout.addView(nativeAdView);
@@ -70,7 +70,7 @@ public class Ad_Native {
 
     public void showNativeBig(Activity activity, FrameLayout frameLayout) {
         if (this.nativeAd != null) {
-            NativeAdView nativeAdView = (NativeAdView) activity.getLayoutInflater().inflate(R.layout.item_ad_unified, (ViewGroup) null);
+            NativeAdView nativeAdView = (NativeAdView) activity.getLayoutInflater().inflate(R.layout.layout_ads_item_ad_unified, (ViewGroup) null);
             populateUnifiedNativeAdView(this.nativeAd, nativeAdView);
             frameLayout.removeAllViews();
             frameLayout.addView(nativeAdView);
@@ -80,7 +80,7 @@ public class Ad_Native {
     }
     public void showNative250(Activity activity, FrameLayout frameLayout) {
         if (this.nativeAd != null) {
-            NativeAdView nativeAdView = (NativeAdView) activity.getLayoutInflater().inflate(R.layout.item_big_native_layout, (ViewGroup) null);
+            NativeAdView nativeAdView = (NativeAdView) activity.getLayoutInflater().inflate(R.layout.layout_ads_item_big_native_layout, (ViewGroup) null);
             populateUnifiedNativeAdView(this.nativeAd, nativeAdView);
             frameLayout.removeAllViews();
             String string2 = new Pref(activity).getString(Pref.SHOW, "no");
@@ -98,7 +98,7 @@ public class Ad_Native {
 
     public void showNative55(Activity activity, FrameLayout frameLayout) {
         if (this.nativeAd != null) {
-            NativeAdView nativeAdView = (NativeAdView) activity.getLayoutInflater().inflate(R.layout.item_ad_unified, (ViewGroup) null);
+            NativeAdView nativeAdView = (NativeAdView) activity.getLayoutInflater().inflate(R.layout.layout_ads_item_ad_unified, (ViewGroup) null);
             populateUnifiedNativeAdView100(this.nativeAd, nativeAdView, activity);
             frameLayout.removeAllViews();
             frameLayout.addView(nativeAdView);
@@ -108,16 +108,16 @@ public class Ad_Native {
 
     @SuppressLint("WrongConstant")
     private void populateUnifiedNativeAdView(NativeAd nativeAd2, NativeAdView nativeAdView) {
-        nativeAdView.setMediaView((MediaView) nativeAdView.findViewById(R.id.ad_media));
-        nativeAdView.setHeadlineView(nativeAdView.findViewById(R.id.ad_headline));
-        nativeAdView.setBodyView(nativeAdView.findViewById(R.id.ad_body));
-        Button button = nativeAdView.findViewById(R.id.ad_call_to_action);
+        nativeAdView.setMediaView((MediaView) nativeAdView.findViewById(R.id.MvAdMedia));
+        nativeAdView.setHeadlineView(nativeAdView.findViewById(R.id.TvAdHeadline));
+        nativeAdView.setBodyView(nativeAdView.findViewById(R.id.TvAdBody));
+        Button button = nativeAdView.findViewById(R.id.BtnAdCallToAction);
         nativeAdView.setCallToActionView(button);
-        nativeAdView.setIconView(nativeAdView.findViewById(R.id.ad_icon));
-        nativeAdView.setPriceView(nativeAdView.findViewById(R.id.ad_price));
-        nativeAdView.setStarRatingView(nativeAdView.findViewById(R.id.ad_stars));
-        nativeAdView.setStoreView(nativeAdView.findViewById(R.id.ad_store));
-        nativeAdView.setAdvertiserView(nativeAdView.findViewById(R.id.ad_advertiser));
+        nativeAdView.setIconView(nativeAdView.findViewById(R.id.IvAdIcon));
+        nativeAdView.setPriceView(nativeAdView.findViewById(R.id.TvAdPrice));
+        nativeAdView.setStarRatingView(nativeAdView.findViewById(R.id.RbAdStars));
+        nativeAdView.setStoreView(nativeAdView.findViewById(R.id.TvAdStore));
+        nativeAdView.setAdvertiserView(nativeAdView.findViewById(R.id.TvAdAdvertiser));
         ((TextView) nativeAdView.getHeadlineView()).setText(nativeAd2.getHeadline());
         if (nativeAd2.getBody() == null) {
             nativeAdView.getBodyView().setVisibility(4);
@@ -166,12 +166,12 @@ public class Ad_Native {
 
     @SuppressLint("WrongConstant")
     private void populateUnifiedNativeAdView100(NativeAd nativeAd2, NativeAdView nativeAdView, Activity activity) {
-        nativeAdView.setHeadlineView(nativeAdView.findViewById(R.id.ad_headline));
-        nativeAdView.setBodyView(nativeAdView.findViewById(R.id.ad_body));
-        Button button = nativeAdView.findViewById(R.id.ad_call_to_action);
+        nativeAdView.setHeadlineView(nativeAdView.findViewById(R.id.TvAdHeadline));
+        nativeAdView.setBodyView(nativeAdView.findViewById(R.id.TvAdBody));
+        Button button = nativeAdView.findViewById(R.id.BtnAdCallToAction);
         nativeAdView.setCallToActionView(button);
-        nativeAdView.setIconView(nativeAdView.findViewById(R.id.ad_icon));
-        nativeAdView.setStarRatingView(nativeAdView.findViewById(R.id.ad_stars));
+        nativeAdView.setIconView(nativeAdView.findViewById(R.id.IvAdIcon));
+        nativeAdView.setStarRatingView(nativeAdView.findViewById(R.id.RbAdStars));
         ((TextView) nativeAdView.getHeadlineView()).setText(nativeAd2.getHeadline());
         if (nativeAd2.getBody() == null) {
             nativeAdView.getBodyView().setVisibility(4);

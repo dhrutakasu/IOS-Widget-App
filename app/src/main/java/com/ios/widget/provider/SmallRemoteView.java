@@ -189,7 +189,7 @@ public class SmallRemoteView implements RemoteViewsService.RemoteViewsFactory {
         if (DayOfString[1].equals("WHITE")) {
             switch (Constants.Widget_Type_Id) {
                 case 6:
-                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.black));
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.widget_black));
                     break;
             }
         }
@@ -198,7 +198,7 @@ public class SmallRemoteView implements RemoteViewsService.RemoteViewsFactory {
                 case 6:
                     views.setViewPadding(R.id.TvCalendarDates, 4, 4, 4, 4);
                     views.setViewVisibility(R.id.IvMainCalendar, View.VISIBLE);
-                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.white));
+                    views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.widget_white));
                     break;
             }
         } else {

@@ -107,7 +107,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
         IvAddWidget = (ImageView) findViewById(R.id.IvAddWidget);
 
         modelArrayList = new ArrayList<>();
-        WidgetModel widgetModel = new WidgetModel(R.drawable.img_photo_s_xxhdpi, R.drawable.img_photo_m_xxhdpi, R.drawable.img_photo_l_xxhdpi, "Trendy", 23);
+        WidgetModel widgetModel = new WidgetModel(R.drawable.ic_widget_photo_small, R.drawable.ic_widget_photo_medium, R.drawable.ic_widget_photo_large, "Trendy", 23);
         modelArrayList.add(widgetModel);
 
         TabSizeLayout.addTab(TabSizeLayout.newTab().setText("Small"));
@@ -333,7 +333,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
             }
         });
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, intervals);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.item_spinner, intervals);
         try {
             Field popup = Spinner.class.getDeclaredField("mPopup");
             popup.setAccessible(true);
@@ -420,7 +420,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                startActivityForResult(new Intent(PhotoWidgetActivity.this, ImageSelection_Activity.class)
+                                startActivityForResult(new Intent(PhotoWidgetActivity.this, ImageSelectionActivity.class)
                                         .putExtra(Constants.MAX_NUMBER, 10), GET_PHOTO);
                             }
                         }, 200);

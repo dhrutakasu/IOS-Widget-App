@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rl_main_img_selection"
+    android:id="@+id/RlMainImgSelection"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true"
-    tools:context=".Activities.ImageSelection_Activity">
+    tools:context=".ui.Activity.ImageSelectionActivity">
 
     <RelativeLayout
-        android:id="@+id/rl_image_actionbar"
+        android:id="@+id/RlImageActionbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -18,10 +18,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/rl_image_actionbar">
+        android:layout_below="@id/RlImageActionbar">
 
         <LinearLayout
-            android:id="@+id/ll_main_panel"
+            android:id="@+id/LlMainPanel"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center_horizontal"
@@ -29,7 +29,7 @@
             android:orientation="horizontal">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_folder_list"
+                android:id="@+id/RvFolderList"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_margin="@dimen/_5sdp"
@@ -42,14 +42,14 @@
                 android:layout_weight="1.0">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_Image_Albumlist"
+                    android:id="@+id/RvImageAlbumlist"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent" />
 
                 <View
                     android:layout_width="6.0dip"
                     android:layout_height="fill_parent"
-                    android:background="@drawable/shadow_left" />
+                    android:background="@drawable/ic_widget_shadow_left" />
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>

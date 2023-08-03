@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/widget_white"
     tools:context=".ui.Activity.MainActivity">
 
     <TextView
@@ -17,7 +17,7 @@
         android:text="@string/widgets_i16"
         android:textSize="@dimen/_22sdp"
         android:layout_marginStart="@dimen/_10sdp"
-        android:textColor="@color/black"
+        android:textColor="@color/widget_black"
         android:fontFamily="@font/main_bold" />
 
     <TextView
@@ -30,7 +30,7 @@
         android:text="@string/widget_category"
         android:textSize="@dimen/_12sdp"
         android:layout_marginStart="@dimen/_12sdp"
-        android:textColor="@color/gray"
+        android:textColor="@color/widget_gray"
         android:fontFamily="@font/main_bold" />
 
     <ImageView

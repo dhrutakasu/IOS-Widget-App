@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/clock_simple2_bg">
+        android:background="@drawable/ic_widget_clock_simple2_bg">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -28,22 +28,22 @@
                 android:layout_weight="5">
 
                 <AnalogClock
-                    android:id="@+id/analog_clock"
+                    android:id="@+id/AnalogClock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:dial="@drawable/img_clock_simple2_dial"
-                    android:hand_hour="@drawable/img_clock_simple2_hand_hour"
-                    android:hand_minute="@drawable/img_clock_simple2_hand_minute"
-                    android:hand_second="@drawable/img_clock_simple2_hand_second" />
+                    android:dial="@drawable/ic_widget_clock2_dial"
+                    android:hand_hour="@drawable/ic_widget_clock2_hand_hour"
+                    android:hand_minute="@drawable/ic_widget_clock_simple2_hand_minute"
+                    android:hand_second="@drawable/ic_widget_clock2_hand_second" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/analog_clock"
-                    android:layout_alignTop="@+id/analog_clock"
-                    android:layout_alignEnd="@+id/analog_clock"
-                    android:layout_alignBottom="@+id/analog_clock"
-                    android:src="@drawable/img_clock_simple2_cap" />
+                    android:layout_alignStart="@+id/AnalogClock"
+                    android:layout_alignTop="@+id/AnalogClock"
+                    android:layout_alignEnd="@+id/AnalogClock"
+                    android:layout_alignBottom="@+id/AnalogClock"
+                    android:src="@drawable/ic_widget_clock2_cap" />
             </RelativeLayout>
 
             <LinearLayout
@@ -84,7 +84,7 @@
                             android:letterSpacing="0"
                             android:singleLine="true"
                             android:text="28"
-                            android:textColor="@color/color_C21241"
+                            android:textColor="@color/widget_color_C21241"
                             android:textSize="@dimen/_38ssp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -95,7 +95,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:layout_weight="0.1"
-                        android:background="@color/color_C21241"
+                        android:background="@color/widget_color_C21241"
                         android:gravity="center" />
 
                     <LinearLayout
@@ -120,7 +120,7 @@
                             android:includeFontPadding="false"
                             android:letterSpacing="0"
                             android:singleLine="true"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_16ssp"
                             android:textStyle="bold" />
 
@@ -139,7 +139,7 @@
                             android:includeFontPadding="false"
                             android:letterSpacing="0"
                             android:singleLine="true"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
                 </LinearLayout>

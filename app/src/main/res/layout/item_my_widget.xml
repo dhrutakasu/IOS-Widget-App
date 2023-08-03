@@ -4,22 +4,33 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="@dimen/_5sdp">
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/IvMyWidget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_3sdp"
+        android:layout_centerInParent="true"
         android:adjustViewBounds="true"
-        android:src="@drawable/img_weather_small_1_xxhdpi" />
+        android:src="@drawable/ic_widget_weather_small_1" />
 
     <ImageView
         android:id="@+id/IvPhotoWidget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_alignStart="@id/IvMyWidget"
+        android:layout_alignEnd="@id/IvMyWidget"
+        android:layout_alignTop="@id/IvMyWidget"
+        android:layout_alignBottom="@id/IvMyWidget"
         android:layout_marginTop="@dimen/_3sdp"
+        android:scaleType="centerCrop"
         android:adjustViewBounds="true"
-        android:src="@drawable/img_weather_small_1_xxhdpi" />
+        android:src="@drawable/ic_widget_photo_small" />
+</RelativeLayout>
 
     <ImageView
         android:id="@+id/IvWidgetRemove"

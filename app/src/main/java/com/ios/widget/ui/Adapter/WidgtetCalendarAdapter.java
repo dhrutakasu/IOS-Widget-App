@@ -144,11 +144,11 @@ public class WidgtetCalendarAdapter extends BaseAdapter {
             TvDates.setTextSize(10f);
         }
         if (DayOfString[1].equals("WHITE")) {
-            TvDates.setTextColor(context.getResources().getColor(R.color.light_brown));
+            TvDates.setTextColor(context.getResources().getColor(R.color.widget_light_brown));
         }
         if (DayOfString[1].equals("BLUE")) {
             TvDates.setPadding(5, 5, 5, 5);
-            TvDates.setTextColor(context.getResources().getColor(R.color.white));
+            TvDates.setTextColor(context.getResources().getColor(R.color.widget_white));
         }
         return view;
     }

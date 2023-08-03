@@ -11,7 +11,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_background"
+            android:id="@+id/IvBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
@@ -20,10 +20,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/iv_background"
-            android:layout_alignTop="@+id/iv_background"
-            android:layout_alignEnd="@+id/iv_background"
-            android:layout_alignBottom="@+id/iv_background"
+            android:layout_alignStart="@+id/IvBackground"
+            android:layout_alignTop="@+id/IvBackground"
+            android:layout_alignEnd="@+id/IvBackground"
+            android:layout_alignBottom="@+id/IvBackground"
             android:gravity="center"
             android:orientation="vertical"
             android:weightSum="5">
@@ -53,7 +53,7 @@
                         android:fontFamily="@font/main_medium"
                         android:gravity="bottom"
                         android:text="@string/app_name"
-                        android:textColor="@color/white"
+                        android:textColor="@color/widget_white"
                         android:textSize="@dimen/_8sdp" />
 
                     <TextView
@@ -61,10 +61,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="3"
-                        android:fontFamily="@font/main_medium"
+                        android:fontFamily="@font/main_bold"
                         android:gravity="top"
                         android:text="29"
-                        android:textColor="@color/white"
+                        android:textColor="@color/widget_white"
                         android:textSize="@dimen/_18sdp" />
                 </LinearLayout>
 
@@ -84,7 +84,7 @@
                         android:layout_weight="1.5"
                         android:adjustViewBounds="true"
                         android:gravity="top"
-                        android:src="@drawable/ic_ios_sunny" />
+                        android:src="@drawable/ic_per_sunny" />
 
                     <TextView
                         android:id="@+id/TvDesc"
@@ -94,7 +94,7 @@
                         android:fontFamily="@font/main_bold"
                         android:gravity="bottom"
                         android:text="@string/app_name"
-                        android:textColor="@color/white"
+                        android:textColor="@color/widget_white"
                         android:textSize="@dimen/_8sdp" />
 
                     <TextView
@@ -105,7 +105,7 @@
                         android:fontFamily="@font/main_bold"
                         android:gravity="center_vertical"
                         android:text="@string/app_name"
-                        android:textColor="@color/white"
+                        android:textColor="@color/widget_white"
                         android:textSize="@dimen/_8sdp" />
                 </LinearLayout>
             </LinearLayout>
@@ -121,7 +121,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4.5"
-                    android:background="@color/white"
+                    android:background="@color/widget_white"
                     android:alpha="0.15"
                     android:weightSum="5" />
             </LinearLayout>
@@ -158,7 +158,7 @@
                             android:fontFamily="@font/main_medium"
                             android:gravity="center"
                             android:text="1PM"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_8sdp" />
 
                         <LinearLayout
@@ -173,7 +173,7 @@
                             android:layout_weight="1"
                             android:adjustViewBounds="true"
                             android:gravity="top"
-                            android:src="@drawable/ic_ios_sunny" />
+                            android:src="@drawable/ic_per_sunny" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -187,7 +187,7 @@
                             android:fontFamily="@font/main_medium"
                             android:gravity="center"
                             android:text="29°"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_8sdp" />
                     </LinearLayout>
 
@@ -207,7 +207,7 @@
                             android:fontFamily="@font/main_medium"
                             android:gravity="center"
                             android:text="1PM"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_8sdp" />
 
                         <LinearLayout
@@ -222,7 +222,7 @@
                             android:layout_weight="1"
                             android:adjustViewBounds="true"
                             android:gravity="top"
-                            android:src="@drawable/ic_ios_sunny" />
+                            android:src="@drawable/ic_per_sunny" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -236,7 +236,7 @@
                             android:fontFamily="@font/main_medium"
                             android:gravity="center"
                             android:text="29°"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_8sdp" />
                     </LinearLayout>
 
@@ -256,7 +256,7 @@
                             android:fontFamily="@font/main_medium"
                             android:gravity="center"
                             android:text="1PM"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_8sdp" />
 
                         <LinearLayout
@@ -271,7 +271,7 @@
                             android:layout_weight="1"
                             android:adjustViewBounds="true"
                             android:gravity="top"
-                            android:src="@drawable/ic_ios_sunny" />
+                            android:src="@drawable/ic_per_sunny" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -285,7 +285,7 @@
                             android:fontFamily="@font/main_medium"
                             android:gravity="center"
                             android:text="29°"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_8sdp" />
                     </LinearLayout>
 
@@ -305,7 +305,7 @@
                             android:fontFamily="@font/main_medium"
                             android:gravity="center"
                             android:text="1PM"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_8sdp" />
 
                         <LinearLayout
@@ -320,7 +320,7 @@
                             android:layout_weight="1"
                             android:adjustViewBounds="true"
                             android:gravity="top"
-                            android:src="@drawable/ic_ios_sunny" />
+                            android:src="@drawable/ic_per_sunny" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -334,7 +334,7 @@
                             android:fontFamily="@font/main_medium"
                             android:gravity="center"
                             android:text="29°"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_8sdp" />
                     </LinearLayout>
 
@@ -354,7 +354,7 @@
                             android:fontFamily="@font/main_medium"
                             android:gravity="center"
                             android:text="1PM"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_8sdp" />
 
                         <LinearLayout
@@ -369,7 +369,7 @@
                             android:layout_weight="1"
                             android:adjustViewBounds="true"
                             android:gravity="top"
-                            android:src="@drawable/ic_ios_sunny" />
+                            android:src="@drawable/ic_per_sunny" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -383,7 +383,7 @@
                             android:fontFamily="@font/main_medium"
                             android:gravity="center"
                             android:text="29°"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_8sdp" />
                     </LinearLayout>
 
@@ -403,7 +403,7 @@
                             android:fontFamily="@font/main_medium"
                             android:gravity="center"
                             android:text="1PM"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_8sdp" />
 
                         <LinearLayout
@@ -418,7 +418,7 @@
                             android:layout_weight="1"
                             android:adjustViewBounds="true"
                             android:gravity="top"
-                            android:src="@drawable/ic_ios_sunny" />
+                            android:src="@drawable/ic_per_sunny" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -432,7 +432,7 @@
                             android:fontFamily="@font/main_medium"
                             android:gravity="center"
                             android:text="29°"
-                            android:textColor="@color/white"
+                            android:textColor="@color/widget_white"
                             android:textSize="@dimen/_8sdp" />
                     </LinearLayout>
                 </LinearLayout>

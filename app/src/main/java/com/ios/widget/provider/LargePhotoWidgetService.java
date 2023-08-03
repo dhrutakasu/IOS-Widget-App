@@ -200,15 +200,15 @@ public class LargePhotoWidgetService extends RemoteViewsService {
             int i28 = i;
             int dpToPx = Constants.dpToPx(this.mContext, this.width);
             int dpToPx2 = Constants.dpToPx(this.mContext, this.height);
-            RemoteViews remoteViews = new RemoteViews(LargePhotoWidgetService.this.getPackageName(), R.layout.image1);
-            remoteViews.setInt(R.id.image_item_full, "setAlpha", this.widgetMaster.getOpacity());
+            RemoteViews remoteViews = new RemoteViews(LargePhotoWidgetService.this.getPackageName(), R.layout.layout_image);
+            remoteViews.setInt(R.id.IvItemFull, "setAlpha", this.widgetMaster.getOpacity());
             float f = 1.0f;
             int i29 = 1;
             switch (this.widgetMaster.getShape()) {
                 case 0:
                     Bitmap[] bitmapArr = this.bitmapList;
                     if (bitmapArr[i28] != null) {
-                        remoteViews.setImageViewBitmap(R.id.image_item_full, bitmapArr[i28]);
+                        remoteViews.setImageViewBitmap(R.id.IvItemFull, bitmapArr[i28]);
                         break;
                     } else {
                         try {
@@ -244,7 +244,7 @@ public class LargePhotoWidgetService extends RemoteViewsService {
                                         i7 = i5;
                                         i6 = i4;
                                     }
-                                    remoteViews.setImageViewBitmap(R.id.image_item_full, getCenterFitRectangle(createBitmap, i7, i6, i3, i2, this.widgetMaster.getCornerBorder()));
+                                    remoteViews.setImageViewBitmap(R.id.IvItemFull, getCenterFitRectangle(createBitmap, i7, i6, i3, i2, this.widgetMaster.getCornerBorder()));
                                     break;
                                 }
                             } else {
@@ -266,7 +266,7 @@ public class LargePhotoWidgetService extends RemoteViewsService {
                                     i11 = i9;
                                     i10 = i8;
                                 }
-                                remoteViews.setImageViewBitmap(R.id.image_item_full, getCenterCropRectangle(createBitmap, i3, i2, i11, i10, this.widgetMaster.getCornerBorder()));
+                                remoteViews.setImageViewBitmap(R.id.IvItemFull, getCenterCropRectangle(createBitmap, i3, i2, i11, i10, this.widgetMaster.getCornerBorder()));
                                 break;
                             }
                         } catch (Exception e) {
@@ -350,7 +350,7 @@ public class LargePhotoWidgetService extends RemoteViewsService {
         }
 
         public RemoteViews getLoadingView() {
-            return this.widgetMaster.isLoadingIndicator() ? new RemoteViews(LargePhotoWidgetService.this.getPackageName(), R.layout.widget_progress) : new RemoteViews(LargePhotoWidgetService.this.getPackageName(), R.layout.empty);
+            return this.widgetMaster.isLoadingIndicator() ? new RemoteViews(LargePhotoWidgetService.this.getPackageName(), R.layout.layout_widget_progress) : new RemoteViews(LargePhotoWidgetService.this.getPackageName(), R.layout.layout_empty);
         }
     }
 }
