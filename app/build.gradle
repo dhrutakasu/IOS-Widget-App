@@ -70,4 +70,7 @@ dependencies {
 
     //todo location dependancy
     implementation "com.google.android.gms:play-services-location:16.0.0"
+
+    //todo facebook ads dependancy
+    implementation 'com.facebook.android:audience-network-sdk:6.2.0'
 }

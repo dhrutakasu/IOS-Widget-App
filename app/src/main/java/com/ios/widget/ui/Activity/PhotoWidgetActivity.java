@@ -21,11 +21,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdSize;
 import com.google.android.material.tabs.TabLayout;
+import com.ios.widget.Ads.MyAppAd_Banner;
+import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.Files.ImageFile;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.Model.WidgetImages;
@@ -38,8 +42,8 @@ import com.ios.widget.provider.MediumPhotoWidgetProvider;
 import com.ios.widget.provider.SmallPhotoWidgetProvider;
 import com.ios.widget.ui.Adapter.PhotoAdapter;
 import com.ios.widget.ui.Adapter.WidgetPagerAdapter;
-import com.ios.widget.utils.Constants;
-import com.ios.widget.utils.Pref;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -61,7 +65,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import static com.ios.widget.utils.Constants.mSelectedList;
+import static com.ios.widget.utils.MyAppConstants.mSelectedList;
 
 public class PhotoWidgetActivity extends AppCompatActivity {
     private final int GET_PHOTO = 102;
@@ -128,7 +132,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
             if (mainWidget != null) {
                 imageUriList = new ArrayList<>();
                 this.imageUriList = this.database.getImageList(this.widgetId);
-                Constants.clearAllSelection();
+                MyAppConstants.clearAllSelection();
                 for (int i = 0; i < imageUriList.size(); i++) {
                     ImageFile imageFile = new ImageFile();
                     imageFile.setPath(imageUriList.get(i).getUri());
@@ -169,7 +173,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
         SpinnerWidgetInterval.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                new Pref(context).setWidgetInterval(context, position);
+                new MyAppPref(context).setWidgetInterval(context, position);
             }
 
             @Override
@@ -180,118 +184,218 @@ public class PhotoWidgetActivity extends AppCompatActivity {
         IvAddWidget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Constants.Widget_Type_Id = 23;
-                if (mSelectedList.size() < 2) {
-                    Toast.makeText(context, "Select at least two photo", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (widgetMaster.getWidgetId() == 0) {
-                        if (TabSizeLayout.getSelectedTabPosition() == 0) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                AppWidgetManager manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
-                                ComponentName componentName = new ComponentName(context, SmallPhotoWidgetProvider.class);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    if (manager != null && manager.isRequestPinAppWidgetSupported()) {
-                                        new Handler().postDelayed(() -> {
-                                            Intent pinnedWidgetCallbackIntent = new Intent(context, SmallPhotoWidgetProvider.class);
-                                            pinnedWidgetCallbackIntent.putExtra("IS_FIRST_ADDED", true);
-                                            PendingIntent pinAppWidget = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                                            manager.requestPinAppWidget(componentName, null, pinAppWidget);
-                                        }, 100);
-                                    }
-                                }
-                            }
-                        } else if (TabSizeLayout.getSelectedTabPosition() == 1) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                AppWidgetManager manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
-                                ComponentName componentName = new ComponentName(context, MediumPhotoWidgetProvider.class);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    if (manager != null && manager.isRequestPinAppWidgetSupported()) {
-                                        new Handler().postDelayed(() -> {
-                                            Intent pinnedWidgetCallbackIntent = new Intent(context, MediumPhotoWidgetProvider.class);
-                                            pinnedWidgetCallbackIntent.putExtra("IS_FIRST_ADDED", true);
-                                            PendingIntent pinAppWidget = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                                            manager.requestPinAppWidget(componentName, null, pinAppWidget);
-                                        }, 100);
-                                    }
-                                }
-                            }
-                        } else if (TabSizeLayout.getSelectedTabPosition() == 2) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                AppWidgetManager manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
-                                ComponentName componentName = new ComponentName(context, LargePhotoWidgetProvider.class);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    if (manager != null && manager.isRequestPinAppWidgetSupported()) {
-                                        new Handler().postDelayed(() -> {
-                                            Intent pinnedWidgetCallbackIntent = new Intent(context, LargePhotoWidgetProvider.class);
-                                            pinnedWidgetCallbackIntent.putExtra("IS_FIRST_ADDED", true);
-                                            PendingIntent pinAppWidget = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                                            manager.requestPinAppWidget(componentName, null, pinAppWidget);
-                                        }, 100);
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-
-                        for (int i = 0; i < Constants.mSelectedList.size(); i++) {
-                            if (database.CheckIsAlreadyDBorNot(Constants.mSelectedList.get(i).getPath().toString(), String.valueOf(widgetId))) {
-                                WidgetImages widgetImages1 = new WidgetImages(database.getImageListData(widgetId).getImageId(), String.valueOf(Constants.mSelectedList.get(i).getPath()), widgetId);
-                                database.updateWidgetImages(widgetImages1);
+                int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                int itemClick = SplashActivity.click++;
+                if (itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(PhotoWidgetActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                        @Override
+                        public void callbackCall() {
+                            MyAppConstants.Widget_Type_Id = 23;
+                            if (mSelectedList.size() < 2) {
+                                Toast.makeText(context, "Select at least two photo", Toast.LENGTH_SHORT).show();
                             } else {
-                                WidgetImages widgetImages = new WidgetImages("0", Constants.mSelectedList.get(i).getPath(), widgetId);
-                                database.InsertWidgetImage(widgetImages);
+                                if (widgetMaster.getWidgetId() == 0) {
+                                    if (TabSizeLayout.getSelectedTabPosition() == 0) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            AppWidgetManager manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
+                                            ComponentName componentName = new ComponentName(context, SmallPhotoWidgetProvider.class);
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                if (manager != null && manager.isRequestPinAppWidgetSupported()) {
+                                                    new Handler().postDelayed(() -> {
+                                                        Intent pinnedWidgetCallbackIntent = new Intent(context, SmallPhotoWidgetProvider.class);
+                                                        pinnedWidgetCallbackIntent.putExtra("IS_FIRST_ADDED", true);
+                                                        PendingIntent pinAppWidget = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                                        manager.requestPinAppWidget(componentName, null, pinAppWidget);
+                                                    }, 100);
+                                                }
+                                            }
+                                        }
+                                    } else if (TabSizeLayout.getSelectedTabPosition() == 1) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            AppWidgetManager manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
+                                            ComponentName componentName = new ComponentName(context, MediumPhotoWidgetProvider.class);
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                if (manager != null && manager.isRequestPinAppWidgetSupported()) {
+                                                    new Handler().postDelayed(() -> {
+                                                        Intent pinnedWidgetCallbackIntent = new Intent(context, MediumPhotoWidgetProvider.class);
+                                                        pinnedWidgetCallbackIntent.putExtra("IS_FIRST_ADDED", true);
+                                                        PendingIntent pinAppWidget = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                                        manager.requestPinAppWidget(componentName, null, pinAppWidget);
+                                                    }, 100);
+                                                }
+                                            }
+                                        }
+                                    } else if (TabSizeLayout.getSelectedTabPosition() == 2) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            AppWidgetManager manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
+                                            ComponentName componentName = new ComponentName(context, LargePhotoWidgetProvider.class);
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                if (manager != null && manager.isRequestPinAppWidgetSupported()) {
+                                                    new Handler().postDelayed(() -> {
+                                                        Intent pinnedWidgetCallbackIntent = new Intent(context, LargePhotoWidgetProvider.class);
+                                                        pinnedWidgetCallbackIntent.putExtra("IS_FIRST_ADDED", true);
+                                                        PendingIntent pinAppWidget = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                                        manager.requestPinAppWidget(componentName, null, pinAppWidget);
+                                                    }, 100);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+
+                                    for (int i = 0; i < MyAppConstants.mSelectedList.size(); i++) {
+                                        if (database.CheckIsAlreadyDBorNot(MyAppConstants.mSelectedList.get(i).getPath().toString(), String.valueOf(widgetId))) {
+                                            WidgetImages widgetImages1 = new WidgetImages(database.getImageListData(widgetId).getImageId(), String.valueOf(MyAppConstants.mSelectedList.get(i).getPath()), widgetId);
+                                            database.updateWidgetImages(widgetImages1);
+                                        } else {
+                                            WidgetImages widgetImages = new WidgetImages("0", MyAppConstants.mSelectedList.get(i).getPath(), widgetId);
+                                            database.InsertWidgetImage(widgetImages);
+                                        }
+                                    }
+                                    if (database.CheckIsAlreadyMasterOrNot(String.valueOf(widgetId))) {
+                                        WidgetMaster widgetMaster = database.getWidgetMaster(widgetId);
+                                        WidgetMaster widgetMaster1 = new WidgetMaster();
+                                        widgetMaster1.setWidgetId(widgetId);
+                                        widgetMaster1.setInterval(new MyAppPref(context).getWidgetInterval(context));
+                                        widgetMaster1.setId(widgetMaster.getId());
+                                        widgetMaster1.setSpaceBorder(widgetMaster.getSpaceBorder());
+                                        widgetMaster1.setSize(widgetMaster.getSize());
+                                        widgetMaster1.setShape(widgetMaster.getShape());
+                                        widgetMaster1.setRow(widgetMaster.getRow());
+                                        widgetMaster1.setRotationType(widgetMaster.getRotationType());
+                                        widgetMaster1.setOpacity(widgetMaster.getOpacity());
+                                        widgetMaster1.setFlipControl(true);
+                                        widgetMaster1.setCustomMode(false);
+                                        widgetMaster1.setCropType(widgetMaster.getCropType());
+                                        widgetMaster1.setCornerBorder(widgetMaster.getCornerBorder());
+                                        widgetMaster1.setColumn(widgetMaster.getColumn());
+                                        widgetMaster1.setColorCode(widgetMaster.getColorCode());
+
+                                        database.updateWidgetMaster(widgetMaster1);
+                                    }
+                                    Intent intent = new Intent(context, getClass());
+                                    intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+                                    intent.setData(Uri.parse(MyAppConstants.getUniqueId()));
+                                    intent.putExtra("appWidgetId", widgetId);
+
+                                    if (TabSizeLayout.getSelectedTabPosition() == 0) {
+                                        SmallPhotoWidgetProvider.updateWidgetView(widgetId, context, intent);
+                                    } else if (TabSizeLayout.getSelectedTabPosition() == 1) {
+                                        MediumPhotoWidgetProvider.updateWidgetView(widgetId, context, intent);
+                                    } else if (TabSizeLayout.getSelectedTabPosition() == 2) {
+                                        LargePhotoWidgetProvider.updateWidgetView(widgetId, context, intent);
+                                    }
+                                }
                             }
                         }
-                        if (database.CheckIsAlreadyMasterOrNot(String.valueOf(widgetId))) {
-                            WidgetMaster widgetMaster = database.getWidgetMaster(widgetId);
-                            WidgetMaster widgetMaster1 = new WidgetMaster();
-                            widgetMaster1.setWidgetId(widgetId);
-                            widgetMaster1.setInterval(new Pref(context).getWidgetInterval(context));
-                            widgetMaster1.setId(widgetMaster.getId());
-                            widgetMaster1.setSpaceBorder(widgetMaster.getSpaceBorder());
-                            widgetMaster1.setSize(widgetMaster.getSize());
-                            widgetMaster1.setShape(widgetMaster.getShape());
-                            widgetMaster1.setRow(widgetMaster.getRow());
-                            widgetMaster1.setRotationType(widgetMaster.getRotationType());
-                            widgetMaster1.setOpacity(widgetMaster.getOpacity());
-                            widgetMaster1.setFlipControl(true);
-                            widgetMaster1.setCustomMode(false);
-                            widgetMaster1.setCropType(widgetMaster.getCropType());
-                            widgetMaster1.setCornerBorder(widgetMaster.getCornerBorder());
-                            widgetMaster1.setColumn(widgetMaster.getColumn());
-                            widgetMaster1.setColorCode(widgetMaster.getColorCode());
+                    });
+                } else {
+                    MyAppConstants.Widget_Type_Id = 23;
+                    if (mSelectedList.size() < 2) {
+                        Toast.makeText(context, "Select at least two photo", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (widgetMaster.getWidgetId() == 0) {
+                            if (TabSizeLayout.getSelectedTabPosition() == 0) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    AppWidgetManager manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
+                                    ComponentName componentName = new ComponentName(context, SmallPhotoWidgetProvider.class);
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        if (manager != null && manager.isRequestPinAppWidgetSupported()) {
+                                            new Handler().postDelayed(() -> {
+                                                Intent pinnedWidgetCallbackIntent = new Intent(context, SmallPhotoWidgetProvider.class);
+                                                pinnedWidgetCallbackIntent.putExtra("IS_FIRST_ADDED", true);
+                                                PendingIntent pinAppWidget = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                                manager.requestPinAppWidget(componentName, null, pinAppWidget);
+                                            }, 100);
+                                        }
+                                    }
+                                }
+                            } else if (TabSizeLayout.getSelectedTabPosition() == 1) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    AppWidgetManager manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
+                                    ComponentName componentName = new ComponentName(context, MediumPhotoWidgetProvider.class);
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        if (manager != null && manager.isRequestPinAppWidgetSupported()) {
+                                            new Handler().postDelayed(() -> {
+                                                Intent pinnedWidgetCallbackIntent = new Intent(context, MediumPhotoWidgetProvider.class);
+                                                pinnedWidgetCallbackIntent.putExtra("IS_FIRST_ADDED", true);
+                                                PendingIntent pinAppWidget = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                                manager.requestPinAppWidget(componentName, null, pinAppWidget);
+                                            }, 100);
+                                        }
+                                    }
+                                }
+                            } else if (TabSizeLayout.getSelectedTabPosition() == 2) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    AppWidgetManager manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
+                                    ComponentName componentName = new ComponentName(context, LargePhotoWidgetProvider.class);
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        if (manager != null && manager.isRequestPinAppWidgetSupported()) {
+                                            new Handler().postDelayed(() -> {
+                                                Intent pinnedWidgetCallbackIntent = new Intent(context, LargePhotoWidgetProvider.class);
+                                                pinnedWidgetCallbackIntent.putExtra("IS_FIRST_ADDED", true);
+                                                PendingIntent pinAppWidget = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                                manager.requestPinAppWidget(componentName, null, pinAppWidget);
+                                            }, 100);
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
 
-                            database.updateWidgetMaster(widgetMaster1);
+                            for (int i = 0; i < MyAppConstants.mSelectedList.size(); i++) {
+                                if (database.CheckIsAlreadyDBorNot(MyAppConstants.mSelectedList.get(i).getPath().toString(), String.valueOf(widgetId))) {
+                                    WidgetImages widgetImages1 = new WidgetImages(database.getImageListData(widgetId).getImageId(), String.valueOf(MyAppConstants.mSelectedList.get(i).getPath()), widgetId);
+                                    database.updateWidgetImages(widgetImages1);
+                                } else {
+                                    WidgetImages widgetImages = new WidgetImages("0", MyAppConstants.mSelectedList.get(i).getPath(), widgetId);
+                                    database.InsertWidgetImage(widgetImages);
+                                }
+                            }
+                            if (database.CheckIsAlreadyMasterOrNot(String.valueOf(widgetId))) {
+                                WidgetMaster widgetMaster = database.getWidgetMaster(widgetId);
+                                WidgetMaster widgetMaster1 = new WidgetMaster();
+                                widgetMaster1.setWidgetId(widgetId);
+                                widgetMaster1.setInterval(new MyAppPref(context).getWidgetInterval(context));
+                                widgetMaster1.setId(widgetMaster.getId());
+                                widgetMaster1.setSpaceBorder(widgetMaster.getSpaceBorder());
+                                widgetMaster1.setSize(widgetMaster.getSize());
+                                widgetMaster1.setShape(widgetMaster.getShape());
+                                widgetMaster1.setRow(widgetMaster.getRow());
+                                widgetMaster1.setRotationType(widgetMaster.getRotationType());
+                                widgetMaster1.setOpacity(widgetMaster.getOpacity());
+                                widgetMaster1.setFlipControl(true);
+                                widgetMaster1.setCustomMode(false);
+                                widgetMaster1.setCropType(widgetMaster.getCropType());
+                                widgetMaster1.setCornerBorder(widgetMaster.getCornerBorder());
+                                widgetMaster1.setColumn(widgetMaster.getColumn());
+                                widgetMaster1.setColorCode(widgetMaster.getColorCode());
+
+                                database.updateWidgetMaster(widgetMaster1);
+                            }
+                            Intent intent = new Intent(context, getClass());
+                            intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+                            intent.setData(Uri.parse(MyAppConstants.getUniqueId()));
+                            intent.putExtra("appWidgetId", widgetId);
+
+                            if (TabSizeLayout.getSelectedTabPosition() == 0) {
+                                SmallPhotoWidgetProvider.updateWidgetView(widgetId, context, intent);
+                            } else if (TabSizeLayout.getSelectedTabPosition() == 1) {
+                                MediumPhotoWidgetProvider.updateWidgetView(widgetId, context, intent);
+                            } else if (TabSizeLayout.getSelectedTabPosition() == 2) {
+                                LargePhotoWidgetProvider.updateWidgetView(widgetId, context, intent);
+                            }
                         }
-                        Intent intent = new Intent(context, getClass());
-                        intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
-                        intent.setData(Uri.parse(Constants.getUniqueId()));
-                        intent.putExtra("appWidgetId", widgetId);
-
-                        if (TabSizeLayout.getSelectedTabPosition() == 0) {
-                            SmallPhotoWidgetProvider.updateWidgetView(widgetId, context, intent);
-                        } else if (TabSizeLayout.getSelectedTabPosition() == 1) {
-                            MediumPhotoWidgetProvider.updateWidgetView(widgetId, context, intent);
-                        } else if (TabSizeLayout.getSelectedTabPosition() == 2) {
-                            LargePhotoWidgetProvider.updateWidgetView(widgetId, context, intent);
-                        }
-
                     }
-                   /* AppWidgetManager appWidgetManager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
-                    ComponentName componentName = new ComponentName(context, PhotoWidgetProvider.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("ggg", "ggg");
-                    if (appWidgetManager.isRequestPinAppWidgetSupported()) {
-                        Intent intent = new Intent(context, PhotoWidgetProvider.class);
-                        intent.putExtra("IS_FIRST_ADDED", true);
-                        appWidgetManager.requestPinAppWidget(componentName, bundle, PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_UPDATE_CURRENT));
-                    }*/
                 }
+
             }
         });
     }
 
     private void initActions() {
+        MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
+
         TvTitle.setText("Photo Widget");
         RvPhotos.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
         photoAdapter = new PhotoAdapter(context, imageUriList, new PhotoAdapter.setPhotoWidget() {
@@ -359,13 +463,13 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                             }
 
                             if (report.isAnyPermissionPermanentlyDenied()) {
-                                Constants.showSettingsDialog(PhotoWidgetActivity.this);
+                                MyAppConstants.showSettingsDialog(PhotoWidgetActivity.this);
                             }
                         }
 
                         public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions,
                                                                        PermissionToken permissionToken) {
-                            Constants.showPermissionDialog(PhotoWidgetActivity.this, permissionToken);
+                            MyAppConstants.showPermissionDialog(PhotoWidgetActivity.this, permissionToken);
                         }
                     })
                     .onSameThread()
@@ -382,13 +486,13 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                             }
 
                             if (report.isAnyPermissionPermanentlyDenied()) {
-                                Constants.showSettingsDialog(PhotoWidgetActivity.this);
+                                MyAppConstants.showSettingsDialog(PhotoWidgetActivity.this);
                             }
                         }
 
                         public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions,
                                                                        PermissionToken permissionToken) {
-                            Constants.showPermissionDialog(PhotoWidgetActivity.this, permissionToken);
+                            MyAppConstants.showPermissionDialog(PhotoWidgetActivity.this, permissionToken);
                         }
                     })
                     .onSameThread()
@@ -400,7 +504,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected void onPreExecute() {
-                Constants.getFolders(PhotoWidgetActivity.this);
+                MyAppConstants.getFolders(PhotoWidgetActivity.this);
                 super.onPreExecute();
             }
 
@@ -421,7 +525,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 startActivityForResult(new Intent(PhotoWidgetActivity.this, ImageSelectionActivity.class)
-                                        .putExtra(Constants.MAX_NUMBER, 10), GET_PHOTO);
+                                        .putExtra(MyAppConstants.MAX_NUMBER, 10), GET_PHOTO);
                             }
                         }, 200);
                     }
@@ -448,7 +552,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                             }
                             bitmapList.add(bitmap2);
 
-                            WidgetImages widgetImages2 = new WidgetImages(Constants.getUniqueId(), storeImage(context, bitmap2).toString(), 0);
+                            WidgetImages widgetImages2 = new WidgetImages(MyAppConstants.getUniqueId(), storeImage(context, bitmap2).toString(), 0);
                             model = widgetImages2;
                             imageUriList.add(widgetImages2);
                             TvUploadPhotoSize.setText((imageUriList.size() - 1) + "/10");
@@ -550,6 +654,23 @@ public class PhotoWidgetActivity extends AppCompatActivity {
         } catch (Exception e2) {
             e2.printStackTrace();
             return 0;
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+        int itemClick = SplashActivity.click++;
+        if (itemClick % countExtra == 0) {
+            MyAppAd_Interstitial.getInstance().showInter(PhotoWidgetActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                @Override
+                public void callbackCall() {
+                    finish();
+                }
+            });
+        } else {
+            finish();
         }
     }
 }

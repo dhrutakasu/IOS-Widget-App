@@ -11,4 +11,10 @@
     <string name="MSG_ASK_PERMISSION">This app needs permissions to use this feature. You can grant them in app settings.</string>
     <string name="str_folder_all">All</string>
     <string name="str_weather_key">b7fc383a06f2e5b385f2f811e18192f6</string>
+    <string name="str_walk_title_1">AppTitle</string>
+    <string name="str_walk_title_2">AppTitle</string>
+    <string name="str_walk_title_3">AppTitle</string>
+    <string name="str_walk_sub_title_1">AppCOntent</string>
+    <string name="str_walk_sub_title_2">AppCOntent</string>
+    <string name="str_walk_sub_title_3">AppCOntent</string>
 </resources>

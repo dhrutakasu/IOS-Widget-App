@@ -8,9 +8,7 @@ import android.location.Geocoder;
 import android.location.Location;
 
 import com.google.android.gms.location.LocationResult;
-import com.ios.widget.utils.Pref;
-
-import org.json.JSONException;
+import com.ios.widget.utils.MyAppPref;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,7 +25,7 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                 Geocoder geocoder = new Geocoder(context, Locale.getDefault());
                 List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                 String city = addresses.get(0).getLocality();
-                new Pref(context).getString(Pref.IS_WEATHER_CITY, city);
+                new MyAppPref(context).getString(MyAppPref.IS_WEATHER_CITY, city);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

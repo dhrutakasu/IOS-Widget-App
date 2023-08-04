@@ -16,11 +16,11 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
-import com.ios.widget.utils.Pref;
+import com.ios.widget.utils.MyAppPref;
 
-public class Ad_Interstitial {
+public class MyAppAd_Interstitial {
     static int gclick = 1;
-    private static Ad_Interstitial mInstance;
+    private static MyAppAd_Interstitial mInstance;
     public InterstitialAd interstitialOne;
 
     MyCallback myCallback;
@@ -29,9 +29,9 @@ public class Ad_Interstitial {
         void callbackCall();
     }
 
-    public static Ad_Interstitial getInstance() {
+    public static MyAppAd_Interstitial getInstance() {
         if (mInstance == null) {
-            mInstance = new Ad_Interstitial();
+            mInstance = new MyAppAd_Interstitial();
         }
         return mInstance;
     }
@@ -44,31 +44,31 @@ public class Ad_Interstitial {
             }
         });
 
-        InterstitialAd.load(activity, new Pref(activity).getString(Pref.AD_INTER, ""), new AdRequest.Builder().build(), new InterstitialAdLoadCallback() {
+        InterstitialAd.load(activity, new MyAppPref(activity).getString(MyAppPref.AD_INTER, ""), new AdRequest.Builder().build(), new InterstitialAdLoadCallback() {
 
             public void onAdLoaded(InterstitialAd interstitialAd) {
-                Ad_Interstitial.this.interstitialOne = interstitialAd;
-                Ad_Interstitial.this.interstitialOne.setFullScreenContentCallback(new FullScreenContentCallback() {
+                MyAppAd_Interstitial.this.interstitialOne = interstitialAd;
+                MyAppAd_Interstitial.this.interstitialOne.setFullScreenContentCallback(new FullScreenContentCallback() {
                     @Override
                     public void onAdDismissedFullScreenContent() {
-                        Ad_Interstitial.this.interstitialOne = null;
-                        Ad_Interstitial.this.loadInterOne(activity);
-                        if (Ad_Interstitial.this.myCallback != null) {
-                            Ad_Interstitial.this.myCallback.callbackCall();
-                            Ad_Interstitial.this.myCallback = null;
+                        MyAppAd_Interstitial.this.interstitialOne = null;
+                        MyAppAd_Interstitial.this.loadInterOne(activity);
+                        if (MyAppAd_Interstitial.this.myCallback != null) {
+                            MyAppAd_Interstitial.this.myCallback.callbackCall();
+                            MyAppAd_Interstitial.this.myCallback = null;
                         }
                     }
                     @Override
                     public void onAdFailedToShowFullScreenContent(AdError adError) {
 
-                        Ad_Interstitial.this.interstitialOne = null;
-                        Ad_Interstitial.this.loadInterOne(activity);
+                        MyAppAd_Interstitial.this.interstitialOne = null;
+                        MyAppAd_Interstitial.this.loadInterOne(activity);
                     }
                 });
             }
             @Override
             public void onAdFailedToLoad(LoadAdError loadAdError) {
-                Ad_Interstitial.this.interstitialOne = null;
+                MyAppAd_Interstitial.this.interstitialOne = null;
             }
         });
     }
@@ -77,10 +77,10 @@ public class Ad_Interstitial {
 
     public void showInter(Activity activity, MyCallback myCallback2) {
         this.myCallback = myCallback2;
-        int integer =new Pref(activity).getInt(Pref.CLICK, 1);
+        int integer =new MyAppPref(activity).getInt(MyAppPref.CLICK, 1);
         int i = gclick;
 
-        String string2 = new Pref(activity).getString(Pref.SHOW, "no");
+        String string2 = new MyAppPref(activity).getString(MyAppPref.SHOW, "no");
 
         if (string2.equalsIgnoreCase("yes")) {
             if (i == integer) {
@@ -114,8 +114,8 @@ public class Ad_Interstitial {
 
     public void showInterBack(Activity activity, MyCallback myCallback2) {
         this.myCallback = myCallback2;
-        int integer = new Pref(activity).getInt(Pref.AD_BACK, 0);
-        int integer2 = new Pref(activity).getInt(Pref.CLICK, 1);
+        int integer = new MyAppPref(activity).getInt(MyAppPref.AD_BACK, 0);
+        int integer2 = new MyAppPref(activity).getInt(MyAppPref.CLICK, 1);
         if (integer == 0) {
             int i = gclick;
             if (i == integer2) {

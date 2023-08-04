@@ -3,9 +3,8 @@ package com.ios.widget.Application;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.google.android.gms.ads.AdError;
@@ -18,7 +17,6 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.Date;
-import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,27 +24,24 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
-//https://github.com/akash-bisariya/Location-Weather
-
-//https://github.com/ZuleMD/WeatherWidget
-
-//https://github.com/TonyChouteau/WeatherWindWidget
-public class App extends Application implements DefaultLifecycleObserver, Application.ActivityLifecycleCallbacks {
+public class MyApp extends Application implements DefaultLifecycleObserver, Application.ActivityLifecycleCallbacks {
 
     private AppOpenAdManager appOpenAdManager;
     private Activity currentActivity;
     private static final String TAG = "MyApplication";
 
-    public static App App = null;
+    public static MyApp MyApp = null;
 
-    public static App getInstance() {
-        return App;
+    public static MyApp getInstance() {
+        return MyApp;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
         this.registerActivityLifecycleCallbacks(this);
 
         Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
@@ -61,7 +56,7 @@ public class App extends Application implements DefaultLifecycleObserver, Applic
 
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
         appOpenAdManager = new AppOpenAdManager();
-        App = this;
+        MyApp = this;
     }
 
     @Override

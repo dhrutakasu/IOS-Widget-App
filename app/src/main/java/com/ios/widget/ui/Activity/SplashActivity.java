@@ -14,14 +14,14 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
-import com.ios.widget.Ads.Ad_Interstitial;
-import com.ios.widget.Ads.Ad_Native;
-import com.ios.widget.Ads.AppOpenAdManager;
-import com.ios.widget.Ads.SingleJsonPass;
-import com.ios.widget.Application.App;
+import com.ios.widget.Ads.MyAppAd_Interstitial;
+import com.ios.widget.Ads.MyAppAd_Native;
+import com.ios.widget.Ads.MyAppOpenAdManager;
+import com.ios.widget.Ads.MyAppSingleJsonPass;
+import com.ios.widget.Application.MyApp;
 import com.ios.widget.R;
-import com.ios.widget.utils.Constants;
-import com.ios.widget.utils.Pref;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,9 +29,11 @@ import org.json.JSONObject;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashActivity extends AppCompatActivity {
+    public static int click=1;
     private Context context;
     private String url2 = "https://7starinnovation.com/api/demoapi.json";
     String AdShow, appid, app_open, banner_ad_unit_id, interstitial_full_screen = "", native_id;
+    int AdCount;
     private static final String LOG_TAG = "AppOpenAdManager";
     private long secondsRemaining;
 
@@ -44,12 +46,11 @@ public class SplashActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_splash);
         context = this;
-        startMainActivity();
-//        createHandler(3);
+        createHandler(3);
     }
 
     private void createHandler(long seconds) {
-        if (Constants.isConnectingToInternet(context)) {
+        if (MyAppConstants.isConnectingToInternet(context)) {
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url2,
                     response2 -> {
                         try {
@@ -60,20 +61,22 @@ public class SplashActivity extends AppCompatActivity {
                             interstitial_full_screen = response.getString("InterstitialAd");
                             native_id = response.getString("NativaAds");
                             AdShow = response.getString("AdShow");
+                            AdCount = response.getInt("Counter");
 
                             Log.d("Manish", "onResponse is: " + banner_ad_unit_id);
 
 
-                            new Pref(SplashActivity.this).putString(Pref.SHOW, AdShow);
-                            new Pref(SplashActivity.this).putString(Pref.AD_BANNER, banner_ad_unit_id);
-                            new Pref(SplashActivity.this).putString(Pref.AD_INTER, interstitial_full_screen);
-                            new Pref(SplashActivity.this).putString(Pref.AD_NATIVE, native_id);
-                            new Pref(SplashActivity.this).putString(Pref.AD_OPEN, app_open);
+                            new MyAppPref(SplashActivity.this).putString(MyAppPref.SHOW, AdShow);
+                            new MyAppPref(SplashActivity.this).putString(MyAppPref.AD_BANNER, banner_ad_unit_id);
+                            new MyAppPref(SplashActivity.this).putString(MyAppPref.AD_INTER, interstitial_full_screen);
+                            new MyAppPref(SplashActivity.this).putString(MyAppPref.AD_NATIVE, native_id);
+                            new MyAppPref(SplashActivity.this).putString(MyAppPref.AD_OPEN, app_open);
+                            new MyAppPref(SplashActivity.this).putInt(MyAppPref.AD_COUNTER, AdCount);
 
-                            AppOpenAdManager appOpenAdManager = new AppOpenAdManager(SplashActivity.this);
+                            MyAppOpenAdManager appOpenAdManager = new MyAppOpenAdManager(SplashActivity.this);
 //                            appOpenAdManager.loadAd(SplashActivity.this);
-                            Ad_Native.getInstance().LoadNative(SplashActivity.this);
-                            Ad_Interstitial.getInstance().loadInterOne(SplashActivity.this);
+                            MyAppAd_Native.getInstance().LoadNative(SplashActivity.this);
+                            MyAppAd_Interstitial.getInstance().loadInterOne(SplashActivity.this);
                             try {
                                 ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
                                 Bundle bundle = ai.metaData;
@@ -106,10 +109,10 @@ public class SplashActivity extends AppCompatActivity {
 //                                            finish();
 //                                        }
 //                                    });
-                                    ((App) application)
+                                    ((MyApp) application)
                                             .showAdIfAvailable(
                                                     SplashActivity.this,
-                                                    new App.OnShowAdCompleteListener() {
+                                                    new MyApp.OnShowAdCompleteListener() {
                                                         @Override
                                                         public void onShowAdComplete() {
                                                             Log.d(LOG_TAG, "onShowAdComplete.");
@@ -129,16 +132,14 @@ public class SplashActivity extends AppCompatActivity {
 
                     }) {
             };
-            SingleJsonPass.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+            MyAppSingleJsonPass.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
         } else {
             Toast.makeText(context, "Please turn on your internet connection...", Toast.LENGTH_LONG).show();
         }
     }
 
     public void startMainActivity() {
-        startActivity(new Intent(this, MainActivity.class));
-//        startActivity(new Intent(this, TestActivity.class));
-//        startActivity(new Intent(this, TabActivity.class));
+        startActivity(new Intent(this, WalkthroughActivity.class));
         finish();
     }
 }

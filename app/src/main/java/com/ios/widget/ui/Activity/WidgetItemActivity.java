@@ -1,7 +1,6 @@
 package com.ios.widget.ui.Activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -15,22 +14,25 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RemoteViews;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.ads.AdSize;
 import com.google.android.material.tabs.TabLayout;
+import com.ios.widget.Ads.MyAppAd_Banner;
+import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
 import com.ios.widget.provider.LargeWidgetProvider;
-import com.ios.widget.provider.LargeWidgetService;
 import com.ios.widget.provider.MediumWidgetProvider;
 import com.ios.widget.provider.SmallWidgetProvider;
 import com.ios.widget.ui.Adapter.WidgetPagerAdapter;
-import com.ios.widget.utils.Constants;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -38,9 +40,7 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class WidgetItemActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -83,29 +83,29 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void initIntents() {
-        pos = getIntent().getIntExtra(Constants.ITEM_POSITION, 0);
-        WidgetPos = getIntent().getIntExtra(Constants.WIDGET_ITEM_POSITION, 0);
-        TabPos = getIntent().getIntExtra(Constants.TabPos, 0);
+        pos = getIntent().getIntExtra(MyAppConstants.ITEM_POSITION, 0);
+        WidgetPos = getIntent().getIntExtra(MyAppConstants.WIDGET_ITEM_POSITION, 0);
+        TabPos = getIntent().getIntExtra(MyAppConstants.TabPos, 0);
         System.out.println("______ pos  ::: "+pos);
         if (TabPos == 0) {
             TvTitle.setText("Trendy");
-            modelArrayList = Constants.getTrendyWidgetLists();
+            modelArrayList = MyAppConstants.getTrendyWidgetLists();
         } else if (TabPos == 1) {
             TvTitle.setText("Calendar");
-            modelArrayList = Constants.getCalendarWidgetLists();
+            modelArrayList = MyAppConstants.getCalendarWidgetLists();
         } else if (TabPos == 2) {
             TvTitle.setText("Weather");
-            modelArrayList = Constants.getWeatherWidgetLists();
+            modelArrayList = MyAppConstants.getWeatherWidgetLists();
             LlTemp.setVisibility(View.VISIBLE);
         } else if (TabPos == 3) {
             TvTitle.setText("Clock");
-            modelArrayList = Constants.getClockWidgetLists();
+            modelArrayList = MyAppConstants.getClockWidgetLists();
         } else if (TabPos == 4) {
             TvTitle.setText("X-Panel");
-            modelArrayList = Constants.getXPanelWidgetLists();
+            modelArrayList = MyAppConstants.getXPanelWidgetLists();
         } else if (TabPos == 5) {
             TvTitle.setText("Photo");
-            modelArrayList = Constants.getPhotoWidgetLists();
+            modelArrayList = MyAppConstants.getPhotoWidgetLists();
         }
     }
 
@@ -115,6 +115,8 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void initActions() {
+        MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
+
         helper = new DatabaseHelper(context);
         if (modelArrayList.size() > 1) {
             TabWidget.setVisibility(View.VISIBLE);
@@ -140,12 +142,12 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         TabLayout.Tab tabWidgetTabAt = TabWidget.getTabAt(WidgetPos);
         tabWidgetTabAt.select();
         PagerWidget.setCurrentItem(WidgetPos);
-        Constants.Temp_Id = TabTempLayout.getSelectedTabPosition();
+        MyAppConstants.Temp_Id = TabTempLayout.getSelectedTabPosition();
 
         TabTempLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Constants.Temp_Id = tab.getPosition();
+                MyAppConstants.Temp_Id = tab.getPosition();
             }
 
             @Override
@@ -225,6 +227,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void GotoAddWidget() {
+        MyAppConstants.CreateWidget=true;
         if ((modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 0 && TabSizeLayout.getSelectedTabPosition() == 2) || (modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 2 && TabSizeLayout.getSelectedTabPosition() == 1) || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 20 || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 22) {
             String s1 = Manifest.permission.CAMERA;
             Dexter.withActivity(this)
@@ -237,13 +240,13 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
                             }
 
                             if (report.isAnyPermissionPermanentlyDenied()) {
-                                Constants.showSettingsDialog(WidgetItemActivity.this);
+                                MyAppConstants.showSettingsDialog(WidgetItemActivity.this);
                             }
                         }
 
                         public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions,
                                                                        PermissionToken permissionToken) {
-                            Constants.showPermissionDialog(WidgetItemActivity.this, permissionToken);
+                            MyAppConstants.showPermissionDialog(WidgetItemActivity.this, permissionToken);
                         }
                     })
                     .onSameThread()
@@ -258,7 +261,18 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
                             if (report.areAllPermissionsGranted()) {
                                 LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
                                 if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                                    setProviderWidgets();
+                                    int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                                    int itemClick = SplashActivity.click++;
+                                    if (itemClick % countExtra == 0) {
+                                        MyAppAd_Interstitial.getInstance().showInter(WidgetItemActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                                            @Override
+                                            public void callbackCall() {
+                                                setProviderWidgets();
+                                            }
+                                        });
+                                    } else {
+                                        setProviderWidgets();
+                                    }
                                 } else {
                                     Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                                     startActivity(myIntent);
@@ -266,12 +280,12 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
                             }
 
                             if (report.isAnyPermissionPermanentlyDenied()) {
-                                Constants.showSettingsDialog(WidgetItemActivity.this);
+                                MyAppConstants.showSettingsDialog(WidgetItemActivity.this);
                             }
                         }
 
                         public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken permissionToken) {
-                            Constants.showPermissionDialog(WidgetItemActivity.this, permissionToken);
+                            MyAppConstants.showPermissionDialog(WidgetItemActivity.this, permissionToken);
                         }
                     })
                     .onSameThread()
@@ -285,8 +299,8 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
     private void setProviderWidgets() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             System.out.println("******** WidgetItemActivity::");
-            Constants.Item_Id = PagerWidget.getCurrentItem();
-            Constants.Widget_Type_Id = modelArrayList.get(PagerWidget.getCurrentItem()).getPosition();
+            MyAppConstants.Item_Id = PagerWidget.getCurrentItem();
+            MyAppConstants.Widget_Type_Id = modelArrayList.get(PagerWidget.getCurrentItem()).getPosition();
             manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
             switch (TabSizeLayout.getSelectedTabPosition()) {
                 case 0:
@@ -313,12 +327,29 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
                             intent = new Intent(context, LargeWidgetProvider.class);
                             break;
                     }
-                    intent.putExtra(Constants.TAG_WIDGET_NOTE_ID, pos);
+                    intent.putExtra(MyAppConstants.TAG_WIDGET_NOTE_ID, pos);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     manager.requestPinAppWidget(name, (Bundle) null, pendingIntent);
                 }, 100);
             }
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+        int itemClick = SplashActivity.click++;
+        if (itemClick % countExtra == 0) {
+            MyAppAd_Interstitial.getInstance().showInter(WidgetItemActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                @Override
+                public void callbackCall() {
+                    finish();
+                }
+            });
+        } else {
+            finish();
         }
     }
 }

@@ -6,6 +6,8 @@
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/drawable/clock_simple1_bg.xml" value="0.1155" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/drawable/clock_simple2_bg.xml" value="0.1155" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/drawable/ic_battery_charging.xml" value="0.1155" />
+        <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/drawable/ic_border_ad.xml" value="0.1245" />
+        <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/drawable/ic_border_color.xml" value="0.1" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/drawable/ic_calendar_purple.xml" value="0.1155" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/drawable/ic_calendar_ring.xml" value="0.1145" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/drawable/ic_calendar_ring_blue.xml" value="0.1155" />
@@ -31,10 +33,12 @@
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/activity_my_widgets_acivity.xml" value="0.13373253493013973" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/activity_photo_widget.xml" value="0.1" />
+        <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/activity_setting.xml" value="0.18796296296296297" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/activity_show_item.xml" value="0.2" />
-        <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/activity_splash.xml" value="0.2" />
+        <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/activity_splash.xml" value="0.12" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/activity_tab.xml" value="0.1712962962962963" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/activity_test.xml" value="0.16944444444444445" />
+        <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/activity_walkthrough.xml" value="0.2" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/activity_widget_item.xml" value="0.18" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/dialog_exit.xml" value="0.1" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/empty.xml" value="0.2" />
@@ -51,6 +55,7 @@
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/item_photo.xml" value="0.1" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/item_sub_category_list.xml" value="0.22" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/item_widget.xml" value="0.2" />
+        <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/layout_ads_item_big_native_layout.xml" value="0.25" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/layout_header.xml" value="0.2" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/layout_item_folder_list.xml" value="0.1" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/layout_test_clock.xml" value="0.2" />
@@ -97,7 +102,7 @@
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/layout_widget_photo_widget.xml" value="0.1" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/layout_widget_preview_large.xml" value="0.2" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/layout_widget_preview_small.xml" value="0.1" />
-        <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/layout_widget_weather1_large.xml" value="0.33" />
+        <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/layout_widget_weather1_large.xml" value="0.25" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/layout_widget_weather1_medium.xml" value="0.25" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/layout_widget_weather1_small.xml" value="0.18" />
         <entry key="..\:/Dhruta/Dhruta project/Client/Manish patel/IOS Widget App/IOS-Widget App/app/src/main/res/layout/layout_widget_weather2_large.xml" value="0.33" />

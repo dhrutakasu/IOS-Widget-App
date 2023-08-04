@@ -18,6 +18,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/RlBannerAd"
         android:layout_below="@id/RlImageActionbar">
 
         <LinearLayout
@@ -52,5 +53,21 @@
                     android:background="@drawable/ic_widget_shadow_left" />
             </RelativeLayout>
         </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/RlBannerAd"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom|center"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom|center">
+
+        <RelativeLayout
+            android:id="@+id/RlBannerAdView"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginBottom="0dp"
+            android:gravity="center|bottom" />
     </RelativeLayout>
 </RelativeLayout>

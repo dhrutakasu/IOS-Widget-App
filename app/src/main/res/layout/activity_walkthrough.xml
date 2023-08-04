@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.Activity.WalkthroughActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/PagerWalk"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/RlBannerAd"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/TvWalkTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:fontFamily="@font/main_semibold"
+                android:gravity="center"
+                android:maxLines="5"
+                android:singleLine="false"
+                android:text=""
+                android:textColor="@color/widget_white"
+                android:textSize="@dimen/_15sdp" />
+
+            <TextView
+                android:id="@+id/TvWalkSubTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:fontFamily="@font/main_medium"
+                android:gravity="center"
+                android:lineSpacingExtra="@dimen/_1sdp"
+                android:maxLines="5"
+                android:text=""
+                android:textColor="@color/widget_black"
+                android:textSize="@dimen/_12sdp" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/TabWalk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:background="@android:color/transparent"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:tabBackground="@drawable/ic_tab_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp" />
+
+            <TextView
+                android:id="@+id/TvWalkContinue"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_20sdp"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:layout_marginBottom="@dimen/_35sdp"
+                android:background="@drawable/ic_border_color"
+                android:fontFamily="@font/main_semibold"
+                android:gravity="center"
+                android:text="Next"
+                android:textAllCaps="false"
+                android:textColor="@color/widget_white"
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/RlBannerAd"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="bottom|center"
+            android:layout_alignParentBottom="true"
+            android:gravity="bottom|center">
+
+            <RelativeLayout
+                android:id="@+id/RlBannerAdView"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginBottom="0dp"
+                android:gravity="center|bottom" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,7 +23,7 @@ import com.ios.widget.Model.WidgetImages;
 import com.ios.widget.Model.WidgetMaster;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
-import com.ios.widget.utils.Constants;
+import com.ios.widget.utils.MyAppConstants;
 
 import java.util.List;
 
@@ -196,8 +196,8 @@ public class SmallPhotoWidgetService extends RemoteViewsService {
             int i26;
             int i27;
             int i28 = i;
-            int dpToPx = Constants.dpToPx(this.mContext, this.width);
-            int dpToPx2 = Constants.dpToPx(this.mContext, this.height);
+            int dpToPx = MyAppConstants.dpToPx(this.mContext, this.width);
+            int dpToPx2 = MyAppConstants.dpToPx(this.mContext, this.height);
             RemoteViews remoteViews = new RemoteViews(SmallPhotoWidgetService.this.getPackageName(), R.layout.layout_image);
             remoteViews.setInt(R.id.IvItemFull, "setAlpha", this.widgetMaster.getOpacity());
             float f = 1.0f;

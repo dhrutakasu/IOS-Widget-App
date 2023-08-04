@@ -16,8 +16,8 @@ import com.ios.widget.Model.WidgetMaster;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
 import com.ios.widget.ui.Activity.PhotoWidgetActivity;
-import com.ios.widget.utils.Constants;
-import com.ios.widget.utils.Pref;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class MediumPhotoWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] iArr) {
         DatabaseHelper helper = new DatabaseHelper(context);
-        WidgetData widgetData = new WidgetData(1, Constants.Widget_Type_Id, -1,"",Constants.Temp_Id);
+        WidgetData widgetData = new WidgetData(1, MyAppConstants.Widget_Type_Id, -1,"", MyAppConstants.Temp_Id);
         int insert = helper.InsertWidget(widgetData);
         for (int id : iArr) {
             Widget_Id = id;
@@ -50,17 +50,17 @@ public class MediumPhotoWidgetProvider extends AppWidgetProvider {
         }
         for (int id : iArr) {
             Widget_Id = id;
-            List widgetLists = new Pref(context).getWidgetLists(context);
+            List widgetLists = new MyAppPref(context).getWidgetLists(context);
             if (widgetLists == null) {
                 widgetLists = new ArrayList();
             }
             widgetLists.add(String.valueOf(Widget_Id));
-            new Pref(context).setWidgetLists(context, widgetLists);
+            new MyAppPref(context).setWidgetLists(context, widgetLists);
             database = new DatabaseHelper(context);
-            for (int i = 0; i < Constants.mSelectedList.size(); i++) {
-                WidgetImages widgetImages = new WidgetImages("0", Constants.mSelectedList.get(i).getPath(), Widget_Id);
-                if (database.CheckIsAlreadyDBorNot(Constants.mSelectedList.get(i).getPath().toString(), String.valueOf(Widget_Id))) {
-                    WidgetImages widgetImages1 = new WidgetImages(database.getImageListData(Widget_Id).getImageId(), String.valueOf(Constants.mSelectedList.get(i).getPath()), Widget_Id);
+            for (int i = 0; i < MyAppConstants.mSelectedList.size(); i++) {
+                WidgetImages widgetImages = new WidgetImages("0", MyAppConstants.mSelectedList.get(i).getPath(), Widget_Id);
+                if (database.CheckIsAlreadyDBorNot(MyAppConstants.mSelectedList.get(i).getPath().toString(), String.valueOf(Widget_Id))) {
+                    WidgetImages widgetImages1 = new WidgetImages(database.getImageListData(Widget_Id).getImageId(), String.valueOf(MyAppConstants.mSelectedList.get(i).getPath()), Widget_Id);
                     database.updateWidgetImages(widgetImages1);
                 } else {
                     database.InsertWidgetImage(widgetImages);
@@ -70,7 +70,7 @@ public class MediumPhotoWidgetProvider extends AppWidgetProvider {
                 WidgetMaster widgetMaster = database.getWidgetMaster(Widget_Id);
                 WidgetMaster widgetMaster1 = new WidgetMaster();
                 widgetMaster1.setWidgetId(Widget_Id);
-                widgetMaster1.setInterval( new Pref(context).getWidgetInterval(context));
+                widgetMaster1.setInterval( new MyAppPref(context).getWidgetInterval(context));
                 widgetMaster1.setId(widgetMaster.getId());
                 widgetMaster1.setSpaceBorder(widgetMaster.getSpaceBorder());
                 widgetMaster1.setSize(widgetMaster.getSize());
@@ -89,7 +89,7 @@ public class MediumPhotoWidgetProvider extends AppWidgetProvider {
             } else {
                 WidgetMaster widgetMaster = new WidgetMaster();
                 widgetMaster.setWidgetId(Widget_Id);
-                widgetMaster.setInterval( new Pref(context).getWidgetInterval(context));
+                widgetMaster.setInterval( new MyAppPref(context).getWidgetInterval(context));
                 database.InsertWidget(widgetMaster);
             }
             Class<MediumPhotoWidgetProvider> cls = MediumPhotoWidgetProvider.class;
@@ -154,7 +154,7 @@ public class MediumPhotoWidgetProvider extends AppWidgetProvider {
                     intent2.putExtra("widgetId", i3);
                     intent2.putExtra("flag", true);
                     intent2.setAction(WidgetSettingAction);
-                    intent2.setData(Uri.parse(Constants.getUniqueId()));
+                    intent2.setData(Uri.parse(MyAppConstants.getUniqueId()));
                     PendingIntent activity = PendingIntent.getActivity(context2, 0, intent2, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     remoteViews.setViewVisibility(R.id.LlFlipperPaging, View.GONE);
                     remoteViews.setOnClickPendingIntent(R.id.RlPhoto1, activity);
@@ -164,20 +164,20 @@ public class MediumPhotoWidgetProvider extends AppWidgetProvider {
                     intent3.putExtra("flag", true);
                     intent3.setAction(WidgetSettingAction);
                     intent3.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent3.setData(Uri.parse(Constants.getUniqueId()));
+                    intent3.setData(Uri.parse(MyAppConstants.getUniqueId()));
                     PendingIntent activity2 = PendingIntent.getActivity(context2, 0, intent3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     Intent intent4 = new Intent(context2, cls);
                     intent4.setAction(LeftClick);
                     intent4.putExtra("flip", true);
                     intent4.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, i3);
                     appWidgetManager = instance2;
-                    intent4.setData(Uri.parse(Constants.getUniqueId()));
+                    intent4.setData(Uri.parse(MyAppConstants.getUniqueId()));
                     PendingIntent broadcast = PendingIntent.getBroadcast(context2, 0, intent4, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     Intent intent5 = new Intent(context2, cls);
                     intent5.setAction(RightClick);
                     intent5.putExtra("flip", true);
                     intent5.putExtra("appWidgetId", i3);
-                    intent5.setData(Uri.parse(Constants.getUniqueId()));
+                    intent5.setData(Uri.parse(MyAppConstants.getUniqueId()));
                     PendingIntent broadcast2 = PendingIntent.getBroadcast(context2, 0, intent5, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     remoteViews.setViewVisibility(R.id.LlFlipperPaging, View.VISIBLE);
                     remoteViews.setOnClickPendingIntent(R.id.FlSettingView, activity2);
@@ -187,7 +187,7 @@ public class MediumPhotoWidgetProvider extends AppWidgetProvider {
             }
             Intent intent8 = new Intent(context2, MediumPhotoWidgetService.class);
             intent8.putExtra("WidgetID", i3);
-            intent8.setData(Uri.parse(Constants.getUniqueId()));
+            intent8.setData(Uri.parse(MyAppConstants.getUniqueId()));
             if (mainWidget != null) {
 
                 switch (mainWidget.getShape()) {

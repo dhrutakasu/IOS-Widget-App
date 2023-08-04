@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="@dimen/_40sdp"
-    android:paddingEnd="@dimen/_40sdp"
+    android:paddingStart="@dimen/_20sdp"
+    android:paddingEnd="@dimen/_20sdp"
     android:background="@android:color/transparent"
     android:gravity="top|center_vertical|center_horizontal|center"
     android:layoutDirection="ltr">
@@ -106,7 +106,7 @@
                         android:gravity="top|end"
                         android:text="29"
                         android:textColor="@color/widget_black"
-                        android:textSize="@dimen/_18sdp" />
+                        android:textSize="@dimen/_28sdp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -123,7 +123,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="4.5"
                     android:alpha="0.15"
-                    android:background="@color/widget_black"
+                    android:background="@color/widget_white"
                     android:weightSum="5" />
             </LinearLayout>
 
@@ -276,7 +276,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="4.5"
                     android:alpha="0.15"
-                    android:background="@color/widget_black"
+                    android:background="@color/widget_white"
                     android:weightSum="5" />
             </LinearLayout>
 

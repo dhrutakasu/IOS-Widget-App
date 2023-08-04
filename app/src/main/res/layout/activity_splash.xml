@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/widget_white"
     android:layout_height="match_parent"
+    android:background="@drawable/ic_splash_bg"
     tools:context="com.ios.widget.ui.Activity.SplashActivity">
 
     <ImageView
@@ -12,9 +12,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/ic_app_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/TvWidgetHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:fontFamily="@font/main_bold"
+        android:text="@string/widgets_i16"
+        android:textColor="@color/widget_black"
+        android:textSize="@dimen/_22sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/IvSetting" />
 </androidx.constraintlayout.widget.ConstraintLayout>

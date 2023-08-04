@@ -9,7 +9,7 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.ios.widget.R;
-import com.ios.widget.utils.Constants;
+import com.ios.widget.utils.MyAppConstants;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -187,14 +187,14 @@ public class SmallRemoteView implements RemoteViewsService.RemoteViewsFactory {
         }
         views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 8f);
         if (DayOfString[1].equals("WHITE")) {
-            switch (Constants.Widget_Type_Id) {
+            switch (MyAppConstants.Widget_Type_Id) {
                 case 6:
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.widget_black));
                     break;
             }
         }
         if (DayOfString[1].equals("BLUE")) {
-            switch (Constants.Widget_Type_Id) {
+            switch (MyAppConstants.Widget_Type_Id) {
                 case 6:
                     views.setViewPadding(R.id.TvCalendarDates, 4, 4, 4, 4);
                     views.setViewVisibility(R.id.IvMainCalendar, View.VISIBLE);

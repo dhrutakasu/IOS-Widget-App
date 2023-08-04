@@ -8,7 +8,7 @@ import android.provider.MediaStore;
 import com.ios.widget.Files.Directory;
 import com.ios.widget.Files.ImageFile;
 import com.ios.widget.Loaders.ImageLoader;
-import com.ios.widget.utils.Constants;
+import com.ios.widget.utils.MyAppConstants;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -99,7 +99,7 @@ public class FileLoaderCallbacks implements LoaderManager.LoaderCallbacks<Cursor
             Directory<ImageFile> directory = new Directory<>();
             directory.setId(img.getBucketId());
             directory.setName(img.getBucketName());
-            directory.setPath(Constants.extractPathWithoutSeparator(img.getPath()));
+            directory.setPath(MyAppConstants.extractPathWithoutSeparator(img.getPath()));
             if (!directories.contains(directory)) {
                 directory.addFile(img);
                 directories.add(directory);
@@ -114,7 +114,7 @@ public class FileLoaderCallbacks implements LoaderManager.LoaderCallbacks<Cursor
     }
 
     private boolean contains(String path) {
-        String name = Constants.extractFileNameWithSuffix(path);
+        String name = MyAppConstants.extractFileNameWithSuffix(path);
         Pattern pattern = Pattern.compile(mSuffixRegex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(name);
         return matcher.matches();

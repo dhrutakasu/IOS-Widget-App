@@ -133,7 +133,25 @@
         android:layout_marginEnd="@dimen/_20sdp"
         android:layout_marginBottom="@dimen/_8sdp"
         android:src="@drawable/btn_add_widget"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/RlBannerAd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/RlBannerAd"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom|center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="bottom|center">
+
+        <RelativeLayout
+            android:id="@+id/RlBannerAdView"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginBottom="0dp"
+            android:gravity="center|bottom" />
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

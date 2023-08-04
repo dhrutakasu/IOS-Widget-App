@@ -7,10 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
 import com.ios.widget.ui.Activity.WidgetItemActivity;
-import com.ios.widget.utils.Constants;
+import com.ios.widget.utils.MyAppConstants;
 
 import java.util.ArrayList;
 
@@ -40,7 +39,7 @@ public class ChildWidgetAdapter extends RecyclerView.Adapter<ChildWidgetAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                con.startActivity(new Intent(con, WidgetItemActivity.class).putExtra(Constants.ITEM_POSITION,positions));
+                con.startActivity(new Intent(con, WidgetItemActivity.class).putExtra(MyAppConstants.ITEM_POSITION,positions));
             }
         });
     }

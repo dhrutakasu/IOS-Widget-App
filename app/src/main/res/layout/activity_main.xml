@@ -7,65 +7,84 @@
     android:background="@color/widget_white"
     tools:context=".ui.Activity.MainActivity">
 
-    <TextView
-        android:id="@+id/TvWidgetHeading"
+    <ImageView
+        android:id="@+id/IvSettings"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:src="@drawable/ic_setting"
+        app:layout_constraintBottom_toBottomOf="@id/TvWidgetHeading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/TvWidgetHeading" />
+
+    <ImageView
+        android:id="@+id/IvMyWidget"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:src="@drawable/btn_my_widget"
+        app:layout_constraintBottom_toTopOf="@id/RlBannerAd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/RlBannerAd"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:text="@string/widgets_i16"
-        android:textSize="@dimen/_22sdp"
-        android:layout_marginStart="@dimen/_10sdp"
-        android:textColor="@color/widget_black"
-        android:fontFamily="@font/main_bold" />
+        android:gravity="bottom|center">
+
+        <RelativeLayout
+            android:id="@+id/RlBannerAdView"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginBottom="0dp"
+            android:gravity="center|bottom" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/TvWidgetSubHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/TvWidgetHeading"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:text="@string/widget_category"
-        android:textSize="@dimen/_12sdp"
         android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:fontFamily="@font/main_bold"
+        android:text="@string/widget_category"
         android:textColor="@color/widget_gray"
-        android:fontFamily="@font/main_bold" />
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TvWidgetHeading" />
 
-    <ImageView
-        android:id="@+id/IvSettings"
+    <TextView
+        android:id="@+id/TvWidgetHeading"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/ic_setting"
-        android:layout_marginEnd="@dimen/_8sdp"
-        app:layout_constraintTop_toTopOf="@id/TvWidgetHeading"
-        app:layout_constraintBottom_toBottomOf="@id/TvWidgetHeading" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:fontFamily="@font/main_bold"
+        android:text="@string/widgets_i16"
+        android:textColor="@color/widget_black"
+        android:textSize="@dimen/_22sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RvTypeList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/_12sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
         android:layout_marginBottom="@dimen/_12sdp"
         app:layout_constraintBottom_toTopOf="@id/IvMyWidget"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/TvWidgetSubHeading" />
-
-    <ImageView
-        android:id="@+id/IvMyWidget"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/btn_my_widget"
-        android:layout_marginStart="@dimen/_12sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:layout_marginBottom="@dimen/_12sdp"
-        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

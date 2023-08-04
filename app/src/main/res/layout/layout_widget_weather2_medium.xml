@@ -40,7 +40,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="2.25"
+                    android:layout_weight="2"
                     android:gravity="center|right"
                     android:orientation="vertical"
                     android:weightSum="5">
@@ -77,7 +77,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="2.25"
+                    android:layout_weight="2.5"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:weightSum="5">
@@ -86,20 +86,20 @@
                         android:id="@+id/TvTemp"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="3"
+                        android:layout_weight="3.5"
                         android:fontFamily="@font/main_bold"
                         android:gravity="center"
                         android:text="29"
                         android:textColor="@color/widget_white"
-                        android:textSize="@dimen/_18sdp" />
+                        android:textSize="@dimen/_28sdp" />
 
                     <TextView
                         android:id="@+id/TvTempMaxMin"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1.5"
+                        android:layout_weight="1"
                         android:fontFamily="@font/main_medium"
-                        android:gravity="center"
+                        android:gravity="center|top"
                         android:text="@string/app_name"
                         android:textColor="@color/widget_white"
                         android:textSize="@dimen/_8sdp" />

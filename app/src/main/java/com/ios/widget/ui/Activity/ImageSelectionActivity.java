@@ -10,14 +10,18 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdSize;
 import com.google.android.material.snackbar.Snackbar;
+import com.ios.widget.Ads.MyAppAd_Banner;
+import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.Callback.OnSelectStateListener;
 import com.ios.widget.Files.Directory;
 import com.ios.widget.Files.ImageFile;
 import com.ios.widget.R;
 import com.ios.widget.ui.Adapter.FolderListAdapter;
 import com.ios.widget.ui.Adapter.ImagePickAdapter;
-import com.ios.widget.utils.Constants;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,24 +32,23 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.ios.widget.utils.Constants.getmSelectedList;
-import static com.ios.widget.utils.Constants.list;
-import static com.ios.widget.utils.Constants.mAll;
-import static com.ios.widget.utils.Constants.mSelectedList;
+import static com.ios.widget.utils.MyAppConstants.getmSelectedList;
+import static com.ios.widget.utils.MyAppConstants.list;
+import static com.ios.widget.utils.MyAppConstants.mAll;
+import static com.ios.widget.utils.MyAppConstants.mSelectedList;
 
 public class ImageSelectionActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final int ARRANGE_IMAGE = 111;
-    public static String EXTRA_FROM_PREVIEW = Constants.EDIT_PERVIEW;
+    public static String EXTRA_FROM_PREVIEW = MyAppConstants.EDIT_PERVIEW;
     private Context context;
-    private TextView tv_title;
-    private ImageView iv_Back, iv_done;
-    private RecyclerView rv_folder_list, rv_Image_Albumlist;
-    private FolderListAdapter mAdapterList;
-    private ImagePickAdapter pickAdapter;
+    private TextView TvTitle;
+    private ImageView IvBack, IvDone;
+    private RecyclerView RvFolderList, RvImageAlbumlist;
+    private FolderListAdapter folderListAdapter;
+    private ImagePickAdapter PickAdapter;
     private int MaxNumber;
     private boolean isPreview = false;
-    private RelativeLayout rl_main_img_selection;
+    private RelativeLayout RlMainImgSelection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,56 +64,58 @@ public class ImageSelectionActivity extends AppCompatActivity implements View.On
 
     private void initViews() {
         context = this;
-        tv_title = (TextView) findViewById(R.id.TvTitle);
-        iv_Back = (ImageView) findViewById(R.id.IvBack);
-        iv_done = (ImageView) findViewById(R.id.iv_done);
-        rv_folder_list = (RecyclerView) findViewById(R.id.RvFolderList);
-        rv_Image_Albumlist = (RecyclerView) findViewById(R.id.RvImageAlbumlist);
-        rl_main_img_selection = (RelativeLayout) findViewById(R.id.RlMainImgSelection);
+        TvTitle = (TextView) findViewById(R.id.TvTitle);
+        IvBack = (ImageView) findViewById(R.id.IvBack);
+        IvDone = (ImageView) findViewById(R.id.IvDone);
+        RvFolderList = (RecyclerView) findViewById(R.id.RvFolderList);
+        RvImageAlbumlist = (RecyclerView) findViewById(R.id.RvImageAlbumlist);
+        RlMainImgSelection = (RelativeLayout) findViewById(R.id.RlMainImgSelection);
 
     }
 
     private void intents() {
-        MaxNumber = getIntent().getIntExtra(Constants.MAX_NUMBER, 2);
+        MaxNumber = getIntent().getIntExtra(MyAppConstants.MAX_NUMBER, 2);
         isPreview = getIntent().hasExtra(EXTRA_FROM_PREVIEW);
 
     }
 
     private void initlistners() {
-        iv_Back.setOnClickListener(this);
-        iv_done.setOnClickListener(this);
+        IvBack.setOnClickListener(this);
+        IvDone.setOnClickListener(this);
 
 
     }
 
     private void initActions() {
-        tv_title.setText(getResources().getString(R.string.str_folder_all));
+        MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
+
+        TvTitle.setText(getResources().getString(R.string.str_folder_all));
 
         if (MaxNumber == 10) {
-            iv_done.setVisibility(View.VISIBLE);
+            IvDone.setVisibility(View.VISIBLE);
         }
         if (isPreview) {
             mSelectedList.clear();
             mSelectedList.addAll(getmSelectedList);
         }
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-        rv_Image_Albumlist.setLayoutManager(layoutManager);
+        RvImageAlbumlist.setLayoutManager(layoutManager);
 
-        pickAdapter = new ImagePickAdapter(this);
-        rv_Image_Albumlist.setAdapter(pickAdapter);
+        PickAdapter = new ImagePickAdapter(this);
+        RvImageAlbumlist.setAdapter(PickAdapter);
 
-        pickAdapter.setOnSelectStateListener(new OnSelectStateListener<ImageFile>() {
+        PickAdapter.setOnSelectStateListener(new OnSelectStateListener<ImageFile>() {
             @Override
             public void OnSelectStateChanged(boolean state, ImageFile file) {
                 if (state) {
                     if (mSelectedList.size() == 10) {
-                        Snackbar snackbar = Snackbar.make(rl_main_img_selection, "Select up to 10 images", Snackbar.LENGTH_LONG);
+                        Snackbar snackbar = Snackbar.make(RlMainImgSelection, "Select up to 10 images", Snackbar.LENGTH_LONG);
                         snackbar.show();
                     } else {
                         if (file.isSelected()) {
-                            Constants.addSelectedImage(file);
+                            MyAppConstants.addSelectedImage(file);
                         } else {
-                            Constants.removeSelectedImages(file);
+                            MyAppConstants.removeSelectedImages(file);
                         }
                     }
                 }
@@ -122,14 +127,14 @@ public class ImageSelectionActivity extends AppCompatActivity implements View.On
             }
         });
 
-        rv_folder_list.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
-        mAdapterList = new FolderListAdapter(context, list);
-        rv_folder_list.setAdapter(mAdapterList);
+        RvFolderList.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+        folderListAdapter = new FolderListAdapter(context, list);
+        RvFolderList.setAdapter(folderListAdapter);
 
-        mAdapterList.setListener(new FolderListAdapter.FolderListListener() {
+        folderListAdapter.setListener(new FolderListAdapter.FolderListListener() {
             @Override
             public void onFolderListClick(Directory directory) {
-                tv_title.setText(directory.getName());
+                TvTitle.setText(directory.getName());
                 if (TextUtils.isEmpty(directory.getPath())) { //All
                     refreshData(mAll);
                 } else {
@@ -145,7 +150,6 @@ public class ImageSelectionActivity extends AppCompatActivity implements View.On
             }
         });
         refreshData(mAll);
-        GridLayoutManager manager = new GridLayoutManager(context, 4);
     }
 
     @Override
@@ -154,7 +158,7 @@ public class ImageSelectionActivity extends AppCompatActivity implements View.On
             case R.id.IvBack:
                 GotoBack();
                 break;
-            case R.id.iv_done:
+            case R.id.IvDone:
                 GotoDone();
                 break;
         }
@@ -165,9 +169,9 @@ public class ImageSelectionActivity extends AppCompatActivity implements View.On
     }
 
     private void GotoDone() {
-        if (Constants.getSelectedImages().size() <= 1) {
+        if (MyAppConstants.getSelectedImages().size() <= 1) {
             Snackbar snackbar = Snackbar
-                    .make(rl_main_img_selection, "Please Select more then 10 Images for Create widget....", Snackbar.LENGTH_LONG);
+                    .make(RlMainImgSelection, "Please Select more then 10 Images for Create widget....", Snackbar.LENGTH_LONG);
 
             snackbar.show();
         } else {
@@ -176,10 +180,20 @@ public class ImageSelectionActivity extends AppCompatActivity implements View.On
     }
 
     private void GotoEditActivity() {
-        for (int i = 0; i < mSelectedList.size(); i++) {
+        int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+        int itemClick = SplashActivity.click++;
+        if (itemClick % countExtra == 0) {
+            MyAppAd_Interstitial.getInstance().showInter(ImageSelectionActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                @Override
+                public void callbackCall() {
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            });
+        } else {
+            setResult(RESULT_OK);
+            finish();
         }
-        setResult(RESULT_OK);
-        finish();
     }
 
     private void refreshData(List<Directory<ImageFile>> directories) {
@@ -194,21 +208,22 @@ public class ImageSelectionActivity extends AppCompatActivity implements View.On
                 list.get(index).setSelected(true);
             }
         }
-        pickAdapter.refresh(list);
+        PickAdapter.refresh(list);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case ARRANGE_IMAGE:
-                switch (resultCode) {
-                    case RESULT_OK:
-                        setResult(RESULT_OK);
-                        finish();
-                        break;
+    public void onBackPressed() {
+        int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+        int itemClick = SplashActivity.click++;
+        if (itemClick % countExtra == 0) {
+            MyAppAd_Interstitial.getInstance().showInter(ImageSelectionActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                @Override
+                public void callbackCall() {
+                    finish();
                 }
-                break;
+            });
+        } else {
+            finish();
         }
     }
 }

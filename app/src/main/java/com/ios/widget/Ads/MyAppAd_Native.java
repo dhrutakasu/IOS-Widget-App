@@ -20,34 +20,27 @@ import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.android.gms.ads.nativead.NativeAdView;
 import com.ios.widget.R;
-import com.ios.widget.utils.Pref;
+import com.ios.widget.utils.MyAppPref;
 
-public class Ad_Native {
-    private static Ad_Native mInstance;
+public class MyAppAd_Native {
+    private static MyAppAd_Native mInstance;
     private NativeAd nativeAd;
 
-    public static Ad_Native getInstance() {
+    public static MyAppAd_Native getInstance() {
         if (mInstance == null) {
-            mInstance = new Ad_Native();
+            mInstance = new MyAppAd_Native();
         }
         return mInstance;
     }
 
     public void LoadNative(final Activity activity) {
 
-        AdLoader.Builder builder = new AdLoader.Builder(activity, new Pref(activity).getString(Pref.AD_NATIVE, ""));
+        AdLoader.Builder builder = new AdLoader.Builder(activity, new MyAppPref(activity).getString(MyAppPref.AD_NATIVE, ""));
         builder.forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
 
             @Override
             public void onNativeAdLoaded(NativeAd nativeAd) {
-//                if ((Build.VERSION.SDK_INT >= 17 ? activity.isDestroyed() : false) || activity.isFinishing() || activity.isChangingConfigurations()) {
-//                    nativeAd.destroy();
-//                    return;
-//                }
-//                if (Ad_Native.this.nativeAd != null) {
-//                    Ad_Native.this.nativeAd.destroy();
-//                }
-                Ad_Native.this.nativeAd = nativeAd;
+                MyAppAd_Native.this.nativeAd = nativeAd;
             }
         });
         builder.withNativeAdOptions(new NativeAdOptions.Builder().setVideoOptions(new VideoOptions.Builder().setStartMuted(true).build()).build());
@@ -83,7 +76,7 @@ public class Ad_Native {
             NativeAdView nativeAdView = (NativeAdView) activity.getLayoutInflater().inflate(R.layout.layout_ads_item_big_native_layout, (ViewGroup) null);
             populateUnifiedNativeAdView(this.nativeAd, nativeAdView);
             frameLayout.removeAllViews();
-            String string2 = new Pref(activity).getString(Pref.SHOW, "no");
+            String string2 = new MyAppPref(activity).getString(MyAppPref.SHOW, "no");
 
             if (string2.equalsIgnoreCase("yes") ) {
                 frameLayout.setVisibility(View.VISIBLE);

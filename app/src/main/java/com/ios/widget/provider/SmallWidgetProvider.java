@@ -1,6 +1,7 @@
 package com.ios.widget.provider;
 
-import static com.ios.widget.utils.Constants.Widget_Id;
+import static com.ios.widget.utils.MyAppConstants.CreateWidget;
+import static com.ios.widget.utils.MyAppConstants.Widget_Id;
 
 import android.Manifest;
 import android.app.AlarmManager;
@@ -39,8 +40,8 @@ import com.android.volley.toolbox.Volley;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
-import com.ios.widget.utils.Constants;
-import com.ios.widget.utils.Pref;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,16 +57,20 @@ public class SmallWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         DatabaseHelper helper = new DatabaseHelper(context);
-        System.out.println("******** SmallWidgetProvider::"+Constants.Temp_Id);
-        WidgetData widgetData = new WidgetData(0, Constants.Widget_Type_Id, -1, "",Constants.Temp_Id);
-        int insert = helper.InsertWidget(widgetData);
-        for (int id : appWidgetIds) {
-            Widget_Id = id;
-        }
-        if (helper.getWidgetCount() != 0) {
-            WidgetData widgetsId = helper.getWidgetsId(insert);
-            widgetsId.setNumber(Widget_Id);
-            helper.updateWidget(widgetsId);
+        System.out.println("******** SmallWidgetProvider::"+ MyAppConstants.Temp_Id);
+        int insert=-1;
+        WidgetData widgetData=null;
+        if (CreateWidget) {
+            widgetData = new WidgetData(0, MyAppConstants.Widget_Type_Id, -1, "", MyAppConstants.Temp_Id);
+            insert = helper.InsertWidget(widgetData);
+            for (int id : appWidgetIds) {
+                Widget_Id = id;
+            }
+            if (helper.getWidgetCount() != 0) {
+                WidgetData widgetsId = helper.getWidgetsId(insert);
+                widgetsId.setNumber(Widget_Id);
+                helper.updateWidget(widgetsId);
+            }
         }
         for (int i = 0; i < helper.getWidgets().size(); ++i) {
             RemoteViews rv = null;
@@ -122,10 +127,10 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                         RequestQueue queue = Volley.newRequestQueue(context);
                                         String url,tempExt;
                                         if (widgetData.getTemp()==0) {
-                                            url = Constants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
+                                            url = MyAppConstants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
                                             tempExt="°C";
                                         }else {
-                                            url = Constants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
+                                            url = MyAppConstants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
                                             tempExt="°F";
                                         }
                                         RemoteViews finalRv1 = rv;
@@ -142,7 +147,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                                         WeatherObject.get("main");
                                                         WeatherObject.get("icon");
                                                         finalRv1.setTextViewText(R.id.TvDesc, WeatherObject.get("description").toString());
-                                                        finalRv1.setImageViewResource(R.id.IvWeatherIcon, Constants.getWeatherIcons(WeatherObject.getString("icon")));
+                                                        finalRv1.setImageViewResource(R.id.IvWeatherIcon, MyAppConstants.getWeatherIcons(WeatherObject.getString("icon")));
                                                     }
                                                     JSONObject MainObject = obj.getJSONObject("main");
 
@@ -152,12 +157,12 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                                     finalRv1.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + tempExt);
                                                     String MinTemp = MainObject.get("temp_min").toString();
                                                     String MaxTemp = MainObject.get("temp_max").toString();
-                                                    finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt+" L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
+                                                    finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt+" / L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
 
                                                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                                                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                                                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                                                    new Pref(context).putBoolean(Pref.IS_WEATHER_1_ALARM, true);
+                                                    new MyAppPref(context).putBoolean(MyAppPref.IS_WEATHER_1_ALARM, true);
                                                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                                                     appWidgetManager.updateAppWidget(Widget_Id, finalRv1);
                                                 } catch (JSONException e) {
@@ -201,7 +206,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                 case 5:
                     //todo calender 2 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_small);
-                    rv.setImageViewBitmap(R.id.IvBackground2, Constants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_small_bg), 30));
+                    rv.setImageViewBitmap(R.id.IvBackground2, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_small_bg), 30));
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
@@ -262,10 +267,10 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                         RequestQueue queue = Volley.newRequestQueue(context);
                                         String url,tempExt;
                                         if (widgetData.getTemp()==0) {
-                                            url = Constants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
+                                            url = MyAppConstants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
                                             tempExt="°C";
                                         }else {
-                                            url = Constants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
+                                            url = MyAppConstants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
                                             tempExt="°F";
                                         }
                                         RemoteViews finalRv1 = rv;
@@ -280,7 +285,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                                         JSONObject WeatherObject = WeatherArray.getJSONObject(j);
 
                                                         finalRv1.setTextViewText(R.id.TvDesc, WeatherObject.get("main").toString());
-                                                        finalRv1.setImageViewResource(R.id.IvWeatherIcon, Constants.getWeatherIcons(WeatherObject.getString("icon")));
+                                                        finalRv1.setImageViewResource(R.id.IvWeatherIcon, MyAppConstants.getWeatherIcons(WeatherObject.getString("icon")));
                                                     }
                                                     JSONObject MainObject = obj.getJSONObject("main");
 
@@ -292,7 +297,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                                                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                                                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                                                    new Pref(context).putBoolean(Pref.IS_WEATHER_1_ALARM, true);
+                                                    new MyAppPref(context).putBoolean(MyAppPref.IS_WEATHER_1_ALARM, true);
                                                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                                                     appWidgetManager.updateAppWidget(Widget_Id, finalRv1);
                                                 } catch (JSONException e) {
@@ -346,10 +351,10 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                         RequestQueue queue = Volley.newRequestQueue(context);
                                         String url,tempExt;
                                         if (widgetData.getTemp()==0) {
-                                            url = Constants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
+                                            url = MyAppConstants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
                                             tempExt="°C";
                                         }else {
-                                            url = Constants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
+                                            url = MyAppConstants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
                                             tempExt="°F";
                                         }
                                         RemoteViews finalRv1 = rv;
@@ -364,7 +369,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                                         JSONObject WeatherObject = WeatherArray.getJSONObject(j);
 
                                                         finalRv1.setTextViewText(R.id.TvDesc, WeatherObject.get("main").toString());
-                                                        finalRv1.setImageViewResource(R.id.IvWeatherIcon, Constants.getWeatherIcons(WeatherObject.getString("icon")));
+                                                        finalRv1.setImageViewResource(R.id.IvWeatherIcon, MyAppConstants.getWeatherIcons(WeatherObject.getString("icon")));
                                                     }
                                                     JSONObject MainObject = obj.getJSONObject("main");
 
@@ -374,12 +379,12 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                                     finalRv1.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + tempExt);
                                                     String MinTemp = MainObject.get("temp_min").toString();
                                                     String MaxTemp = MainObject.get("temp_max").toString();
-                                                    finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt+" L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
+                                                    finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt+" ~ L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
 
                                                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                                                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                                                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                                                    new Pref(context).putBoolean(Pref.IS_WEATHER_1_ALARM, true);
+                                                    new MyAppPref(context).putBoolean(MyAppPref.IS_WEATHER_1_ALARM, true);
                                                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                                                     appWidgetManager.updateAppWidget(Widget_Id, finalRv1);
                                                 } catch (JSONException e) {
@@ -462,7 +467,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                             }
                         }, null);
                     }
-                    if (Constants.IsWIfiConnected(context)) {
+                    if (MyAppConstants.IsWIfiConnected(context)) {
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1_selected);
                     } else {
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi1);
@@ -476,9 +481,9 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         }
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                        System.out.println("------------ ppppp :: "+Constants.hasSIMCard(context));
+                        System.out.println("------------ ppppp :: "+ MyAppConstants.hasSIMCard(context));
                     }
-                    if (Constants.isNetworkAvailable(context)) {
+                    if (MyAppConstants.isNetworkAvailable(context)) {
                         rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1_selected);
                     } else {
                         rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1);
@@ -489,11 +494,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_tourch1);
                     }
 
-                    if (!new Pref(context).getBoolean(Pref.IS_X_PANEL_1_ALARM, false)) {
+                    if (!new MyAppPref(context).getBoolean(MyAppPref.IS_X_PANEL_1_ALARM, false)) {
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                         PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                        new Pref(context).putBoolean(Pref.IS_X_PANEL_1_ALARM, true);
+                        new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_1_ALARM, true);
                         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                     }
 
@@ -553,12 +558,12 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     long free = internalFree + externalFree;
                     long used = total - free;
                     rv.setTextViewText(R.id.TvProgressText, managerIntProperty + "%");
-                    rv.setTextViewText(R.id.storage_text, Constants.bytes2String(used) + "/" + Constants.bytes2String(total));
-                    if (!new Pref(context).getBoolean(Pref.IS_X_PANEL_4_ALARM, false)) {
+                    rv.setTextViewText(R.id.storage_text, MyAppConstants.bytes2String(used) + "/" + MyAppConstants.bytes2String(total));
+                    if (!new MyAppPref(context).getBoolean(MyAppPref.IS_X_PANEL_4_ALARM, false)) {
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                         PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                        new Pref(context).putBoolean(Pref.IS_X_PANEL_4_ALARM, true);
+                        new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
                         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                     }
                     break;
@@ -596,7 +601,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                             }
                         }, null);
                     }
-                    if (Constants.IsWIfiConnected(context)) {
+                    if (MyAppConstants.IsWIfiConnected(context)) {
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_xpanel_medium_2_wifi_selected);
                     } else {
                         rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_xpanel_medium_2_wifi);
@@ -610,7 +615,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         }
                     }
 
-                    if (Constants.isNetworkAvailable(context)) {
+                    if (MyAppConstants.isNetworkAvailable(context)) {
                         rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_xpanel_medium_2_mobiledata_selected);
                     } else {
                         rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_xpanel_medium_2_mobiledata);
@@ -621,17 +626,17 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         rv.setImageViewResource(R.id.IvTorch, R.drawable.ic_xpanel_medium_2_flashlight);
                     }
 
-                    final float totalSpace = Constants.DeviceMemory.getInternalStorageSpace();
-                    final float occupiedSpace = Constants.DeviceMemory.getInternalUsedSpace();
-                    final float freeSpace = Constants.DeviceMemory.getInternalFreeSpace();
+                    final float totalSpace = MyAppConstants.DeviceMemory.getInternalStorageSpace();
+                    final float occupiedSpace = MyAppConstants.DeviceMemory.getInternalUsedSpace();
+                    final float freeSpace = MyAppConstants.DeviceMemory.getInternalFreeSpace();
 
                     rv.setProgressBar(R.id.progressBarCharge, 100, property, false);
                     rv.setProgressBar(R.id.progressBarStorage, (int) totalSpace, (int) occupiedSpace, false);
-                    if (!new Pref(context).getBoolean(Pref.IS_X_PANEL_3_ALARM, false)) {
+                    if (!new MyAppPref(context).getBoolean(MyAppPref.IS_X_PANEL_3_ALARM, false)) {
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                         PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                        new Pref(context).putBoolean(Pref.IS_X_PANEL_3_ALARM, true);
+                        new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_3_ALARM, true);
                         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                     }
                     Intent intentWifi3 = new Intent(Settings.ACTION_WIFI_SETTINGS);
@@ -653,6 +658,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     break;
             }
             appWidgetManager.updateAppWidget(Widget_Id, rv);
+            MyAppConstants.CreateWidget=false;
 
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);

@@ -8,7 +8,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
-public class Pref {
+public class MyAppPref {
     private SharedPreferences preferences;
     public static String IS_DATE_1 = "IsDate1";
     public static String IS_DATE_3 = "IsDate3";
@@ -38,11 +38,12 @@ public class Pref {
     public static final String AD_INTER = "AD_INTER";
     public static final String AD_NATIVE = "AD_NATIVE";
     public static final String AD_OPEN = "AD_OPEN";
+    public static final String AD_COUNTER = "AD_COUNTER";
     public static final String SHOW = "AdShow";
     public static final String CLICK = "CLICK";
     public static String openads;
 
-    public Pref(Context context) {
+    public MyAppPref(Context context) {
         preferences = context.getSharedPreferences("widget_pref", Context.MODE_PRIVATE);
     }
 

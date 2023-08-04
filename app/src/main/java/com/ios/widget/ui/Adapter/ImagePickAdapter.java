@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
-import static com.ios.widget.utils.Constants.mSelectedList;
+import static com.ios.widget.utils.MyAppConstants.mSelectedList;
 
 public class ImagePickAdapter extends BaseAdapter<ImageFile, ImagePickAdapter.ImagePickViewHolder> {
     public ImagePickAdapter(Context ctx) {

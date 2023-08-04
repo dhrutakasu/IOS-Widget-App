@@ -7,19 +7,19 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-public class SingleJsonPass extends Application {
-    private static SingleJsonPass mInstance;
+public class MyAppSingleJsonPass extends Application {
+    private static MyAppSingleJsonPass mInstance;
     private RequestQueue mRequestQueue;
     private static Context mCtx;
 
-    private SingleJsonPass(Context context) {
+    private MyAppSingleJsonPass(Context context) {
         mCtx = context;
         mRequestQueue = getRequestQueue();
     }
 
-    public static synchronized SingleJsonPass getInstance(Context context) {
+    public static synchronized MyAppSingleJsonPass getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new SingleJsonPass(context);
+            mInstance = new MyAppSingleJsonPass(context);
         }
         return mInstance;
     }

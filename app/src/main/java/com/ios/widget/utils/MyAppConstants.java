@@ -34,6 +34,8 @@ import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
 import com.karumi.dexter.PermissionToken;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
-public class Constants {
+public class MyAppConstants {
 
     public static final String ITEM_POSITION = "ITEM_POSITION";
     public static final String WIDGET_ITEM_POSITION = "WIDGET_ITEM_POSITION";
@@ -66,6 +68,7 @@ public class Constants {
     public static final String EDIT_PERVIEW = "Edit_preview";
     public static int Temp_Id = -1;
     public static boolean WidgetRemove = false;
+    public static boolean CreateWidget=false;
 
     public static boolean isConnectingToInternet(Context con) {
         ConnectivityManager connectivity = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -290,6 +293,25 @@ public class Constants {
         return 0;
     }
 
+    public static String md5(String s) {
+            try {
+                // Create MD5 Hash
+                MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+                digest.update(s.getBytes());
+                byte messageDigest[] = digest.digest();
+
+                // Create Hex String
+                StringBuffer hexString = new StringBuffer();
+                for (int i=0; i<messageDigest.length; i++)
+                    hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+                return hexString.toString();
+
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            return "";
+    }
+
     public static class DeviceMemory {
 
         public static float getInternalStorageSpace() {
@@ -326,7 +348,7 @@ public class Constants {
         builder.setPositiveButton((CharSequence) "GOTO SETTINGS", (DialogInterface.OnClickListener) new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
-                Constants.openSettings(activity);
+                MyAppConstants.openSettings(activity);
             }
         });
         builder.setNegativeButton((CharSequence) "Cancel", (DialogInterface.OnClickListener) new DialogInterface.OnClickListener() {

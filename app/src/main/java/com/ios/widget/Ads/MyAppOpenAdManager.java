@@ -8,21 +8,21 @@ import android.os.Bundle;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.appopen.AppOpenAd;
-import com.ios.widget.Application.App;
-import com.ios.widget.utils.Pref;
+import com.ios.widget.Application.MyApp;
+import com.ios.widget.utils.MyAppPref;
 
 import java.util.Date;
 
 import androidx.lifecycle.LifecycleObserver;
 
-public class AppOpenAdManager implements Application.ActivityLifecycleCallbacks, LifecycleObserver {
+public class MyAppOpenAdManager implements Application.ActivityLifecycleCallbacks, LifecycleObserver {
     private static final String LOG_TAG = "AppOpenAdManager";
     private final String AD_UNIT_ID;
     private AppOpenAd appOpenAd = null;
     private boolean isLoadingAd = false;
     public boolean isShowingAd = false;
     private long loadTime = 0;
-    App myApplication;
+    MyApp myApplication;
 
     public void onActivityCreated(Activity activity, Bundle bundle) {
     }
@@ -45,17 +45,17 @@ public class AppOpenAdManager implements Application.ActivityLifecycleCallbacks,
     public void onActivityStopped(Activity activity) {
     }
 
-    public AppOpenAdManager(Context context) {
-        String string = new Pref(context).getString(Pref.AD_OPEN, "");
+    public MyAppOpenAdManager(Context context) {
+        String string = new MyAppPref(context).getString(MyAppPref.AD_OPEN, "");
         this.AD_UNIT_ID = string;
-        Pref.openads = string;
+        MyAppPref.openads = string;
         loadAd(context);
     }
 
-    public AppOpenAdManager(App myApplicationAppOpen, Context context) {
-        this.AD_UNIT_ID = new Pref(context).getString(Pref.AD_OPEN, "");
-        this.myApplication = myApplicationAppOpen;
-        myApplicationAppOpen.registerActivityLifecycleCallbacks(this);
+    public MyAppOpenAdManager(MyApp myApplicationMyAppOpen, Context context) {
+        this.AD_UNIT_ID = new MyAppPref(context).getString(MyAppPref.AD_OPEN, "");
+        this.myApplication = myApplicationMyAppOpen;
+        myApplicationMyAppOpen.registerActivityLifecycleCallbacks(this);
         loadAd(context);
     }
 
@@ -65,14 +65,14 @@ public class AppOpenAdManager implements Application.ActivityLifecycleCallbacks,
             AppOpenAd.load(context, this.AD_UNIT_ID, new AdRequest.Builder().build(), 1, new AppOpenAd.AppOpenAdLoadCallback() {
 
                 public void onAdLoaded(AppOpenAd appOpenAd) {
-                    AppOpenAdManager.this.appOpenAd = appOpenAd;
-                    AppOpenAdManager.this.isLoadingAd = false;
-                    AppOpenAdManager.this.loadTime = new Date().getTime();
+                    MyAppOpenAdManager.this.appOpenAd = appOpenAd;
+                    MyAppOpenAdManager.this.isLoadingAd = false;
+                    MyAppOpenAdManager.this.loadTime = new Date().getTime();
                 }
 
                 @Override
                 public void onAdFailedToLoad(LoadAdError loadAdError) {
-                    AppOpenAdManager.this.isLoadingAd = false;
+                    MyAppOpenAdManager.this.isLoadingAd = false;
                 }
             });
         }

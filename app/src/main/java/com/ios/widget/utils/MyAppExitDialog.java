@@ -7,11 +7,11 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.nativead.NativeAd;
-import com.ios.widget.Ads.Ad_Native;
+import com.ios.widget.Ads.MyAppAd_Native;
 import com.ios.widget.R;
 import com.ios.widget.ui.Activity.MainActivity;
 
-public class ExitDialog extends Dialog {
+public class MyAppExitDialog extends Dialog {
     private final MainActivity activity;
     public ExitListener exitListener;
     private NativeAd nativeAd;
@@ -21,7 +21,7 @@ public class ExitDialog extends Dialog {
         void onExit();
     }
 
-    public ExitDialog(MainActivity activity, Context context, ExitListener exitListener) {
+    public MyAppExitDialog(MainActivity activity, Context context, ExitListener exitListener) {
         super(context);
         this.activity = activity;
         this.exitListener = exitListener;
@@ -32,7 +32,7 @@ public class ExitDialog extends Dialog {
         super.onCreate(bundle);
         setContentView(R.layout.dialog_exit);
         TextView TvDialogExit = (TextView) findViewById(R.id.TvDialogExit);
-        Ad_Native.getInstance().showNative250(activity, findViewById(R.id.FlNativeExit));
+        MyAppAd_Native.getInstance().showNative250(activity, findViewById(R.id.FlNativeExit));
         TvDialogExit.setOnClickListener(view -> {
             exitListener.onExit();
         });

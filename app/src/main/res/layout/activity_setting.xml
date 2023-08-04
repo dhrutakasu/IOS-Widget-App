@@ -20,7 +20,7 @@
         android:paddingStart="@dimen/_20sdp"
         android:paddingEnd="@dimen/_20sdp"
         android:layout_marginTop="@dimen/_8sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/RlBannerAd"
         app:layout_constraintTop_toBottomOf="@id/ViewHeader">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -164,7 +164,24 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/RlBannerAd"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_gravity="bottom|center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="bottom|center">
 
+        <FrameLayout
+            android:id="@+id/FlNativeAds"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_8sdp" />
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

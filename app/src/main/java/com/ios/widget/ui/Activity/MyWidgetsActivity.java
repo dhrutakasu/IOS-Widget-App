@@ -6,16 +6,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdSize;
+import com.ios.widget.Ads.MyAppAd_Banner;
+import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
 import com.ios.widget.ui.Adapter.MyWidgetAdapter;
-import com.ios.widget.utils.Constants;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import java.util.ArrayList;
 
@@ -27,6 +33,7 @@ public class MyWidgetsActivity extends AppCompatActivity implements View.OnClick
     private DatabaseHelper helper;
     private RecyclerView RvMyWidget;
     private ArrayList<WidgetData> myWidgetLists = new ArrayList<WidgetData>();
+    private int countExtra,itemClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +48,7 @@ public class MyWidgetsActivity extends AppCompatActivity implements View.OnClick
     private void initViews() {
         context = this;
         IvBack = (ImageView) findViewById(R.id.IvBack);
-        iv_done = (ImageView) findViewById(R.id.iv_done);
+        iv_done = (ImageView) findViewById(R.id.IvDone);
         IvNotFoundRecord = (ImageView) findViewById(R.id.IvNotFoundRecord);
         IvMyWidgetTrendy = (ImageView) findViewById(R.id.IvMyWidgetTrendy);
         IvMyWidgetCalendar = (ImageView) findViewById(R.id.IvMyWidgetCalendar);
@@ -65,13 +72,15 @@ public class MyWidgetsActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void initActions() {
+        MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
+
         iv_done.setImageResource(R.drawable.ic_delete);
         helper = new DatabaseHelper(context);
         TvTitle.setText(getResources().getString(R.string.str_my_widget));
         myWidgetLists = new ArrayList<>();
-        for (int j = 0; j < Constants.getTrendyWidgetLists().size(); j++) {
-            System.out.println("_______%%%% PPPP: " + helper.getWidgetsType(Constants.getTrendyWidgetLists().get(j).getPosition()).toString());
-            myWidgetLists.addAll(helper.getWidgetsType(Constants.getTrendyWidgetLists().get(j).getPosition()));
+        for (int j = 0; j < MyAppConstants.getTrendyWidgetLists().size(); j++) {
+            System.out.println("_______%%%% PPPP: " + helper.getWidgetsType(MyAppConstants.getTrendyWidgetLists().get(j).getPosition()).toString());
+            myWidgetLists.addAll(helper.getWidgetsType(MyAppConstants.getTrendyWidgetLists().get(j).getPosition()));
         }
         RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
         RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, this));
@@ -84,87 +93,209 @@ public class MyWidgetsActivity extends AppCompatActivity implements View.OnClick
             case R.id.IvBack:
                 onBackPressed();
                 break;
-            case R.id.iv_done:
-                System.out.println("_____  _ _ : " + Constants.WidgetRemove);
-                if (Constants.WidgetRemove) {
-                    Constants.WidgetRemove = false;
+            case R.id.IvDone:
+                countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                itemClick = SplashActivity.click++;
+                if (itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(MyWidgetsActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                        @Override
+                        public void callbackCall() {
+                            System.out.println("_____  _ _ : " + MyAppConstants.WidgetRemove);
+                            if (MyAppConstants.WidgetRemove) {
+                                MyAppConstants.WidgetRemove = false;
+                            } else {
+                                MyAppConstants.WidgetRemove = true;
+                            }
+                            RvMyWidget.getAdapter().notifyDataSetChanged();
+                        }
+                    });
                 } else {
-                    Constants.WidgetRemove = true;
+                    System.out.println("_____  _ _ : " + MyAppConstants.WidgetRemove);
+                    if (MyAppConstants.WidgetRemove) {
+                        MyAppConstants.WidgetRemove = false;
+                    } else {
+                        MyAppConstants.WidgetRemove = true;
+                    }
+                    RvMyWidget.getAdapter().notifyDataSetChanged();
                 }
-                RvMyWidget.getAdapter().notifyDataSetChanged();
                 break;
             case R.id.IvMyWidgetTrendy:
-                System.out.println("_____  _ _ : " + Constants.WidgetRemove);
-
-                Constants.WidgetRemove = false;
-                myWidgetLists = new ArrayList<>();
-                for (int j = 0; j < Constants.getTrendyWidgetLists().size(); j++) {
-                    myWidgetLists.addAll(helper.getWidgetsType(Constants.getTrendyWidgetLists().get(j).getPosition()));
+                System.out.println("_____  _ _ : " + MyAppConstants.WidgetRemove);
+                countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                itemClick = SplashActivity.click++;
+                if (itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(MyWidgetsActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                        @Override
+                        public void callbackCall() {
+                            MyAppConstants.WidgetRemove = false;
+                            myWidgetLists = new ArrayList<>();
+                            for (int j = 0; j < MyAppConstants.getTrendyWidgetLists().size(); j++) {
+                                myWidgetLists.addAll(helper.getWidgetsType(MyAppConstants.getTrendyWidgetLists().get(j).getPosition()));
+                            }
+                            RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+                            RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, MyWidgetsActivity.this));
+                            getIsNotFound();
+                        }
+                    });
+                } else {
+                    MyAppConstants.WidgetRemove = false;
+                    myWidgetLists = new ArrayList<>();
+                    for (int j = 0; j < MyAppConstants.getTrendyWidgetLists().size(); j++) {
+                        myWidgetLists.addAll(helper.getWidgetsType(MyAppConstants.getTrendyWidgetLists().get(j).getPosition()));
+                    }
+                    RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+                    RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, MyWidgetsActivity.this));
+                    getIsNotFound();
                 }
-                RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
-                RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, this));
-                getIsNotFound();
                 break;
             case R.id.IvMyWidgetCalendar:
-                System.out.println("_____  _ _ : " + Constants.WidgetRemove);
-
-                Constants.WidgetRemove = false;
-                myWidgetLists = new ArrayList<>();
-                for (int j = 0; j < Constants.getCalendarWidgetLists().size(); j++) {
-                    myWidgetLists.addAll(helper.getWidgetsType(Constants.getCalendarWidgetLists().get(j).getPosition()));
+                System.out.println("_____  _ _ : " + MyAppConstants.WidgetRemove);
+                countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                itemClick = SplashActivity.click++;
+                if (itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(MyWidgetsActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                        @Override
+                        public void callbackCall() {
+                            MyAppConstants.WidgetRemove = false;
+                            myWidgetLists = new ArrayList<>();
+                            for (int j = 0; j < MyAppConstants.getCalendarWidgetLists().size(); j++) {
+                                myWidgetLists.addAll(helper.getWidgetsType(MyAppConstants.getCalendarWidgetLists().get(j).getPosition()));
+                            }
+                            RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+                            RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, MyWidgetsActivity.this));
+                            getIsNotFound();
+                        }
+                    });
+                } else {
+                    MyAppConstants.WidgetRemove = false;
+                    myWidgetLists = new ArrayList<>();
+                    for (int j = 0; j < MyAppConstants.getCalendarWidgetLists().size(); j++) {
+                        myWidgetLists.addAll(helper.getWidgetsType(MyAppConstants.getCalendarWidgetLists().get(j).getPosition()));
+                    }
+                    RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+                    RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, MyWidgetsActivity.this));
+                    getIsNotFound();
                 }
-                RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
-                RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, this));
-                getIsNotFound();
                 break;
             case R.id.IvMyWidgetWeather:
-                System.out.println("_____  _ _ : " + Constants.WidgetRemove);
-
-                Constants.WidgetRemove = false;
-                myWidgetLists = new ArrayList<>();
-                for (int j = 0; j < Constants.getWeatherWidgetLists().size(); j++) {
-                    myWidgetLists.addAll(helper.getWidgetsType(Constants.getWeatherWidgetLists().get(j).getPosition()));
+                System.out.println("_____  _ _ : " + MyAppConstants.WidgetRemove);
+                countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                itemClick = SplashActivity.click++;
+                if (itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(MyWidgetsActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                        @Override
+                        public void callbackCall() {
+                            MyAppConstants.WidgetRemove = false;
+                            myWidgetLists = new ArrayList<>();
+                            for (int j = 0; j < MyAppConstants.getWeatherWidgetLists().size(); j++) {
+                                myWidgetLists.addAll(helper.getWidgetsType(MyAppConstants.getWeatherWidgetLists().get(j).getPosition()));
+                            }
+                            RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+                            RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, MyWidgetsActivity.this));
+                            getIsNotFound();
+                        }
+                    });
+                } else {
+                    MyAppConstants.WidgetRemove = false;
+                    myWidgetLists = new ArrayList<>();
+                    for (int j = 0; j < MyAppConstants.getWeatherWidgetLists().size(); j++) {
+                        myWidgetLists.addAll(helper.getWidgetsType(MyAppConstants.getWeatherWidgetLists().get(j).getPosition()));
+                    }
+                    RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+                    RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, MyWidgetsActivity.this));
+                    getIsNotFound();
                 }
-                RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
-                RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, this));
-                getIsNotFound();
                 break;
             case R.id.IvMyWidgetAlarm:
-                System.out.println("_____  _ _ : " + Constants.WidgetRemove);
-
-                Constants.WidgetRemove = false;
-                myWidgetLists = new ArrayList<>();
-                for (int j = 0; j < Constants.getClockWidgetLists().size(); j++) {
-                    myWidgetLists.addAll(helper.getWidgetsType(Constants.getClockWidgetLists().get(j).getPosition()));
+                System.out.println("_____  _ _ : " + MyAppConstants.WidgetRemove);
+                countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                itemClick = SplashActivity.click++;
+                if (itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(MyWidgetsActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                        @Override
+                        public void callbackCall() {
+                            MyAppConstants.WidgetRemove = false;
+                            myWidgetLists = new ArrayList<>();
+                            for (int j = 0; j < MyAppConstants.getClockWidgetLists().size(); j++) {
+                                myWidgetLists.addAll(helper.getWidgetsType(MyAppConstants.getClockWidgetLists().get(j).getPosition()));
+                            }
+                            RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+                            RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, MyWidgetsActivity.this));
+                            getIsNotFound();
+                        }
+                    });
+                } else {
+                    MyAppConstants.WidgetRemove = false;
+                    myWidgetLists = new ArrayList<>();
+                    for (int j = 0; j < MyAppConstants.getClockWidgetLists().size(); j++) {
+                        myWidgetLists.addAll(helper.getWidgetsType(MyAppConstants.getClockWidgetLists().get(j).getPosition()));
+                    }
+                    RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+                    RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, MyWidgetsActivity.this));
+                    getIsNotFound();
                 }
-                RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
-                RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, this));
-                getIsNotFound();
                 break;
             case R.id.IvMyWidgetXPanel:
-                System.out.println("_____  _ _ : " + Constants.WidgetRemove);
-
-                Constants.WidgetRemove = false;
-                myWidgetLists = new ArrayList<>();
-                for (int j = 0; j < Constants.getXPanelWidgetLists().size(); j++) {
-                    myWidgetLists.addAll(helper.getWidgetsType(Constants.getXPanelWidgetLists().get(j).getPosition()));
+                System.out.println("_____  _ _ : " + MyAppConstants.WidgetRemove);
+                countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                itemClick = SplashActivity.click++;
+                if (itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(MyWidgetsActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                        @Override
+                        public void callbackCall() {
+                            MyAppConstants.WidgetRemove = false;
+                            myWidgetLists = new ArrayList<>();
+                            for (int j = 0; j < MyAppConstants.getXPanelWidgetLists().size(); j++) {
+                                myWidgetLists.addAll(helper.getWidgetsType(MyAppConstants.getXPanelWidgetLists().get(j).getPosition()));
+                            }
+                            RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+                            RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, MyWidgetsActivity.this));
+                            getIsNotFound();
+                        }
+                    });
+                } else {
+                    MyAppConstants.WidgetRemove = false;
+                    myWidgetLists = new ArrayList<>();
+                    for (int j = 0; j < MyAppConstants.getXPanelWidgetLists().size(); j++) {
+                        myWidgetLists.addAll(helper.getWidgetsType(MyAppConstants.getXPanelWidgetLists().get(j).getPosition()));
+                    }
+                    RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+                    RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, MyWidgetsActivity.this));
+                    getIsNotFound();
                 }
-                RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
-                RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, this));
-                getIsNotFound();
                 break;
             case R.id.IvMyWidgetPhoto:
-
-                Constants.WidgetRemove = false;
-                myWidgetLists = new ArrayList<>();
-                for (int j = 0; j < Constants.getPhotoWidgetLists().size(); j++) {
-                    System.out.println("_____  _ _ : " + Constants.getPhotoWidgetLists().get(j).getPosition());
-                    myWidgetLists.addAll(helper.getWidgetsType(Constants.getPhotoWidgetLists().get(j).getPosition()));
+                countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                itemClick = SplashActivity.click++;
+                if (itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(MyWidgetsActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                        @Override
+                        public void callbackCall() {
+                            MyAppConstants.WidgetRemove = false;
+                            myWidgetLists = new ArrayList<>();
+                            for (int j = 0; j < MyAppConstants.getPhotoWidgetLists().size(); j++) {
+                                System.out.println("_____  _ _ : " + MyAppConstants.getPhotoWidgetLists().get(j).getPosition());
+                                myWidgetLists.addAll(helper.getWidgetsType(MyAppConstants.getPhotoWidgetLists().get(j).getPosition()));
+                            }
+                            System.out.println("_____  _ _ : " + myWidgetLists.size());
+                            RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+                            RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, MyWidgetsActivity.this));
+                            getIsNotFound();
+                        }
+                    });
+                } else {
+                    MyAppConstants.WidgetRemove = false;
+                    myWidgetLists = new ArrayList<>();
+                    for (int j = 0; j < MyAppConstants.getPhotoWidgetLists().size(); j++) {
+                        System.out.println("_____  _ _ : " + MyAppConstants.getPhotoWidgetLists().get(j).getPosition());
+                        myWidgetLists.addAll(helper.getWidgetsType(MyAppConstants.getPhotoWidgetLists().get(j).getPosition()));
+                    }
+                    System.out.println("_____  _ _ : " + myWidgetLists.size());
+                    RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+                    RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, MyWidgetsActivity.this));
+                    getIsNotFound();
                 }
-                System.out.println("_____  _ _ : " + myWidgetLists.size());
-                RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
-                RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, this));
-                getIsNotFound();
+
                 break;
         }
     }
@@ -201,5 +332,22 @@ public class MyWidgetsActivity extends AppCompatActivity implements View.OnClick
         }
         helper.getDeleteWidgets(myWidgetLists.get(position).getNumber());
         RvMyWidget.getAdapter().notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+        int itemClick = SplashActivity.click++;
+        if (itemClick % countExtra == 0) {
+            MyAppAd_Interstitial.getInstance().showInter(MyWidgetsActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                @Override
+                public void callbackCall() {
+                    finish();
+                }
+            });
+        } else {
+            finish();
+        }
     }
 }

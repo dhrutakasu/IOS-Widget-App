@@ -1,13 +1,6 @@
 package com.ios.widget.ui.Adapter;
 
-import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.location.LocationManager;
-import android.os.Build;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ios.widget.R;
-import com.ios.widget.provider.BetteryBroadcastReceiver;
-import com.ios.widget.ui.Activity.PhotoWidgetActivity;
-import com.ios.widget.ui.Activity.ShowItemActivity;
-import com.ios.widget.ui.Activity.WidgetItemActivity;
-import com.ios.widget.utils.Constants;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TypeImageAdapter extends RecyclerView.Adapter<TypeImageAdapter.MyViewHolder> {
     private final Context con;

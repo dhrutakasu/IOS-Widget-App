@@ -1,7 +1,6 @@
 package com.ios.widget.ui.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,13 +8,17 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdSize;
+import com.ios.widget.Ads.MyAppAd_Banner;
+import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
 import com.ios.widget.ui.Adapter.ItemAdapter;
-import com.ios.widget.ui.Adapter.MyWidgetAdapter;
-import com.ios.widget.utils.Constants;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import java.util.ArrayList;
 
@@ -46,25 +49,25 @@ public class ShowItemActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void initIntents() {
-        TabPos = getIntent().getIntExtra(Constants.TabPos, 0);
+        TabPos = getIntent().getIntExtra(MyAppConstants.TabPos, 0);
         if (TabPos == 0) {
             TvTitle.setText("Trendy");
-            modelArrayList = Constants.getTrendyWidgetLists();
+            modelArrayList = MyAppConstants.getTrendyWidgetLists();
         } else if (TabPos == 1) {
             TvTitle.setText("Calendar");
-            modelArrayList = Constants.getCalendarWidgetLists();
+            modelArrayList = MyAppConstants.getCalendarWidgetLists();
         } else if (TabPos == 2) {
             TvTitle.setText("Weather");
-            modelArrayList = Constants.getWeatherWidgetLists();
+            modelArrayList = MyAppConstants.getWeatherWidgetLists();
         } else if (TabPos == 3) {
             TvTitle.setText("Clock");
-            modelArrayList = Constants.getClockWidgetLists();
+            modelArrayList = MyAppConstants.getClockWidgetLists();
         } else if (TabPos == 4) {
             TvTitle.setText("X-Panel");
-            modelArrayList = Constants.getXPanelWidgetLists();
+            modelArrayList = MyAppConstants.getXPanelWidgetLists();
         } else if (TabPos == 5) {
             TvTitle.setText("Photo");
-            modelArrayList = Constants.getPhotoWidgetLists();
+            modelArrayList = MyAppConstants.getPhotoWidgetLists();
         }
     }
 
@@ -73,8 +76,10 @@ public class ShowItemActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void initActions() {
+        MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
+
         RvItemList.setLayoutManager(new LinearLayoutManager(context));
-        RvItemList.setAdapter(new ItemAdapter(context, modelArrayList,TabPos));
+        RvItemList.setAdapter(new ItemAdapter(context, modelArrayList,TabPos,ShowItemActivity.this));
     }
 
     @Override
@@ -83,6 +88,22 @@ public class ShowItemActivity extends AppCompatActivity implements View.OnClickL
             case R.id.IvBack:
                 onBackPressed();
                 break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+        int itemClick = SplashActivity.click++;
+        if (itemClick % countExtra == 0) {
+            MyAppAd_Interstitial.getInstance().showInter(ShowItemActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                @Override
+                public void callbackCall() {
+                    finish();
+                }
+            });
+        } else {
+            finish();
         }
     }
 }
