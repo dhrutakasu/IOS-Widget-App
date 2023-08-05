@@ -63,9 +63,8 @@
                     android:layout_weight="2"
                     android:fontFamily="@font/main_bold"
                     android:gravity="center|end"
-                    android:text="@string/app_name"
                     android:textColor="@color/widget_white"
-                    android:textSize="@dimen/_18sdp" />
+                    android:textSize="@dimen/_12sdp" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -82,9 +81,8 @@
                         android:layout_marginStart="@dimen/_5sdp"
                         android:fontFamily="@font/main_bold"
                         android:gravity="center_vertical"
-                        android:text="@string/app_name"
                         android:textColor="@color/widget_white"
-                        android:textSize="@dimen/_10sdp"/>
+                        android:textSize="@dimen/_8sdp"/>
 
                     <TextView
                         android:id="@+id/TvCity"
@@ -94,9 +92,8 @@
                         android:layout_weight="2"
                         android:fontFamily="@font/main_bold"
                         android:gravity="top"
-                        android:text="@string/app_name"
                         android:textColor="@color/widget_white"
-                        android:textSize="@dimen/_10sdp" />
+                        android:textSize="@dimen/_8sdp" />
 
                 </LinearLayout>
             </LinearLayout>

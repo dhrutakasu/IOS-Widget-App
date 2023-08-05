@@ -175,7 +175,7 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public RemoteViews getViewAt(int i) {
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.item_calendar_day);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.item_calendar_day_large);
 
         String[] DayOfString = strings.get(i).split("-");
         String Day = DayOfString[0];
@@ -186,7 +186,15 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
         } else {
             views.setTextViewText(R.id.TvCalendarDates, "");
         }
-
+        switch (NoteId) {
+            case 5:
+            case 7:
+                views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 11f);
+                break;
+            case 6:
+                views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 12f);
+                break;
+        }
         if (DayOfString[1].equals("WHITE")) {
             switch (NoteId) {
                 case 4:
@@ -196,12 +204,12 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
                     break;
                case 6:
                     views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
-                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 12f);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 18f);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.widget_white));
                     break;
                 case 7:
                     views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
-                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 12f);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 16f);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.widget_white));
                     break;
             }
@@ -214,11 +222,11 @@ public class LargeRemoteView implements RemoteViewsService.RemoteViewsFactory {
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.widget_color_0263FF));
                     break;
                 case 6:
-                    views.setInt(R.id.TvCalendarDates, "setBackgroundResource", R.drawable.ic_calendar_purple);
+                    views.setInt(R.id.TvCalendarDates, "setBackgroundResource", R.drawable.ic_calendar_purple_large);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.widget_white));
                     break;
                 case 7:
-                    views.setInt(R.id.TvCalendarDates, "setBackgroundResource", R.drawable.ic_calendar_square);
+                    views.setInt(R.id.TvCalendarDates, "setBackgroundResource", R.drawable.ic_calendar_square_large);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.widget_white));
                     break;
             }

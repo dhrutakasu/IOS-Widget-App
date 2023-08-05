@@ -87,7 +87,7 @@
                                 android:gravity="center"
                                 android:text=":"
                                 android:textColor="@color/widget_white"
-                                android:textSize="@dimen/_30ssp"
+                                android:textSize="@dimen/_20ssp"
                                 android:textStyle="bold" />
 
                             <TextClock
@@ -142,7 +142,7 @@
                     android:weightSum="10">
 
                     <LinearLayout
-                        android:id="@+id/LlSmallClock"
+                        android:id="@+id/LlTime"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="5"

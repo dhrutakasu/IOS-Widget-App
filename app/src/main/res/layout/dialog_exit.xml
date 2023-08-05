@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_exit_bg"
+        android:background="@drawable/ic_exit_box"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,13 +20,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/TvDialogExit"
+            app:layout_constraintBottom_toTopOf="@+id/TvExitMsg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/TvDialogExit"
+            android:id="@+id/TvExitMsg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/main_bold"
@@ -35,11 +35,39 @@
             android:paddingBottom="15dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/ic_item_background_color"
             android:layout_marginBottom="5dp"
-            android:text="Tap On Exit"
-            android:textColor="@color/widget_white"
-            android:textSize="15sp"
+            android:text="Are you sure you want to \nexit this app?"
+            android:textColor="@color/widget_black"
+            android:textSize="@dimen/_18ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/IvExit" />
+
+        <ImageView
+            android:id="@+id/IvExit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_8sdp"
+            android:gravity="center"
+            android:src="@drawable/ic_exit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/TvDialogNotExit" />
+
+        <TextView
+            android:id="@+id/TvDialogNotExit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/main_bold"
+            android:gravity="center"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:text="Not now"
+            android:textColor="@color/widget_orange"
+            android:textSize="@dimen/_14ssp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />

@@ -37,6 +37,7 @@
                 android:weightSum="5">
 
                 <LinearLayout
+                    android:id="@+id/LlTime"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
@@ -149,6 +150,7 @@
                         android:weightSum="5">
 
                         <LinearLayout
+                            android:id="@+id/LlBettery"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="5"
@@ -191,7 +193,7 @@
                                     android:layout_weight="1.5"
                                     android:text="50%"
                                     android:textColor="@color/widget_white"
-                                    android:textSize="@dimen/_25sdp"
+                                    android:textSize="@dimen/_18sdp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -201,7 +203,7 @@
                                     android:gravity="center|start|top"
                                     android:text="Batteries"
                                     android:textColor="@color/widget_white"
-                                    android:textSize="@dimen/_14sdp" />
+                                    android:textSize="@dimen/_8sdp" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -212,6 +214,7 @@
                         android:layout_weight="0.6" />
 
                     <LinearLayout
+                        android:id="@+id/LlStorage"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="4.7"
@@ -263,7 +266,7 @@
                                     android:text="50%"
                                     android:gravity="center|start|bottom"
                                     android:textColor="@color/widget_white"
-                                    android:textSize="@dimen/_12sdp"
+                                    android:textSize="@dimen/_8sdp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -273,7 +276,7 @@
                                     android:gravity="center|start|top"
                                     android:text="Storage"
                                     android:textColor="@color/widget_white"
-                                    android:textSize="@dimen/_12sdp" />
+                                    android:textSize="@dimen/_8sdp" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>

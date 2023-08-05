@@ -50,7 +50,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
     private ViewPager PagerWidget;
     private ImageView IvAddWidget;
 
-    private int pos,WidgetPos;
+    private int pos, WidgetPos;
     private TabLayout TabWidget, TabTempLayout, TabSizeLayout;
     private int TabPos;
     private ArrayList<WidgetModel> modelArrayList = new ArrayList<>();
@@ -86,7 +86,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         pos = getIntent().getIntExtra(MyAppConstants.ITEM_POSITION, 0);
         WidgetPos = getIntent().getIntExtra(MyAppConstants.WIDGET_ITEM_POSITION, 0);
         TabPos = getIntent().getIntExtra(MyAppConstants.TabPos, 0);
-        System.out.println("______ pos  ::: "+pos);
+        System.out.println("______ pos  ::: " + pos);
         if (TabPos == 0) {
             TvTitle.setText("Trendy");
             modelArrayList = MyAppConstants.getTrendyWidgetLists();
@@ -227,7 +227,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void GotoAddWidget() {
-        MyAppConstants.CreateWidget=true;
+        MyAppConstants.CreateWidget = true;
         if ((modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 0 && TabSizeLayout.getSelectedTabPosition() == 2) || (modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 2 && TabSizeLayout.getSelectedTabPosition() == 1) || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 20 || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 22) {
             String s1 = Manifest.permission.CAMERA;
             Dexter.withActivity(this)
@@ -251,7 +251,7 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
                     })
                     .onSameThread()
                     .check();
-        } else if ((modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 1 && TabSizeLayout.getSelectedTabPosition() == 0) || (modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 2 && TabSizeLayout.getSelectedTabPosition() == 2) || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 8) {
+        } else if ((modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 1 && TabSizeLayout.getSelectedTabPosition() == 0) || (modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 2 && TabSizeLayout.getSelectedTabPosition() == 2) || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 8 || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 9 || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 10) {
             String s = Manifest.permission.ACCESS_COARSE_LOCATION;
             String s1 = Manifest.permission.ACCESS_FINE_LOCATION;
             Dexter.withActivity(this)

@@ -120,7 +120,7 @@
                         android:layout_weight="0.5" />
 
                     <LinearLayout
-                        android:id="@+id/LlSmallClock"
+                        android:id="@+id/LlTime"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="4.2"
@@ -172,7 +172,7 @@
                                     android:gravity="center"
                                     android:text=":"
                                     android:textColor="@color/widget_white"
-                                    android:textSize="@dimen/_10ssp"
+                                    android:textSize="@dimen/_6ssp"
                                     android:textStyle="bold" />
 
                                 <TextClock

@@ -206,8 +206,8 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                 case 5:
                     //todo calender 2 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_small);
-                    rv.setImageViewBitmap(R.id.IvBackground2, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_small_bg), 30));
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE");
+//                    rv.setImageViewBitmap(R.id.IvBackground2, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_small_bg), 30));
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour",                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              "EEE");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
                     rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
@@ -559,6 +559,18 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     long used = total - free;
                     rv.setTextViewText(R.id.TvProgressText, managerIntProperty + "%");
                     rv.setTextViewText(R.id.storage_text, MyAppConstants.bytes2String(used) + "/" + MyAppConstants.bytes2String(total));
+
+                    intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
+
+                    intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
+
+                    intent = new Intent(Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
                     if (!new MyAppPref(context).getBoolean(MyAppPref.IS_X_PANEL_4_ALARM, false)) {
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
@@ -655,6 +667,19 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     Intent intentTorch3 = new Intent(context, XPanelFlashlight3WidgetReceiver.class);
                     configPendingIntent = PendingIntent.getBroadcast(context, 0, intentTorch3, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvTorch, configPendingIntent);
+
+                    intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.progressBarStorage, configPendingIntent);
+
+                    intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.progressBarCharge, configPendingIntent);
+
+                    intent = new Intent(Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
+
                     break;
             }
             appWidgetManager.updateAppWidget(Widget_Id, rv);

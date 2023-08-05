@@ -64,8 +64,8 @@ public class LargeWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         DatabaseHelper helper = new DatabaseHelper(context);
-        int insert=-1;
-        WidgetData widgetData=null;
+        int insert = -1;
+        WidgetData widgetData = null;
         if (CreateWidget) {
             widgetData = new WidgetData(2, MyAppConstants.Widget_Type_Id, -1, "", MyAppConstants.Temp_Id);
             insert = helper.InsertWidget(widgetData);
@@ -86,7 +86,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
             Intent intent1 = null;
             PendingIntent configPendingIntent = null;
             Calendar calendar;
-            int currentDay ;
+            int currentDay;
             int currentMonth;
             int currentYear;
             switch (helper.getWidgets().get(i).getPosition()) {
@@ -189,13 +189,13 @@ public class LargeWidgetProvider extends AppWidgetProvider {
 
                                         RemoteViews finalRv4 = rv;
                                         RequestQueue queue = Volley.newRequestQueue(context);
-                                        String url,tempExt;
-                                        if (widgetData.getTemp()==0) {
+                                        String url, tempExt;
+                                        if (widgetData.getTemp() == 0) {
                                             url = MyAppConstants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
-                                            tempExt="°C";
-                                        }else {
+                                            tempExt = "°C";
+                                        } else {
                                             url = MyAppConstants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
-                                            tempExt="°F";
+                                            tempExt = "°F";
                                         }
                                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                                             @Override
@@ -216,22 +216,22 @@ public class LargeWidgetProvider extends AppWidgetProvider {
 
                                                     JSONObject SysObject = obj.getJSONObject("sys");
                                                     long millisecond = Long.parseLong(SysObject.getString("sunrise"));
-                                                    String dateString = DateFormat.format("HH:mm:ss a", new Date(millisecond)).toString();
+                                                    String dateString = DateFormat.format("HH:mm a", new Date(millisecond)).toString();
                                                     finalRv4.setTextViewText(R.id.TvSunRise, dateString);
                                                     long millisecondset = Long.parseLong(SysObject.getString("sunset"));
-                                                    String dateStringset = DateFormat.format("HH:mm:ss a", new Date(millisecondset)).toString();
+                                                    String dateStringset = DateFormat.format("HH:mm a", new Date(millisecondset)).toString();
                                                     finalRv4.setTextViewText(R.id.TvSunSet, dateStringset);
                                                     JSONObject WindObject = obj.getJSONObject("wind");
                                                     double millisecondWind = Double.parseDouble(WindObject.getString("speed"));
-                                                    finalRv4.setTextViewText(R.id.TvWind, mps_to_kmph(millisecondWind)+"km/h");
+                                                    finalRv4.setTextViewText(R.id.TvWind, mps_to_kmph(millisecondWind) + "km/h");
                                                     finalRv4.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
                                                     String Temp = MainObject.get("temp").toString();
-                                                    finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) +tempExt);
+                                                    finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + tempExt);
                                                     String MinTemp = MainObject.get("temp_min").toString();
                                                     String MaxTemp = MainObject.get("temp_max").toString();
-                                                    finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) +tempExt+ "\nL:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
-                                                    finalRv4.setTextViewText(R.id.TvHumidity, MainObject.get("humidity").toString()+ "%" );
-                                                    finalRv4.setTextViewText(R.id.TvPressure, MainObject.get("pressure").toString()+ "%" );
+                                                    finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt + "\nL:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
+                                                    finalRv4.setTextViewText(R.id.TvHumidity, MainObject.get("humidity").toString() + "%");
+                                                    finalRv4.setTextViewText(R.id.TvPressure, MainObject.get("pressure").toString() + "%");
 
                                                 } catch (JSONException e) {
                                                     throw new RuntimeException(e);
@@ -248,19 +248,19 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                         RequestQueue queue1 = Volley.newRequestQueue(context);
 
                                         String url1;
-                                        if (widgetData.getTemp()==0) {
+                                        if (widgetData.getTemp() == 0) {
                                             url1 = MyAppConstants.BASE_URL_FORECAST + city + "&cnt=6&units=metric&APPID=" + context.getString(R.string.str_weather_key);
-                                        }else {
+                                        } else {
                                             url1 = MyAppConstants.BASE_URL_FORECAST + city + "&cnt=6&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
                                         }
                                         StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
                                                 try {
-                                                    JSONObject MainObject=null;
-                                                    JSONArray IconObject=null;
-                                                    String Temp=null;
-                                                    String res=null;
+                                                    JSONObject MainObject = null;
+                                                    JSONArray IconObject = null;
+                                                    String Temp = null;
+                                                    String res = null;
 
                                                     JSONObject obj = new JSONObject(response);
 
@@ -278,50 +278,50 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                                         }
                                                         switch (j) {
                                                             case 0:
-                                                                finalRv4.setTextViewText(R.id.TvTimeFirst,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeFirst, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempFirst,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconFirst, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 1:
-                                                                finalRv4.setTextViewText(R.id.TvTimeSecond,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeSecond, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempSecond,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconSecond, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 2:
-                                                                finalRv4.setTextViewText(R.id.TvTimeThird,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeThird, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempThird,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconThird, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 3:
-                                                                finalRv4.setTextViewText(R.id.TvTimeForth,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeForth, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempForth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconForth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 4:
-                                                                finalRv4.setTextViewText(R.id.TvTimeFifth,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeFifth, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempFifth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconFifth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 5:
-                                                                finalRv4.setTextViewText(R.id.TvTimeSixth,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeSixth, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempSixth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconSixth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
@@ -358,7 +358,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                 case 5:
                     //todo calender 2 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_large);
-                    rv.setImageViewBitmap(R.id.IvBackground, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_large_bg), 30));
+//                    rv.setImageViewBitmap(R.id.IvBackground, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_large_bg), 30));
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
@@ -382,7 +382,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
 
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
                     rv.setRemoteAdapter(Widget_Id, R.id.GridCalendarLargeView, intent);
-                 calendar = Calendar.getInstance();
+                    calendar = Calendar.getInstance();
                     currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                     currentMonth = calendar.get(Calendar.MONTH);
                     currentYear = calendar.get(Calendar.YEAR);
@@ -435,7 +435,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
 
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
                     rv.setRemoteAdapter(Widget_Id, R.id.GridCalendarLargeView, intent);
-                 calendar = Calendar.getInstance();
+                    calendar = Calendar.getInstance();
                     currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                     currentMonth = calendar.get(Calendar.MONTH);
                     currentYear = calendar.get(Calendar.YEAR);
@@ -494,13 +494,13 @@ public class LargeWidgetProvider extends AppWidgetProvider {
 
                                         RemoteViews finalRv4 = rv;
                                         RequestQueue queue = Volley.newRequestQueue(context);
-                                        String url,tempExt;
-                                        if (widgetData.getTemp()==0) {
+                                        String url, tempExt;
+                                        if (widgetData.getTemp() == 0) {
                                             url = MyAppConstants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
-                                            tempExt="°C";
-                                        }else {
+                                            tempExt = "°C";
+                                        } else {
                                             url = MyAppConstants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
-                                            tempExt="°F";
+                                            tempExt = "°F";
                                         }
                                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                                             @Override
@@ -521,22 +521,22 @@ public class LargeWidgetProvider extends AppWidgetProvider {
 
                                                     JSONObject SysObject = obj.getJSONObject("sys");
                                                     long millisecond = Long.parseLong(SysObject.getString("sunrise"));
-                                                    String dateString = DateFormat.format("HH:mm:ss a", new Date(millisecond)).toString();
+                                                    String dateString = DateFormat.format("HH:mm a", new Date(millisecond)).toString();
                                                     finalRv4.setTextViewText(R.id.TvSunRise, dateString);
                                                     long millisecondset = Long.parseLong(SysObject.getString("sunset"));
-                                                    String dateStringset = DateFormat.format("HH:mm:ss a", new Date(millisecondset)).toString();
+                                                    String dateStringset = DateFormat.format("HH:mm a", new Date(millisecondset)).toString();
                                                     finalRv4.setTextViewText(R.id.TvSunSet, dateStringset);
                                                     JSONObject WindObject = obj.getJSONObject("wind");
                                                     double millisecondWind = Double.parseDouble(WindObject.getString("speed"));
-                                                    finalRv4.setTextViewText(R.id.TvWind, mps_to_kmph(millisecondWind)+"km/h");
+                                                    finalRv4.setTextViewText(R.id.TvWind, mps_to_kmph(millisecondWind) + "km/h");
                                                     finalRv4.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
                                                     String Temp = MainObject.get("temp").toString();
-                                                    finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) +tempExt);
+                                                    finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + tempExt);
                                                     String MinTemp = MainObject.get("temp_min").toString();
                                                     String MaxTemp = MainObject.get("temp_max").toString();
-                                                    finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) +tempExt+ " / L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
-                                                    finalRv4.setTextViewText(R.id.TvHumidity, MainObject.get("humidity").toString()+ "%" );
-                                                    finalRv4.setTextViewText(R.id.TvPressure, MainObject.get("pressure").toString()+ "%" );
+                                                    finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt + " / L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
+                                                    finalRv4.setTextViewText(R.id.TvHumidity, MainObject.get("humidity").toString() + "%");
+                                                    finalRv4.setTextViewText(R.id.TvPressure, MainObject.get("pressure").toString() + "%");
 
                                                 } catch (JSONException e) {
                                                     throw new RuntimeException(e);
@@ -553,19 +553,19 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                         RequestQueue queue1 = Volley.newRequestQueue(context);
 
                                         String url1;
-                                        if (widgetData.getTemp()==0) {
+                                        if (widgetData.getTemp() == 0) {
                                             url1 = MyAppConstants.BASE_URL_FORECAST + city + "&cnt=6&units=metric&APPID=" + context.getString(R.string.str_weather_key);
-                                        }else {
+                                        } else {
                                             url1 = MyAppConstants.BASE_URL_FORECAST + city + "&cnt=6&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
                                         }
                                         StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
                                                 try {
-                                                    JSONObject MainObject=null;
-                                                    JSONArray IconObject=null;
-                                                    String Temp=null;
-                                                    String res=null;
+                                                    JSONObject MainObject = null;
+                                                    JSONArray IconObject = null;
+                                                    String Temp = null;
+                                                    String res = null;
 
                                                     JSONObject obj = new JSONObject(response);
 
@@ -583,50 +583,50 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                                         }
                                                         switch (j) {
                                                             case 0:
-                                                                finalRv4.setTextViewText(R.id.TvTimeFirst,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeFirst, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempFirst,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconFirst, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 1:
-                                                                finalRv4.setTextViewText(R.id.TvTimeSecond,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeSecond, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempSecond,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconSecond, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 2:
-                                                                finalRv4.setTextViewText(R.id.TvTimeThird,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeThird, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempThird,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconThird, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 3:
-                                                                finalRv4.setTextViewText(R.id.TvTimeForth,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeForth, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempForth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconForth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 4:
-                                                                finalRv4.setTextViewText(R.id.TvTimeFifth,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeFifth, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempFifth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconFifth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 5:
-                                                                finalRv4.setTextViewText(R.id.TvTimeSixth,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeSixth, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempSixth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconSixth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
@@ -689,13 +689,13 @@ public class LargeWidgetProvider extends AppWidgetProvider {
 
                                         RemoteViews finalRv4 = rv;
                                         RequestQueue queue = Volley.newRequestQueue(context);
-                                        String url,tempExt;
-                                        if (widgetData.getTemp()==0) {
+                                        String url, tempExt;
+                                        if (widgetData.getTemp() == 0) {
                                             url = MyAppConstants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
-                                            tempExt="°C";
-                                        }else {
+                                            tempExt = "°C";
+                                        } else {
                                             url = MyAppConstants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
-                                            tempExt="°F";
+                                            tempExt = "°F";
                                         }
                                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                                             @Override
@@ -716,22 +716,22 @@ public class LargeWidgetProvider extends AppWidgetProvider {
 
                                                     JSONObject SysObject = obj.getJSONObject("sys");
                                                     long millisecond = Long.parseLong(SysObject.getString("sunrise"));
-                                                    String dateString = DateFormat.format("HH:mm:ss a", new Date(millisecond)).toString();
+                                                    String dateString = DateFormat.format("HH:mm a", new Date(millisecond)).toString();
                                                     finalRv4.setTextViewText(R.id.TvSunRise, dateString);
                                                     long millisecondset = Long.parseLong(SysObject.getString("sunset"));
-                                                    String dateStringset = DateFormat.format("HH:mm:ss a", new Date(millisecondset)).toString();
+                                                    String dateStringset = DateFormat.format("HH:mm a", new Date(millisecondset)).toString();
                                                     finalRv4.setTextViewText(R.id.TvSunSet, dateStringset);
                                                     JSONObject WindObject = obj.getJSONObject("wind");
                                                     double millisecondWind = Double.parseDouble(WindObject.getString("speed"));
-                                                    finalRv4.setTextViewText(R.id.TvWind, mps_to_kmph(millisecondWind)+"km/h");
+                                                    finalRv4.setTextViewText(R.id.TvWind, mps_to_kmph(millisecondWind) + "km/h");
                                                     finalRv4.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
                                                     String Temp = MainObject.get("temp").toString();
-                                                    finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) +tempExt);
+                                                    finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + tempExt);
                                                     String MinTemp = MainObject.get("temp_min").toString();
                                                     String MaxTemp = MainObject.get("temp_max").toString();
-                                                    finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) +tempExt+ " ~ L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
-                                                    finalRv4.setTextViewText(R.id.TvHumidity, MainObject.get("humidity").toString()+ "%" );
-                                                    finalRv4.setTextViewText(R.id.TvPressure, MainObject.get("pressure").toString()+ "%" );
+                                                    finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt + " ~ L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
+                                                    finalRv4.setTextViewText(R.id.TvHumidity, MainObject.get("humidity").toString() + "%");
+                                                    finalRv4.setTextViewText(R.id.TvPressure, MainObject.get("pressure").toString() + "%");
 
                                                 } catch (JSONException e) {
                                                     throw new RuntimeException(e);
@@ -748,19 +748,19 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                         RequestQueue queue1 = Volley.newRequestQueue(context);
 
                                         String url1;
-                                        if (widgetData.getTemp()==0) {
+                                        if (widgetData.getTemp() == 0) {
                                             url1 = MyAppConstants.BASE_URL_FORECAST + city + "&cnt=6&units=metric&APPID=" + context.getString(R.string.str_weather_key);
-                                        }else {
+                                        } else {
                                             url1 = MyAppConstants.BASE_URL_FORECAST + city + "&cnt=6&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
                                         }
                                         StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
                                                 try {
-                                                    JSONObject MainObject=null;
-                                                    JSONArray IconObject=null;
-                                                    String Temp=null;
-                                                    String res=null;
+                                                    JSONObject MainObject = null;
+                                                    JSONArray IconObject = null;
+                                                    String Temp = null;
+                                                    String res = null;
 
                                                     JSONObject obj = new JSONObject(response);
 
@@ -778,50 +778,50 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                                         }
                                                         switch (j) {
                                                             case 0:
-                                                                finalRv4.setTextViewText(R.id.TvTimeFirst,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeFirst, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempFirst,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconFirst, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 1:
-                                                                finalRv4.setTextViewText(R.id.TvTimeSecond,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeSecond, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempSecond,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconSecond, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 2:
-                                                                finalRv4.setTextViewText(R.id.TvTimeThird,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeThird, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempThird,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconThird, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 3:
-                                                                finalRv4.setTextViewText(R.id.TvTimeForth,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeForth, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempForth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconForth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 4:
-                                                                finalRv4.setTextViewText(R.id.TvTimeFifth,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeFifth, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempFifth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconFifth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
                                                             case 5:
-                                                                finalRv4.setTextViewText(R.id.TvTimeSixth,res.toString());
+                                                                finalRv4.setTextViewText(R.id.TvTimeSixth, res.toString());
                                                                 MainObject = WeatherObject.getJSONObject("main");
                                                                 Temp = MainObject.getString("temp").toString();
-                                                                finalRv4.setTextViewText(R.id.TvTempSixth,Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                                finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
                                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconSixth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                                 break;
@@ -855,7 +855,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                         }
                     }
                     break;
-                    case 1:
+                case 1:
                 case 11:
                     //todo clock 1 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple1_large);
@@ -910,7 +910,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     rv.setOnClickPendingIntent(R.id.RlLargeClock, configPendingIntent);
                     break;
                 case 21:
-                    //todo x-panel 4 small
+                    //todo x-panel 4 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_large);
 
                     rv.setCharSequence(R.id.TClockHr, "setFormat12Hour", "HH");
@@ -924,29 +924,41 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     int managerIntProperty = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
 
                     long KILOBYTE = 1024;
-                    StatFs internalStatFs = new StatFs( Environment.getRootDirectory().getAbsolutePath() );
+                    StatFs internalStatFs = new StatFs(Environment.getRootDirectory().getAbsolutePath());
                     long internalTotal;
                     long internalFree;
 
-                    StatFs externalStatFs = new StatFs( Environment.getExternalStorageDirectory().getAbsolutePath() );
+                    StatFs externalStatFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
                     long externalTotal;
                     long externalFree;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                        internalTotal = ( internalStatFs.getBlockCountLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                        internalFree = ( internalStatFs.getAvailableBlocksLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                        externalTotal = ( externalStatFs.getBlockCountLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                        externalFree = ( externalStatFs.getAvailableBlocksLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                    }
-                    else {
-                        internalTotal = ( (long) internalStatFs.getBlockCount() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
-                        internalFree = ( (long) internalStatFs.getAvailableBlocks() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
-                        externalTotal = ( (long) externalStatFs.getBlockCount() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
-                        externalFree = ( (long) externalStatFs.getAvailableBlocks() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                        internalTotal = (internalStatFs.getBlockCountLong() * internalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                        internalFree = (internalStatFs.getAvailableBlocksLong() * internalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                        externalTotal = (externalStatFs.getBlockCountLong() * externalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                        externalFree = (externalStatFs.getAvailableBlocksLong() * externalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                    } else {
+                        internalTotal = ((long) internalStatFs.getBlockCount() * (long) internalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                        internalFree = ((long) internalStatFs.getAvailableBlocks() * (long) internalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                        externalTotal = ((long) externalStatFs.getBlockCount() * (long) externalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                        externalFree = ((long) externalStatFs.getAvailableBlocks() * (long) externalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
                     }
 
                     long total = internalTotal + externalTotal;
                     long free = internalFree + externalFree;
                     long used = total - free;
+
+                    intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
+
+                    intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
+
+                    intent = new Intent(Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
+
                     rv.setTextViewText(R.id.TvProgressText, managerIntProperty + "%");
                     rv.setTextViewText(R.id.storage_text, MyAppConstants.bytes2String(used) + "/" + MyAppConstants.bytes2String(total));
                     if (!new MyAppPref(context).getBoolean(MyAppPref.IS_X_PANEL_4_ALARM, false)) {
@@ -1005,7 +1017,6 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                         }
                     }
 
-
                     if (MyAppConstants.isNetworkAvailable(context)) {
                         rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_xpanel_medium_2_mobiledata_selected);
                     } else {
@@ -1047,18 +1058,32 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     Intent intentTorch3 = new Intent(context, XPanelFlashlight3WidgetReceiver.class);
                     configPendingIntent = PendingIntent.getBroadcast(context, 0, intentTorch3, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvTorch, configPendingIntent);
+
+                    intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.progressBarStorage, configPendingIntent);
+
+                    intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.progressBarCharge, configPendingIntent);
+
+                    intent = new Intent(Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
+
                     break;
             }
 
             appWidgetManager.updateAppWidget(Widget_Id, rv);
-            MyAppConstants.CreateWidget=false;
+            MyAppConstants.CreateWidget = false;
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
-    public int mps_to_kmph(double mps)
-    {
-        return(int) (3.6 * mps);
+
+    public int mps_to_kmph(double mps) {
+        return (int) (3.6 * mps);
     }
+
     @Override
     public void onDeleted(Context context, int[] iArr) {
         for (int id : iArr) {

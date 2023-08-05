@@ -15,16 +15,20 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.Activity.WalkthroughActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.Activity.ShowItemActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.Activity.MyWidgetsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.Activity.SettingActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.Activity.WidgetItemActivity"
             android:exported="false"

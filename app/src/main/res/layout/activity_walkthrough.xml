@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/ic_splash_bg"
     tools:context=".ui.Activity.WalkthroughActivity">
 
     <RelativeLayout
@@ -13,40 +14,51 @@
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/PagerWalk"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_above="@+id/LlPager"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_50sdp"
+            android:layout_marginEnd="@dimen/_60sdp" />
 
         <LinearLayout
+            android:id="@+id/LlPager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/RlBannerAd"
+            android:gravity="center"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/TvWalkTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="start"
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_12sdp"
                 android:fontFamily="@font/main_semibold"
-                android:gravity="center"
+                android:gravity="start"
                 android:maxLines="5"
                 android:singleLine="false"
                 android:text=""
-                android:textColor="@color/widget_white"
+                android:textColor="@color/widget_black"
                 android:textSize="@dimen/_15sdp" />
 
             <TextView
                 android:id="@+id/TvWalkSubTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="start"
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_8sdp"
                 android:fontFamily="@font/main_medium"
-                android:gravity="center"
+                android:gravity="start"
                 android:lineSpacingExtra="@dimen/_1sdp"
                 android:maxLines="5"
                 android:text=""
@@ -62,23 +74,44 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 app:tabBackground="@drawable/ic_tab_selector"
                 app:tabGravity="center"
+                android:visibility="gone"
                 app:tabIndicatorHeight="0dp" />
 
-            <TextView
-                android:id="@+id/TvWalkContinue"
+            <LinearLayout
+                android:id="@+id/LlNext"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_35sdp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/_20sdp"
-                android:layout_marginRight="@dimen/_20sdp"
-                android:layout_marginBottom="@dimen/_35sdp"
-                android:background="@drawable/ic_border_color"
-                android:fontFamily="@font/main_semibold"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Next"
-                android:textAllCaps="false"
-                android:textColor="@color/widget_white"
-                android:textSize="@dimen/_12sdp" />
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <TextView
+                    android:id="@+id/TvWidgetHeading"
+                    android:layout_width="0dp"
+                    android:layout_weight="4.2"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/main_bold"
+                    android:text="@string/widgets_i16"
+                    android:textColor="@color/widget_black"
+                    android:textSize="@dimen/_22sdp" />
+
+                <ImageView
+                    android:id="@+id/IvNext"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.8"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:src="@drawable/ic_next"/>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/IvStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:src="@drawable/ic_start"/>
         </LinearLayout>
         <RelativeLayout
             android:id="@+id/RlBannerAd"

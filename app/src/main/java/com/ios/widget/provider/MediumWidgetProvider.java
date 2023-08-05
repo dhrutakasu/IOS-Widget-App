@@ -252,11 +252,24 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     Intent intentTorch3 = new Intent(context, XPanelFlashlight3WidgetReceiver.class);
                     configPendingIntent = PendingIntent.getBroadcast(context, 0, intentTorch3, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvTorch, configPendingIntent);
+
+                    intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.progressBarStorage, configPendingIntent);
+
+                    intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.progressBarCharge, configPendingIntent);
+
+                    intent = new Intent(Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
+
                     break;
                 case 5:
                     //todo calender 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_medium);
-                    rv.setImageViewBitmap(R.id.IvBackground, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_medium_bg), 30));
+//                    rv.setImageViewBitmap(R.id.IvBackground, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_medium_bg), 30));
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
@@ -701,7 +714,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     break;
                 case 10:
                     //todo weather 3 medium
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather3_medium);
                     LocationManager service2 = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
                     if (service2.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         if (ActivityCompat.checkSelfPermission(
@@ -710,7 +722,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         } else {
                             String city = "";
 
-                            rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_medium);
+                            rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather3_medium);
                             List<String> providers = service2.getProviders(true);
                             for (String provider : providers) {
                                 Location locationGPS = service2.getLastKnownLocation(provider);
@@ -881,7 +893,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
 
                                 }
                             }
-
                         }
                     }
                     break;
@@ -1022,7 +1033,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     rv.setOnClickPendingIntent(R.id.IvTorch, broadcast1);
                     break;
                 case 21:
-                    //todo clock 9 medium
+                    //todo xpanel 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_medium);
 
                     rv.setCharSequence(R.id.TClockHr, "setFormat12Hour", "HH");
@@ -1101,13 +1112,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         }
                     }
 
-                    if (!new MyAppPref(context).getBoolean(MyAppPref.IS_X_PANEL_4_ALARM, false)) {
-                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
-                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                        new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
-                    }
                     Intent intentWifi = new Intent(Settings.ACTION_WIFI_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intentWifi, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvWifi, configPendingIntent);
@@ -1119,6 +1123,26 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                     Intent intent2 = new Intent(context, XPanelFlashlight4WidgetReceiver.class);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
+
+                    intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
+
+                    intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
+
+                    intent = new Intent(Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
+
+                    if (!new MyAppPref(context).getBoolean(MyAppPref.IS_X_PANEL_4_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    }
                     break;
             }
             appWidgetManager.updateAppWidget(Widget_Id, rv);

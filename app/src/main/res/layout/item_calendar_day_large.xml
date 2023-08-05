@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/IvMainCalendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_alignTop="@id/TvCalendarDates"
+        android:layout_alignBottom="@id/TvCalendarDates"
+        android:layout_alignStart="@id/TvCalendarDates"
+        android:layout_alignEnd="@id/TvCalendarDates"
+        android:src="@drawable/ic_calendar_ring" />
+
+    <TextView
+        android:id="@+id/TvCalendarDates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:fontFamily="@font/main_medium"
+        android:textColor="@color/widget_brown"
+        android:textSize="@dimen/_10sdp" />
+
+</RelativeLayout>

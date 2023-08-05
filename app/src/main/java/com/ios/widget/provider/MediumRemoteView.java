@@ -186,7 +186,15 @@ public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
         } else {
             views.setTextViewText(R.id.TvCalendarDates, "");
         }
-
+        switch (NoteId) {
+            case 5:
+            case 7:
+                views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 9f);
+                break;
+            case 6:
+                views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 10f);
+                break;
+        }
         if (DayOfString[1].equals("WHITE")) {
             switch (NoteId) {
                 case 0:
@@ -198,7 +206,7 @@ public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
                 case 1:
                 case 7:
                     views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
-                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 8f);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 11f);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.widget_white));
                     break;
                 case 4:
@@ -208,12 +216,12 @@ public class MediumRemoteView implements RemoteViewsService.RemoteViewsFactory {
                     break;
                 case 5:
                     views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
-                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 8f);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 13f);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.widget_black));
                     break;
                 case 6:
                     views.setViewPadding(R.id.TvCalendarDates, 1, 1, 1, 1);
-                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 8f);
+                    views.setTextViewTextSize(R.id.TvCalendarDates, TypedValue.COMPLEX_UNIT_SP, 13f);
                     views.setTextColor(R.id.TvCalendarDates, context.getResources().getColor(R.color.widget_white));
                     break;
                 case 12:

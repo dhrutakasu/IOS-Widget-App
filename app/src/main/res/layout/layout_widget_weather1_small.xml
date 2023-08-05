@@ -18,8 +18,8 @@
             android:src="@drawable/ic_weather1_small_bg" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_alignStart="@+id/IvBackground"
             android:layout_alignTop="@+id/IvBackground"
             android:layout_alignEnd="@+id/IvBackground"
@@ -35,6 +35,7 @@
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:weightSum="5">
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -51,7 +52,6 @@
                         android:layout_weight="2"
                         android:fontFamily="@font/main_bold"
                         android:gravity="center_vertical"
-                        android:text="@string/app_name"
                         android:textColor="@color/widget_white"
                         android:textSize="@dimen/_10sdp" />
 
@@ -63,7 +63,6 @@
                         android:layout_marginStart="@dimen/_5sdp"
                         android:fontFamily="@font/main_bold"
                         android:gravity="top"
-                        android:text="@string/app_name"
                         android:textColor="@color/widget_white"
                         android:textSize="@dimen/_14sdp"/>
                 </LinearLayout>
@@ -102,7 +101,6 @@
                         android:layout_marginStart="@dimen/_5sdp"
                         android:fontFamily="@font/main_bold"
                         android:gravity="bottom"
-                        android:text="@string/app_name"
                         android:textColor="@color/widget_white"
                         android:textSize="@dimen/_10sdp"/>
 
@@ -114,7 +112,6 @@
                         android:layout_marginStart="@dimen/_5sdp"
                         android:fontFamily="@font/main_bold"
                         android:gravity="center_vertical"
-                        android:text="@string/app_name"
                         android:textColor="@color/widget_white"
                         android:textSize="@dimen/_10sdp"/>
                 </LinearLayout>

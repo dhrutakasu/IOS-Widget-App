@@ -429,16 +429,159 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 } else if (widgetData.get(i).getType() == 2) {
-
                     //todo weather 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather2_large);
+                    String city = widgetData.get(i).getCity();
+                    RemoteViews finalRv4 = rv;
+                    RequestQueue queue = Volley.newRequestQueue(context);
+                    String url, tempExt;
+                    if (widgetData.get(i).getTemp() == 0) {
+                        url = MyAppConstants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
+                        tempExt = "°C";
+                    } else {
+                        url = MyAppConstants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
+                        tempExt = "°F";
+                    }
+                    StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject obj = new JSONObject(response);
 
-                    AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
-                    appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
-                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
-                    PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+                                JSONArray WeatherArray = obj.getJSONArray("weather");
+                                for (int j = 0; j < WeatherArray.length(); j++) {
+                                    JSONObject WeatherObject = WeatherArray.getJSONObject(j);
+
+                                    WeatherObject.get("main");
+                                    WeatherObject.get("icon");
+                                    finalRv4.setTextViewText(R.id.TvDesc, WeatherObject.get("description").toString());
+                                    finalRv4.setImageViewResource(R.id.IvWeatherIcon, MyAppConstants.getWeatherIcons(WeatherObject.getString("icon")));
+                                }
+                                JSONObject MainObject = obj.getJSONObject("main");
+
+                                JSONObject SysObject = obj.getJSONObject("sys");
+                                finalRv4.setTextViewText(R.id.TvCity, obj.get("name") + "," + SysObject.get("country"));
+                                String Temp = MainObject.get("temp").toString();
+                                finalRv4.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + tempExt);
+                                String MinTemp = MainObject.get("temp_min").toString();
+                                String MaxTemp = MainObject.get("temp_max").toString();
+                                finalRv4.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt + " L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
+
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //displaying the error in toast if occur
+                        }
+                    });
+                    queue.add(stringReq);
+
+                    RequestQueue queue1 = Volley.newRequestQueue(context);
+                    String url1, tempExt1;
+                    if (widgetData.get(i).getTemp() == 0) {
+                        url1 = MyAppConstants.BASE_URL_FORECAST + widgetData.get(i).getCity() + "&cnt=6&units=metric&APPID=" + context.getString(R.string.str_weather_key);
+                        tempExt1 = "°C";
+                    } else {
+                        url1 = MyAppConstants.BASE_URL_FORECAST + widgetData.get(i).getCity() + "&cnt=6&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
+                        tempExt1 = "°F";
+                    }
+                    int finalI2 = i;
+                    StringRequest stringReq1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject MainObject = null;
+                                JSONArray IconObject = null;
+                                String Temp = null;
+                                String res = null;
+
+                                JSONObject obj = new JSONObject(response);
+
+                                JSONArray WeatherArray = obj.getJSONArray("list");
+                                for (int j = 0; j < WeatherArray.length(); j++) {
+                                    JSONObject WeatherObject = WeatherArray.getJSONObject(j);
+
+                                    String dateStr = WeatherObject.getString("dt_txt").substring(WeatherObject.getString("dt_txt").lastIndexOf(" "));
+                                    SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                                    try {
+                                        Date date = format.parse(dateStr);
+                                        format = new SimpleDateFormat("HH:mm");
+                                        res = format.format(date);
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    switch (j) {
+                                        case 0:
+                                            finalRv4.setTextViewText(R.id.TvTimeFirst, res.toString());
+                                            MainObject = WeatherObject.getJSONObject("main");
+                                            Temp = MainObject.getString("temp").toString();
+                                            finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            IconObject = WeatherObject.getJSONArray("weather");
+                                            finalRv4.setImageViewResource(R.id.IvWeatherIconFirst, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                            break;
+                                        case 1:
+                                            finalRv4.setTextViewText(R.id.TvTimeSecond, res.toString());
+                                            MainObject = WeatherObject.getJSONObject("main");
+                                            Temp = MainObject.getString("temp").toString();
+                                            finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            IconObject = WeatherObject.getJSONArray("weather");
+                                            finalRv4.setImageViewResource(R.id.IvWeatherIconSecond, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                            break;
+                                        case 2:
+                                            finalRv4.setTextViewText(R.id.TvTimeThird, res.toString());
+                                            MainObject = WeatherObject.getJSONObject("main");
+                                            Temp = MainObject.getString("temp").toString();
+                                            finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            IconObject = WeatherObject.getJSONArray("weather");
+                                            finalRv4.setImageViewResource(R.id.IvWeatherIconThird, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                            break;
+                                        case 3:
+                                            finalRv4.setTextViewText(R.id.TvTimeForth, res.toString());
+                                            MainObject = WeatherObject.getJSONObject("main");
+                                            Temp = MainObject.getString("temp").toString();
+                                            finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            IconObject = WeatherObject.getJSONArray("weather");
+                                            finalRv4.setImageViewResource(R.id.IvWeatherIconForth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                            break;
+                                        case 4:
+                                            finalRv4.setTextViewText(R.id.TvTimeFifth, res.toString());
+                                            MainObject = WeatherObject.getJSONObject("main");
+                                            Temp = MainObject.getString("temp").toString();
+                                            finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            IconObject = WeatherObject.getJSONArray("weather");
+                                            finalRv4.setImageViewResource(R.id.IvWeatherIconFifth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                            break;
+                                        case 5:
+                                            finalRv4.setTextViewText(R.id.TvTimeSixth, res.toString());
+                                            MainObject = WeatherObject.getJSONObject("main");
+                                            Temp = MainObject.getString("temp").toString();
+                                            finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            IconObject = WeatherObject.getJSONArray("weather");
+                                            finalRv4.setImageViewResource(R.id.IvWeatherIconSixth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
+                                            break;
+                                    }
+                                }
+                                AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                                appWidgetManager.updateAppWidget(widgetData.get(finalI2).getNumber(), finalRv4);
+                                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                                Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                                PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //displaying the error in toast if occur
+                        }
+                    });
+                    queue1.add(stringReq1);
                 }
             } else if (widgetData.get(i).getPosition() == 4) {
                 if (widgetData.get(i).getType() == 1) {
@@ -484,7 +627,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
 
                     //todo calender 1 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar1_large);
-                    rv.setImageViewBitmap(R.id.IvBackground, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar1_small_bg), 30));
+//                    rv.setImageViewBitmap(R.id.IvBackground, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar1_small_bg), 30));
                     rv.setCharSequence(R.id.TClockYear, "setFormat12Hour", "yyyy");
                     rv.setCharSequence(R.id.TClockYear, "setFormat24Hour", "yyyy");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM");
@@ -528,7 +671,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
 
                     //todo calender 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_medium);
-                    rv.setImageViewBitmap(R.id.IvBackground, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_medium_bg), 30));
+//                    rv.setImageViewBitmap(R.id.IvBackground, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_medium_bg), 30));
                     rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE, yyyy");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
@@ -976,10 +1119,10 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
 
                                     JSONObject SysObject = obj.getJSONObject("sys");
                                     long millisecond = Long.parseLong(SysObject.getString("sunrise"));
-                                    String dateString = android.text.format.DateFormat.format("HH:mm:ss a", new Date(millisecond)).toString();
+                                    String dateString = android.text.format.DateFormat.format("HH:mm a", new Date(millisecond)).toString();
                                     finalRv4.setTextViewText(R.id.TvSunRise, dateString);
                                     long millisecondset = Long.parseLong(SysObject.getString("sunset"));
-                                    String dateStringset = DateFormat.format("HH:mm:ss a", new Date(millisecondset)).toString();
+                                    String dateStringset = DateFormat.format("HH:mm a", new Date(millisecondset)).toString();
                                     finalRv4.setTextViewText(R.id.TvSunSet, dateStringset);
                                     JSONObject WindObject = obj.getJSONObject("wind");
                                     double millisecondWind = Double.parseDouble(WindObject.getString("speed"));
@@ -1090,7 +1233,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                         }
                                     }
 
-//                                                    if (!new Pref(context).getBoolean(Pref.IS_WEATHER_1 _ALARM, false)) {
                                     AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
                                     appWidgetManager.updateAppWidget(widgetData.get(finalI4).getNumber(), finalRv4);
                                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -1361,10 +1503,10 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
 
                                     JSONObject SysObject = obj.getJSONObject("sys");
                                     long millisecond = Long.parseLong(SysObject.getString("sunrise"));
-                                    String dateString = android.text.format.DateFormat.format("HH:mm:ss a", new Date(millisecond)).toString();
+                                    String dateString = android.text.format.DateFormat.format("HH:mm a", new Date(millisecond)).toString();
                                     finalRv4.setTextViewText(R.id.TvSunRise, dateString);
                                     long millisecondset = Long.parseLong(SysObject.getString("sunset"));
-                                    String dateStringset = DateFormat.format("HH:mm:ss a", new Date(millisecondset)).toString();
+                                    String dateStringset = DateFormat.format("HH:mm a", new Date(millisecondset)).toString();
                                     finalRv4.setTextViewText(R.id.TvSunSet, dateStringset);
                                     JSONObject WindObject = obj.getJSONObject("wind");
                                     double millisecondWind = Double.parseDouble(WindObject.getString("speed"));
@@ -1751,10 +1893,10 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
 
                                     JSONObject SysObject = obj.getJSONObject("sys");
                                     long millisecond = Long.parseLong(SysObject.getString("sunrise"));
-                                    String dateString = android.text.format.DateFormat.format("HH:mm:ss a", new Date(millisecond)).toString();
+                                    String dateString = android.text.format.DateFormat.format("HH:mm a", new Date(millisecond)).toString();
                                     finalRv4.setTextViewText(R.id.TvSunRise, dateString);
                                     long millisecondset = Long.parseLong(SysObject.getString("sunset"));
-                                    String dateStringset = DateFormat.format("HH:mm:ss a", new Date(millisecondset)).toString();
+                                    String dateStringset = DateFormat.format("HH:mm a", new Date(millisecondset)).toString();
                                     finalRv4.setTextViewText(R.id.TvSunSet, dateStringset);
                                     JSONObject WindObject = obj.getJSONObject("wind");
                                     double millisecondWind = Double.parseDouble(WindObject.getString("speed"));
@@ -1865,7 +2007,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                         }
                                     }
 
-//                                                    if (!new Pref(context).getBoolean(Pref.IS_WEATHER_1 _ALARM, false)) {
                                     AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
                                     appWidgetManager.updateAppWidget(widgetData.get(finalI4).getNumber(), finalRv4);
                                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -2186,41 +2327,230 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 if (widgetData.get(i).getType() == 0) {
 
                     //todo x-panel 2 small
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel2_small);
-                } else if (widgetData.get(i).getType() == 1) {
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_small);
+
+                    rv.setCharSequence(R.id.TClockHr, "setFormat12Hour", "HH");
+                    rv.setCharSequence(R.id.TClockHr, "setFormat24Hour", "HH");
+                    rv.setCharSequence(R.id.TClockMin, "setFormat12Hour", "mm");
+                    rv.setCharSequence(R.id.TClockMin, "setFormat24Hour", "mm");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "d EEEE");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "d EEEE");
+
+                    BatteryManager batteryManager = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+                    int managerIntProperty = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+
+                    long KILOBYTE = 1024;
+                    StatFs internalStatFs = new StatFs(Environment.getRootDirectory().getAbsolutePath());
+                    long internalTotal;
+                    long internalFree;
+
+                    StatFs externalStatFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+                    long externalTotal;
+                    long externalFree;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                        internalTotal = (internalStatFs.getBlockCountLong() * internalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                        internalFree = (internalStatFs.getAvailableBlocksLong() * internalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                        externalTotal = (externalStatFs.getBlockCountLong() * externalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                        externalFree = (externalStatFs.getAvailableBlocksLong() * externalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                    } else {
+                        internalTotal = ((long) internalStatFs.getBlockCount() * (long) internalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                        internalFree = ((long) internalStatFs.getAvailableBlocks() * (long) internalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                        externalTotal = ((long) externalStatFs.getBlockCount() * (long) externalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                        externalFree = ((long) externalStatFs.getAvailableBlocks() * (long) externalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                    }
+
+                    long total = internalTotal + externalTotal;
+                    long free = internalFree + externalFree;
+                    long used = total - free;
+                    rv.setTextViewText(R.id.TvProgressText, managerIntProperty + "%");
+                    rv.setTextViewText(R.id.storage_text, MyAppConstants.bytes2String(used) + "/" + MyAppConstants.bytes2String(total));
+
+                    intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
+
+                    intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
+
+                    intent = new Intent(Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                }
+                else if (widgetData.get(i).getType() == 1) {
 
                     //todo x-panel 2 medium
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel2_medium);
-                } else if (widgetData.get(i).getType() == 2) {
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_medium);
+
+                    rv.setCharSequence(R.id.TClockHr, "setFormat12Hour", "HH");
+                    rv.setCharSequence(R.id.TClockHr, "setFormat24Hour", "HH");
+                    rv.setCharSequence(R.id.TClockMin, "setFormat12Hour", "mm");
+                    rv.setCharSequence(R.id.TClockMin, "setFormat24Hour", "mm");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "d EEEE");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "d EEEE");
+
+                    BatteryManager batteryManager = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+                    int managerIntProperty = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+
+                    long KILOBYTE = 1024;
+                    StatFs internalStatFs = new StatFs(Environment.getRootDirectory().getAbsolutePath());
+                    long internalTotal;
+                    long internalFree;
+
+                    StatFs externalStatFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+                    long externalTotal;
+                    long externalFree;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                        internalTotal = (internalStatFs.getBlockCountLong() * internalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                        internalFree = (internalStatFs.getAvailableBlocksLong() * internalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                        externalTotal = (externalStatFs.getBlockCountLong() * externalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                        externalFree = (externalStatFs.getAvailableBlocksLong() * externalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                    } else {
+                        internalTotal = ((long) internalStatFs.getBlockCount() * (long) internalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                        internalFree = ((long) internalStatFs.getAvailableBlocks() * (long) internalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                        externalTotal = ((long) externalStatFs.getBlockCount() * (long) externalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                        externalFree = ((long) externalStatFs.getAvailableBlocks() * (long) externalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                    }
+
+                    long total = internalTotal + externalTotal;
+                    long free = internalFree + externalFree;
+                    long used = total - free;
+                    rv.setTextViewText(R.id.TvProgressText, managerIntProperty + "%");
+                    rv.setTextViewText(R.id.storage_text, MyAppConstants.bytes2String(used) + "/" + MyAppConstants.bytes2String(total));
+
+                    CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        RemoteViews finalRv5 = rv;
+                        cameraManager.registerTorchCallback(new CameraManager.TorchCallback() {
+                            @Override
+                            public void onTorchModeUnavailable(@NonNull String cameraId) {
+                                super.onTorchModeUnavailable(cameraId);
+                            }
+
+                            @Override
+                            public void onTorchModeChanged(@NonNull String cameraId, boolean enabled) {
+                                super.onTorchModeChanged(cameraId, enabled);
+                                IsTorchOn = enabled;
+                                if (IsTorchOn) {
+                                    finalRv5.setImageViewResource(R.id.IvTorch, R.drawable.ic_torch4_selected);
+                                } else {
+                                    finalRv5.setImageViewResource(R.id.IvTorch, R.drawable.ic_torch4);
+                                }
+                            }
+
+                            @Override
+                            public void onTorchStrengthLevelChanged(@NonNull String cameraId, int newStrengthLevel) {
+                                super.onTorchStrengthLevelChanged(cameraId, newStrengthLevel);
+                            }
+                        }, null);
+                    }
+                    if (MyAppConstants.IsWIfiConnected(context)) {
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi4_selected);
+                    } else {
+                        rv.setImageViewResource(R.id.IvWifi, R.drawable.ic_wifi4);
+                    }
+                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    if (mBluetoothAdapter != null) {
+                        if (mBluetoothAdapter.isEnabled()) {
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluetooth4_selected);
+                        } else if (!mBluetoothAdapter.isEnabled()) {
+                            rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluetooth4);
+                        }
+                    }
+                    Intent intentWifi = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intentWifi, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.IvWifi, configPendingIntent);
+
+                    Intent intentBluetooth = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intentBluetooth, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.IvBluetooth, configPendingIntent);
+
+                    Intent intent2 = new Intent(context, XPanelFlashlight4WidgetReceiver.class);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
+
+                    intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
+
+                    intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
+
+                    intent = new Intent(Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
+
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                }
+                else if (widgetData.get(i).getType() == 2) {
 
                     //todo x-panel 2 large
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel2_large);
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_large);
+
+                    rv.setCharSequence(R.id.TClockHr, "setFormat12Hour", "HH");
+                    rv.setCharSequence(R.id.TClockHr, "setFormat24Hour", "HH");
+                    rv.setCharSequence(R.id.TClockMin, "setFormat12Hour", "mm");
+                    rv.setCharSequence(R.id.TClockMin, "setFormat24Hour", "mm");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "d EEEE");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "d EEEE");
+
+                    BatteryManager batteryManager = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+                    int managerIntProperty = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+
+                    long KILOBYTE = 1024;
+                    StatFs internalStatFs = new StatFs( Environment.getRootDirectory().getAbsolutePath() );
+                    long internalTotal;
+                    long internalFree;
+
+                    StatFs externalStatFs = new StatFs( Environment.getExternalStorageDirectory().getAbsolutePath() );
+                    long externalTotal;
+                    long externalFree;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                        internalTotal = ( internalStatFs.getBlockCountLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                        internalFree = ( internalStatFs.getAvailableBlocksLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                        externalTotal = ( externalStatFs.getBlockCountLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                        externalFree = ( externalStatFs.getAvailableBlocksLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
+                    }
+                    else {
+                        internalTotal = ( (long) internalStatFs.getBlockCount() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                        internalFree = ( (long) internalStatFs.getAvailableBlocks() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                        externalTotal = ( (long) externalStatFs.getBlockCount() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                        externalFree = ( (long) externalStatFs.getAvailableBlocks() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                    }
+
+                    long total = internalTotal + externalTotal;
+                    long free = internalFree + externalFree;
+                    long used = total - free;
+                    rv.setTextViewText(R.id.TvProgressText, managerIntProperty + "%");
+                    rv.setTextViewText(R.id.storage_text, MyAppConstants.bytes2String(used) + "/" + MyAppConstants.bytes2String(total));
+
+                    intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
+
+                    intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
+
+                    intent = new Intent(Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                 }
-
-                BatteryManager bm = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
-                int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-                new MyAppPref(context).putInt(MyAppPref.IS_BATTERY, batLevel);
-
-                rv.setTextViewText(R.id.TvProgressText, batLevel + "%");
-                rv.setProgressBar(R.id.ProgressBarWidget2, 100, batLevel, false);
-                if (new MyAppPref(context).getInt(MyAppPref.IS_BATTERY, -1) != batLevel) {
-                    BatteryManager systemService = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
-                    int batlevel = systemService.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-                    rv.setTextViewText(R.id.TvProgressText, batLevel + "%");
-                    rv.setProgressBar(R.id.ProgressBarWidget2, 100, batLevel, false);
-                    new MyAppPref(context).putInt(MyAppPref.IS_BATTERY, batlevel);
-
-                }
-
-                Intent intentBattery = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
-                configPendingIntent = PendingIntent.getActivity(context, 0, intentBattery, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                rv.setOnClickPendingIntent(R.id.RlBattery, configPendingIntent);
-                AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
-                appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
-                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
-                PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
             } else if (widgetData.get(i).getPosition() == 22) {
                 if (widgetData.get(i).getType() == 0) {
 
@@ -2350,6 +2680,18 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 Intent intentTorch3 = new Intent(context, XPanelFlashlight3WidgetReceiver.class);
                 configPendingIntent = PendingIntent.getBroadcast(context, 0, intentTorch3, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 rv.setOnClickPendingIntent(R.id.IvTorch, configPendingIntent);
+
+                intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS);
+                configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                rv.setOnClickPendingIntent(R.id.progressBarStorage, configPendingIntent);
+
+                intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                rv.setOnClickPendingIntent(R.id.progressBarCharge, configPendingIntent);
+
+                intent = new Intent(Settings.ACTION_DATE_SETTINGS);
+                configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
 
                 AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
                 appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);

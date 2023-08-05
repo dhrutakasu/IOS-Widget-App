@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:gravity="top|center_vertical|center_horizontal|center">
 
     <RelativeLayout
         android:id="@+id/RlSmallCal"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/IvBackground"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_widget_calendar3_small_bg" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_alignStart="@+id/IvBackground"
             android:layout_alignTop="@+id/IvBackground"
             android:layout_alignEnd="@+id/IvBackground"
@@ -41,8 +41,8 @@
                         android:id="@+id/TClockDay"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="2"
-                        android:autoSizeMaxTextSize="@dimen/_18ssp"
+                        android:layout_weight="2.5"
+                        android:autoSizeMaxTextSize="@dimen/_15ssp"
                         android:autoSizeMinTextSize="@dimen/_6ssp"
                         android:autoSizeTextType="uniform"
                         android:ellipsize="none"
@@ -52,15 +52,15 @@
                         android:includeFontPadding="false"
                         android:textAllCaps="true"
                         android:textColor="@color/widget_white"
-                        android:textSize="@dimen/_16ssp"
+                        android:textSize="@dimen/_15ssp"
                         android:singleLine="true" />
 
                     <TextClock
                         android:id="@+id/TClockDate"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="4"
-                        android:autoSizeMaxTextSize="@dimen/_62ssp"
+                        android:layout_weight="3.5"
+                        android:autoSizeMaxTextSize="@dimen/_66ssp"
                         android:autoSizeMinTextSize="@dimen/_24ssp"
                         android:autoSizeTextType="uniform"
                         android:ellipsize="none"
@@ -69,7 +69,7 @@
                         android:gravity="center"
                         android:includeFontPadding="false"
                         android:textColor="@color/widget_color_C21271"
-                        android:textSize="@dimen/_62ssp"
+                        android:textSize="@dimen/_66ssp"
                         android:textStyle="bold"
                         android:singleLine="true" />
 
@@ -77,8 +77,8 @@
                         android:id="@+id/TClockMonth"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="2"
-                        android:autoSizeMaxTextSize="@dimen/_18ssp"
+                        android:layout_weight="2.2"
+                        android:autoSizeMaxTextSize="@dimen/_10ssp"
                         android:autoSizeMinTextSize="@dimen/_6ssp"
                         android:autoSizeTextType="uniform"
                         android:ellipsize="none"
@@ -88,7 +88,7 @@
                         android:includeFontPadding="false"
                         android:textAllCaps="true"
                         android:textColor="@color/widget_white"
-                        android:textSize="@dimen/_18ssp"
+                        android:textSize="@dimen/_10ssp"
                         android:textStyle="bold"
                         android:singleLine="true" />
 
