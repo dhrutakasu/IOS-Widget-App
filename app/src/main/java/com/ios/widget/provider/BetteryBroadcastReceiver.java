@@ -55,8 +55,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.ios.widget.utils.MyAppConstants.Widget_Id;
+
 public class BetteryBroadcastReceiver extends BroadcastReceiver {
     private boolean IsTorchOn;
+    private Calendar calendar;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -75,7 +78,34 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
         int currentMonth;
         int currentYear;
         for (int i = 0; i < widgetData.size(); i++) {
+            System.out.println("******** BetteryBroadcastReceiverPOSSSS::"+ widgetData.get(i).getPosition());
             if (widgetData.get(i).getPosition() == 0) {
+                if (widgetData.get(i).getType() == 0) {
+
+                    //todo calender 4 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_small);
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM yyyy");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMMM yyyy");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEEE");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "EEEE");
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlSmallCal, configPendingIntent);
+
+                    AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                    appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                    PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+                }else
                 if (widgetData.get(i).getType() == 1) {
                     //todo clock 3 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple3_medium);
@@ -192,7 +222,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 }
-            } else if (widgetData.get(i).getPosition() == 1) {
+            }
+            else if (widgetData.get(i).getPosition() == 1) {
                 if (widgetData.get(i).getType() == 0) {
 
                     //todo weather 1 small
@@ -274,7 +305,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                             alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                         }
                     }
-                } else if (widgetData.get(i).getType() == 1) {
+                }
+                else if (widgetData.get(i).getType() == 1) {
                     //todo calender 4 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_medium);
                     rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEEE");
@@ -315,8 +347,41 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 }
-            } else if (widgetData.get(i).getPosition() == 2) {
-                if (widgetData.get(i).getType() == 1) {
+                else if (widgetData.get(i).getType() == 2) {
+                    //todo clock 1 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple1_large);
+
+                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
+                }
+            }
+            else if (widgetData.get(i).getPosition() == 2) {
+                if (widgetData.get(i).getType() == 0) {
+                    //todo clock 9 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text3_small);
+
+                    rv.setCharSequence(R.id.TClockHour, "setFormat12Hour", "HH");
+                    rv.setCharSequence(R.id.TClockHour, "setFormat24Hour", "HH");
+                    rv.setCharSequence(R.id.TClockMinutes, "setFormat12Hour", "mm");
+                    rv.setCharSequence(R.id.TClockMinutes, "setFormat24Hour", "mm");
+                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat12Hour", "d EEEE");
+                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat24Hour", "d EEEE");
+
+                    intent1 = new Intent(Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlSmallClock, configPendingIntent);
+
+                    AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                    appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                    PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+                }
+                else if (widgetData.get(i).getType() == 1) {
 
                     //todo x-panel 3 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel3_medium);
@@ -428,7 +493,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-                } else if (widgetData.get(i).getType() == 2) {
+                }
+                else if (widgetData.get(i).getType() == 2) {
                     //todo weather 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather2_large);
                     String city = widgetData.get(i).getCity();
@@ -583,91 +649,34 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     });
                     queue1.add(stringReq1);
                 }
-            } else if (widgetData.get(i).getPosition() == 4) {
-                if (widgetData.get(i).getType() == 1) {
+            }
+            else if (widgetData.get(i).getPosition() == 5) {
+                if (widgetData.get(i).getType() == 0) {
 
-                    //todo calender 1 medium
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar1_medium);
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMM yyyy");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMM yyyy");
+                    //todo calender 2 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_small);
+//                    rv.setImageViewBitmap(R.id.IvBackground2, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_small_bg), 30));
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour",                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              "EEE");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
                     rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
-
-                    intent = new Intent(context, MediumWidgetService.class);
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetData.get(i).getNumber());
-                    intent.putExtra("TypeId", widgetData.get(i).getPosition());
-                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-                    rv.setRemoteAdapter(widgetData.get(i).getNumber(), R.id.GridCalendarMediumView, intent);
-
                     startMillis = Calendar.getInstance().getTimeInMillis();
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
                     ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    rv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
+                    rv.setOnClickPendingIntent(R.id.RlSmallCal, configPendingIntent);
 
                     AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
-                    Calendar NewCalendar = Calendar.getInstance();
-                    currentDay = NewCalendar.get(Calendar.DAY_OF_MONTH);
-                    currentMonth = NewCalendar.get(Calendar.MONTH);
-                    currentYear = NewCalendar.get(Calendar.YEAR);
-                    if (!new MyAppPref(context).getString(MyAppPref.IS_DATE_1, "").equalsIgnoreCase(currentDay + "/" + currentMonth + "/" + currentYear)) {
-                        appWidgetManager.notifyAppWidgetViewDataChanged(widgetData.get(i).getNumber(), R.id.GridCalendarMediumView);
-                        new MyAppPref(context).putString(MyAppPref.IS_DATE_1, currentDay + "/" + currentMonth + "/" + currentYear);
-                    }
-                    appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
-                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
-                    PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-                } else if (widgetData.get(i).getType() == 2) {
-
-                    //todo calender 1 large
-                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar1_large);
-//                    rv.setImageViewBitmap(R.id.IvBackground, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar1_small_bg), 30));
-                    rv.setCharSequence(R.id.TClockYear, "setFormat12Hour", "yyyy");
-                    rv.setCharSequence(R.id.TClockYear, "setFormat24Hour", "yyyy");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM");
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMMM");
-                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
-                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
-                    intent = new Intent(context, LargeWidgetService.class);
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetData.get(i).getNumber());
-                    intent.putExtra("TypeId", widgetData.get(i).getPosition());
-
-                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-                    rv.setRemoteAdapter(widgetData.get(i).getNumber(), R.id.GridCalendarLargeView, intent);
-
-                    startMillis = Calendar.getInstance().getTimeInMillis();
-                    builder = CalendarContract.CONTENT_URI.buildUpon();
-                    builder.appendPath("time");
-                    ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
-                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    rv.setOnClickPendingIntent(R.id.RlLargeCal, configPendingIntent);
-
-                    AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
-                    Calendar NewCalendar = Calendar.getInstance();
-                    currentDay = NewCalendar.get(Calendar.DAY_OF_MONTH);
-                    currentMonth = NewCalendar.get(Calendar.MONTH);
-                    currentYear = NewCalendar.get(Calendar.YEAR);
-                    if (!new MyAppPref(context).getString(MyAppPref.IS_DATE_LARGE_1, "").equalsIgnoreCase(currentDay + "/" + currentMonth + "/" + currentYear)) {
-                        appWidgetManager.notifyAppWidgetViewDataChanged(widgetData.get(i).getNumber(), R.id.GridCalendarLargeView);
-                        new MyAppPref(context).putString(MyAppPref.IS_DATE_LARGE_1, currentDay + "/" + currentMonth + "/" + currentYear);
-                    }
                     appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 }
-            } else if (widgetData.get(i).getPosition() == 5) {
-                if (widgetData.get(i).getType() == 1) {
+                else if (widgetData.get(i).getType() == 1) {
 
                     //todo calender 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_medium);
@@ -708,7 +717,61 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 }
-            } else if (widgetData.get(i).getPosition() == 6) {
+                else if (widgetData.get(i).getType() == 2) {
+
+                    //todo calender 2 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_large);
+//                    rv.setImageViewBitmap(R.id.IvBackground, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_large_bg), 30));
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE, yyyy");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE, yyyy");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                    intent1 = new Intent(Intent.ACTION_VIEW)
+                            .setData(builder.build());
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlLargeCal, configPendingIntent);
+                    AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+
+                    appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                    PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+                }
+            }
+            else if (widgetData.get(i).getPosition() == 6) {
+                if (widgetData.get(i).getType() == 0) {
+
+                    //todo calender 3 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar2_small);
+                    rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEEE");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "EEEE");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM yyyy");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMMM yyyy");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
+
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlSmallCal, configPendingIntent);
+
+                    AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                    appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                    PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+                }else
                 if (widgetData.get(i).getType() == 1) {
 
                     //todo calender 3 medium
@@ -749,7 +812,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-                } else if (widgetData.get(i).getType() == 2) {
+                }
+                else if (widgetData.get(i).getType() == 2) {
 
                     //todo calender 3 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar2_large);
@@ -786,7 +850,34 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 }
-            } else if (widgetData.get(i).getPosition() == 7) {
+            }
+            else if (widgetData.get(i).getPosition() == 7) {
+                if (widgetData.get(i).getType() == 0) {
+
+                    //todo calender 4 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_small);
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "MMMM yyyy");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "MMMM yyyy");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
+                    rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEEE");
+                    rv.setCharSequence(R.id.TClockDay, "setFormat24Hour", "EEEE");
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlSmallCal, configPendingIntent);
+
+                    AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                    appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                    PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+                } else
                 if (widgetData.get(i).getType() == 1) {
 
                     //todo calender 4 medium
@@ -827,7 +918,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-                } else if (widgetData.get(i).getType() == 2) {
+                }
+                else if (widgetData.get(i).getType() == 2) {
 
                     //todo calender 4 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_large);
@@ -869,7 +961,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 }
-            } else if (widgetData.get(i).getPosition() == 8) {
+            }
+            else if (widgetData.get(i).getPosition() == 8) {
                 String city = widgetData.get(i).getCity();
                 if (widgetData.get(i).getType() == 0) {
 
@@ -929,7 +1022,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }
                     });
                     queue.add(stringReq);
-                } else if (widgetData.get(i).getType() == 1) {
+                }
+                else if (widgetData.get(i).getType() == 1) {
 
                     //todo weather 1 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_medium);
@@ -1084,7 +1178,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }
                     });
                     queue1.add(stringReq1);
-                } else if (widgetData.get(i).getType() == 2) {
+                }
+                else if (widgetData.get(i).getType() == 2) {
 
                     //todo weather 1 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_large);
@@ -1255,7 +1350,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     }
                 }
 
-            } else if (widgetData.get(i).getPosition() == 9) {
+            }
+            else if (widgetData.get(i).getPosition() == 9) {
                 String city = widgetData.get(i).getCity();
                 if (widgetData.get(i).getType() == 0) {
                     //todo weather 2 small
@@ -1314,7 +1410,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }
                     });
                     queue.add(stringReq);
-                } else if (widgetData.get(i).getType() == 1) {
+                }
+                else if (widgetData.get(i).getType() == 1) {
 
                     //todo weather 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather2_medium);
@@ -1468,7 +1565,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }
                     });
                     queue1.add(stringReq1);
-                } else if (widgetData.get(i).getType() == 2) {
+                }
+                else if (widgetData.get(i).getType() == 2) {
 
                     //todo weather 2 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather2_large);
@@ -1638,14 +1736,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     } catch (Exception e) {
                     }
                 }
-                AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
-                appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
-                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
-                PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-
-            } else if (widgetData.get(i).getPosition() == 10) {
+            }
+            else if (widgetData.get(i).getPosition() == 10) {
                 String city = widgetData.get(i).getCity();
                 if (widgetData.get(i).getType() == 0) {
                     //todo weather 3 small
@@ -1704,7 +1796,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }
                     });
                     queue.add(stringReq);
-                } else if (widgetData.get(i).getType() == 1) {
+                }
+                else if (widgetData.get(i).getType() == 1) {
 
                     //todo weather 3 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather3_medium);
@@ -1858,7 +1951,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }
                     });
                     queue1.add(stringReq1);
-                } else if (widgetData.get(i).getType() == 2) {
+                }
+                else if (widgetData.get(i).getType() == 2) {
 
                     //todo weather 3 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather3_large);
@@ -2028,22 +2122,267 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     } catch (Exception e) {
                     }
                 }
+            }
+            else if (widgetData.get(i).getPosition() == 11) {
+                if (widgetData.get(i).getType() == 0) {
+                    //todo clock 1 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple1_small);
+                    intent1 = new Intent(Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
+                }
+                else if (widgetData.get(i).getType() == 1) {
+                    //todo clock 1 medium
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple1_medium);
+                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlMediumClock, configPendingIntent);
+
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                    intent1 = new Intent(Intent.ACTION_VIEW)
+                            .setData(builder.build());
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.LlMediumCalendar, configPendingIntent);
+                }
+                else if (widgetData.get(i).getType() == 2) {
+                    //todo clock 1 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple1_large);
+
+                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
+                }
+
+
                 AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
                 appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
                 AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                 Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                 PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+            }
+            else if (widgetData.get(i).getPosition() == 12) {
+                if (widgetData.get(i).getType() == 0) {
+                    //todo clock 2 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple2_small);
 
-            } else if (widgetData.get(i).getPosition() == 20) {
+                    intent1 = new Intent(Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
+                }
+                else if (widgetData.get(i).getType() == 1) {
+                    //todo clock 2 medium
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple2_medium);
+
+                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlMediumClock, configPendingIntent);
+
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                    intent1 = new Intent(Intent.ACTION_VIEW)
+                            .setData(builder.build());
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.LlMediumCalendar, configPendingIntent);
+                }
+                else if (widgetData.get(i).getType() == 2) {
+                    //todo clock 2 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple2_large);
+
+                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
+                }
+
+
+                AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+            }
+            else if (widgetData.get(i).getPosition() == 13) {
+                if (widgetData.get(i).getType() == 0) {
+                    //todo clock 3 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple3_small);
+
+                    intent1 = new Intent(Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
+                }
+                else if (widgetData.get(i).getType() == 1) {
+                    //todo clock 3 medium
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple3_medium);
+                    intent = new Intent(context, MediumWidgetService.class);
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
+                    intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
+                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+                    rv.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
+
+                    calendar = Calendar.getInstance();
+                    currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+                    currentMonth = calendar.get(Calendar.MONTH);
+                    currentYear = calendar.get(Calendar.YEAR);
+                    new MyAppPref(context).putString(MyAppPref.IS_DATE_4, currentDay + "/" + currentMonth + "/" + currentYear);
+
+                    if (!new MyAppPref(context).getBoolean(MyAppPref.IS_CLOCK_3_ALARM, false)) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        new MyAppPref(context).putBoolean(MyAppPref.IS_CLOCK_3_ALARM, true);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    }
+                    startMillis = Calendar.getInstance().getTimeInMillis();
+                    builder = CalendarContract.CONTENT_URI.buildUpon();
+                    builder.appendPath("time");
+                    ContentUris.appendId(builder, startMillis);
+                    intent1 = new Intent(Intent.ACTION_VIEW)
+                            .setData(builder.build());
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
+                }
+                else if (widgetData.get(i).getType() == 2) {
+                    //todo clock 3 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple3_large);
+
+                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
+                }
+
+
+                AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+            }
+            else if (widgetData.get(i).getPosition() == 14) {
+                if (widgetData.get(i).getType() == 0) {
+                    //todo clock 4 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text1_small);
+
+                    intent1 = new Intent(Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.LlSmallClock, configPendingIntent);
+                }
+                else if (widgetData.get(i).getType() == 1) {
+                    //todo clock 4 medium
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text1_medium);
+
+                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlMediumClock, configPendingIntent);
+                }
+                else if (widgetData.get(i).getType() == 2) {
+                    //todo clock 4 large
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text1_large);
+
+                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlLargeClock, configPendingIntent);
+                }
+
+
+                AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+            }
+            else if (widgetData.get(i).getPosition() == 19) {
+                if (widgetData.get(i).getType() == 0) {
+                    //todo clock 9 small
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text3_small);
+
+                    rv.setCharSequence(R.id.TClockHour, "setFormat12Hour", "HH");
+                    rv.setCharSequence(R.id.TClockHour, "setFormat24Hour", "HH");
+                    rv.setCharSequence(R.id.TClockMinutes, "setFormat12Hour", "mm");
+                    rv.setCharSequence(R.id.TClockMinutes, "setFormat24Hour", "mm");
+                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat12Hour", "d EEEE");
+                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat24Hour", "d EEEE");
+
+                    intent1 = new Intent(Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlSmallClock, configPendingIntent);
+                }
+                else if (widgetData.get(i).getType() == 1) {
+                    //todo clock 9 medium
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text3_medium);
+
+                    rv.setCharSequence(R.id.TClockHour, "setFormat12Hour", "HH");
+                    rv.setCharSequence(R.id.TClockHour, "setFormat24Hour", "HH");
+                    rv.setCharSequence(R.id.TClockMinutes, "setFormat12Hour", "mm");
+                    rv.setCharSequence(R.id.TClockMinutes, "setFormat24Hour", "mm");
+                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat12Hour", "d EEEE");
+                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat24Hour", "d EEEE");
+
+                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlMediumClock, configPendingIntent);
+                }
+                else if (widgetData.get(i).getType() == 2) {
+                    //todo clock 9 large
+
+                    rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text3_large);
+
+                    rv.setCharSequence(R.id.TClockHour, "setFormat12Hour", "HH");
+                    rv.setCharSequence(R.id.TClockHour, "setFormat24Hour", "HH");
+                    rv.setCharSequence(R.id.TClockMinutes, "setFormat12Hour", "mm");
+                    rv.setCharSequence(R.id.TClockMinutes, "setFormat24Hour", "mm");
+                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat12Hour", "d EEEE");
+                    rv.setCharSequence(R.id.TClockDayMonthDate, "setFormat24Hour", "d EEEE");
+
+                    intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
+                    configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    rv.setOnClickPendingIntent(R.id.RlLargeClock, configPendingIntent);
+
+                }
+
+
+                AppWidgetManager appWidgetManager = (AppWidgetManager) context.getSystemService(AppWidgetManager.class);
+                appWidgetManager.updateAppWidget(widgetData.get(i).getNumber(), rv);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+            }
+            else if (widgetData.get(i).getPosition() == 20) {
                 if (widgetData.get(i).getType() == 0) {
                     //todo x-panel 1 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_small);
-                } else if (widgetData.get(i).getType() == 1) {
+                }
+                else if (widgetData.get(i).getType() == 1) {
 
                     //todo x-panel 1 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_medium);
-                } else if (widgetData.get(i).getType() == 2) {
+                }
+                else if (widgetData.get(i).getType() == 2) {
 
                     //todo x-panel 1 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_large);
@@ -2124,7 +2463,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                 PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-            } else if (widgetData.get(i).getPosition() == 18) {
+            }
+            else if (widgetData.get(i).getPosition() == 18) {
                 if (widgetData.get(i).getType() == 0) {
 
                     //todo x-panel 4 small
@@ -2165,7 +2505,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     rv.setTextViewText(R.id.TvProgressText, managerIntProperty + "%");
                     rv.setTextViewText(R.id.storage_text, MyAppConstants.bytes2String(used) + "/" + MyAppConstants.bytes2String(total));
 
-                } else if (widgetData.get(i).getType() == 1) {
+                }
+                else if (widgetData.get(i).getType() == 1) {
 
                     //todo x-panel 4 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_medium);
@@ -2275,7 +2616,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                         rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
                     }
-                } else if (widgetData.get(i).getType() == 2) {
+                }
+                else if (widgetData.get(i).getType() == 2) {
 
                     //todo x-panel 4 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_large);
@@ -2323,7 +2665,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                 PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-            } else if (widgetData.get(i).getPosition() == 21) {
+            }
+            else if (widgetData.get(i).getPosition() == 21) {
                 if (widgetData.get(i).getType() == 0) {
 
                     //todo x-panel 2 small
@@ -2551,7 +2894,8 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
                         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                 }
-            } else if (widgetData.get(i).getPosition() == 22) {
+            }
+            else if (widgetData.get(i).getPosition() == 22) {
                 if (widgetData.get(i).getType() == 0) {
 
                     //todo x-panel 3 small

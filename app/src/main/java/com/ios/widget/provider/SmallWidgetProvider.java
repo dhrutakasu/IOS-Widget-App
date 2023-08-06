@@ -57,9 +57,9 @@ public class SmallWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         DatabaseHelper helper = new DatabaseHelper(context);
-        System.out.println("******** SmallWidgetProvider::"+ MyAppConstants.Temp_Id);
-        int insert=-1;
-        WidgetData widgetData=null;
+        System.out.println("******** SmallWidgetProvider::" + MyAppConstants.Widget_Type_Id);
+        int insert = -1;
+        WidgetData widgetData = null;
         if (CreateWidget) {
             widgetData = new WidgetData(0, MyAppConstants.Widget_Type_Id, -1, "", MyAppConstants.Temp_Id);
             insert = helper.InsertWidget(widgetData);
@@ -72,13 +72,14 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                 helper.updateWidget(widgetsId);
             }
         }
+        RemoteViews rv = null;
+        long startMillis = 0;
+        Uri.Builder builder = null;
+        Intent intent = null;
+        Intent intent1 = null;
+        PendingIntent configPendingIntent = null;
         for (int i = 0; i < helper.getWidgets().size(); ++i) {
-            RemoteViews rv = null;
-            long startMillis = 0;
-            Uri.Builder builder = null;
-            Intent intent = null;
-            Intent intent1 = null;
-            PendingIntent configPendingIntent = null;
+            System.out.println("******** SmallWidgetProviderPOSSSS::" + helper.getWidgets().get(i).getPosition());
             switch (helper.getWidgets().get(i).getPosition()) {
                 case 0:
                 case 7:
@@ -101,6 +102,8 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     break;
                 case 1:
                 case 8:
+
+                    System.out.println("******** SmallWidgetProviderCommm::" + helper.getWidgets().get(i).getPosition());
                     //todo weather 1 small
                     LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
                     if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -125,13 +128,13 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                         helper.updateWidget(widgetsId);
 
                                         RequestQueue queue = Volley.newRequestQueue(context);
-                                        String url,tempExt;
-                                        if (widgetData.getTemp()==0) {
+                                        String url, tempExt;
+                                        if (widgetData.getTemp() == 0) {
                                             url = MyAppConstants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
-                                            tempExt="°C";
-                                        }else {
+                                            tempExt = "°C";
+                                        } else {
                                             url = MyAppConstants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
-                                            tempExt="°F";
+                                            tempExt = "°F";
                                         }
                                         RemoteViews finalRv1 = rv;
                                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -157,7 +160,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                                     finalRv1.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + tempExt);
                                                     String MinTemp = MainObject.get("temp_min").toString();
                                                     String MaxTemp = MainObject.get("temp_max").toString();
-                                                    finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt+" / L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
+                                                    finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt + " / L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
 
                                                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                                                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
@@ -185,6 +188,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
 
                         }
                     }
+                    appWidgetManager.notifyAppWidgetViewDataChanged(helper.getWidgets().get(i).getNumber(), R.id.LlSmall);
                     break;
                 case 2:
                 case 19:
@@ -207,7 +211,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     //todo calender 2 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_small);
 //                    rv.setImageViewBitmap(R.id.IvBackground2, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_small_bg), 30));
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour",                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              "EEE");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
                     rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
@@ -265,13 +269,13 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                         helper.updateWidget(widgetsId);
 
                                         RequestQueue queue = Volley.newRequestQueue(context);
-                                        String url,tempExt;
-                                        if (widgetData.getTemp()==0) {
+                                        String url, tempExt;
+                                        if (widgetData.getTemp() == 0) {
                                             url = MyAppConstants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
-                                            tempExt="°C";
-                                        }else {
+                                            tempExt = "°C";
+                                        } else {
                                             url = MyAppConstants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
-                                            tempExt="°F";
+                                            tempExt = "°F";
                                         }
                                         RemoteViews finalRv1 = rv;
                                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -279,7 +283,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                             public void onResponse(String response) {
                                                 try {
                                                     JSONObject obj = new JSONObject(response);
-                                                    System.out.println("******** weather res:: "+obj.toString());
+                                                    System.out.println("******** weather res:: " + obj.toString());
                                                     JSONArray WeatherArray = obj.getJSONArray("weather");
                                                     for (int j = 0; j < WeatherArray.length(); j++) {
                                                         JSONObject WeatherObject = WeatherArray.getJSONObject(j);
@@ -301,20 +305,20 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                                                     appWidgetManager.updateAppWidget(Widget_Id, finalRv1);
                                                 } catch (JSONException e) {
-                                                    System.out.println("******** weather:ex: "+e.getMessage());
+                                                    System.out.println("******** weather:ex: " + e.getMessage());
                                                     throw new RuntimeException(e);
                                                 }
                                             }
                                         }, new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
-                                                System.out.println("******** Wather :err : "+error.getLocalizedMessage());
+                                                System.out.println("******** Wather :err : " + error.getLocalizedMessage());
                                                 //displaying the error in toast if occur
-                                             }
+                                            }
                                         });
                                         queue.add(stringReq);
                                     } catch (Exception e) {
-                                        System.out.println("******** weather :eee : "+e.getMessage());
+                                        System.out.println("******** weather :eee : " + e.getMessage());
                                     }
                                 } else {
 
@@ -349,13 +353,13 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                         helper.updateWidget(widgetsId);
 
                                         RequestQueue queue = Volley.newRequestQueue(context);
-                                        String url,tempExt;
-                                        if (widgetData.getTemp()==0) {
+                                        String url, tempExt;
+                                        if (widgetData.getTemp() == 0) {
                                             url = MyAppConstants.BASE_URL_WEATHER + city + "&units=metric&APPID=" + context.getString(R.string.str_weather_key);
-                                            tempExt="°C";
-                                        }else {
+                                            tempExt = "°C";
+                                        } else {
                                             url = MyAppConstants.BASE_URL_WEATHER + city + "&units=imperial&APPID=" + context.getString(R.string.str_weather_key);
-                                            tempExt="°F";
+                                            tempExt = "°F";
                                         }
                                         RemoteViews finalRv1 = rv;
                                         StringRequest stringReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -379,7 +383,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                                     finalRv1.setTextViewText(R.id.TvTemp, Temp.substring(0, Temp.lastIndexOf(".")) + tempExt);
                                                     String MinTemp = MainObject.get("temp_min").toString();
                                                     String MaxTemp = MainObject.get("temp_max").toString();
-                                                    finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt+" ~ L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
+                                                    finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt + " ~ L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
 
                                                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                                                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
@@ -409,12 +413,14 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     }
                     break;
                 case 11:
+                    System.out.println("******** SmallWidgetProviderCommm::" + helper.getWidgets().get(i).getPosition());
                     //todo clock 1 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple1_small);
                     intent1 = new Intent(Settings.ACTION_DATE_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
+                    appWidgetManager.notifyAppWidgetViewDataChanged(helper.getWidgets().get(i).getNumber(), R.id.LlSmall);
                     break;
                 case 12:
                     //todo clock 2 small
@@ -481,7 +487,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         }
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                        System.out.println("------------ ppppp :: "+ MyAppConstants.hasSIMCard(context));
+                        System.out.println("------------ ppppp :: " + MyAppConstants.hasSIMCard(context));
                     }
                     if (MyAppConstants.isNetworkAvailable(context)) {
                         rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1_selected);
@@ -519,6 +525,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     Intent intent2 = new Intent(context, XPanelFlashlightWidgetReceiver.class);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
+                    break;
                 case 21:
                     //todo x-panel 4 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_small);
@@ -534,24 +541,23 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                     int managerIntProperty = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
 
                     long KILOBYTE = 1024;
-                    StatFs internalStatFs = new StatFs( Environment.getRootDirectory().getAbsolutePath() );
+                    StatFs internalStatFs = new StatFs(Environment.getRootDirectory().getAbsolutePath());
                     long internalTotal;
                     long internalFree;
 
-                    StatFs externalStatFs = new StatFs( Environment.getExternalStorageDirectory().getAbsolutePath() );
+                    StatFs externalStatFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
                     long externalTotal;
                     long externalFree;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                        internalTotal = ( internalStatFs.getBlockCountLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                        internalFree = ( internalStatFs.getAvailableBlocksLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                        externalTotal = ( externalStatFs.getBlockCountLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                        externalFree = ( externalStatFs.getAvailableBlocksLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                    }
-                    else {
-                        internalTotal = ( (long) internalStatFs.getBlockCount() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
-                        internalFree = ( (long) internalStatFs.getAvailableBlocks() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
-                        externalTotal = ( (long) externalStatFs.getBlockCount() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
-                        externalFree = ( (long) externalStatFs.getAvailableBlocks() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                        internalTotal = (internalStatFs.getBlockCountLong() * internalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                        internalFree = (internalStatFs.getAvailableBlocksLong() * internalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                        externalTotal = (externalStatFs.getBlockCountLong() * externalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                        externalFree = (externalStatFs.getAvailableBlocksLong() * externalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                    } else {
+                        internalTotal = ((long) internalStatFs.getBlockCount() * (long) internalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                        internalFree = ((long) internalStatFs.getAvailableBlocks() * (long) internalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                        externalTotal = ((long) externalStatFs.getBlockCount() * (long) externalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                        externalFree = ((long) externalStatFs.getAvailableBlocks() * (long) externalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
                     }
 
                     long total = internalTotal + externalTotal;
@@ -682,18 +688,17 @@ public class SmallWidgetProvider extends AppWidgetProvider {
 
                     break;
             }
-            appWidgetManager.updateAppWidget(Widget_Id, rv);
-            MyAppConstants.CreateWidget=false;
-
+            System.out.println("******** SmallWidgetProviderUPPP::" + helper.getWidgets().get(i).getPosition());
+            appWidgetManager.updateAppWidget(helper.getWidgets().get(i).getNumber(), rv);
+            MyAppConstants.CreateWidget = false;
+            super.onUpdate(context, appWidgetManager, appWidgetIds);
         }
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
-
     }
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         for (int id : appWidgetIds) {
-            System.out.println("_____ delete : "+id);
+            System.out.println("_____ delete : " + id);
             DatabaseHelper helper = new DatabaseHelper(context);
 
             helper.getDeleteWidgets(id);
@@ -707,7 +712,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
                 // Show a confirmation dialog to the user for widget removal
-                onDeleted(context, new int[] { appWidgetId });
+                onDeleted(context, new int[]{appWidgetId});
             }
         }
         super.onReceive(context, intent);

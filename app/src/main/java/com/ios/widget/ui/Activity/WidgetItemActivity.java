@@ -298,9 +298,9 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
 
     private void setProviderWidgets() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            System.out.println("******** WidgetItemActivity::");
             MyAppConstants.Item_Id = PagerWidget.getCurrentItem();
             MyAppConstants.Widget_Type_Id = modelArrayList.get(PagerWidget.getCurrentItem()).getPosition();
+            System.out.println("******** WidgetItemActivity::"+MyAppConstants.Widget_Type_Id);
             manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
             switch (TabSizeLayout.getSelectedTabPosition()) {
                 case 0:

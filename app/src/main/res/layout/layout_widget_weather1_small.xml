@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LlSmall"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
@@ -36,6 +37,15 @@
                 android:orientation="horizontal"
                 android:weightSum="5">
 
+                <ImageView
+                    android:id="@+id/IvWeatherIcon"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:gravity="top"
+                    android:src="@drawable/ic_per_sunny" />
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -59,22 +69,13 @@
                         android:id="@+id/TvTemp"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="2"
                         android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_weight="2"
                         android:fontFamily="@font/main_bold"
                         android:gravity="top"
                         android:textColor="@color/widget_white"
-                        android:textSize="@dimen/_14sdp"/>
+                        android:textSize="@dimen/_14sdp" />
                 </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/IvWeatherIcon"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:gravity="top"
-                    android:src="@drawable/ic_per_sunny" />
             </LinearLayout>
 
             <LinearLayout
@@ -97,23 +98,23 @@
                         android:id="@+id/TvDesc"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="2"
                         android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_weight="2"
                         android:fontFamily="@font/main_bold"
                         android:gravity="bottom"
                         android:textColor="@color/widget_white"
-                        android:textSize="@dimen/_10sdp"/>
+                        android:textSize="@dimen/_10sdp" />
 
                     <TextView
                         android:id="@+id/TvTempMaxMin"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="2"
                         android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_weight="2"
                         android:fontFamily="@font/main_bold"
                         android:gravity="center_vertical"
                         android:textColor="@color/widget_white"
-                        android:textSize="@dimen/_10sdp"/>
+                        android:textSize="@dimen/_10sdp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

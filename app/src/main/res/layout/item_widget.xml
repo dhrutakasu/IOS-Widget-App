@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="115dp"
+    android:layout_height="100dp"
     android:layout_margin="@dimen/_5sdp"
     android:orientation="horizontal">
 
@@ -12,7 +12,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_marginEnd="@dimen/_4sdp"
+        android:layout_marginTop="@dimen/_1sdp"
+        android:layout_marginBottom="@dimen/_1sdp"
         android:elevation="@dimen/_5sdp"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_widget_weather_medium_1" />
 
     <ImageView
@@ -23,5 +26,6 @@
         android:layout_gravity="center"
         android:layout_marginStart="@dimen/_4sdp"
         android:elevation="@dimen/_5sdp"
+        android:adjustViewBounds="true"
         android:src="@drawable/ic_widget_weather_small_1" />
 </LinearLayout>
