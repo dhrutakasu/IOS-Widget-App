@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,8 +32,8 @@ import com.ios.widget.provider.LargeWidgetProvider;
 import com.ios.widget.provider.MediumWidgetProvider;
 import com.ios.widget.provider.SmallWidgetProvider;
 import com.ios.widget.ui.Adapter.WidgetPagerAdapter;
-import com.ios.widget.utils.MyAppConstants;
-import com.ios.widget.utils.MyAppPref;
+import com.ios.widget.crop.utils.MyAppConstants;
+import com.ios.widget.crop.utils.MyAppPref;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -86,7 +87,6 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         pos = getIntent().getIntExtra(MyAppConstants.ITEM_POSITION, 0);
         WidgetPos = getIntent().getIntExtra(MyAppConstants.WIDGET_ITEM_POSITION, 0);
         TabPos = getIntent().getIntExtra(MyAppConstants.TabPos, 0);
-        System.out.println("______ pos  ::: " + pos);
         if (TabPos == 0) {
             TvTitle.setText("Trendy");
             modelArrayList = MyAppConstants.getTrendyWidgetLists();
@@ -115,8 +115,9 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void initActions() {
-        MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
-
+        if (MyAppConstants.isConnectingToInternet(context)) {
+            MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
+        }
         helper = new DatabaseHelper(context);
         if (modelArrayList.size() > 1) {
             TabWidget.setVisibility(View.VISIBLE);
@@ -165,7 +166,6 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
             public void onTabSelected(TabLayout.Tab tab) {
                 adapter.setchange(tab.getPosition());
                 adapter.notifyDataSetChanged();
-                System.out.println("___________ Tab 1: " + TabPos + " - " + tab.getPosition() + " - " + TabWidget.getSelectedTabPosition());
                 if (TabPos == 0) {
                     if ((TabWidget.getSelectedTabPosition() == 1 && tab.getPosition() == 0)) {
                         LlTemp.setVisibility(View.VISIBLE);
@@ -190,7 +190,6 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         TabWidget.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                System.out.println("___________ Tab 2: " + TabPos + " - " + tab.getPosition() + " - " + TabSizeLayout.getSelectedTabPosition());
                 if (TabPos == 0) {
                     if ((TabSizeLayout.getSelectedTabPosition() == 0 && tab.getPosition() == 1)) {
                         LlTemp.setVisibility(View.VISIBLE);
@@ -228,13 +227,21 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
 
     private void GotoAddWidget() {
         MyAppConstants.CreateWidget = true;
-        if ((modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 0 && TabSizeLayout.getSelectedTabPosition() == 2) || (modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 2 && TabSizeLayout.getSelectedTabPosition() == 1) || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 20 || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 22) {
+        if ((modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 0 && TabSizeLayout.getSelectedTabPosition() == 2) || (modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 2 && TabSizeLayout.getSelectedTabPosition() == 1) || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 20 || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 21 || modelArrayList.get(PagerWidget.getCurrentItem()).getPosition() == 22) {
             String s1 = Manifest.permission.CAMERA;
+            String s2 = Manifest.permission.READ_PHONE_STATE;
             Dexter.withActivity(this)
-                    .withPermissions(s1)
+                    .withPermissions(s1, s2)
                     .withListener(new MultiplePermissionsListener() {
                         public void onPermissionsChecked(MultiplePermissionsReport report) {
                             if (report.areAllPermissionsGranted()) {
+                                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                                int simState = telephonyManager.getSimState();
+                                if (simState == TelephonyManager.SIM_STATE_ABSENT) {
+                                    MyAppConstants.IS_SIM_CARD=false;
+                                } else {
+                                    MyAppConstants.IS_SIM_CARD=true;
+                                }
                                 setProviderWidgets();
 
                             }
@@ -261,12 +268,12 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
                             if (report.areAllPermissionsGranted()) {
                                 LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
                                 if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                                    int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                                    int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
                                     int itemClick = SplashActivity.click++;
-                                    if (itemClick % countExtra == 0) {
-                                        MyAppAd_Interstitial.getInstance().showInter(WidgetItemActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                                    if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+                                        MyAppAd_Interstitial.getInstance().showInter(WidgetItemActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                                             @Override
-                                            public void callbackCall() {
+                                            public void AppCallback() {
                                                 setProviderWidgets();
                                             }
                                         });
@@ -300,7 +307,6 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             MyAppConstants.Item_Id = PagerWidget.getCurrentItem();
             MyAppConstants.Widget_Type_Id = modelArrayList.get(PagerWidget.getCurrentItem()).getPosition();
-            System.out.println("******** WidgetItemActivity::"+MyAppConstants.Widget_Type_Id);
             manager = (AppWidgetManager) getSystemService(AppWidgetManager.class);
             switch (TabSizeLayout.getSelectedTabPosition()) {
                 case 0:
@@ -339,12 +345,12 @@ public class WidgetItemActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onBackPressed() {
-        int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+        int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
         int itemClick = SplashActivity.click++;
-        if (itemClick % countExtra == 0) {
-            MyAppAd_Interstitial.getInstance().showInter(WidgetItemActivity.this, new MyAppAd_Interstitial.MyCallback() {
+        if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+            MyAppAd_Interstitial.getInstance().showInter(WidgetItemActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                 @Override
-                public void callbackCall() {
+                public void AppCallback() {
                     finish();
                 }
             });

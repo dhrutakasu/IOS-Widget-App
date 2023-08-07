@@ -1,7 +1,7 @@
 package com.ios.widget.Files;
 
-import com.ios.widget.Callback.FileLoaderCallbacks;
-import com.ios.widget.Callback.FilterResultCallback;
+import com.ios.widget.crop.Callback.FileLoaderCallbacks;
+import com.ios.widget.crop.Callback.FilterResultCallback;
 
 import androidx.fragment.app.FragmentActivity;
 

@@ -16,17 +16,16 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
-import com.ios.widget.utils.MyAppPref;
+import com.ios.widget.crop.utils.MyAppPref;
 
 public class MyAppAd_Interstitial {
-    static int gclick = 1;
+    static int OnClick = 1;
     private static MyAppAd_Interstitial mInstance;
-    public InterstitialAd interstitialOne;
+    public InterstitialAd interstitial;
+    MyAppCallback myAppCallback;
 
-    MyCallback myCallback;
-
-    public interface MyCallback {
-        void callbackCall();
+    public interface MyAppCallback {
+        void AppCallback();
     }
 
     public static MyAppAd_Interstitial getInstance() {
@@ -44,108 +43,106 @@ public class MyAppAd_Interstitial {
             }
         });
 
-        InterstitialAd.load(activity, new MyAppPref(activity).getString(MyAppPref.AD_INTER, ""), new AdRequest.Builder().build(), new InterstitialAdLoadCallback() {
+        InterstitialAd.load(activity, new MyAppPref(activity).getString(MyAppPref.APP_AD_INTER, ""), new AdRequest.Builder().build(), new InterstitialAdLoadCallback() {
 
             public void onAdLoaded(InterstitialAd interstitialAd) {
-                MyAppAd_Interstitial.this.interstitialOne = interstitialAd;
-                MyAppAd_Interstitial.this.interstitialOne.setFullScreenContentCallback(new FullScreenContentCallback() {
+                MyAppAd_Interstitial.this.interstitial = interstitialAd;
+                MyAppAd_Interstitial.this.interstitial.setFullScreenContentCallback(new FullScreenContentCallback() {
                     @Override
                     public void onAdDismissedFullScreenContent() {
-                        MyAppAd_Interstitial.this.interstitialOne = null;
+                        MyAppAd_Interstitial.this.interstitial = null;
                         MyAppAd_Interstitial.this.loadInterOne(activity);
-                        if (MyAppAd_Interstitial.this.myCallback != null) {
-                            MyAppAd_Interstitial.this.myCallback.callbackCall();
-                            MyAppAd_Interstitial.this.myCallback = null;
+                        if (MyAppAd_Interstitial.this.myAppCallback != null) {
+                            MyAppAd_Interstitial.this.myAppCallback.AppCallback();
+                            MyAppAd_Interstitial.this.myAppCallback = null;
                         }
                     }
                     @Override
                     public void onAdFailedToShowFullScreenContent(AdError adError) {
 
-                        MyAppAd_Interstitial.this.interstitialOne = null;
+                        MyAppAd_Interstitial.this.interstitial = null;
                         MyAppAd_Interstitial.this.loadInterOne(activity);
                     }
                 });
             }
             @Override
             public void onAdFailedToLoad(LoadAdError loadAdError) {
-                MyAppAd_Interstitial.this.interstitialOne = null;
+                MyAppAd_Interstitial.this.interstitial = null;
             }
         });
     }
 
 
 
-    public void showInter(Activity activity, MyCallback myCallback2) {
-        this.myCallback = myCallback2;
-        int integer =new MyAppPref(activity).getInt(MyAppPref.CLICK, 1);
-        int i = gclick;
+    public void showInter(Activity activity, MyAppCallback myAppCallback2) {
+        this.myAppCallback = myAppCallback2;
+        int integer =new MyAppPref(activity).getInt(MyAppPref.APP_CLICK, 1);
+        int i = OnClick;
 
-        String string2 = new MyAppPref(activity).getString(MyAppPref.SHOW, "no");
+        String string2 = new MyAppPref(activity).getString(MyAppPref.APP_SHOW, "no");
 
         if (string2.equalsIgnoreCase("yes")) {
             if (i == integer) {
-                gclick = 1;
-                InterstitialAd interstitialAd = this.interstitialOne;
+                OnClick = 1;
+                InterstitialAd interstitialAd = this.interstitial;
                 if (interstitialAd != null) {
                     interstitialAd.show(activity);
                     return;
                 }
 
-                MyCallback myCallback3 = this.myCallback;
-                if (myCallback3 != null) {
-                    myCallback3.callbackCall();
-                    this.myCallback = null;
+                MyAppCallback myAppCallback3 = this.myAppCallback;
+                if (myAppCallback3 != null) {
+                    myAppCallback3.AppCallback();
+                    this.myAppCallback = null;
                     return;
                 }
                 return;
             }
-            gclick = i + 1;
+            OnClick = i + 1;
         } else {
-            MyCallback myCallback4 = this.myCallback;
-            if (myCallback4 != null) {
-                myCallback4.callbackCall();
-                this.myCallback = null;
+            MyAppCallback myAppCallback4 = this.myAppCallback;
+            if (myAppCallback4 != null) {
+                myAppCallback4.AppCallback();
+                this.myAppCallback = null;
             }
             return;
         }
-
-
     }
 
-    public void showInterBack(Activity activity, MyCallback myCallback2) {
-        this.myCallback = myCallback2;
-        int integer = new MyAppPref(activity).getInt(MyAppPref.AD_BACK, 0);
-        int integer2 = new MyAppPref(activity).getInt(MyAppPref.CLICK, 1);
+    public void showInterBack(Activity activity, MyAppCallback myAppCallback2) {
+        this.myAppCallback = myAppCallback2;
+        int integer = new MyAppPref(activity).getInt(MyAppPref.APP_AD_BACK, 0);
+        int integer2 = new MyAppPref(activity).getInt(MyAppPref.APP_CLICK, 1);
         if (integer == 0) {
-            int i = gclick;
+            int i = OnClick;
             if (i == integer2) {
-                gclick = 1;
-                InterstitialAd interstitialAd = this.interstitialOne;
+                OnClick = 1;
+                InterstitialAd interstitialAd = this.interstitial;
                 if (interstitialAd != null) {
                     interstitialAd.show(activity);
                     return;
                 }
-                MyCallback myCallback3 = this.myCallback;
-                if (myCallback3 != null) {
-                    myCallback3.callbackCall();
-                    this.myCallback = null;
+                MyAppCallback myAppCallback3 = this.myAppCallback;
+                if (myAppCallback3 != null) {
+                    myAppCallback3.AppCallback();
+                    this.myAppCallback = null;
                     return;
                 }
                 return;
             }
-            gclick = i + 1;
-            MyCallback myCallback4 = this.myCallback;
-            if (myCallback4 != null) {
-                myCallback4.callbackCall();
-                this.myCallback = null;
+            OnClick = i + 1;
+            MyAppCallback myAppCallback4 = this.myAppCallback;
+            if (myAppCallback4 != null) {
+                myAppCallback4.AppCallback();
+                this.myAppCallback = null;
                 return;
             }
             return;
         }
-        MyCallback myCallback5 = this.myCallback;
-        if (myCallback5 != null) {
-            myCallback5.callbackCall();
-            this.myCallback = null;
+        MyAppCallback myAppCallback5 = this.myAppCallback;
+        if (myAppCallback5 != null) {
+            myAppCallback5.AppCallback();
+            this.myAppCallback = null;
         }
     }
 

@@ -16,7 +16,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -42,8 +41,8 @@ import com.ios.widget.provider.MediumPhotoWidgetProvider;
 import com.ios.widget.provider.SmallPhotoWidgetProvider;
 import com.ios.widget.ui.Adapter.PhotoAdapter;
 import com.ios.widget.ui.Adapter.WidgetPagerAdapter;
-import com.ios.widget.utils.MyAppConstants;
-import com.ios.widget.utils.MyAppPref;
+import com.ios.widget.crop.utils.MyAppConstants;
+import com.ios.widget.crop.utils.MyAppPref;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -65,7 +64,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import static com.ios.widget.utils.MyAppConstants.mSelectedList;
+import static com.ios.widget.crop.utils.MyAppConstants.mSelectedList;
 
 public class PhotoWidgetActivity extends AppCompatActivity {
     private final int GET_PHOTO = 102;
@@ -89,6 +88,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
     private DatabaseHelper database;
     private int widgetId;
     private WidgetMaster widgetMaster;
+    private ImageView IvCrop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +102,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
 
     private void initViews() {
         IvBack = (ImageView) findViewById(R.id.IvBack);
+        IvCrop = (ImageView) findViewById(R.id.IvCrop);
         TvTitle = (TextView) findViewById(R.id.TvTitle);
         RvPhotos = (RecyclerView) findViewById(R.id.RvPhotos);
         TvUploadPhotoSize = (TextView) findViewById(R.id.TvUploadPhotoSize);
@@ -170,6 +171,12 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        IvCrop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(context,ImageCropListActivity.class));
+            }
+        });
         SpinnerWidgetInterval.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -184,12 +191,12 @@ public class PhotoWidgetActivity extends AppCompatActivity {
         IvAddWidget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
                 int itemClick = SplashActivity.click++;
-                if (itemClick % countExtra == 0) {
-                    MyAppAd_Interstitial.getInstance().showInter(PhotoWidgetActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(PhotoWidgetActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                         @Override
-                        public void callbackCall() {
+                        public void AppCallback() {
                             MyAppConstants.Widget_Type_Id = 23;
                             if (mSelectedList.size() < 2) {
                                 Toast.makeText(context, "Select at least two photo", Toast.LENGTH_SHORT).show();
@@ -394,8 +401,9 @@ public class PhotoWidgetActivity extends AppCompatActivity {
     }
 
     private void initActions() {
-        MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
-
+        if (MyAppConstants.isConnectingToInternet(context)) {
+            MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
+        }
         TvTitle.setText("Photo Widget");
         RvPhotos.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
         photoAdapter = new PhotoAdapter(context, imageUriList, new PhotoAdapter.setPhotoWidget() {
@@ -637,7 +645,6 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                 inputStream.close();
             } else {
                 ExifInterface exifInterface2 = new ExifInterface(uri.getPath());
-                Log.e("ExifInterface", uri.getPath());
                 exifInterface = exifInterface2;
             }
             int attributeInt = exifInterface.getAttributeInt(androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION, 1);
@@ -660,12 +667,12 @@ public class PhotoWidgetActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+        int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
         int itemClick = SplashActivity.click++;
-        if (itemClick % countExtra == 0) {
-            MyAppAd_Interstitial.getInstance().showInter(PhotoWidgetActivity.this, new MyAppAd_Interstitial.MyCallback() {
+        if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+            MyAppAd_Interstitial.getInstance().showInter(PhotoWidgetActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                 @Override
-                public void callbackCall() {
+                public void AppCallback() {
                     finish();
                 }
             });

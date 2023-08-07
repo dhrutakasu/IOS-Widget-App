@@ -1,4 +1,4 @@
-package com.ios.widget.Callback;
+package com.ios.widget.crop.Callback;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,7 +8,7 @@ import android.provider.MediaStore;
 import com.ios.widget.Files.Directory;
 import com.ios.widget.Files.ImageFile;
 import com.ios.widget.Loaders.ImageLoader;
-import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.crop.utils.MyAppConstants;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

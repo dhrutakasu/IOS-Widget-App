@@ -17,8 +17,8 @@ import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
 import com.ios.widget.ui.Adapter.ItemAdapter;
-import com.ios.widget.utils.MyAppConstants;
-import com.ios.widget.utils.MyAppPref;
+import com.ios.widget.crop.utils.MyAppConstants;
+import com.ios.widget.crop.utils.MyAppPref;
 
 import java.util.ArrayList;
 
@@ -76,8 +76,9 @@ public class ShowItemActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void initActions() {
-        MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
-
+        if (MyAppConstants.isConnectingToInternet(context)) {
+            MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
+        }
         RvItemList.setLayoutManager(new LinearLayoutManager(context));
         RvItemList.setAdapter(new ItemAdapter(context, modelArrayList,TabPos,ShowItemActivity.this));
     }
@@ -93,12 +94,12 @@ public class ShowItemActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onBackPressed() {
-        int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+        int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
         int itemClick = SplashActivity.click++;
-        if (itemClick % countExtra == 0) {
-            MyAppAd_Interstitial.getInstance().showInter(ShowItemActivity.this, new MyAppAd_Interstitial.MyCallback() {
+        if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+            MyAppAd_Interstitial.getInstance().showInter(ShowItemActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                 @Override
-                public void callbackCall() {
+                public void AppCallback() {
                     finish();
                 }
             });

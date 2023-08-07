@@ -1,4 +1,4 @@
-package com.ios.widget.Callback;
+package com.ios.widget.crop.Callback;
 
 public interface OnSelectStateListener<T> {
     void OnSelectStateChanged(boolean state, T file);

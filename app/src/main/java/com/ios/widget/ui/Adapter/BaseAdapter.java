@@ -2,7 +2,7 @@ package com.ios.widget.ui.Adapter;
 
 import android.content.Context;
 
-import com.ios.widget.Callback.OnSelectStateListener;
+import com.ios.widget.crop.Callback.OnSelectStateListener;
 import com.ios.widget.Files.ImageFile;
 
 import java.util.ArrayList;

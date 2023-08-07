@@ -15,7 +15,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -23,7 +22,7 @@ import com.ios.widget.Model.WidgetImages;
 import com.ios.widget.Model.WidgetMaster;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
-import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.crop.utils.MyAppConstants;
 
 import java.util.List;
 
@@ -144,14 +143,12 @@ public class SmallPhotoWidgetService extends RemoteViewsService {
         }
 
         public void onDestroy() {
-            Log.d("WidgetServiceCalled", "Destroy GridRemoteViewsFactory ");
         }
 
         public int maxNumberOfCell(int i) {
             return i / 90;
         }
 
-        /* access modifiers changed from: package-private */
         public int shouldNumberOfCell(int i) {
             return i / 100;
         }
@@ -300,7 +297,6 @@ public class SmallPhotoWidgetService extends RemoteViewsService {
             return createBitmap;
         }
 
-        /* access modifiers changed from: package-private */
         public Bitmap getCenterFitRectangle(Bitmap bitmap, int i, int i2, int i3, int i4, int i5) {
             int i6 = i;
             int i7 = i2;

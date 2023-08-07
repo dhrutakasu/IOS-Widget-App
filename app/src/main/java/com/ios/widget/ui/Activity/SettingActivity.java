@@ -12,7 +12,8 @@ import android.widget.TextView;
 import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.Ads.MyAppAd_Native;
 import com.ios.widget.R;
-import com.ios.widget.utils.MyAppPref;
+import com.ios.widget.crop.utils.MyAppConstants;
+import com.ios.widget.crop.utils.MyAppPref;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -51,7 +52,9 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initActions() {
-        MyAppAd_Native.getInstance().showNative250(this, findViewById(R.id.FlNativeAds));
+        if (MyAppConstants.isConnectingToInternet(context)) {
+            MyAppAd_Native.getInstance().showNative250(this, findViewById(R.id.FlNativeAds));
+        }
 
         TvTitle.setText(getResources().getString(R.string.str_setting));
     }
@@ -63,48 +66,48 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 onBackPressed();
                 break;
             case R.id.ConstRate:
-                countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
                 itemClick = SplashActivity.click++;
-                if (itemClick % countExtra == 0) {
-                    MyAppAd_Interstitial.getInstance().showInter(SettingActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(SettingActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                         @Override
-                        public void callbackCall() {
+                        public void AppCallback() {
                         }
                     });
                 } else {
                 }
                 break;
             case R.id.ConstShare:
-                countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
                 itemClick = SplashActivity.click++;
-                if (itemClick % countExtra == 0) {
-                    MyAppAd_Interstitial.getInstance().showInter(SettingActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(SettingActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                         @Override
-                        public void callbackCall() {
+                        public void AppCallback() {
                         }
                     });
                 } else {
                 }
                 break;
             case R.id.ConstPolicy:
-                countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
                 itemClick = SplashActivity.click++;
-                if (itemClick % countExtra == 0) {
-                    MyAppAd_Interstitial.getInstance().showInter(SettingActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(SettingActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                         @Override
-                        public void callbackCall() {
+                        public void AppCallback() {
                         }
                     });
                 } else {
                 }
                 break;
             case R.id.ConstAbout:
-                countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
                 itemClick = SplashActivity.click++;
-                if (itemClick % countExtra == 0) {
-                    MyAppAd_Interstitial.getInstance().showInter(SettingActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(SettingActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                         @Override
-                        public void callbackCall() {
+                        public void AppCallback() {
                         }
                     });
                 } else {
@@ -116,12 +119,12 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onBackPressed() {
-        int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+        int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
         int itemClick = SplashActivity.click++;
-        if (itemClick % countExtra == 0) {
-            MyAppAd_Interstitial.getInstance().showInter(SettingActivity.this, new MyAppAd_Interstitial.MyCallback() {
+        if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+            MyAppAd_Interstitial.getInstance().showInter(SettingActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                 @Override
-                public void callbackCall() {
+                public void AppCallback() {
                     finish();
                 }
             });

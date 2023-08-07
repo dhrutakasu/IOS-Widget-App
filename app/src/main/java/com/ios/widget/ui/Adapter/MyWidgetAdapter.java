@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
-import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.crop.utils.MyAppConstants;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,7 +40,6 @@ public class MyWidgetAdapter extends RecyclerView.Adapter<MyWidgetAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyWidgetAdapter.MyViewHolder holder, int position) {
-        System.out.println("_____  _ _ Adp : " + myWidgetLists.get(position).getType() + " ..... : " + myWidgetLists.get(position).getPosition());
         if (MyAppConstants.WidgetRemove) {
             holder.IvWidgetRemove.setVisibility(View.VISIBLE);
         } else {
@@ -60,7 +59,6 @@ public class MyWidgetAdapter extends RecyclerView.Adapter<MyWidgetAdapter.MyView
         } else if (myWidgetLists.get(position).getType() == 1) {
             for (int i = 0; i < MyAppConstants.getWidgetLists().size(); i++) {
                 if (MyAppConstants.getWidgetLists().get(i).getPosition() == myWidgetLists.get(position).getPosition()) {
-                    System.out.println("_____  _ _ CONSSS : " + MyAppConstants.getWidgetLists().get(i).getPosition() + " ..... : " + myWidgetLists.get(position).getPosition());
                     holder.IvMyWidget.setImageResource(MyAppConstants.getWidgetLists().get(i).getMedium());
                     if (myWidgetLists.get(position).getPosition() == 23) {
                         holder.IvPhotoWidget.setImageURI(Uri.parse(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(helper.getImageList(myWidgetLists.get(position).getNumber()).get(helper.getImageList(myWidgetLists.get(position).getNumber()).size()-1).getUri())).toString()));
@@ -84,13 +82,13 @@ public class MyWidgetAdapter extends RecyclerView.Adapter<MyWidgetAdapter.MyView
         holder.IvWidgetRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteWidget.DeleteWidget(position);
+                deleteWidget.DeleteWidget(myWidgetLists,position,myWidgetLists.get(position).getNumber());
             }
         });
     }
 
     public interface deleteWidget {
-        void DeleteWidget(int pos);
+        void DeleteWidget(ArrayList<WidgetData> myWidgetLists, int pos, int number);
     }
 
     @Override

@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import com.ios.widget.R;
 import com.ios.widget.ui.Activity.WidgetItemActivity;
-import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.crop.utils.MyAppConstants;
 
 import java.util.ArrayList;
 

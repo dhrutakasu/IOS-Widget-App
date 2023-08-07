@@ -14,17 +14,20 @@
         android:theme="@style/Theme.IOSWidgetApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.Activity.ImageCropListActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.Activity.WalkthroughActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.Activity.ShowItemActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.Activity.MyWidgetsActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.Activity.SettingActivity"
             android:exported="false"
@@ -210,11 +213,10 @@
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
-
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-feature android:name="android.hardware.camera.flash" />
 
+    <uses-feature android:name="android.hardware.camera.flash" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

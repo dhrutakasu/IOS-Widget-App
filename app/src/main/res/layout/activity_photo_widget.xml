@@ -74,12 +74,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_toStartOf="@+id/IvCrop"
             android:fontFamily="@font/main_black"
             android:gravity="center_vertical"
             android:text="4/10"
             android:textColor="@color/widget_orange"
             android:textSize="@dimen/_14sdp" />
+
+        <ImageView
+            android:id="@+id/IvCrop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_crop"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RvPhotos"

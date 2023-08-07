@@ -1,7 +1,6 @@
 package com.ios.widget.ui.Activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,28 +13,27 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.material.snackbar.Snackbar;
 import com.ios.widget.Ads.MyAppAd_Banner;
 import com.ios.widget.Ads.MyAppAd_Interstitial;
-import com.ios.widget.Callback.OnSelectStateListener;
+import com.ios.widget.crop.Callback.OnSelectStateListener;
 import com.ios.widget.Files.Directory;
 import com.ios.widget.Files.ImageFile;
 import com.ios.widget.R;
 import com.ios.widget.ui.Adapter.FolderListAdapter;
 import com.ios.widget.ui.Adapter.ImagePickAdapter;
-import com.ios.widget.utils.MyAppConstants;
-import com.ios.widget.utils.MyAppPref;
+import com.ios.widget.crop.utils.MyAppConstants;
+import com.ios.widget.crop.utils.MyAppPref;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.ios.widget.utils.MyAppConstants.getmSelectedList;
-import static com.ios.widget.utils.MyAppConstants.list;
-import static com.ios.widget.utils.MyAppConstants.mAll;
-import static com.ios.widget.utils.MyAppConstants.mSelectedList;
+import static com.ios.widget.crop.utils.MyAppConstants.getmSelectedList;
+import static com.ios.widget.crop.utils.MyAppConstants.list;
+import static com.ios.widget.crop.utils.MyAppConstants.mAll;
+import static com.ios.widget.crop.utils.MyAppConstants.mSelectedList;
 
 public class ImageSelectionActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -87,7 +85,9 @@ public class ImageSelectionActivity extends AppCompatActivity implements View.On
     }
 
     private void initActions() {
-        MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
+        if (MyAppConstants.isConnectingToInternet(context)) {
+            MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
+        }
 
         TvTitle.setText(getResources().getString(R.string.str_folder_all));
 
@@ -180,12 +180,12 @@ public class ImageSelectionActivity extends AppCompatActivity implements View.On
     }
 
     private void GotoEditActivity() {
-        int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+        int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
         int itemClick = SplashActivity.click++;
-        if (itemClick % countExtra == 0) {
-            MyAppAd_Interstitial.getInstance().showInter(ImageSelectionActivity.this, new MyAppAd_Interstitial.MyCallback() {
+        if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+            MyAppAd_Interstitial.getInstance().showInter(ImageSelectionActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                 @Override
-                public void callbackCall() {
+                public void AppCallback() {
                     setResult(RESULT_OK);
                     finish();
                 }
@@ -213,12 +213,12 @@ public class ImageSelectionActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onBackPressed() {
-        int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+        int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
         int itemClick = SplashActivity.click++;
-        if (itemClick % countExtra == 0) {
-            MyAppAd_Interstitial.getInstance().showInter(ImageSelectionActivity.this, new MyAppAd_Interstitial.MyCallback() {
+        if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+            MyAppAd_Interstitial.getInstance().showInter(ImageSelectionActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                 @Override
-                public void callbackCall() {
+                public void AppCallback() {
                     finish();
                 }
             });

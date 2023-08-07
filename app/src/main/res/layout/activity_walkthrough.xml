@@ -117,6 +117,7 @@
             android:id="@+id/RlBannerAd"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+            android:background="@color/widget_black"
             android:layout_gravity="bottom|center"
             android:layout_alignParentBottom="true"
             android:gravity="bottom|center">

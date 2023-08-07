@@ -11,7 +11,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
-import com.ios.widget.utils.MyAppPref;
+import com.ios.widget.crop.utils.MyAppPref;
 
 public class MyAppAd_Banner {
 
@@ -24,13 +24,13 @@ public class MyAppAd_Banner {
         return mInstance;
     }
 
-    public void showBanner(Activity activity, AdSize adSize, RelativeLayout relativeLayout, RelativeLayout bannerlay) {
-        String string = new MyAppPref(activity).getString(MyAppPref.AD_BANNER, "");
-        AdView adView = new AdView(activity);
-        adView.setAdSize(adSize);
-        adView.setAdUnitId(string);
-        adView.loadAd(new AdRequest.Builder().build());
-        adView.setAdListener(new AdListener() {
+    public void showBanner(Activity activity, AdSize adSize, RelativeLayout RlBannerView, RelativeLayout RlBannerParent) {
+        String Bannerstring = new MyAppPref(activity).getString(MyAppPref.APP_AD_BANNER, "");
+        AdView view = new AdView(activity);
+        view.setAdSize(adSize);
+        view.setAdUnitId(Bannerstring);
+        view.loadAd(new AdRequest.Builder().build());
+        view.setAdListener(new AdListener() {
 
             @Override
             public void onAdClicked() {
@@ -42,55 +42,25 @@ public class MyAppAd_Banner {
 
             @Override
             public void onAdFailedToLoad(LoadAdError loadAdError) {
-                System.out.println("********* LoadAdError : ");
-
-
-                relativeLayout.setVisibility(View.GONE);
-//                AudienceNetworkAds.initialize(activity);
-//                com.facebook.ads.AdView adView = new com.facebook.ads.AdView(activity, "IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID", com.facebook.ads.AdSize.BANNER_HEIGHT_50);
-//                bannerlay.addView(adView);
-//                com.facebook.ads.AdListener adListener = new com.facebook.ads.AdListener() {
-//                    @Override
-//                    public void onError(Ad ad, AdError adError) {
-//                        System.out.println("********* Error : ");
-//                    }
-//
-//                    @Override
-//                    public void onAdLoaded(Ad ad) {
-//                        System.out.println("********* Loaded : ");
-//                    }
-//
-//                    @Override
-//                    public void onAdClicked(Ad ad) {
-//                    }
-//
-//                    @Override
-//                    public void onLoggingImpression(Ad ad) {
-//                    }
-//                };
-//                com.facebook.ads.AdView.AdViewLoadConfig loadAdConfig = adView.buildLoadAdConfig()
-//                        .withAdListener(adListener)
-//                        .build();
-//                adView.loadAd(loadAdConfig);
+                RlBannerView.setVisibility(View.INVISIBLE);
             }
 
             @Override
 
             public void onAdLoaded() {
-                System.out.println("********* onAdLoaded : ");
             }
 
             @Override
             public void onAdOpened() {
             }
         });
-        relativeLayout.addView(adView);
-        String string2 = new MyAppPref(activity).getString(MyAppPref.SHOW, "no");
+        RlBannerView.addView(view);
+        String show = new MyAppPref(activity).getString(MyAppPref.APP_SHOW, "no");
 
-        if (string2.equalsIgnoreCase("yes")) {
-            bannerlay.setVisibility(View.VISIBLE);
+        if (show.equalsIgnoreCase("yes")) {
+            RlBannerParent.setVisibility(View.VISIBLE);
         } else {
-            bannerlay.setVisibility(View.GONE);
+            RlBannerParent.setVisibility(View.INVISIBLE);
         }
     }
 

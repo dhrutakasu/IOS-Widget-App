@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -16,7 +15,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -24,7 +22,7 @@ import com.ios.widget.Model.WidgetImages;
 import com.ios.widget.Model.WidgetMaster;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
-import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.crop.utils.MyAppConstants;
 
 import java.util.List;
 
@@ -63,107 +61,104 @@ public class LargePhotoWidgetService extends RemoteViewsService {
         }
 
         public GridRemoteViewsFactory(Context context, Intent intent) {
-            this.mContext = context;
-            this.mAppWidgetId = intent.getIntExtra("WidgetID", 0);
+            mContext = context;
+            mAppWidgetId = intent.getIntExtra("WidgetID", 0);
         }
 
         public void onDataSetChanged() {
-            DatabaseHelper instance = new DatabaseHelper(this.mContext);
-            this.database = instance;
-            this.imageUriList = instance.getImageList(this.mAppWidgetId);
-            this.widgetMaster = this.database.getWidgetMaster(this.mAppWidgetId);
-            Bundle appWidgetOptions = AppWidgetManager.getInstance(this.mContext).getAppWidgetOptions(this.mAppWidgetId);
-            this.width = 320;
-            this.height = 320;
-            this.columns = LargePhotoWidgetProvider.getCellsForSize(this.width);
-            this.custPadding = this.widgetMaster.getSpaceBorder();
-            if (this.widgetMaster.getShape() == 3 || this.widgetMaster.getShape() == 4) {
-                if (!this.widgetMaster.isCustomMode()) {
-                    int maxNumberOfCell = maxNumberOfCell(this.height);
-                    int maxNumberOfCell2 = maxNumberOfCell(this.width);
+            DatabaseHelper instance = new DatabaseHelper(mContext);
+            database = instance;
+            imageUriList = instance.getImageList(mAppWidgetId);
+            widgetMaster = database.getWidgetMaster(mAppWidgetId);
+            Bundle appWidgetOptions = AppWidgetManager.getInstance(mContext).getAppWidgetOptions(mAppWidgetId);
+            width = 320;
+            height = 320;
+            columns = LargePhotoWidgetProvider.getCellsForSize(width);
+            custPadding = widgetMaster.getSpaceBorder();
+            if (widgetMaster.getShape() == 3 || widgetMaster.getShape() == 4) {
+                if (!widgetMaster.isCustomMode()) {
+                    int maxNumberOfCell = maxNumberOfCell(height);
+                    int maxNumberOfCell2 = maxNumberOfCell(width);
                     int i = maxNumberOfCell * maxNumberOfCell2;
-                    if (this.imageUriList.size() >= 2) {
-                        if (this.imageUriList.size() <= i) {
-                            int i2 = this.width;
-                            int i3 = this.height;
+                    if (imageUriList.size() >= 2) {
+                        if (imageUriList.size() <= i) {
+                            int i2 = width;
+                            int i3 = height;
                             if (i2 > i3) {
                                 int shouldNumberOfCell = shouldNumberOfCell(i2);
-                                if (shouldNumberOfCell(this.width) <= 0) {
+                                if (shouldNumberOfCell(width) <= 0) {
                                     shouldNumberOfCell = 1;
                                 }
-                                if (this.imageUriList.size() / shouldNumberOfCell <= 1) {
-                                    this.custRows = 2;
-                                    this.custCols = (int) Math.ceil((double) ((((float) this.imageUriList.size()) * 1.0f) / ((float) this.custRows)));
+                                if (imageUriList.size() / shouldNumberOfCell <= 1) {
+                                    custRows = 2;
+                                    custCols = (int) Math.ceil((double) ((((float) imageUriList.size()) * 1.0f) / ((float) custRows)));
                                 } else {
-                                    this.custRows = (int) Math.ceil((double) ((((float) this.imageUriList.size()) * 1.0f) / ((float) shouldNumberOfCell)));
-                                    this.custCols = (int) Math.ceil((double) ((((float) this.imageUriList.size()) * 1.0f) / ((float) this.custRows)));
+                                    custRows = (int) Math.ceil((double) ((((float) imageUriList.size()) * 1.0f) / ((float) shouldNumberOfCell)));
+                                    custCols = (int) Math.ceil((double) ((((float) imageUriList.size()) * 1.0f) / ((float) custRows)));
                                 }
                             } else {
                                 int shouldNumberOfCell2 = shouldNumberOfCell(i3);
-                                if (shouldNumberOfCell(this.height) <= 0) {
+                                if (shouldNumberOfCell(height) <= 0) {
                                     shouldNumberOfCell2 = 1;
                                 }
-                                if (this.imageUriList.size() / shouldNumberOfCell2 <= 1) {
-                                    this.custCols = 2;
-                                    this.custRows = (int) Math.ceil((double) ((((float) this.imageUriList.size()) * 1.0f) / ((float) this.custCols)));
+                                if (imageUriList.size() / shouldNumberOfCell2 <= 1) {
+                                    custCols = 2;
+                                    custRows = (int) Math.ceil((double) ((((float) imageUriList.size()) * 1.0f) / ((float) custCols)));
                                 } else {
-                                    this.custCols = (int) Math.ceil((double) ((((float) this.imageUriList.size()) * 1.0f) / ((float) shouldNumberOfCell2)));
-                                    this.custRows = (int) Math.ceil((double) ((((float) this.imageUriList.size()) * 1.0f) / ((float) this.custCols)));
+                                    custCols = (int) Math.ceil((double) ((((float) imageUriList.size()) * 1.0f) / ((float) shouldNumberOfCell2)));
+                                    custRows = (int) Math.ceil((double) ((((float) imageUriList.size()) * 1.0f) / ((float) custCols)));
                                 }
                             }
                         } else {
-                            this.custCols = maxNumberOfCell2;
-                            this.custRows = maxNumberOfCell;
+                            custCols = maxNumberOfCell2;
+                            custRows = maxNumberOfCell;
                         }
-                        if (this.custRows == 0) {
-                            this.custRows = 1;
+                        if (custRows == 0) {
+                            custRows = 1;
                         }
-                        if (this.custCols == 0) {
-                            this.custCols = 1;
+                        if (custCols == 0) {
+                            custCols = 1;
                         }
                     } else {
-                        this.custCols = 1;
-                        this.custRows = 1;
+                        custCols = 1;
+                        custRows = 1;
                     }
                 } else {
-                    this.custRows = this.widgetMaster.getRow() == 0 ? 1 : this.widgetMaster.getRow();
-                    this.custCols = this.widgetMaster.getColumn() == 0 ? 1 : this.widgetMaster.getColumn();
+                    custRows = widgetMaster.getRow() == 0 ? 1 : widgetMaster.getRow();
+                    custCols = widgetMaster.getColumn() == 0 ? 1 : widgetMaster.getColumn();
                 }
             }
-            Bitmap[] bitmapArr = this.bitmapList;
+            Bitmap[] bitmapArr = bitmapList;
             if (bitmapArr != null) {
                 for (int length = bitmapArr.length - 1; length >= 0; length--) {
-                    Bitmap[] bitmapArr2 = this.bitmapList;
+                    Bitmap[] bitmapArr2 = bitmapList;
                     if (bitmapArr2[length] != null) {
                         bitmapArr2[length].recycle();
-                        this.bitmapList[length] = null;
+                        bitmapList[length] = null;
                     }
                 }
-                this.bitmapList = null;
+                bitmapList = null;
             }
-            this.bitmapList = new Bitmap[this.imageUriList.size()];
+            bitmapList = new Bitmap[imageUriList.size()];
         }
 
         public void onDestroy() {
-            Log.d("WidgetServiceCalled", "Destroy GridRemoteViewsFactory ");
         }
 
-        /* access modifiers changed from: package-private */
         public int maxNumberOfCell(int i) {
             return i / 90;
         }
 
-        /* access modifiers changed from: package-private */
         public int shouldNumberOfCell(int i) {
             return i / 100;
         }
 
         public int getCount() {
-            WidgetMaster widgetMaster2 = this.widgetMaster;
-            if (widgetMaster2 == null || (widgetMaster2.getShape() != 3 && this.widgetMaster.getShape() != 4)) {
-                return this.imageUriList.size();
+            WidgetMaster widgetMaster2 = widgetMaster;
+            if (widgetMaster2 == null || (widgetMaster2.getShape() != 3 && widgetMaster.getShape() != 4)) {
+                return imageUriList.size();
             }
-            return (int) Math.ceil((double) ((((float) this.imageUriList.size()) * 1.0f) / ((float) (this.custCols * this.custRows))));
+            return (int) Math.ceil((double) ((((float) imageUriList.size()) * 1.0f) / ((float) (custCols * custRows))));
         }
 
         public RemoteViews getViewAt(int i) {
@@ -177,55 +172,35 @@ public class LargePhotoWidgetService extends RemoteViewsService {
             int i9;
             int i10;
             int i11;
-            int i12;
-            int i13;
-            boolean z;
-            int i14;
-            int i15;
-            int i16;
-            int i17;
-            Canvas canvas;
-            Paint paint;
-            int i18;
-            int i19;
-            int i20;
-            int i21;
-            int i22;
-            int i23;
-            int i24;
-            int i25;
-            Bitmap bitmap;
-            int i26;
-            int i27;
             int i28 = i;
-            int dpToPx = MyAppConstants.dpToPx(this.mContext, this.width);
-            int dpToPx2 = MyAppConstants.dpToPx(this.mContext, this.height);
+            int dpToPx = MyAppConstants.dpToPx(mContext, width);
+            int dpToPx2 = MyAppConstants.dpToPx(mContext, height);
             RemoteViews remoteViews = new RemoteViews(LargePhotoWidgetService.this.getPackageName(), R.layout.layout_image);
-            remoteViews.setInt(R.id.IvItemFull, "setAlpha", this.widgetMaster.getOpacity());
+            remoteViews.setInt(R.id.IvItemFull, "setAlpha", widgetMaster.getOpacity());
             float f = 1.0f;
             int i29 = 1;
-            switch (this.widgetMaster.getShape()) {
+            switch (widgetMaster.getShape()) {
                 case 0:
-                    Bitmap[] bitmapArr = this.bitmapList;
+                    Bitmap[] bitmapArr = bitmapList;
                     if (bitmapArr[i28] != null) {
                         remoteViews.setImageViewBitmap(R.id.IvItemFull, bitmapArr[i28]);
                         break;
                     } else {
                         try {
-                            Bitmap decodeFile = BitmapFactory.decodeFile(this.imageUriList.get(i28).getUri());
+                            Bitmap decodeFile = BitmapFactory.decodeFile(imageUriList.get(i28).getUri());
                             Matrix matrix = new Matrix();
-                            matrix.postRotate((float) this.widgetMaster.getRotationType());
+                            matrix.postRotate((float) widgetMaster.getRotationType());
                             Bitmap createBitmap = Bitmap.createBitmap(decodeFile, 0, 0, decodeFile.getWidth(), decodeFile.getHeight(), matrix, true);
                             double width2 = (double) ((((float) createBitmap.getWidth()) * 1.0f) / ((float) createBitmap.getHeight()));
-                            if (this.widgetMaster.getShape() == 3) {
-                                i3 = dpToPx / (this.imageUriList.size() >= 3 ? Math.min(this.columns, 3) : 1);
+                            if (widgetMaster.getShape() == 3) {
+                                i3 = dpToPx / (imageUriList.size() >= 3 ? Math.min(columns, 3) : 1);
                                 i2 = i3;
                             } else {
                                 i3 = dpToPx;
                                 i2 = dpToPx2;
                             }
-                            if (this.widgetMaster.getCropType() != 1) {
-                                if (this.widgetMaster.getCropType() == 2) {
+                            if (widgetMaster.getCropType() != 1) {
+                                if (widgetMaster.getCropType() == 2) {
                                     if (i2 > i3) {
                                         i5 = (int) (((double) i2) * width2);
                                         i4 = i2;
@@ -244,7 +219,7 @@ public class LargePhotoWidgetService extends RemoteViewsService {
                                         i7 = i5;
                                         i6 = i4;
                                     }
-                                    remoteViews.setImageViewBitmap(R.id.IvItemFull, getCenterFitRectangle(createBitmap, i7, i6, i3, i2, this.widgetMaster.getCornerBorder()));
+                                    remoteViews.setImageViewBitmap(R.id.IvItemFull, getCenterFitRectangle(createBitmap, i7, i6, i3, i2, widgetMaster.getCornerBorder()));
                                     break;
                                 }
                             } else {
@@ -266,7 +241,7 @@ public class LargePhotoWidgetService extends RemoteViewsService {
                                     i11 = i9;
                                     i10 = i8;
                                 }
-                                remoteViews.setImageViewBitmap(R.id.IvItemFull, getCenterCropRectangle(createBitmap, i3, i2, i11, i10, this.widgetMaster.getCornerBorder()));
+                                remoteViews.setImageViewBitmap(R.id.IvItemFull, getCenterCropRectangle(createBitmap, i3, i2, i11, i10, widgetMaster.getCornerBorder()));
                                 break;
                             }
                         } catch (Exception e) {
@@ -279,27 +254,6 @@ public class LargePhotoWidgetService extends RemoteViewsService {
             return remoteViews;
         }
 
-        public Bitmap getRoundedBitmap(Bitmap bitmap, int i, int i2, int i3, int i4) {
-            Bitmap createScaledBitmap = Bitmap.createScaledBitmap(bitmap, i3, i4, true);
-            Bitmap createBitmap = Bitmap.createBitmap(i, i2, createScaledBitmap.getConfig());
-            Canvas canvas = new Canvas(createBitmap);
-            Paint paint = new Paint();
-            int i5 = (int) ((((double) i3) / 2.0d) - (((double) i) / 2.0d));
-            int i6 = (int) ((((double) i4) / 2.0d) - (((double) i2) / 2.0d));
-            paint.setAntiAlias(true);
-            paint.setFilterBitmap(true);
-            paint.setDither(true);
-            canvas.drawARGB(0, 0, 0, 0);
-            paint.setColor(Color.parseColor("#BAB399"));
-            float f = (((float) i) * 1.0f) / 2.0f;
-            float f2 = 0.7f + f;
-            canvas.drawCircle(f2, f2, f + 0.1f, paint);
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-            canvas.drawBitmap(createScaledBitmap, new Rect(i5, i6, i + i5, i2 + i6), new Rect(0, 0, i, i2), paint);
-            return createBitmap;
-        }
-
-        /* access modifiers changed from: package-private */
         public Bitmap getCenterCropRectangle(Bitmap bitmap, int i, int i2, int i3, int i4, int i5) {
             int i6 = i;
             int i7 = i2;
@@ -310,8 +264,8 @@ public class LargePhotoWidgetService extends RemoteViewsService {
             Canvas canvas = new Canvas(createBitmap);
             Paint paint = new Paint();
             paint.setAntiAlias(true);
-            int i10 = (int) ((((double) i8) / 2.0d) - (((double) i6) / 2.0d));
-            int i11 = (int) ((((double) i9) / 2.0d) - (((double) i7) / 2.0d));
+            int i10 = (int) ((((double) i8) / 1.2d) - (((double) i6) / 1.2d));
+            int i11 = (int) ((((double) i9) / 1.2d) - (((double) i7) / 1.2d));
             paint.setShader(new BitmapShader(createScaledBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP));
             float f = ((float) (i6 * i5)) / 100.0f;
             if (i7 < i6) {
@@ -323,7 +277,6 @@ public class LargePhotoWidgetService extends RemoteViewsService {
             return createBitmap;
         }
 
-        /* access modifiers changed from: package-private */
         public Bitmap getCenterFitRectangle(Bitmap bitmap, int i, int i2, int i3, int i4, int i5) {
             int i6 = i;
             int i7 = i2;
@@ -350,7 +303,7 @@ public class LargePhotoWidgetService extends RemoteViewsService {
         }
 
         public RemoteViews getLoadingView() {
-            return this.widgetMaster.isLoadingIndicator() ? new RemoteViews(LargePhotoWidgetService.this.getPackageName(), R.layout.layout_widget_progress) : new RemoteViews(LargePhotoWidgetService.this.getPackageName(), R.layout.layout_empty);
+            return widgetMaster.isLoadingIndicator() ? new RemoteViews(LargePhotoWidgetService.this.getPackageName(), R.layout.layout_widget_progress) : new RemoteViews(LargePhotoWidgetService.this.getPackageName(), R.layout.layout_empty);
         }
     }
 }

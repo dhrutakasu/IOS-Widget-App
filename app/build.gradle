@@ -71,4 +71,8 @@ dependencies {
     //todo location dependancy
     implementation "com.google.android.gms:play-services-location:16.0.0"
 
+    //todo rxjava dependancy
+    implementation 'io.reactivex.rxjava2:rxjava:2.0.1'
+
+
 }

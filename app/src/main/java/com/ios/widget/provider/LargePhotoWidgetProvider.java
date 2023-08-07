@@ -16,8 +16,8 @@ import com.ios.widget.Model.WidgetMaster;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
 import com.ios.widget.ui.Activity.PhotoWidgetActivity;
-import com.ios.widget.utils.MyAppConstants;
-import com.ios.widget.utils.MyAppPref;
+import com.ios.widget.crop.utils.MyAppConstants;
+import com.ios.widget.crop.utils.MyAppPref;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +38,7 @@ public class LargePhotoWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] iArr) {
         DatabaseHelper helper = new DatabaseHelper(context);
-        System.out.println("******** LargePhotoWidgetProvider::");
-        WidgetData widgetData = new WidgetData(2, MyAppConstants.Widget_Type_Id, -1,"", MyAppConstants.Temp_Id);
+        WidgetData widgetData = new WidgetData(2, MyAppConstants.Widget_Type_Id, -1,"", MyAppConstants.Temp_Id, MyAppConstants.IS_SIM_CARD);
         int insert = helper.InsertWidget(widgetData);
         for (int id : iArr) {
             Widget_Id = id;

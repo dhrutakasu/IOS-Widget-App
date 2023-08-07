@@ -26,10 +26,10 @@ import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
 import com.ios.widget.provider.BetteryBroadcastReceiver;
 import com.ios.widget.ui.Adapter.TypeImageAdapter;
-import com.ios.widget.utils.MyAppConstants;
-import com.ios.widget.utils.MyAppExitDialog;
-import com.ios.widget.utils.MyAppPref;
-import com.ios.widget.utils.NotificationHelper;
+import com.ios.widget.crop.utils.MyAppConstants;
+import com.ios.widget.crop.utils.MyAppExitDialog;
+import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.crop.utils.NotificationHelper;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         DatabaseHelper helper = new DatabaseHelper(context);
         helper.getWritableDatabase();
         ArrayList<WidgetData> widgetData = helper.getWidgets();
-        System.out.println("____+++_ Table : " + widgetData.size());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             String s = Manifest.permission.POST_NOTIFICATIONS;
             Dexter.withActivity(this)
@@ -109,7 +108,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initActions() {
-        MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
+        if (MyAppConstants.isConnectingToInternet(context)) {
+            MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
+        }
 
         ArrayList<Integer> TypesArrayList = new ArrayList<>();
         TypesArrayList.add(R.drawable.btn_trendy);
@@ -130,12 +131,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             .withListener(new MultiplePermissionsListener() {
                                 public void onPermissionsChecked(MultiplePermissionsReport report) {
                                     if (report.areAllPermissionsGranted()) {
-                                        countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                                        countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
                                         itemClick = SplashActivity.click++;
-                                        if (itemClick % countExtra == 0) {
-                                            MyAppAd_Interstitial.getInstance().showInter(MainActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                                        if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+                                            MyAppAd_Interstitial.getInstance().showInter(MainActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                                                 @Override
-                                                public void callbackCall() {
+                                                public void AppCallback() {
                                                     if (position == 5) {
                                                         MyAppConstants.clearAllSelection();
                                                         startActivity(new Intent(context, PhotoWidgetActivity.class));
@@ -170,12 +171,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             .onSameThread()
                             .check();
                 } else {
-                    countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                    countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
                     itemClick = SplashActivity.click++;
-                    if (itemClick % countExtra == 0) {
-                        MyAppAd_Interstitial.getInstance().showInter(MainActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                    if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+                        MyAppAd_Interstitial.getInstance().showInter(MainActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                             @Override
-                            public void callbackCall() {
+                            public void AppCallback() {
                                 if (position == 5) {
                                     MyAppConstants.clearAllSelection();
                                     startActivity(new Intent(context, PhotoWidgetActivity.class));
@@ -205,12 +206,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.IvSettings:
-                countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
                 itemClick = SplashActivity.click++;
-                if (itemClick % countExtra == 0) {
-                    MyAppAd_Interstitial.getInstance().showInter(MainActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(MainActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                         @Override
-                        public void callbackCall() {
+                        public void AppCallback() {
                             startActivity(new Intent(context, SettingActivity.class));
                         }
                     });
@@ -219,12 +220,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.IvMyWidget:
-                countExtra = new MyAppPref(context).getInt( MyAppPref.AD_COUNTER, 0);
+                countExtra = new MyAppPref(context).getInt( MyAppPref.APP_AD_COUNTER, 0);
                 itemClick = SplashActivity.click++;
-                if (itemClick % countExtra == 0) {
-                    MyAppAd_Interstitial.getInstance().showInter(MainActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(MainActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                         @Override
-                        public void callbackCall() {
+                        public void AppCallback() {
                             startActivity(new Intent(context, MyWidgetsActivity.class));
                         }
                     });
@@ -237,12 +238,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+        int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
         int itemClick = SplashActivity.click++;
-        if (itemClick % countExtra == 0) {
-            MyAppAd_Interstitial.getInstance().showInter(MainActivity.this, new MyAppAd_Interstitial.MyCallback() {
+        if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+            MyAppAd_Interstitial.getInstance().showInter(MainActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                 @Override
-                public void callbackCall() {
+                public void AppCallback() {
                     MyAppExitDialog exitDialog = new MyAppExitDialog(MainActivity.this,context, () -> finishAffinity());
                     exitDialog.show();
                     WindowManager.LayoutParams lp = exitDialog.getWindow().getAttributes();

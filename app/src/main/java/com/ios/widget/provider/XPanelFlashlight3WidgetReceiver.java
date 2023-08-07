@@ -22,7 +22,6 @@ public class XPanelFlashlight3WidgetReceiver extends BroadcastReceiver {
 
             try {
                 context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
-                Log.e("#isLightOn",isLightOn+"");
 
                 CameraManager camManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
                 String cameraId = camManager.getCameraIdList()[0]; // Usually front camera is at 0 position.
@@ -35,8 +34,6 @@ public class XPanelFlashlight3WidgetReceiver extends BroadcastReceiver {
         } else {
             try {
                 context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
-
-                Log.e("#isLightOn",isLightOn+"");
 
                 CameraManager camManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
                 String cameraId = camManager.getCameraIdList()[0]; // Usually front camera is at 0 position.

@@ -1,4 +1,4 @@
-package com.ios.widget.utils;
+package com.ios.widget.crop.utils;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.nativead.NativeAd;
 import com.ios.widget.Ads.MyAppAd_Native;
 import com.ios.widget.R;
 import com.ios.widget.ui.Activity.MainActivity;

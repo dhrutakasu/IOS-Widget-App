@@ -10,7 +10,6 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.hardware.camera2.CameraManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -39,9 +38,9 @@ import com.android.volley.toolbox.Volley;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
 import com.ios.widget.helper.DatabaseHelper;
-import com.ios.widget.utils.MyAppConstants;
-import com.ios.widget.utils.NotificationHelper;
-import com.ios.widget.utils.MyAppPref;
+import com.ios.widget.crop.utils.MyAppConstants;
+import com.ios.widget.crop.utils.NotificationHelper;
+import com.ios.widget.crop.utils.MyAppPref;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,8 +53,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import static com.ios.widget.utils.MyAppConstants.Widget_Id;
 
 public class BetteryBroadcastReceiver extends BroadcastReceiver {
     private boolean IsTorchOn;
@@ -78,7 +75,6 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
         int currentMonth;
         int currentYear;
         for (int i = 0; i < widgetData.size(); i++) {
-            System.out.println("******** BetteryBroadcastReceiverPOSSSS::"+ widgetData.get(i).getPosition());
             if (widgetData.get(i).getPosition() == 0) {
                 if (widgetData.get(i).getType() == 0) {
 
@@ -105,8 +101,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-                }else
-                if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
                     //todo clock 3 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple3_medium);
 
@@ -120,8 +115,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
                     ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
@@ -160,7 +154,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     }
 
 
-                    if (MyAppConstants.isNetworkAvailable(context)) {
+                    if (widgetData.get(i).getSim()) {
                         rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1_selected);
                     } else {
                         rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1);
@@ -222,16 +216,13 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 }
-            }
-            else if (widgetData.get(i).getPosition() == 1) {
+            } else if (widgetData.get(i).getPosition() == 1) {
                 if (widgetData.get(i).getType() == 0) {
 
                     //todo weather 1 small
                     LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
                     if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        if (ActivityCompat.checkSelfPermission(
-                                context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         } else {
                             String city = "";
 
@@ -305,8 +296,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                             alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                         }
                     }
-                }
-                else if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
                     //todo calender 4 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_medium);
                     rv.setCharSequence(R.id.TClockDay, "setFormat12Hour", "EEEE");
@@ -326,8 +316,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
                     ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
@@ -346,8 +335,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                } else if (widgetData.get(i).getType() == 2) {
                     //todo clock 1 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple1_large);
 
@@ -356,8 +344,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
 
                     rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
                 }
-            }
-            else if (widgetData.get(i).getPosition() == 2) {
+            } else if (widgetData.get(i).getPosition() == 2) {
                 if (widgetData.get(i).getType() == 0) {
                     //todo clock 9 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text3_small);
@@ -380,8 +367,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-                }
-                else if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
 
                     //todo x-panel 3 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel3_medium);
@@ -493,8 +479,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                } else if (widgetData.get(i).getType() == 2) {
                     //todo weather 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather2_large);
                     String city = widgetData.get(i).getCity();
@@ -584,7 +569,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeFirst, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempFirst, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconFirst, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -592,7 +581,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeSecond, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempSecond, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconSecond, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -600,7 +593,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeThird, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempThird, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconThird, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -608,7 +605,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeForth, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempForth, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconForth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -616,7 +617,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeFifth, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempFifth, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconFifth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -624,7 +629,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeSixth, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempSixth, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconSixth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -649,14 +658,13 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     });
                     queue1.add(stringReq1);
                 }
-            }
-            else if (widgetData.get(i).getPosition() == 5) {
+            } else if (widgetData.get(i).getPosition() == 5) {
                 if (widgetData.get(i).getType() == 0) {
 
                     //todo calender 2 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_small);
 //                    rv.setImageViewBitmap(R.id.IvBackground2, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_small_bg), 30));
-                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour",                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              "EEE");
+                    rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE");
                     rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE");
                     rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
                     rv.setCharSequence(R.id.TClockDate, "setFormat24Hour", "d");
@@ -675,8 +683,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-                }
-                else if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
 
                     //todo calender 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_medium);
@@ -696,8 +703,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
                     ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
@@ -716,8 +722,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                } else if (widgetData.get(i).getType() == 2) {
 
                     //todo calender 2 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_large);
@@ -730,8 +735,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
                     ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.RlLargeCal, configPendingIntent);
@@ -743,8 +747,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 }
-            }
-            else if (widgetData.get(i).getPosition() == 6) {
+            } else if (widgetData.get(i).getPosition() == 6) {
                 if (widgetData.get(i).getType() == 0) {
 
                     //todo calender 3 small
@@ -771,8 +774,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-                }else
-                if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
 
                     //todo calender 3 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar2_medium);
@@ -792,8 +794,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
                     ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
@@ -812,8 +813,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                } else if (widgetData.get(i).getType() == 2) {
 
                     //todo calender 3 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar2_large);
@@ -829,8 +829,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
                     ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.RlLargeCal, configPendingIntent);
@@ -850,8 +849,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 }
-            }
-            else if (widgetData.get(i).getPosition() == 7) {
+            } else if (widgetData.get(i).getPosition() == 7) {
                 if (widgetData.get(i).getType() == 0) {
 
                     //todo calender 4 small
@@ -877,8 +875,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-                } else
-                if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
 
                     //todo calender 4 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_medium);
@@ -898,8 +895,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
                     ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
@@ -918,8 +914,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                } else if (widgetData.get(i).getType() == 2) {
 
                     //todo calender 4 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar4_large);
@@ -940,8 +935,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
                     ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.RlLargeCal, configPendingIntent);
@@ -961,8 +955,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
                 }
-            }
-            else if (widgetData.get(i).getPosition() == 8) {
+            } else if (widgetData.get(i).getPosition() == 8) {
                 String city = widgetData.get(i).getCity();
                 if (widgetData.get(i).getType() == 0) {
 
@@ -1022,8 +1015,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }
                     });
                     queue.add(stringReq);
-                }
-                else if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
 
                     //todo weather 1 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_medium);
@@ -1114,7 +1106,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeFirst, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempFirst, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconFirst, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1122,7 +1118,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeSecond, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempSecond, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconSecond, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1130,7 +1130,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeThird, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempThird, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconThird, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1138,7 +1142,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeForth, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempForth, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconForth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1146,7 +1154,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeFifth, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempFifth, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconFifth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1154,7 +1166,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeSixth, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempSixth, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconSixth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1178,8 +1194,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }
                     });
                     queue1.add(stringReq1);
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                } else if (widgetData.get(i).getType() == 2) {
 
                     //todo weather 1 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather1_large);
@@ -1281,7 +1296,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeFirst, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempFirst, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconFirst, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -1289,7 +1308,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeSecond, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempSecond, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconSecond, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -1297,7 +1320,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeThird, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempThird, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconThird, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -1305,7 +1332,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeForth, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempForth, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconForth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -1313,7 +1344,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeFifth, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempFifth, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconFifth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -1321,7 +1356,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeSixth, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempSixth, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconSixth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -1350,8 +1389,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     }
                 }
 
-            }
-            else if (widgetData.get(i).getPosition() == 9) {
+            } else if (widgetData.get(i).getPosition() == 9) {
                 String city = widgetData.get(i).getCity();
                 if (widgetData.get(i).getType() == 0) {
                     //todo weather 2 small
@@ -1410,8 +1448,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }
                     });
                     queue.add(stringReq);
-                }
-                else if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
 
                     //todo weather 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather2_medium);
@@ -1501,7 +1538,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeFirst, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempFirst, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconFirst, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1509,7 +1550,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeSecond, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempSecond, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconSecond, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1517,7 +1562,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeThird, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempThird, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconThird, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1525,7 +1574,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeForth, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempForth, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconForth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1533,7 +1586,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeFifth, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempFifth, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconFifth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1541,7 +1598,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeSixth, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempSixth, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconSixth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1565,8 +1626,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }
                     });
                     queue1.add(stringReq1);
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                } else if (widgetData.get(i).getType() == 2) {
 
                     //todo weather 2 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather2_large);
@@ -1668,7 +1728,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeFirst, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempFirst, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconFirst, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -1676,7 +1740,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeSecond, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempSecond, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconSecond, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -1684,7 +1752,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeThird, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempThird, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconThird, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -1692,7 +1764,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeForth, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempForth, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconForth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -1700,7 +1776,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeFifth, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempFifth, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconFifth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -1708,7 +1788,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeSixth, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempSixth, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconSixth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -1736,8 +1820,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     } catch (Exception e) {
                     }
                 }
-            }
-            else if (widgetData.get(i).getPosition() == 10) {
+            } else if (widgetData.get(i).getPosition() == 10) {
                 String city = widgetData.get(i).getCity();
                 if (widgetData.get(i).getType() == 0) {
                     //todo weather 3 small
@@ -1796,8 +1879,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }
                     });
                     queue.add(stringReq);
-                }
-                else if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
 
                     //todo weather 3 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather3_medium);
@@ -1887,7 +1969,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeFirst, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempFirst, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconFirst, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1895,7 +1981,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeSecond, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempSecond, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconSecond, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1903,7 +1993,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeThird, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempThird, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconThird, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1911,7 +2005,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeForth, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempForth, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconForth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1919,7 +2017,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeFifth, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempFifth, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconFifth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1927,7 +2029,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                             finalRv4.setTextViewText(R.id.TvTimeSixth, res.toString());
                                             MainObject = WeatherObject.getJSONObject("main");
                                             Temp = MainObject.getString("temp").toString();
-                                            finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            if (Temp.contains(".")) {
+                                                finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                            } else {
+                                                finalRv4.setTextViewText(R.id.TvTempSixth, Temp + "°");
+                                            }
                                             IconObject = WeatherObject.getJSONArray("weather");
                                             finalRv4.setImageViewResource(R.id.IvWeatherIconSixth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                             break;
@@ -1951,8 +2057,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }
                     });
                     queue1.add(stringReq1);
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                } else if (widgetData.get(i).getType() == 2) {
 
                     //todo weather 3 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_weather3_large);
@@ -2054,7 +2159,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeFirst, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempFirst, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempFirst, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconFirst, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -2062,7 +2171,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeSecond, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempSecond, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempSecond, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconSecond, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -2070,7 +2183,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeThird, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempThird, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempThird, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconThird, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -2078,7 +2195,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeForth, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempForth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempForth, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconForth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -2086,7 +2207,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeFifth, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempFifth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempFifth, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconFifth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -2094,7 +2219,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                                                 finalRv4.setTextViewText(R.id.TvTimeSixth, res.toString());
                                                 MainObject = WeatherObject.getJSONObject("main");
                                                 Temp = MainObject.getString("temp").toString();
-                                                finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                if (Temp.contains(".")) {
+                                                    finalRv4.setTextViewText(R.id.TvTempSixth, Temp.substring(0, Temp.lastIndexOf(".")) + "°");
+                                                } else {
+                                                    finalRv4.setTextViewText(R.id.TvTempSixth, Temp + "°");
+                                                }
                                                 IconObject = WeatherObject.getJSONArray("weather");
                                                 finalRv4.setImageViewResource(R.id.IvWeatherIconSixth, MyAppConstants.getWeatherIcons(IconObject.getJSONObject(0).getString("icon")));
                                                 break;
@@ -2122,8 +2251,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     } catch (Exception e) {
                     }
                 }
-            }
-            else if (widgetData.get(i).getPosition() == 11) {
+            } else if (widgetData.get(i).getPosition() == 11) {
                 if (widgetData.get(i).getType() == 0) {
                     //todo clock 1 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple1_small);
@@ -2131,8 +2259,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
-                }
-                else if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
                     //todo clock 1 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple1_medium);
                     intent1 = new Intent(android.provider.Settings.ACTION_DATE_SETTINGS);
@@ -2144,13 +2271,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
                     ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.LlMediumCalendar, configPendingIntent);
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                } else if (widgetData.get(i).getType() == 2) {
                     //todo clock 1 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple1_large);
 
@@ -2167,8 +2292,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                 PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-            }
-            else if (widgetData.get(i).getPosition() == 12) {
+            } else if (widgetData.get(i).getPosition() == 12) {
                 if (widgetData.get(i).getType() == 0) {
                     //todo clock 2 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple2_small);
@@ -2177,8 +2301,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
-                }
-                else if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
                     //todo clock 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple2_medium);
 
@@ -2191,13 +2314,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
                     ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.LlMediumCalendar, configPendingIntent);
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                } else if (widgetData.get(i).getType() == 2) {
                     //todo clock 2 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple2_large);
 
@@ -2214,8 +2335,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                 PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-            }
-            else if (widgetData.get(i).getPosition() == 13) {
+            } else if (widgetData.get(i).getPosition() == 13) {
                 if (widgetData.get(i).getType() == 0) {
                     //todo clock 3 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple3_small);
@@ -2224,15 +2344,14 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
-                }
-                else if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
                     //todo clock 3 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple3_medium);
                     intent = new Intent(context, MediumWidgetService.class);
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, Widget_Id);
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, helper.getWidgets().get(i).getNumber());
                     intent.putExtra("TypeId", helper.getWidgets().get(i).getPosition());
                     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-                    rv.setRemoteAdapter(Widget_Id, R.id.GridCalendarMediumView, intent);
+                    rv.setRemoteAdapter(helper.getWidgets().get(i).getNumber(), R.id.GridCalendarMediumView, intent);
 
                     calendar = Calendar.getInstance();
                     currentDay = calendar.get(Calendar.DAY_OF_MONTH);
@@ -2251,13 +2370,11 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     builder = CalendarContract.CONTENT_URI.buildUpon();
                     builder.appendPath("time");
                     ContentUris.appendId(builder, startMillis);
-                    intent1 = new Intent(Intent.ACTION_VIEW)
-                            .setData(builder.build());
+                    intent1 = new Intent(Intent.ACTION_VIEW).setData(builder.build());
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                } else if (widgetData.get(i).getType() == 2) {
                     //todo clock 3 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_simple3_large);
 
@@ -2274,8 +2391,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                 PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-            }
-            else if (widgetData.get(i).getPosition() == 14) {
+            } else if (widgetData.get(i).getPosition() == 14) {
                 if (widgetData.get(i).getType() == 0) {
                     //todo clock 4 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text1_small);
@@ -2284,8 +2400,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.LlSmallClock, configPendingIntent);
-                }
-                else if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
                     //todo clock 4 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text1_medium);
 
@@ -2293,8 +2408,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.RlMediumClock, configPendingIntent);
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                } else if (widgetData.get(i).getType() == 2) {
                     //todo clock 4 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text1_large);
 
@@ -2311,8 +2425,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                 PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-            }
-            else if (widgetData.get(i).getPosition() == 19) {
+            } else if (widgetData.get(i).getPosition() == 19) {
                 if (widgetData.get(i).getType() == 0) {
                     //todo clock 9 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text3_small);
@@ -2328,8 +2441,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.RlSmallClock, configPendingIntent);
-                }
-                else if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
                     //todo clock 9 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text3_medium);
 
@@ -2344,8 +2456,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     rv.setOnClickPendingIntent(R.id.RlMediumClock, configPendingIntent);
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                } else if (widgetData.get(i).getType() == 2) {
                     //todo clock 9 large
 
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_clock_text3_large);
@@ -2371,18 +2482,15 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                 PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-            }
-            else if (widgetData.get(i).getPosition() == 20) {
+            } else if (widgetData.get(i).getPosition() == 20) {
                 if (widgetData.get(i).getType() == 0) {
                     //todo x-panel 1 small
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_small);
-                }
-                else if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
 
                     //todo x-panel 1 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_medium);
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                } else if (widgetData.get(i).getType() == 2) {
 
                     //todo x-panel 1 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel1_large);
@@ -2401,8 +2509,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         rv.setImageViewResource(R.id.IvBluetooth, R.drawable.ic_bluethooth1);
                     }
                 }
-                System.out.println("------------ rrrr :: " + MyAppConstants.hasSIMCard(context));
-                if (MyAppConstants.isNetworkAvailable(context)) {
+                if (widgetData.get(i).getSim()) {
                     rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1_selected);
                 } else {
                     rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1);
@@ -2463,8 +2570,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                 PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-            }
-            else if (widgetData.get(i).getPosition() == 18) {
+            } else if (widgetData.get(i).getPosition() == 18) {
                 if (widgetData.get(i).getType() == 0) {
 
                     //todo x-panel 4 small
@@ -2505,8 +2611,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     rv.setTextViewText(R.id.TvProgressText, managerIntProperty + "%");
                     rv.setTextViewText(R.id.storage_text, MyAppConstants.bytes2String(used) + "/" + MyAppConstants.bytes2String(total));
 
-                }
-                else if (widgetData.get(i).getType() == 1) {
+                } else if (widgetData.get(i).getType() == 1) {
 
                     //todo x-panel 4 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_medium);
@@ -2591,7 +2696,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     }
 
 
-                    if (MyAppConstants.isNetworkAvailable(context)) {
+                    if (widgetData.get(i).getSim()) {
                         rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_cellular4_selected);
                     } else {
                         rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_cellular4);
@@ -2616,8 +2721,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular3, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                         rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
                     }
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                } else if (widgetData.get(i).getType() == 2) {
 
                     //todo x-panel 4 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_large);
@@ -2665,8 +2769,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                 PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
-            }
-            else if (widgetData.get(i).getPosition() == 21) {
+            } else if (widgetData.get(i).getPosition() == 21) {
                 if (widgetData.get(i).getType() == 0) {
 
                     //todo x-panel 2 small
@@ -2712,20 +2815,19 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
 
-                    intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                    intent = new Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
 
                     intent = new Intent(Settings.ACTION_DATE_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
-                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
-                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                        new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
-                }
-                else if (widgetData.get(i).getType() == 1) {
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                    PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                } else if (widgetData.get(i).getType() == 1) {
 
                     //todo x-panel 2 medium
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_medium);
@@ -2821,7 +2923,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
 
-                    intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                    intent = new Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
 
@@ -2829,13 +2931,12 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
 
-                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
-                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                        new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
-                }
-                else if (widgetData.get(i).getType() == 2) {
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                    PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                } else if (widgetData.get(i).getType() == 2) {
 
                     //todo x-panel 2 large
                     rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_xpanel4_large);
@@ -2851,24 +2952,23 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     int managerIntProperty = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
 
                     long KILOBYTE = 1024;
-                    StatFs internalStatFs = new StatFs( Environment.getRootDirectory().getAbsolutePath() );
+                    StatFs internalStatFs = new StatFs(Environment.getRootDirectory().getAbsolutePath());
                     long internalTotal;
                     long internalFree;
 
-                    StatFs externalStatFs = new StatFs( Environment.getExternalStorageDirectory().getAbsolutePath() );
+                    StatFs externalStatFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
                     long externalTotal;
                     long externalFree;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                        internalTotal = ( internalStatFs.getBlockCountLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                        internalFree = ( internalStatFs.getAvailableBlocksLong() * internalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                        externalTotal = ( externalStatFs.getBlockCountLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                        externalFree = ( externalStatFs.getAvailableBlocksLong() * externalStatFs.getBlockSizeLong() ) / ( KILOBYTE * KILOBYTE );
-                    }
-                    else {
-                        internalTotal = ( (long) internalStatFs.getBlockCount() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
-                        internalFree = ( (long) internalStatFs.getAvailableBlocks() * (long) internalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
-                        externalTotal = ( (long) externalStatFs.getBlockCount() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
-                        externalFree = ( (long) externalStatFs.getAvailableBlocks() * (long) externalStatFs.getBlockSize() ) / ( KILOBYTE * KILOBYTE );
+                        internalTotal = (internalStatFs.getBlockCountLong() * internalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                        internalFree = (internalStatFs.getAvailableBlocksLong() * internalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                        externalTotal = (externalStatFs.getBlockCountLong() * externalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                        externalFree = (externalStatFs.getAvailableBlocksLong() * externalStatFs.getBlockSizeLong()) / (KILOBYTE * KILOBYTE);
+                    } else {
+                        internalTotal = ((long) internalStatFs.getBlockCount() * (long) internalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                        internalFree = ((long) internalStatFs.getAvailableBlocks() * (long) internalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                        externalTotal = ((long) externalStatFs.getBlockCount() * (long) externalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
+                        externalFree = ((long) externalStatFs.getAvailableBlocks() * (long) externalStatFs.getBlockSize()) / (KILOBYTE * KILOBYTE);
                     }
 
                     long total = internalTotal + externalTotal;
@@ -2881,21 +2981,20 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
 
-                    intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                    intent = new Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.LlStorage, configPendingIntent);
 
                     intent = new Intent(Settings.ACTION_DATE_SETTINGS);
                     configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                     rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
-                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
-                        PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                        new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
+                    PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                 }
-            }
-            else if (widgetData.get(i).getPosition() == 22) {
+            } else if (widgetData.get(i).getPosition() == 22) {
                 if (widgetData.get(i).getType() == 0) {
 
                     //todo x-panel 3 small
@@ -2973,7 +3072,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                         }
                     }
 
-                    if (MyAppConstants.isNetworkAvailable(context)) {
+                    if (widgetData.get(i).getSim()) {
                         rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1_selected);
                     } else {
                         rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_celluer1);
@@ -2994,7 +3093,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                     }
 
 
-                    if (MyAppConstants.isNetworkAvailable(context)) {
+                    if (widgetData.get(i).getSim()) {
                         rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_xpanel_medium_2_mobiledata_selected);
                     } else {
                         rv.setImageViewResource(R.id.IvCellular, R.drawable.ic_xpanel_medium_2_mobiledata);
@@ -3029,7 +3128,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 rv.setOnClickPendingIntent(R.id.progressBarStorage, configPendingIntent);
 
-                intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+                intent = new Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS);
                 configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 rv.setOnClickPendingIntent(R.id.progressBarCharge, configPendingIntent);
 
@@ -3043,6 +3142,28 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
                 Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                 PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, broadcast);
+            } else if (widgetData.get(i).getPosition() == 23) {
+                if (new MyAppPref(context).getBoolean(MyAppPref.IS_PHOTO, false)) {
+                    if (widgetData.get(i).getType() == 0) {
+
+                        //todo Photo 3 small
+                        Class<SmallPhotoWidgetProvider> cls = SmallPhotoWidgetProvider.class;
+                        SmallPhotoWidgetProvider.updateWidgetView(helper.getWidgets().get(i).getNumber(), context, new Intent(context, cls));
+                    } else if (widgetData.get(i).getType() == 1) {
+
+                        //todo Photo 3 medium
+
+                        Class<MediumPhotoWidgetProvider> cls = MediumPhotoWidgetProvider.class;
+                        MediumPhotoWidgetProvider.updateWidgetView(helper.getWidgets().get(i).getNumber(), context, new Intent(context, cls));
+                    } else if (widgetData.get(i).getType() == 2) {
+
+                        //todo Photo 3 large
+
+                        Class<LargePhotoWidgetProvider> cls = LargePhotoWidgetProvider.class;
+                        LargePhotoWidgetProvider.updateWidgetView(helper.getWidgets().get(i).getNumber(), context, new Intent(context, cls));
+                    }
+                    new MyAppPref(context).putBoolean(MyAppPref.IS_PHOTO, true);
+                }
             }
         }
     }

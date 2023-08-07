@@ -56,7 +56,7 @@
                     android:gravity="center"
                     android:text="Wi-Fi"
                     android:textColor="@color/widget_white"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_10sdp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -93,7 +93,7 @@
                     android:gravity="center"
                     android:text="Cellular"
                     android:textColor="@color/widget_white"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_10sdp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -130,7 +130,7 @@
                     android:gravity="center"
                     android:text="Bluetooth"
                     android:textColor="@color/widget_white"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_10sdp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -167,7 +167,7 @@
                     android:gravity="center"
                     android:text="Torch"
                     android:textColor="@color/widget_white"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_10sdp"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>

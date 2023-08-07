@@ -10,12 +10,11 @@ import android.widget.ImageView;
 import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
-import com.ios.widget.ui.Activity.SettingActivity;
 import com.ios.widget.ui.Activity.ShowItemActivity;
 import com.ios.widget.ui.Activity.SplashActivity;
 import com.ios.widget.ui.Activity.WidgetItemActivity;
-import com.ios.widget.utils.MyAppConstants;
-import com.ios.widget.utils.MyAppPref;
+import com.ios.widget.crop.utils.MyAppConstants;
+import com.ios.widget.crop.utils.MyAppPref;
 
 import java.util.ArrayList;
 
@@ -48,12 +47,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
         holder.IvSmallWidget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
                 int itemClick = SplashActivity.click++;
-                if (itemClick % countExtra == 0) {
-                    MyAppAd_Interstitial.getInstance().showInter(showItemActivity, new MyAppAd_Interstitial.MyCallback() {
+                if (MyAppConstants.isConnectingToInternet(context) && itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(showItemActivity, new MyAppAd_Interstitial.MyAppCallback() {
                         @Override
-                        public void callbackCall() {
+                        public void AppCallback() {
                             Intent intent = new Intent(context, WidgetItemActivity.class);
                             intent.putExtra(MyAppConstants.ITEM_POSITION, 0);
                             intent.putExtra(MyAppConstants.WIDGET_ITEM_POSITION, position);
@@ -73,12 +72,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
         holder.IvMediumWidget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
                 int itemClick = SplashActivity.click++;
-                if (itemClick % countExtra == 0) {
-                    MyAppAd_Interstitial.getInstance().showInter(showItemActivity, new MyAppAd_Interstitial.MyCallback() {
+                if (MyAppConstants.isConnectingToInternet(context) && itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(showItemActivity, new MyAppAd_Interstitial.MyAppCallback() {
                         @Override
-                        public void callbackCall() {
+                        public void AppCallback() {
                             Intent intent = new Intent(context, WidgetItemActivity.class);
                             intent.putExtra(MyAppConstants.ITEM_POSITION, 1);
                             intent.putExtra(MyAppConstants.WIDGET_ITEM_POSITION, position);

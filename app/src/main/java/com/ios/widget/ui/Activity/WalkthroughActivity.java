@@ -18,7 +18,8 @@ import com.ios.widget.Ads.MyAppAd_Banner;
 import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.R;
 import com.ios.widget.ui.Adapter.WalkAdapter;
-import com.ios.widget.utils.MyAppPref;
+import com.ios.widget.crop.utils.MyAppConstants;
+import com.ios.widget.crop.utils.MyAppPref;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -64,12 +65,12 @@ public class WalkthroughActivity extends AppCompatActivity {
         IvNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+                int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
                 int itemClick = SplashActivity.click++;
-                if (itemClick % countExtra == 0) {
-                    MyAppAd_Interstitial.getInstance().showInter(WalkthroughActivity.this, new MyAppAd_Interstitial.MyCallback() {
+                if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+                    MyAppAd_Interstitial.getInstance().showInter(WalkthroughActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                         @Override
-                        public void callbackCall() {
+                        public void AppCallback() {
                             if (PagerWalk.getCurrentItem() == 0) {
                                 PagerWalk.setCurrentItem(1);
                                 LlNext.setVisibility(View.VISIBLE);
@@ -101,12 +102,12 @@ public class WalkthroughActivity extends AppCompatActivity {
             }
         });
         IvStart.setOnClickListener(view -> {
-            int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+            int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
             int itemClick = SplashActivity.click++;
-            if (itemClick % countExtra == 0) {
-                MyAppAd_Interstitial.getInstance().showInter(WalkthroughActivity.this, new MyAppAd_Interstitial.MyCallback() {
+            if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+                MyAppAd_Interstitial.getInstance().showInter(WalkthroughActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                     @Override
-                    public void callbackCall() {
+                    public void AppCallback() {
                         if (PagerWalk.getCurrentItem() == 2) {
                             Intent intent = new Intent(context, MainActivity.class);
                             startActivity(intent);
@@ -126,8 +127,9 @@ public class WalkthroughActivity extends AppCompatActivity {
     }
 
     private void initActions() {
-        MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
-
+        if (MyAppConstants.isConnectingToInternet(context)) {
+            MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
+        }
         WalkAdapter adapter = new WalkAdapter(this, images);
         PagerWalk.setAdapter(adapter);
         TvWalkTitle.setText(getResources().getString(R.string.str_walk_title_1));
@@ -178,12 +180,12 @@ public class WalkthroughActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        int countExtra = new MyAppPref(context).getInt(MyAppPref.AD_COUNTER, 0);
+        int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
         int itemClick = SplashActivity.click++;
-        if (itemClick % countExtra == 0) {
-            MyAppAd_Interstitial.getInstance().showInter(WalkthroughActivity.this, new MyAppAd_Interstitial.MyCallback() {
+        if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+            MyAppAd_Interstitial.getInstance().showInter(WalkthroughActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                 @Override
-                public void callbackCall() {
+                public void AppCallback() {
                     finish();
                 }
             });
