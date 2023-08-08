@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.net.wifi.WifiManager;
 import android.os.Environment;
 import android.os.StatFs;
 
+import com.ios.widget.Application.MyApp;
 import com.ios.widget.crop.Callback.FilterResultCallback;
 import com.ios.widget.Files.Directory;
 import com.ios.widget.Files.FileFilter;
@@ -19,6 +21,7 @@ import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
 import com.karumi.dexter.PermissionToken;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -32,6 +35,10 @@ public class MyAppConstants {
 
     public static final String ITEM_POSITION = "ITEM_POSITION";
     public static final String WIDGET_ITEM_POSITION = "WIDGET_ITEM_POSITION";
+    public static final String CROP_URI = "CROP_URI";
+    public static final String LOCAL_BROAD_CROP = "local_crop_cast";
+    public static int CROP_SIZE = 0;
+    public static Uri CROP_DATA;
     public static String BASE_URL_WEATHER = "http://api.openweathermap.org/data/2.5/weather?q=";
     public static String BASE_URL_FORECAST = "http://api.openweathermap.org/data/2.5/forecast?q=";
     public static final String TAG_WIDGET_NOTE_ID = "WIDGET_NOTE_ID";
@@ -45,12 +52,14 @@ public class MyAppConstants {
     public static List<Directory<ImageFile>> mAll = new ArrayList<>();
     public static String MAX_NUMBER = "Max Number";
     public static ArrayList<ImageFile> mSelectedList = new ArrayList<>();
+    public static ArrayList<ImageFile> mSelectedList1_1 = new ArrayList<>();
     public static ArrayList<ImageFile> getmSelectedList = new ArrayList<>();
     public static final String EDIT_PERVIEW = "Edit_preview";
     public static int Temp_Id = -1;
     public static boolean WidgetRemove = false;
     public static boolean CreateWidget = false;
     public static boolean IS_SIM_CARD = false;
+    public static String CROP_POS = "CROP_POS";
 
     public static boolean isConnectingToInternet(Context con) {
         ConnectivityManager connectivity = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -177,6 +186,7 @@ public class MyAppConstants {
 
         return modelArrayList;
     }
+
     private static double SPACE_KB = 1024;
     private static double SPACE_MB = 1024 * SPACE_KB;
     private static double SPACE_GB = 1024 * SPACE_MB;
@@ -238,6 +248,12 @@ public class MyAppConstants {
                 return R.drawable.ic_per_night_rain;
         }
         return 0;
+    }
+
+    public static Uri createNewEmptyFile() {
+        return Uri.fromFile(new File(
+                MyApp.getInstance().getFilesDir(),
+                System.currentTimeMillis() + ".png"));
     }
 
     public static class DeviceMemory {

@@ -1,6 +1,7 @@
 package com.ios.widget.ui.Activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.ios.widget.crop.utils.MyAppPref;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,6 +39,7 @@ import static com.ios.widget.crop.utils.MyAppConstants.mSelectedList;
 
 public class ImageSelectionActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int CROP_LIST = 20;
     public static String EXTRA_FROM_PREVIEW = MyAppConstants.EDIT_PERVIEW;
     private Context context;
     private TextView TvTitle;
@@ -175,14 +178,14 @@ public class ImageSelectionActivity extends AppCompatActivity implements View.On
 
             snackbar.show();
         } else {
-            GotoEditActivity();
+            startActivityForResult(new Intent(context, ImageCropListActivity.class), CROP_LIST);
         }
     }
 
     private void GotoEditActivity() {
         int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
         int itemClick = SplashActivity.click++;
-        if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+        if (MyAppConstants.isConnectingToInternet(context) && itemClick % countExtra == 0) {
             MyAppAd_Interstitial.getInstance().showInter(ImageSelectionActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                 @Override
                 public void AppCallback() {
@@ -193,6 +196,20 @@ public class ImageSelectionActivity extends AppCompatActivity implements View.On
         } else {
             setResult(RESULT_OK);
             finish();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case CROP_LIST:
+                switch (resultCode){
+                    case RESULT_OK:
+                        GotoEditActivity();
+                        break;
+                }
+                break;
         }
     }
 
@@ -215,7 +232,7 @@ public class ImageSelectionActivity extends AppCompatActivity implements View.On
     public void onBackPressed() {
         int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
         int itemClick = SplashActivity.click++;
-        if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+        if (MyAppConstants.isConnectingToInternet(context) && itemClick % countExtra == 0) {
             MyAppAd_Interstitial.getInstance().showInter(ImageSelectionActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                 @Override
                 public void AppCallback() {

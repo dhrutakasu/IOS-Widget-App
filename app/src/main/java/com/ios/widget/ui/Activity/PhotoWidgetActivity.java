@@ -64,10 +64,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import static com.ios.widget.crop.utils.MyAppConstants.getmSelectedList;
 import static com.ios.widget.crop.utils.MyAppConstants.mSelectedList;
+import static com.ios.widget.crop.utils.MyAppConstants.mSelectedList1_1;
 
 public class PhotoWidgetActivity extends AppCompatActivity {
     private final int GET_PHOTO = 102;
+    private final int CROP_REQUEST = 18;
     private ArrayList<String> PhotoLists;
     private ImageView IvBack;
     private TextView TvTitle;
@@ -174,7 +177,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
         IvCrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(context,ImageCropListActivity.class));
+                startActivityForResult(new Intent(context, ImageCropListActivity.class), CROP_REQUEST);
             }
         });
         SpinnerWidgetInterval.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -193,7 +196,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
             public void onClick(View view) {
                 int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
                 int itemClick = SplashActivity.click++;
-                if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+                if (MyAppConstants.isConnectingToInternet(context) && itemClick % countExtra == 0) {
                     MyAppAd_Interstitial.getInstance().showInter(PhotoWidgetActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                         @Override
                         public void AppCallback() {
@@ -430,6 +433,38 @@ public class PhotoWidgetActivity extends AppCompatActivity {
         TabSizeLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                imageUriList.clear();
+                imageUriList.add(0, new WidgetImages("", String.valueOf(R.drawable.ic_upload), -1));
+//                if (tab.getPosition()==0||tab.getPosition()==2){
+//                    getmSelectedList=new ArrayList<>();
+//                    getmSelectedList.addAll(mSelectedList);
+//                    for (int i = 0; i < getmSelectedList.size(); i++) {
+//                        String uri = getmSelectedList.get(i).getPath().toString();
+//                        Bitmap bitmap2 = null;
+//                        bitmap2 = BitmapFactory.decodeFile(uri);
+//
+//                        WidgetImages widgetImages2 = new WidgetImages(MyAppConstants.getUniqueId(), storeImage(context, bitmap2).toString(), 0);
+//                        model = widgetImages2;
+//                        imageUriList.add(widgetImages2);
+//                        TvUploadPhotoSize.setText((imageUriList.size() - 1) + "/10");
+//                        photoAdapter.notifyDataSetChanged();
+//                    }
+//                }else {
+//                    getmSelectedList=new ArrayList<>();
+//                    getmSelectedList.addAll(mSelectedList1_1);
+//                    for (int i = 0; i < getmSelectedList.size(); i++) {
+//                        String uri = getmSelectedList.get(i).getPath().toString();
+//                        Bitmap bitmap2 = null;
+//                        bitmap2 = BitmapFactory.decodeFile(uri);
+//
+//                        WidgetImages widgetImages2 = new WidgetImages(MyAppConstants.getUniqueId(), storeImage(context, bitmap2).toString(), 0);
+//                        model = widgetImages2;
+//                        imageUriList.add(widgetImages2);
+//                        TvUploadPhotoSize.setText((imageUriList.size() - 1) + "/10");
+//                        photoAdapter.notifyDataSetChanged();
+//                    }
+//                }
+
                 adapter.setchange(tab.getPosition());
                 adapter.notifyDataSetChanged();
             }
@@ -532,6 +567,10 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
+
+                                MyAppConstants.CROP_SIZE = TabSizeLayout.getSelectedTabPosition();
+
+                                System.out.println("------ - - crop size 11: " + MyAppConstants.CROP_SIZE);
                                 startActivityForResult(new Intent(PhotoWidgetActivity.this, ImageSelectionActivity.class)
                                         .putExtra(MyAppConstants.MAX_NUMBER, 10), GET_PHOTO);
                             }
@@ -544,21 +583,18 @@ public class PhotoWidgetActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("------ UUURU : " + requestCode);
         switch (requestCode) {
             case GET_PHOTO:
                 switch (resultCode) {
                     case RESULT_OK:
                         imageUriList.clear();
                         imageUriList.add(0, new WidgetImages("", String.valueOf(R.drawable.ic_upload), -1));
+
                         for (int i = 0; i < mSelectedList.size(); i++) {
                             String uri = mSelectedList.get(i).getPath().toString();
-                            Bitmap bitmap2 = null;
-                            try {
-                                bitmap2 = getThumbnail(Uri.fromFile(new File(uri)), context, true);
-                            } catch (IOException e2) {
-                                e2.printStackTrace();
-                            }
-                            bitmapList.add(bitmap2);
+                            System.out.println("------ UUURURIII : " + uri);
+                            Bitmap bitmap2 =  BitmapFactory.decodeFile(uri);;
 
                             WidgetImages widgetImages2 = new WidgetImages(MyAppConstants.getUniqueId(), storeImage(context, bitmap2).toString(), 0);
                             model = widgetImages2;
@@ -590,7 +626,8 @@ public class PhotoWidgetActivity extends AppCompatActivity {
 
     public static Bitmap getThumbnail(Uri uri, Context context2, boolean z) throws IOException {
         Uri uri2;
-        if (uri.toString().contains(context2.getApplicationContext().getPackageName())) {
+        System.out.println("---- -- - contain :" + uri.toString().contains(context2.getApplicationContext().getPackageName()));
+        if (!uri.toString().contains(context2.getApplicationContext().getPackageName())) {
             uri2 = FileProvider.getUriForFile(context2.getApplicationContext(), context2.getApplicationContext().getPackageName() + ".fileprovider", new File(uri.toString()));
         } else {
             uri2 = uri;
@@ -669,7 +706,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
     public void onBackPressed() {
         int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
         int itemClick = SplashActivity.click++;
-        if (MyAppConstants.isConnectingToInternet(context)&&itemClick % countExtra == 0) {
+        if (MyAppConstants.isConnectingToInternet(context) && itemClick % countExtra == 0) {
             MyAppAd_Interstitial.getInstance().showInter(PhotoWidgetActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
                 @Override
                 public void AppCallback() {

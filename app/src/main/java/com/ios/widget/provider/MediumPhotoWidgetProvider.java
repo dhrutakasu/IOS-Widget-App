@@ -57,10 +57,10 @@ public class MediumPhotoWidgetProvider extends AppWidgetProvider {
             widgetLists.add(String.valueOf(Widget_Id));
             new MyAppPref(context).setWidgetLists(context, widgetLists);
             database = new DatabaseHelper(context);
-            for (int i = 0; i < MyAppConstants.mSelectedList.size(); i++) {
-                WidgetImages widgetImages = new WidgetImages("0", MyAppConstants.mSelectedList.get(i).getPath(), Widget_Id);
-                if (database.CheckIsAlreadyDBorNot(MyAppConstants.mSelectedList.get(i).getPath().toString(), String.valueOf(Widget_Id))) {
-                    WidgetImages widgetImages1 = new WidgetImages(database.getImageListData(Widget_Id).getImageId(), String.valueOf(MyAppConstants.mSelectedList.get(i).getPath()), Widget_Id);
+            for (int i = 0; i < MyAppConstants.mSelectedList1_1.size(); i++) {
+                WidgetImages widgetImages = new WidgetImages("0", MyAppConstants.mSelectedList1_1.get(i).getPath(), Widget_Id);
+                if (database.CheckIsAlreadyDBorNot(MyAppConstants.mSelectedList1_1.get(i).getPath().toString(), String.valueOf(Widget_Id))) {
+                    WidgetImages widgetImages1 = new WidgetImages(database.getImageListData(Widget_Id).getImageId(), String.valueOf(MyAppConstants.mSelectedList1_1.get(i).getPath()), Widget_Id);
                     database.updateWidgetImages(widgetImages1);
                 } else {
                     database.InsertWidgetImage(widgetImages);
