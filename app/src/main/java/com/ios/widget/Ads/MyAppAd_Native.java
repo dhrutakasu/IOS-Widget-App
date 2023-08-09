@@ -20,7 +20,7 @@ import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.android.gms.ads.nativead.NativeAdView;
 import com.ios.widget.R;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.utils.MyAppPref;
 
 public class MyAppAd_Native {
     private static MyAppAd_Native mInstance;

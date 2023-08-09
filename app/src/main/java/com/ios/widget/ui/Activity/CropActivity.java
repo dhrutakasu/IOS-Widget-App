@@ -1,5 +1,7 @@
 package com.ios.widget.ui.Activity;
 
+import static com.ios.widget.utils.MyAppConstants.mSelectedList;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,25 +9,32 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdSize;
+import com.google.android.material.snackbar.Snackbar;
 import com.ios.widget.Ads.MyAppAd_Banner;
 import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.Files.ImageFile;
 import com.ios.widget.R;
-import com.ios.widget.crop.utils.MyAppConstants;
-import com.ios.widget.crop.utils.MyAppPref;
-import com.oginotihiro.cropview.CropUtil;
-import com.oginotihiro.cropview.CropView;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
+import com.ios.widget.ImageCropview.CropUtil;
+import com.ios.widget.ImageCropview.ImageCropView;
+import com.ios.widget.ui.Adapter.CropAdapter;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CropActivity extends AppCompatActivity implements View.OnClickListener {
     private Context context;
@@ -33,9 +42,13 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView IvBack, IvDone;
     private Uri imageUri;
 
-    private CropView CropView1_1, CropView16_9;
+    private ImageCropView imageCropView1_1, imageCropView16_9;
     private int imagePos;
     private Bitmap Crop1_1, Crop16_9;
+    private RecyclerView RvCropList;
+    private CropAdapter cropAdapter;
+    private RelativeLayout RlCropView;
+    private int CropInt;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +58,6 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         intents();
         initListeners();
         initActions();
-
     }
 
     private void initViews() {
@@ -53,8 +65,10 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         TvTitle = (TextView) findViewById(R.id.TvTitle);
         IvBack = (ImageView) findViewById(R.id.IvBack);
         IvDone = (ImageView) findViewById(R.id.IvDone);
-        CropView1_1 = (CropView) findViewById(R.id.CropView1_1);
-        CropView16_9 = (CropView) findViewById(R.id.CropView16_9);
+        imageCropView1_1 = (ImageCropView) findViewById(R.id.CropView1_1);
+        imageCropView16_9 = (ImageCropView) findViewById(R.id.CropView16_9);
+        RvCropList = (RecyclerView) findViewById(R.id.RvCropList);
+        RlCropView = (RelativeLayout) findViewById(R.id.RlCropView);
     }
 
     private void intents() {
@@ -74,21 +88,46 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         IvDone.setVisibility(View.VISIBLE);
         TvTitle.setText("Crop Image");
 
-        CropView1_1.withAspect(1, 1).of(imageUri)
+        CropInt = 0;
+        imageCropView1_1.withAspect(1, 1).of(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(mSelectedList.get(0).getPath().toString())))
                 .initialize(context);
-        CropView16_9.withAspect(16, 9).of(imageUri)
+        imageCropView16_9.withAspect(16, 9).of(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(mSelectedList.get(0).getPath().toString())))
                 .initialize(context);
 
         System.out.println("------ - - crop size : " + MyAppConstants.CROP_SIZE);
         if (MyAppConstants.CROP_SIZE == 0 || MyAppConstants.CROP_SIZE == 2) {
-            CropView1_1.setVisibility(View.VISIBLE);
-            CropView16_9.setVisibility(View.INVISIBLE);
+            imageCropView1_1.setVisibility(View.VISIBLE);
+            imageCropView16_9.setVisibility(View.INVISIBLE);
         } else {
-            CropView16_9.setVisibility(View.VISIBLE);
-            CropView1_1.setVisibility(View.INVISIBLE);
+            imageCropView16_9.setVisibility(View.VISIBLE);
+            imageCropView1_1.setVisibility(View.INVISIBLE);
         }
-        MyAppConstants.mSelectedList1_1 = new ArrayList<>();
-        MyAppConstants.mSelectedList1_1.addAll(MyAppConstants.mSelectedList);
+        MyAppConstants.mCropSelectedList_1_1 = new ArrayList<>();
+        MyAppConstants.mCropSelectedList = new ArrayList<>();
+        MyAppConstants.mCropSelectedList.addAll(mSelectedList);
+        MyAppConstants.mCropSelectedList_1_1.addAll(mSelectedList);
+        System.out.println("--- -- - -- mSelectedList : " + mSelectedList.size());
+
+        RvCropList.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
+        cropAdapter = new CropAdapter(context, MyAppConstants.mCropSelectedList, new CropAdapter.SetWidgetRemoveCrop() {
+            @Override
+            public void RemoveCropImage(int position) {
+                System.out.println("--- -- - -- posssss : " + position + " -- " + MyAppConstants.getSelectedImages().size());
+                if (MyAppConstants.getSelectedImages().size() <= 2) {
+                    Snackbar snackbar = Snackbar
+                            .make(RlCropView, "Two photos compulsory for widget create....", Snackbar.LENGTH_LONG);
+
+                    snackbar.show();
+                } else {
+                    MyAppConstants.mCropSelectedList_1_1.remove(position);
+                    MyAppConstants.mCropSelectedList.remove(position);
+                    ImageFile file = MyAppConstants.getSelectedImages().get(position);
+                    MyAppConstants.removeSelectedImages(file);
+                    cropAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+        RvCropList.setAdapter(cropAdapter);
     }
 
     @Override
@@ -108,36 +147,272 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void GotoDone() {
-        new AsyncTask<Void, Void, Bitmap>() {
-            @Override
-            protected Bitmap doInBackground(Void... voids) {
-                System.out.println("-----1111 :");
-                Crop1_1 = CropView1_1.getOutput();
-                return Crop1_1;
-            }
+        System.out.println("----- - --  if_else : " + CropInt + " ---- " + (mSelectedList.size() - 1));
+        if (CropInt == (mSelectedList.size() - 1)) {
+            if (MyAppConstants.CROP_SIZE == 0 || MyAppConstants.CROP_SIZE == 2) {
+                new AsyncTask<Void, Void, Bitmap>() {
+                    @Override
+                    protected Bitmap doInBackground(Void... voids) {
+                        System.out.println("-----1111 :");
+                        Crop1_1 = imageCropView1_1.getOutput();
+                        return Crop1_1;
+                    }
 
-            @Override
-            protected void onPostExecute(Bitmap unused) {
-                super.onPostExecute(unused);
-                System.out.println("-----1221 :");
-                Uri uri1_1 = MyAppConstants.createNewEmptyFile();
-                CropUtil.saveOutput(CropActivity.this, uri1_1, Crop1_1, 90);
+                    @Override
+                    protected void onPostExecute(Bitmap unused) {
+                        super.onPostExecute(unused);
+                        System.out.println("-----1221 :");
+                        Uri uri1_1 = MyAppConstants.createNewEmptyFile("Crop1_1");
+                        CropUtil.saveOutput(CropActivity.this, uri1_1, Crop1_1, 90);
+
+                        new AsyncTask<Void, Void, Bitmap>() {
+                            @Override
+                            protected void onPreExecute() {
+                                super.onPreExecute();
+                                findViewById(R.id.ProgressBarCrop).setVisibility(View.VISIBLE);
+
+                            }
+
+                            @Override
+                            protected Bitmap doInBackground(Void... voids) {
+                                System.out.println("-----1211 :");
+                                runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        imageCropView16_9.withAspect(16, 9).of(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(mSelectedList.get(CropInt).getPath().toString())))
+                                                .initialize(context);
+                                        Crop16_9 = imageCropView16_9.getOutput();
+                                    }
+                                });
+                                return Crop16_9;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Bitmap unused) {
+                                super.onPostExecute(unused);
+                                System.out.println("-----2221 :");
+                                Uri uri16_9 = MyAppConstants.createNewEmptyFile("Crop16_9");
+                                CropUtil.saveOutput(CropActivity.this, uri16_9, Crop16_9, 90);
+
+                                ImageFile file = new ImageFile();
+                                file.setPath(uri1_1.getPath());
+                                MyAppConstants.mCropSelectedList_1_1.set(CropInt, file);
+
+                                ImageFile file16_9 = new ImageFile();
+                                file16_9.setPath(uri16_9.getPath());
+                                MyAppConstants.mCropSelectedList.set(CropInt, file16_9);
+
+                                int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
+                                int itemClick = SplashActivity.click++;
+                                if (MyAppConstants.isConnectingToInternet(context) && itemClick % countExtra == 0) {
+                                    MyAppAd_Interstitial.getInstance().showInter(CropActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
+                                        @Override
+                                        public void AppCallback() {
+                                            Intent intent = new Intent();
+                                            setResult(RESULT_OK, intent);
+                                            finish();
+                                        }
+                                    });
+                                } else {
+
+                                    ImageFile fileelse = new ImageFile();
+                                    fileelse.setPath(uri1_1.getPath());
+                                    MyAppConstants.mCropSelectedList_1_1.set(CropInt, fileelse);
+
+                                    ImageFile fileelse16_9 = new ImageFile();
+                                    fileelse16_9.setPath(uri16_9.getPath());
+                                    MyAppConstants.mCropSelectedList.set(CropInt, fileelse16_9);
+                                    Intent intent = new Intent();
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+                                }
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        findViewById(R.id.ProgressBarCrop).setVisibility(View.GONE);
+                                    }
+                                }, 800);
+                            }
+                        }.execute();
+                    }
+                }.execute();
+            } else {
+                new AsyncTask<Void, Void, Bitmap>() {
+                    @Override
+                    protected Bitmap doInBackground(Void... voids) {
+                        System.out.println("-----1111 :");
+                        Crop16_9 = imageCropView16_9.getOutput();
+                        return Crop16_9;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Bitmap unused) {
+                        super.onPostExecute(unused);
+                        System.out.println("-----1221 :");
+                        Uri uri16_9 = MyAppConstants.createNewEmptyFile("Crop16_9");
+                        CropUtil.saveOutput(CropActivity.this, uri16_9, Crop16_9, 90);
+
+                        new AsyncTask<Void, Void, Bitmap>() {
+                            @Override
+                            protected void onPreExecute() {
+                                super.onPreExecute();
+                                findViewById(R.id.ProgressBarCrop).setVisibility(View.VISIBLE);
+
+                            }
+
+                            @Override
+                            protected Bitmap doInBackground(Void... voids) {
+                                System.out.println("-----1211 :");
+                                runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        imageCropView1_1.withAspect(1, 1).of(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(mSelectedList.get(CropInt).getPath().toString())))
+                                                .initialize(context);
+                                        Crop1_1 = imageCropView1_1.getOutput();
+                                    }
+                                });
+                                return Crop1_1;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Bitmap unused) {
+                                super.onPostExecute(unused);
+                                System.out.println("-----2221 :");
+                                Uri uri1_1 = MyAppConstants.createNewEmptyFile("Crop1_1");
+                                CropUtil.saveOutput(CropActivity.this, uri1_1, Crop1_1, 90);
+
+                                ImageFile file = new ImageFile();
+                                file.setPath(uri1_1.getPath());
+                                MyAppConstants.mCropSelectedList_1_1.set(CropInt, file);
+
+                                ImageFile file16_9 = new ImageFile();
+                                file16_9.setPath(uri16_9.getPath());
+                                MyAppConstants.mCropSelectedList.set(CropInt, file16_9);
+
+                                int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
+                                int itemClick = SplashActivity.click++;
+                                if (MyAppConstants.isConnectingToInternet(context) && itemClick % countExtra == 0) {
+                                    MyAppAd_Interstitial.getInstance().showInter(CropActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
+                                        @Override
+                                        public void AppCallback() {
+                                            Intent intent = new Intent();
+                                            setResult(RESULT_OK, intent);
+                                            finish();
+                                        }
+                                    });
+                                } else {
+
+                                    ImageFile fileelse = new ImageFile();
+                                    fileelse.setPath(uri1_1.getPath());
+                                    MyAppConstants.mCropSelectedList_1_1.set(CropInt, fileelse);
+
+                                    ImageFile fileelse16_9 = new ImageFile();
+                                    fileelse16_9.setPath(uri16_9.getPath());
+                                    MyAppConstants.mCropSelectedList.set(CropInt, fileelse16_9);
+                                    Intent intent = new Intent();
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+                                }
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        findViewById(R.id.ProgressBarCrop).setVisibility(View.GONE);
+                                    }
+                                }, 800);
+                            }
+                        }.execute();
+                    }
+                }.execute();
+            }
+        } else {
+            if (MyAppConstants.CROP_SIZE == 0 || MyAppConstants.CROP_SIZE == 2) {
+                new AsyncTask<Void, Void, Bitmap>() {
+                    @Override
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                        findViewById(R.id.ProgressBarCrop).setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    protected Bitmap doInBackground(Void... voids) {
+                        System.out.println("-----1111 :");
+
+                        Crop1_1 = imageCropView1_1.getOutput();
+
+                        return Crop1_1;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Bitmap unused) {
+                        super.onPostExecute(unused);
+                        System.out.println("-----1221 :");
+                        Uri uri1_1 = MyAppConstants.createNewEmptyFile("Crop1_1");
+                        CropUtil.saveOutput(CropActivity.this, uri1_1, Crop1_1, 90);
+
+                        new AsyncTask<Void, Void, Bitmap>() {
+
+
+                            @Override
+                            protected Bitmap doInBackground(Void... voids) {
+                                System.out.println("-----1211 :");
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        imageCropView16_9.withAspect(16, 9).of(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(mSelectedList.get(CropInt).getPath().toString())))
+                                                .initialize(context);
+                                        Crop16_9 = imageCropView16_9.getOutput();
+                                    }
+                                });
+                                return Crop16_9;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Bitmap unused) {
+                                super.onPostExecute(unused);
+                                System.out.println("-----2221 :");
+                                Uri uri16_9 = MyAppConstants.createNewEmptyFile("Crop16_9");
+                                CropUtil.saveOutput(CropActivity.this, uri16_9, Crop16_9, 90);
+
+                                ImageFile file = new ImageFile();
+                                file.setPath(uri1_1.getPath());
+                                MyAppConstants.mCropSelectedList_1_1.set(CropInt, file);
+
+                                ImageFile file16_9 = new ImageFile();
+                                file16_9.setPath(uri16_9.getPath());
+                                MyAppConstants.mCropSelectedList.set(CropInt, file16_9);
+                                cropAdapter.notifyItemChanged(CropInt);
+                                CropInt++;
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        findViewById(R.id.ProgressBarCrop).setVisibility(View.GONE);
+
+                                        if (!(CropInt >= mSelectedList.size())) {
+                                            imageCropView1_1.withAspect(1, 1).of(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(mSelectedList.get(CropInt).getPath().toString())))
+                                                    .initialize(context);
+                                        }
+                                    }
+                                }, 800);
+                            }
+                        }.execute();
+                    }
+                }.execute();
+            } else {
 
                 new AsyncTask<Void, Void, Bitmap>() {
                     @Override
                     protected void onPreExecute() {
                         super.onPreExecute();
                         findViewById(R.id.ProgressBarCrop).setVisibility(View.VISIBLE);
-
                     }
 
                     @Override
                     protected Bitmap doInBackground(Void... voids) {
-                        System.out.println("-----1211 :");
+                        System.out.println("-----1111 :");
 
-                        CropView16_9.withAspect(16, 9).of(imageUri)
-                                .initialize(context);
-                        Crop16_9 = CropView16_9.getOutput();
+                        Crop16_9 = imageCropView16_9.getOutput();
 
                         return Crop16_9;
                     }
@@ -145,75 +420,62 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     protected void onPostExecute(Bitmap unused) {
                         super.onPostExecute(unused);
-                        System.out.println("-----2221 :");
-                        Uri uri16_9 = MyAppConstants.createNewEmptyFile();
+                        System.out.println("-----1221 :");
+                        Uri uri16_9 = MyAppConstants.createNewEmptyFile("Crop16_9");
                         CropUtil.saveOutput(CropActivity.this, uri16_9, Crop16_9, 90);
-                        int countExtra = new MyAppPref(context).getInt(MyAppPref.APP_AD_COUNTER, 0);
-                        int itemClick = SplashActivity.click++;
-                        if (MyAppConstants.isConnectingToInternet(context) && itemClick % countExtra == 0) {
-                            MyAppAd_Interstitial.getInstance().showInter(CropActivity.this, new MyAppAd_Interstitial.MyAppCallback() {
-                                @Override
-                                public void AppCallback() {
-                                    for (int i = 0; i < MyAppConstants.mSelectedList.size(); i++) {
-                                        if (imagePos == i) {
-                                            ImageFile imageFile = new ImageFile();
-                                            imageFile.setPath(uri1_1.getPath());
-                                            MyAppConstants.mSelectedList.set(imagePos,imageFile);
-                                        }
-                                    }
-                                    for (int i = 0; i < MyAppConstants.mSelectedList1_1.size(); i++) {
-                                        if (imagePos == i) {
-                                            ImageFile imageFile = new ImageFile();
-                                            imageFile.setPath(uri16_9.getPath());
-                                            MyAppConstants.mSelectedList1_1.set(imagePos,imageFile);
-                                        }
-                                    }
-                                    Intent intent = new Intent();
-                                    if (MyAppConstants.CROP_SIZE == 0 || MyAppConstants.CROP_SIZE == 2) {
-                                        intent.setData(uri1_1);
-                                        MyAppConstants.CROP_DATA = uri16_9;
-                                    } else {
-                                        intent.setData(uri16_9);
-                                        MyAppConstants.CROP_DATA = uri1_1;
-                                    }
-                                    intent.putExtra(MyAppConstants.CROP_POS, imagePos);
-                                    setResult(RESULT_OK, intent);
-                                    finish();
-                                }
-                            });
-                        } else {
-                            for (int i = 0; i < MyAppConstants.mSelectedList.size(); i++) {
-                                if (imagePos == i) {
-                                    ImageFile imageFile = new ImageFile();
-                                    imageFile.setPath(uri1_1.getPath());
-                                    MyAppConstants.mSelectedList.set(imagePos,imageFile);
-                                }
-                            }
-                            for (int i = 0; i < MyAppConstants.mSelectedList1_1.size(); i++) {
-                                if (imagePos == i) {
-                                    ImageFile imageFile = new ImageFile();
-                                    imageFile.setPath(uri16_9.getPath());
-                                    MyAppConstants.mSelectedList1_1.set(imagePos,imageFile);
-                                }
-                            }
-                            Intent intent = new Intent();
-                            if (MyAppConstants.CROP_SIZE == 0 || MyAppConstants.CROP_SIZE == 2) {
-                                intent.setData(uri1_1);
-                                MyAppConstants.CROP_DATA = uri16_9;
 
-                            } else {
-                                intent.setData(uri16_9);
-                                MyAppConstants.CROP_DATA = uri1_1;
+                        new AsyncTask<Void, Void, Bitmap>() {
+
+
+                            @Override
+                            protected Bitmap doInBackground(Void... voids) {
+                                System.out.println("-----1211 :");
+                                runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        imageCropView1_1.withAspect(16, 9).of(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(mSelectedList.get(CropInt).getPath().toString())))
+                                                .initialize(context);
+                                        Crop1_1 = imageCropView1_1.getOutput();
+                                    }
+                                });
+                                return Crop1_1;
                             }
-                            intent.putExtra(MyAppConstants.CROP_POS, imagePos);
-                            setResult(RESULT_OK, intent);
-                            finish();
-                        }
-                        findViewById(R.id.ProgressBarCrop).setVisibility(View.GONE);
+
+                            @Override
+                            protected void onPostExecute(Bitmap unused) {
+                                super.onPostExecute(unused);
+                                System.out.println("-----2221 :");
+                                Uri uri1_1 = MyAppConstants.createNewEmptyFile("Crop1_1");
+                                CropUtil.saveOutput(CropActivity.this, uri1_1, Crop1_1, 90);
+
+                                ImageFile file = new ImageFile();
+                                file.setPath(uri1_1.getPath());
+                                MyAppConstants.mCropSelectedList_1_1.set(CropInt, file);
+
+                                ImageFile file16_9 = new ImageFile();
+                                file16_9.setPath(uri16_9.getPath());
+                                MyAppConstants.mCropSelectedList.set(CropInt, file16_9);
+                                cropAdapter.notifyItemChanged(CropInt);
+                                CropInt++;
+
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        findViewById(R.id.ProgressBarCrop).setVisibility(View.GONE);
+                                        if (!(CropInt >= mSelectedList.size())) {
+                                            imageCropView16_9.withAspect(16, 9).of(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", new File(mSelectedList.get(CropInt).getPath().toString())))
+                                                    .initialize(context);
+                                        }
+                                    }
+                                }, 800);
+                            }
+                        }.execute();
                     }
                 }.execute();
             }
-        }.execute();
+        }
+
     }
 
     @Override

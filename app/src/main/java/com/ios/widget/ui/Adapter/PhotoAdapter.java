@@ -52,7 +52,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.MyViewHolder
                         .load(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file))
                         .centerCrop())
                         .into(holder.IvPhoto);
-            }else {
+            } else {
                 File file = new File(photoLists.get(position).getUri());
                 ((RequestBuilder) Glide.with(context)
                         .load(FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file))
@@ -74,7 +74,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.MyViewHolder
         holder.IvPhotoRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                widget.RemovePhotoWidget(position);
+                widget.RemovePhotoWidget((position - 1));
             }
         });
     }

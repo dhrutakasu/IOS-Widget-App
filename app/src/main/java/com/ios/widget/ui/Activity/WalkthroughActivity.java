@@ -18,8 +18,8 @@ import com.ios.widget.Ads.MyAppAd_Banner;
 import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.R;
 import com.ios.widget.ui.Adapter.WalkAdapter;
-import com.ios.widget.crop.utils.MyAppConstants;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;

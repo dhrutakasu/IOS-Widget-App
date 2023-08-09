@@ -11,7 +11,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.utils.MyAppPref;
 
 public class MyAppAd_Banner {
 

@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/RlCropView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
-
-    <ProgressBar
-        android:id="@+id/ProgressBarCrop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,15 +13,39 @@
         android:layout_above="@id/RlBannerAd"
         android:layout_below="@id/RlImageActionbar">
 
-        <com.oginotihiro.cropview.CropView
+        <com.ios.widget.ImageCropview.ImageCropView
             android:id="@+id/CropView16_9"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/RvCropList" />
 
-        <com.oginotihiro.cropview.CropView
+        <com.ios.widget.ImageCropview.ImageCropView
             android:id="@+id/CropView1_1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/RvCropList" />
+
+        <ProgressBar
+            android:id="@+id/ProgressBarCrop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RvCropList"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_60sdp"
+            android:layout_alignParentBottom="true"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
+            tools:listitem="@layout/layout_item_image_crop_list"/>
     </RelativeLayout>
 
     <RelativeLayout

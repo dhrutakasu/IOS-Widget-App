@@ -13,8 +13,8 @@ import com.ios.widget.R;
 import com.ios.widget.ui.Activity.ShowItemActivity;
 import com.ios.widget.ui.Activity.SplashActivity;
 import com.ios.widget.ui.Activity.WidgetItemActivity;
-import com.ios.widget.crop.utils.MyAppConstants;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import java.util.ArrayList;
 

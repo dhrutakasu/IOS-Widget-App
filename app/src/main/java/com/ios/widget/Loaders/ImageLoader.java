@@ -10,7 +10,6 @@ import static android.provider.MediaStore.MediaColumns.MIME_TYPE;
 
 public class ImageLoader extends CursorLoader {
     private static final String[] IMAGE_PROJECTION = {
-            //Base File
             MediaStore.Images.Media._ID,
             MediaStore.Images.Media.TITLE,
             MediaStore.Images.Media.DATA,

@@ -17,10 +17,10 @@ import com.ios.widget.Ads.MyAppAd_Banner;
 import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
-import com.ios.widget.helper.DatabaseHelper;
+import com.ios.widget.Apphelper.AppDatabaseHelper;
 import com.ios.widget.ui.Adapter.MyWidgetAdapter;
-import com.ios.widget.crop.utils.MyAppConstants;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import java.util.ArrayList;
 
@@ -29,7 +29,7 @@ public class MyWidgetsActivity extends AppCompatActivity implements View.OnClick
     private Context context;
     private ImageView IvBack, IvNotFoundRecord, iv_done, IvMyWidgetTrendy, IvMyWidgetCalendar, IvMyWidgetWeather, IvMyWidgetAlarm, IvMyWidgetXPanel, IvMyWidgetPhoto;
     private TextView TvTitle;
-    private DatabaseHelper helper;
+    private AppDatabaseHelper helper;
     private RecyclerView RvMyWidget;
     private ArrayList<WidgetData> myWidgetLists = new ArrayList<WidgetData>();
     private int countExtra, itemClick;
@@ -86,7 +86,7 @@ public class MyWidgetsActivity extends AppCompatActivity implements View.OnClick
         iv_done.setVisibility(View.VISIBLE);
 
         iv_done.setImageResource(R.drawable.ic_delete);
-        helper = new DatabaseHelper(context);
+        helper = new AppDatabaseHelper(context);
         TvTitle.setText(getResources().getString(R.string.str_my_widget));
         myWidgetLists = new ArrayList<>();
 
@@ -166,7 +166,7 @@ public class MyWidgetsActivity extends AppCompatActivity implements View.OnClick
         }
 
 
-        RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+        RvMyWidget.setLayoutManager(new StaggeredGridLayoutManager(1, LinearLayoutManager.VERTICAL));
         RvMyWidget.setAdapter(new MyWidgetAdapter(context, myWidgetLists, this));
         getIsNotFound();
     }

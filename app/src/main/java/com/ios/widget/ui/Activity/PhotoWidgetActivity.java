@@ -3,9 +3,11 @@ package com.ios.widget.ui.Activity;
 import android.Manifest;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -35,14 +37,14 @@ import com.ios.widget.Model.WidgetImages;
 import com.ios.widget.Model.WidgetMaster;
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
-import com.ios.widget.helper.DatabaseHelper;
+import com.ios.widget.Apphelper.AppDatabaseHelper;
 import com.ios.widget.provider.LargePhotoWidgetProvider;
 import com.ios.widget.provider.MediumPhotoWidgetProvider;
 import com.ios.widget.provider.SmallPhotoWidgetProvider;
 import com.ios.widget.ui.Adapter.PhotoAdapter;
 import com.ios.widget.ui.Adapter.WidgetPagerAdapter;
-import com.ios.widget.crop.utils.MyAppConstants;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -60,23 +62,24 @@ import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import static com.ios.widget.crop.utils.MyAppConstants.getmSelectedList;
-import static com.ios.widget.crop.utils.MyAppConstants.mSelectedList;
-import static com.ios.widget.crop.utils.MyAppConstants.mSelectedList1_1;
+import static com.ios.widget.utils.MyAppConstants.CROP_SIZE;
+import static com.ios.widget.utils.MyAppConstants.getmSelectedList;
+import static com.ios.widget.utils.MyAppConstants.mCropSelectedList;
+import static com.ios.widget.utils.MyAppConstants.mCropSelectedList_1_1;
+import static com.ios.widget.utils.MyAppConstants.mSelectedList;
+import static com.ios.widget.utils.MyAppConstants.mSelectedList1_1;
 
 public class PhotoWidgetActivity extends AppCompatActivity {
     private final int GET_PHOTO = 102;
-    private final int CROP_REQUEST = 18;
-    private ArrayList<String> PhotoLists;
     private ImageView IvBack;
     private TextView TvTitle;
     private RecyclerView RvPhotos;
     public TextView TvUploadPhotoSize;
-    private ArrayList<Bitmap> bitmapList = new ArrayList<>();
     private Context context;
     public List<WidgetImages> imageUriList = new ArrayList();
     private WidgetImages model;
@@ -86,12 +89,11 @@ public class PhotoWidgetActivity extends AppCompatActivity {
     private WidgetPagerAdapter adapter;
     private ArrayList<WidgetModel> modelArrayList;
     private Spinner SpinnerWidgetInterval;
-    private String[] intervals = {"1 Min", "5 Min", "30 Min", "1 h", "6 h"};
+    private String[] intervals = {"10 sec", "20 sec ", "30 sec", "1 Min", "5 Min"};
     private ImageView IvAddWidget;
-    private DatabaseHelper database;
+    private AppDatabaseHelper database;
     private int widgetId;
     private WidgetMaster widgetMaster;
-    private ImageView IvCrop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +107,6 @@ public class PhotoWidgetActivity extends AppCompatActivity {
 
     private void initViews() {
         IvBack = (ImageView) findViewById(R.id.IvBack);
-        IvCrop = (ImageView) findViewById(R.id.IvCrop);
         TvTitle = (TextView) findViewById(R.id.TvTitle);
         RvPhotos = (RecyclerView) findViewById(R.id.RvPhotos);
         TvUploadPhotoSize = (TextView) findViewById(R.id.TvUploadPhotoSize);
@@ -124,8 +125,12 @@ public class PhotoWidgetActivity extends AppCompatActivity {
 
         adapter = new WidgetPagerAdapter(this, modelArrayList, 0);
         PagerWidget.setAdapter(adapter);
-
-        database = new DatabaseHelper(this.context);
+        mSelectedList = new ArrayList<>();
+        mSelectedList1_1 = new ArrayList<>();
+        mCropSelectedList_1_1 = new ArrayList<>();
+        mCropSelectedList = new ArrayList<>();
+        getmSelectedList = new ArrayList<>();
+        database = new AppDatabaseHelper(this.context);
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         int intExtra = intent.getIntExtra("widgetId", 0);
@@ -174,12 +179,6 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        IvCrop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(new Intent(context, ImageCropListActivity.class), CROP_REQUEST);
-            }
-        });
         SpinnerWidgetInterval.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -216,6 +215,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                                                         pinnedWidgetCallbackIntent.putExtra("IS_FIRST_ADDED", true);
                                                         PendingIntent pinAppWidget = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                                                         manager.requestPinAppWidget(componentName, null, pinAppWidget);
+
                                                     }, 100);
                                                 }
                                             }
@@ -231,6 +231,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                                                         pinnedWidgetCallbackIntent.putExtra("IS_FIRST_ADDED", true);
                                                         PendingIntent pinAppWidget = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                                                         manager.requestPinAppWidget(componentName, null, pinAppWidget);
+
                                                     }, 100);
                                                 }
                                             }
@@ -246,6 +247,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                                                         pinnedWidgetCallbackIntent.putExtra("IS_FIRST_ADDED", true);
                                                         PendingIntent pinAppWidget = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                                                         manager.requestPinAppWidget(componentName, null, pinAppWidget);
+
                                                     }, 100);
                                                 }
                                             }
@@ -295,6 +297,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                                     } else if (TabSizeLayout.getSelectedTabPosition() == 2) {
                                         LargePhotoWidgetProvider.updateWidgetView(widgetId, context, intent);
                                     }
+
                                 }
                             }
                         }
@@ -316,6 +319,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                                                 pinnedWidgetCallbackIntent.putExtra("IS_FIRST_ADDED", true);
                                                 PendingIntent pinAppWidget = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                                                 manager.requestPinAppWidget(componentName, null, pinAppWidget);
+
                                             }, 100);
                                         }
                                     }
@@ -331,6 +335,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                                                 pinnedWidgetCallbackIntent.putExtra("IS_FIRST_ADDED", true);
                                                 PendingIntent pinAppWidget = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                                                 manager.requestPinAppWidget(componentName, null, pinAppWidget);
+
                                             }, 100);
                                         }
                                     }
@@ -346,6 +351,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                                                 pinnedWidgetCallbackIntent.putExtra("IS_FIRST_ADDED", true);
                                                 PendingIntent pinAppWidget = PendingIntent.getBroadcast(context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                                                 manager.requestPinAppWidget(componentName, null, pinAppWidget);
+
                                             }, 100);
                                         }
                                     }
@@ -395,18 +401,25 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                             } else if (TabSizeLayout.getSelectedTabPosition() == 2) {
                                 LargePhotoWidgetProvider.updateWidgetView(widgetId, context, intent);
                             }
+
                         }
                     }
                 }
-
             }
         });
     }
-
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    };
     private void initActions() {
         if (MyAppConstants.isConnectingToInternet(context)) {
             MyAppAd_Banner.getInstance().showBanner(this, AdSize.LARGE_BANNER, (RelativeLayout) findViewById(R.id.RlBannerAdView), (RelativeLayout) findViewById(R.id.RlBannerAd));
         }
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter("Widget_create"));
         TvTitle.setText("Photo Widget");
         RvPhotos.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
         photoAdapter = new PhotoAdapter(context, imageUriList, new PhotoAdapter.setPhotoWidget() {
@@ -421,8 +434,13 @@ public class PhotoWidgetActivity extends AppCompatActivity {
 
             @Override
             public void RemovePhotoWidget(int pos) {
-                imageUriList.remove(pos);
-                mSelectedList.remove(pos);
+                System.out.println("---- - - - - " + pos);
+
+                MyAppConstants.mCropSelectedList_1_1.remove(pos);
+                MyAppConstants.mCropSelectedList.remove(pos);
+                ImageFile file = MyAppConstants.getSelectedImages().get(pos);
+                MyAppConstants.removeSelectedImages(file);
+                imageUriList.remove((pos + 1));
                 TvUploadPhotoSize.setText((imageUriList.size() - 1) + "/10");
                 photoAdapter.notifyDataSetChanged();
             }
@@ -435,35 +453,33 @@ public class PhotoWidgetActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 imageUriList.clear();
                 imageUriList.add(0, new WidgetImages("", String.valueOf(R.drawable.ic_upload), -1));
-//                if (tab.getPosition()==0||tab.getPosition()==2){
-//                    getmSelectedList=new ArrayList<>();
-//                    getmSelectedList.addAll(mSelectedList);
-//                    for (int i = 0; i < getmSelectedList.size(); i++) {
-//                        String uri = getmSelectedList.get(i).getPath().toString();
-//                        Bitmap bitmap2 = null;
-//                        bitmap2 = BitmapFactory.decodeFile(uri);
-//
-//                        WidgetImages widgetImages2 = new WidgetImages(MyAppConstants.getUniqueId(), storeImage(context, bitmap2).toString(), 0);
-//                        model = widgetImages2;
-//                        imageUriList.add(widgetImages2);
-//                        TvUploadPhotoSize.setText((imageUriList.size() - 1) + "/10");
-//                        photoAdapter.notifyDataSetChanged();
-//                    }
-//                }else {
-//                    getmSelectedList=new ArrayList<>();
-//                    getmSelectedList.addAll(mSelectedList1_1);
-//                    for (int i = 0; i < getmSelectedList.size(); i++) {
-//                        String uri = getmSelectedList.get(i).getPath().toString();
-//                        Bitmap bitmap2 = null;
-//                        bitmap2 = BitmapFactory.decodeFile(uri);
-//
-//                        WidgetImages widgetImages2 = new WidgetImages(MyAppConstants.getUniqueId(), storeImage(context, bitmap2).toString(), 0);
-//                        model = widgetImages2;
-//                        imageUriList.add(widgetImages2);
-//                        TvUploadPhotoSize.setText((imageUriList.size() - 1) + "/10");
-//                        photoAdapter.notifyDataSetChanged();
-//                    }
-//                }
+
+                if (tab.getPosition() == 0 || tab.getPosition() == 2) {
+
+                    for (int i = 0; i < mCropSelectedList_1_1.size(); i++) {
+                        String uri = mCropSelectedList_1_1.get(i).getPath().toString();
+                        Bitmap bitmap2 = null;
+                        bitmap2 = BitmapFactory.decodeFile(uri);
+
+                        WidgetImages widgetImages2 = new WidgetImages(MyAppConstants.getUniqueId(), storeImage(context, bitmap2).toString(), 0);
+                        model = widgetImages2;
+                        imageUriList.add(widgetImages2);
+                        TvUploadPhotoSize.setText((imageUriList.size() - 1) + "/10");
+                        photoAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    for (int i = 0; i < mCropSelectedList.size(); i++) {
+                        String uri = mCropSelectedList.get(i).getPath().toString();
+                        Bitmap bitmap2 = null;
+                        bitmap2 = BitmapFactory.decodeFile(uri);
+
+                        WidgetImages widgetImages2 = new WidgetImages(MyAppConstants.getUniqueId(), storeImage(context, bitmap2).toString(), 0);
+                        model = widgetImages2;
+                        imageUriList.add(widgetImages2);
+                        TvUploadPhotoSize.setText((imageUriList.size() - 1) + "/10");
+                        photoAdapter.notifyDataSetChanged();
+                    }
+                }
 
                 adapter.setchange(tab.getPosition());
                 adapter.notifyDataSetChanged();
@@ -488,7 +504,7 @@ public class PhotoWidgetActivity extends AppCompatActivity {
             int altoSpinner = (int) getResources().getDimension(com.intuit.sdp.R.dimen._50sdp);
             popupWindow.setHeight(altoSpinner);
         } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException |
-                IllegalAccessException e) {
+                 IllegalAccessException e) {
         }
 
         SpinnerWidgetInterval.setAdapter(arrayAdapter);
@@ -590,18 +606,34 @@ public class PhotoWidgetActivity extends AppCompatActivity {
                     case RESULT_OK:
                         imageUriList.clear();
                         imageUriList.add(0, new WidgetImages("", String.valueOf(R.drawable.ic_upload), -1));
+                        if (CROP_SIZE == 0 || CROP_SIZE == 2) {
+                            for (int i = 0; i < mCropSelectedList_1_1.size(); i++) {
+                                String uri = mCropSelectedList_1_1.get(i).getPath().toString();
+                                System.out.println("------ UUURURIII : " + uri);
+                                Bitmap bitmap2 = BitmapFactory.decodeFile(uri);
 
-                        for (int i = 0; i < mSelectedList.size(); i++) {
-                            String uri = mSelectedList.get(i).getPath().toString();
-                            System.out.println("------ UUURURIII : " + uri);
-                            Bitmap bitmap2 =  BitmapFactory.decodeFile(uri);;
+                                WidgetImages widgetImages2 = new WidgetImages(MyAppConstants.getUniqueId(), storeImage(context, bitmap2).toString(), 0);
+                                model = widgetImages2;
+                                imageUriList.add(widgetImages2);
+                                TvUploadPhotoSize.setText((imageUriList.size() - 1) + "/10");
 
-                            WidgetImages widgetImages2 = new WidgetImages(MyAppConstants.getUniqueId(), storeImage(context, bitmap2).toString(), 0);
-                            model = widgetImages2;
-                            imageUriList.add(widgetImages2);
-                            TvUploadPhotoSize.setText((imageUriList.size() - 1) + "/10");
-                            photoAdapter.notifyDataSetChanged();
+                                photoAdapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            for (int i = 0; i < mCropSelectedList.size(); i++) {
+                                String uri = mCropSelectedList.get(i).getPath().toString();
+                                System.out.println("------ UUURURIII : " + uri);
+                                Bitmap bitmap2 = BitmapFactory.decodeFile(uri);
+
+                                WidgetImages widgetImages2 = new WidgetImages(MyAppConstants.getUniqueId(), storeImage(context, bitmap2).toString(), 0);
+                                model = widgetImages2;
+                                imageUriList.add(widgetImages2);
+                                TvUploadPhotoSize.setText((imageUriList.size() - 1) + "/10");
+
+                                photoAdapter.notifyDataSetChanged();
+                            }
                         }
+
                         break;
                     case RESULT_CANCELED:
                         break;

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
-import static com.ios.widget.crop.utils.MyAppConstants.mSelectedList;
+import static com.ios.widget.utils.MyAppConstants.mSelectedList;
 
 public class ImagePickAdapter extends BaseAdapter<ImageFile, ImagePickAdapter.ImagePickViewHolder> {
     public ImagePickAdapter(Context ctx) {
@@ -111,7 +111,6 @@ public class ImagePickAdapter extends BaseAdapter<ImageFile, ImagePickAdapter.Im
     }
 
     class ImagePickViewHolder extends RecyclerView.ViewHolder {
-        //        private final TextView tv_folder_title;
         private ImageView mIvThumbnail;
         private ImageView iv_thumbnailChecked;
         private View mShadow;
@@ -121,7 +120,6 @@ public class ImagePickAdapter extends BaseAdapter<ImageFile, ImagePickAdapter.Im
             mIvThumbnail = itemView.findViewById(R.id.IvThumbnail);
             mShadow = itemView.findViewById(R.id.ViewShadow);
             iv_thumbnailChecked = itemView.findViewById(R.id.IvThumbnailChecked);
-//            tv_folder_title = itemView.findViewById(R.id.tv_folder_title);
         }
     }
 

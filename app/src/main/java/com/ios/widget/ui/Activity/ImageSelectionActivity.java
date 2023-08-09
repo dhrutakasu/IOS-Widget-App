@@ -14,14 +14,14 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.material.snackbar.Snackbar;
 import com.ios.widget.Ads.MyAppAd_Banner;
 import com.ios.widget.Ads.MyAppAd_Interstitial;
-import com.ios.widget.crop.Callback.OnSelectStateListener;
+import com.ios.widget.Callback.OnSelectStateListener;
 import com.ios.widget.Files.Directory;
 import com.ios.widget.Files.ImageFile;
 import com.ios.widget.R;
 import com.ios.widget.ui.Adapter.FolderListAdapter;
 import com.ios.widget.ui.Adapter.ImagePickAdapter;
-import com.ios.widget.crop.utils.MyAppConstants;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +32,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.ios.widget.crop.utils.MyAppConstants.getmSelectedList;
-import static com.ios.widget.crop.utils.MyAppConstants.list;
-import static com.ios.widget.crop.utils.MyAppConstants.mAll;
-import static com.ios.widget.crop.utils.MyAppConstants.mSelectedList;
+import static com.ios.widget.utils.MyAppConstants.getmSelectedList;
+import static com.ios.widget.utils.MyAppConstants.list;
+import static com.ios.widget.utils.MyAppConstants.mAll;
+import static com.ios.widget.utils.MyAppConstants.mSelectedList;
 
 public class ImageSelectionActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -178,7 +178,7 @@ public class ImageSelectionActivity extends AppCompatActivity implements View.On
 
             snackbar.show();
         } else {
-            startActivityForResult(new Intent(context, ImageCropListActivity.class), CROP_LIST);
+            startActivityForResult(new Intent(context, CropActivity.class), CROP_LIST);
         }
     }
 

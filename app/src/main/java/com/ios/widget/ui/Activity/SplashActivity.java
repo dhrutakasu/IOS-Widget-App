@@ -19,8 +19,8 @@ import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.Ads.MyAppAd_Native;
 import com.ios.widget.Ads.MyAppSingleJsonPass;
 import com.ios.widget.R;
-import com.ios.widget.crop.utils.MyAppConstants;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -121,17 +121,6 @@ public class SplashActivity extends AppCompatActivity {
 //                            appOpenAdManager.loadAd(SplashActivity.this);
                             MyAppAd_Native.getInstance().LoadNative(SplashActivity.this);
                             MyAppAd_Interstitial.getInstance().loadInterOne(SplashActivity.this);
-                           /* try {
-                                ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
-                                Bundle bundle = ai.metaData;
-                                String myApiKey = bundle.getString("com.google.android.gms.ads.APPLICATION_ID");
-                                ai.metaData.putString("com.google.android.gms.ads.APPLICATION_ID", app_open);//you can replace your key APPLICATION_ID here
-                                String ApiKey = bundle.getString("com.google.android.gms.ads.APPLICATION_ID");
-                            } catch (PackageManager.NameNotFoundException e) {
-                            } catch (NullPointerException e) {
-                            }
-                            */
-
 
                             if (show.equalsIgnoreCase("yes")) {
                                 fetchAd();
@@ -168,11 +157,12 @@ public class SplashActivity extends AppCompatActivity {
             MyAppSingleJsonPass.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
         } else {
             Toast.makeText(context, "Please turn on your internet connection...", Toast.LENGTH_LONG).show();
+            return;
         }
     }
 
     public void startMainActivity() {
-        if (new MyAppPref(SplashActivity.this).getBoolean(MyAppPref.APP_WALKTHROUGH, false)) {
+        if (!new MyAppPref(SplashActivity.this).getBoolean(MyAppPref.APP_WALKTHROUGH, false)) {
             startActivity(new Intent(this, WalkthroughActivity.class));
             new MyAppPref(SplashActivity.this).putBoolean(MyAppPref.APP_WALKTHROUGH, true);
         } else {

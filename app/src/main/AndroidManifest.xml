@@ -37,9 +37,6 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".ui.Activity.ImageCropListActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.Activity.WalkthroughActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

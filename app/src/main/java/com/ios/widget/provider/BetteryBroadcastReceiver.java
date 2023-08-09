@@ -37,10 +37,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
-import com.ios.widget.helper.DatabaseHelper;
-import com.ios.widget.crop.utils.MyAppConstants;
-import com.ios.widget.crop.utils.NotificationHelper;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.Apphelper.AppDatabaseHelper;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.NotificationHelper;
+import com.ios.widget.utils.MyAppPref;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,7 +62,7 @@ public class BetteryBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intentReceiver) {
         NotificationHelper.showNonCancelableNotification(context, context.getString(R.string.app_name) + "Now", context.getString(R.string.app_name));
-        DatabaseHelper helper = new DatabaseHelper(context);
+        AppDatabaseHelper helper = new AppDatabaseHelper(context);
         ArrayList<WidgetData> widgetData = helper.getWidgets();
         RemoteViews rv = null;
         PendingIntent configPendingIntent = null;

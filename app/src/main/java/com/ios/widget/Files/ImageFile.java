@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class ImageFile extends BaseFile implements Parcelable {
-    private int orientation; //0, 90, 180, 270
+    private int orientation;
     public int imageCount = 0;
 
     public int getOrientation() {

@@ -23,13 +23,13 @@ import com.ios.widget.Ads.MyAppAd_Banner;
 import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
-import com.ios.widget.helper.DatabaseHelper;
+import com.ios.widget.Apphelper.AppDatabaseHelper;
 import com.ios.widget.provider.BetteryBroadcastReceiver;
 import com.ios.widget.ui.Adapter.TypeImageAdapter;
-import com.ios.widget.crop.utils.MyAppConstants;
-import com.ios.widget.crop.utils.MyAppExitDialog;
-import com.ios.widget.crop.utils.MyAppPref;
-import com.ios.widget.crop.utils.NotificationHelper;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppExitDialog;
+import com.ios.widget.utils.MyAppPref;
+import com.ios.widget.utils.NotificationHelper;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initViews() {
         context = this;
-        DatabaseHelper helper = new DatabaseHelper(context);
+        AppDatabaseHelper helper = new AppDatabaseHelper(context);
         helper.getWritableDatabase();
         ArrayList<WidgetData> widgetData = helper.getWidgets();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

@@ -47,7 +47,6 @@ public class ImageCropAdapter extends RecyclerView.Adapter<ImageCropAdapter.MyVi
         RequestOptions options = new RequestOptions();
         System.out.println("---- - - path 77: "+imageFile.getPath());
         Bitmap bitmap= BitmapFactory.decodeFile(Uri.fromFile(new File(imageFile.getPath())).getPath());
-//        holder.IvImageCrop.setImageBitmap(bitmap);
         Glide.with(context)
                 .load(bitmap)
                 .error(R.drawable.ic_widget_placeholder_img)

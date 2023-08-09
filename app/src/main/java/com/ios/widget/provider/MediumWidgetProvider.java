@@ -1,7 +1,7 @@
 package com.ios.widget.provider;
 
-import static com.ios.widget.crop.utils.MyAppConstants.CreateWidget;
-import static com.ios.widget.crop.utils.MyAppConstants.Widget_Id;
+import static com.ios.widget.utils.MyAppConstants.CreateWidget;
+import static com.ios.widget.utils.MyAppConstants.Widget_Id;
 
 import android.Manifest;
 import android.app.AlarmManager;
@@ -29,6 +29,7 @@ import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -38,9 +39,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
-import com.ios.widget.helper.DatabaseHelper;
-import com.ios.widget.crop.utils.MyAppConstants;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.Apphelper.AppDatabaseHelper;
+import com.ios.widget.ui.Activity.MainActivity;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,7 +61,7 @@ public class MediumWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        DatabaseHelper helper = new DatabaseHelper(context);
+        AppDatabaseHelper helper = new AppDatabaseHelper(context);
         int insert = -1;
         WidgetData widgetData = null;
         if (CreateWidget) {
@@ -119,6 +121,11 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlMediumWidget, configPendingIntent);
                         break;
                     case 1:
                     case 7:
@@ -159,6 +166,11 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlMediumWidget, configPendingIntent);
                         break;
                     case 2:
                     case 22:
@@ -264,11 +276,14 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                         rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
 
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlMediumWidget, configPendingIntent);
                         break;
                     case 5:
                         //todo calender 2 medium
                         rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_medium);
-//                    rv.setImageViewBitmap(R.id.IvBackground, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_medium_bg), 30));
                         rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE, yyyy");
                         rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE, yyyy");
                         rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
@@ -301,6 +316,10 @@ public class MediumWidgetProvider extends AppWidgetProvider {
 
                         rv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
 
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlMediumWidget, configPendingIntent);
                         break;
                     case 6:
                         //todo calender 3 medium
@@ -340,6 +359,11 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         finalRv.setOnClickPendingIntent(R.id.RlMediumCal, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlMediumWidget, configPendingIntent);
                         break;
                     case 8:
                         //todo weather 1 medium
@@ -410,7 +434,6 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                             }, new Response.ErrorListener() {
                                                 @Override
                                                 public void onErrorResponse(VolleyError error) {
-                                                    //displaying the error in toast if occur
                                                 }
                                             });
                                             queue.add(stringReq);
@@ -544,6 +567,11 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                             queue1.add(stringReq1);
                                         } catch (Exception e) {
                                         }
+
+                                        intent = new Intent(context, MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                        rv.setOnClickPendingIntent(R.id.LlMediumWidget, configPendingIntent);
                                     } else {
 
                                     }
@@ -754,6 +782,11 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                             queue1.add(stringReq1);
                                         } catch (Exception e) {
                                         }
+
+                                        intent = new Intent(context, MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                        rv.setOnClickPendingIntent(R.id.LlMediumWidget, configPendingIntent);
                                     } else {
 
                                     }
@@ -964,6 +997,11 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                                             queue1.add(stringReq1);
                                         } catch (Exception e) {
                                         }
+
+                                        intent = new Intent(context, MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                        rv.setOnClickPendingIntent(R.id.LlMediumWidget, configPendingIntent);
                                     } else {
 
                                     }
@@ -988,6 +1026,11 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.LlMediumCalendar, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlMediumWidget, configPendingIntent);
                         break;
                     case 12:
                         //todo clock 2 medium
@@ -1007,6 +1050,11 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.LlMediumCalendar, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlMediumWidget, configPendingIntent);
                         break;
                     case 14:
                         //todo clock 4 medium
@@ -1016,6 +1064,11 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.RlMediumClock, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlMediumWidget, configPendingIntent);
                         break;
                     case 19:
                         //todo clock 9 medium
@@ -1032,6 +1085,11 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.RlMediumClock, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlMediumWidget, configPendingIntent);
                         break;
                     case 20:
                         //todo x-panel 1 medium
@@ -1106,6 +1164,11 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                         Intent intentTorch = new Intent(context, XPanelFlashlightWidgetReceiver.class);
                         PendingIntent broadcast1 = PendingIntent.getBroadcast(context, 0, intentTorch, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                         rv.setOnClickPendingIntent(R.id.IvTorch, broadcast1);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlMediumWidget, configPendingIntent);
                         break;
                     case 21:
                         //todo xpanel 2 medium
@@ -1218,21 +1281,31 @@ public class MediumWidgetProvider extends AppWidgetProvider {
                             new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
                             alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                         }
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlMediumWidget, configPendingIntent);
                         break;
+
                 }
                 if (!(MyAppConstants.Widget_Type_Id == 8 || MyAppConstants.Widget_Type_Id == 9 || MyAppConstants.Widget_Type_Id == 10)) {
                     appWidgetManager.updateAppWidget(Widget_Id, rv);
                 }
                 MyAppConstants.CreateWidget = false;
+
             }
             super.onUpdate(context, appWidgetManager, appWidgetIds);
         }
+
+        Intent widget_create = new Intent("Widget_create");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(widget_create);
     }
 
     @Override
     public void onDeleted(Context context, int[] iArr) {
         for (int id : iArr) {
-            DatabaseHelper helper = new DatabaseHelper(context);
+            AppDatabaseHelper helper = new AppDatabaseHelper(context);
             helper.getDeleteWidgets(id);
         }
     }

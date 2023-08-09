@@ -1,7 +1,7 @@
 package com.ios.widget.provider;
 
-import static com.ios.widget.crop.utils.MyAppConstants.CreateWidget;
-import static com.ios.widget.crop.utils.MyAppConstants.Widget_Id;
+import static com.ios.widget.utils.MyAppConstants.CreateWidget;
+import static com.ios.widget.utils.MyAppConstants.Widget_Id;
 
 import android.Manifest;
 import android.app.AlarmManager;
@@ -29,6 +29,7 @@ import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -38,9 +39,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
-import com.ios.widget.helper.DatabaseHelper;
-import com.ios.widget.crop.utils.MyAppConstants;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.Apphelper.AppDatabaseHelper;
+import com.ios.widget.ui.Activity.MainActivity;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,7 +57,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        DatabaseHelper helper = new DatabaseHelper(context);
+        AppDatabaseHelper helper = new AppDatabaseHelper(context);
         int insert = -1;
         WidgetData widgetData = null;
         if (CreateWidget) {
@@ -97,6 +99,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.RlSmallCal, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlSmallWidget, configPendingIntent);
                         break;
                     case 1:
                     case 8:
@@ -159,6 +166,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                                         String MaxTemp = MainObject.get("temp_max").toString();
                                                         finalRv1.setTextViewText(R.id.TvTempMaxMin, "H:" + MaxTemp.substring(0, MaxTemp.lastIndexOf(".")) + tempExt + " / L:" + MinTemp.substring(0, MinTemp.lastIndexOf(".")) + tempExt);
 
+
                                                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                                                         Intent alarmIntent = new Intent(context, BetteryBroadcastReceiver.class);
                                                         PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
@@ -172,12 +180,15 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                             }, new Response.ErrorListener() {
                                                 @Override
                                                 public void onErrorResponse(VolleyError error) {
-                                                    //displaying the error in toast if occur
                                                 }
                                             });
                                             queue.add(stringReq);
                                         } catch (Exception e) {
                                         }
+                                        intent = new Intent(context, MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                        rv.setOnClickPendingIntent(R.id.LlSmallWidget, configPendingIntent);
                                     } else {
 
                                     }
@@ -200,13 +211,16 @@ public class SmallWidgetProvider extends AppWidgetProvider {
 
                         intent1 = new Intent(Settings.ACTION_DATE_SETTINGS);
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
                         rv.setOnClickPendingIntent(R.id.RlSmallClock, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlSmallWidget, configPendingIntent);
                         break;
                     case 5:
                         //todo calender 2 small
                         rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_small);
-//                    rv.setImageViewBitmap(R.id.IvBackground2, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_small_bg), 30));
                         rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE");
                         rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE");
                         rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
@@ -219,6 +233,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.RlSmallCal, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlSmallWidget, configPendingIntent);
 
                         break;
                     case 6:
@@ -239,6 +258,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.RlSmallCal, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlSmallWidget, configPendingIntent);
                         break;
                     case 9:
                         //todo weather 2 small
@@ -313,6 +337,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                             queue.add(stringReq);
                                         } catch (Exception e) {
                                         }
+
+                                        intent = new Intent(context, MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                        rv.setOnClickPendingIntent(R.id.LlSmallWidget, configPendingIntent);
                                     } else {
 
                                     }
@@ -398,6 +427,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                                             queue.add(stringReq);
                                         } catch (Exception e) {
                                         }
+
+                                        intent = new Intent(context, MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                        rv.setOnClickPendingIntent(R.id.LlSmallWidget, configPendingIntent);
                                     } else {
 
                                     }
@@ -413,6 +447,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlSmallWidget, configPendingIntent);
                         break;
                     case 12:
                         //todo clock 2 small
@@ -422,6 +461,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlSmallWidget, configPendingIntent);
                         break;
                     case 13:
                         //todo clock 3 small
@@ -431,6 +475,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlSmallWidget, configPendingIntent);
                         break;
                     case 14:
                         //todo clock 4 small
@@ -514,6 +563,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         Intent intent2 = new Intent(context, XPanelFlashlightWidgetReceiver.class);
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                         rv.setOnClickPendingIntent(R.id.IvTorch, pendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlSmallWidget, configPendingIntent);
                         break;
                     case 21:
                         //todo x-panel 4 small
@@ -573,6 +627,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                             new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
                             alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                         }
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlSmallWidget, configPendingIntent);
                         break;
                     case 22:
                         //todo x-panel 3 small
@@ -674,6 +733,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                         intent = new Intent(Settings.ACTION_DATE_SETTINGS);
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                         rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlSmallWidget, configPendingIntent);
                         break;
                 }
                 if (!(MyAppConstants.Widget_Type_Id == 8 || MyAppConstants.Widget_Type_Id == 9 || MyAppConstants.Widget_Type_Id == 10)) {
@@ -683,12 +747,15 @@ public class SmallWidgetProvider extends AppWidgetProvider {
                 super.onUpdate(context, appWidgetManager, appWidgetIds);
             }
         }
+
+        Intent widget_create = new Intent("Widget_create");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(widget_create);
     }
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         for (int id : appWidgetIds) {
-            DatabaseHelper helper = new DatabaseHelper(context);
+            AppDatabaseHelper helper = new AppDatabaseHelper(context);
 
             helper.getDeleteWidgets(id);
         }

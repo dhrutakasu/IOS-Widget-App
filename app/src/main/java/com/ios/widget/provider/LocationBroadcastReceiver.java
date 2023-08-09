@@ -8,7 +8,7 @@ import android.location.Geocoder;
 import android.location.Location;
 
 import com.google.android.gms.location.LocationResult;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.utils.MyAppPref;
 
 import java.io.IOException;
 import java.util.List;

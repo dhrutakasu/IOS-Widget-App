@@ -16,7 +16,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.utils.MyAppPref;
 
 public class MyAppAd_Interstitial {
     static int OnClick = 1;

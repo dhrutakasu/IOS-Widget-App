@@ -21,8 +21,8 @@ import android.widget.RemoteViewsService;
 import com.ios.widget.Model.WidgetImages;
 import com.ios.widget.Model.WidgetMaster;
 import com.ios.widget.R;
-import com.ios.widget.helper.DatabaseHelper;
-import com.ios.widget.crop.utils.MyAppConstants;
+import com.ios.widget.Apphelper.AppDatabaseHelper;
+import com.ios.widget.utils.MyAppConstants;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class SmallPhotoWidgetService extends RemoteViewsService {
         int custCols = 2;
         int custPadding = 0;
         int custRows = 3;
-        DatabaseHelper database;
+        AppDatabaseHelper database;
         int height;
         List<WidgetImages> imageUriList;
         private int mAppWidgetId;
@@ -66,7 +66,7 @@ public class SmallPhotoWidgetService extends RemoteViewsService {
         }
 
         public void onDataSetChanged() {
-            DatabaseHelper instance = new DatabaseHelper(this.mContext);
+            AppDatabaseHelper instance = new AppDatabaseHelper(this.mContext);
             this.database = instance;
             this.imageUriList = instance.getImageList(this.mAppWidgetId);
             this.widgetMaster = this.database.getWidgetMaster(this.mAppWidgetId);

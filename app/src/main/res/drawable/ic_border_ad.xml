@@ -5,4 +5,5 @@
     <stroke
         android:width="@dimen/_1sdp"
         android:color="@color/widget_black" />
+    <solid android:color="@android:color/transparent"/>
 </shape>

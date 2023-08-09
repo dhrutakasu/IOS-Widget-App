@@ -17,8 +17,8 @@ import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.Model.WidgetModel;
 import com.ios.widget.R;
 import com.ios.widget.ui.Adapter.ItemAdapter;
-import com.ios.widget.crop.utils.MyAppConstants;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import java.util.ArrayList;
 

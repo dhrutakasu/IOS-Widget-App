@@ -14,18 +14,19 @@ import com.ios.widget.Model.WidgetData;
 import com.ios.widget.Model.WidgetImages;
 import com.ios.widget.Model.WidgetMaster;
 import com.ios.widget.R;
-import com.ios.widget.helper.DatabaseHelper;
+import com.ios.widget.Apphelper.AppDatabaseHelper;
 import com.ios.widget.ui.Activity.PhotoWidgetActivity;
-import com.ios.widget.crop.utils.MyAppConstants;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.RequiresApi;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class MediumPhotoWidgetProvider extends AppWidgetProvider {
-    private DatabaseHelper database;
+    private AppDatabaseHelper database;
     private static final String LeftClick = "left";
     private static final String RightClick = "right";
     private static final String WidgetSettingAction = "WidgetSetting";
@@ -37,7 +38,7 @@ public class MediumPhotoWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] iArr) {
-        DatabaseHelper helper = new DatabaseHelper(context);
+        AppDatabaseHelper helper = new AppDatabaseHelper(context);
         WidgetData widgetData = new WidgetData(1, MyAppConstants.Widget_Type_Id, -1,"", MyAppConstants.Temp_Id, MyAppConstants.IS_SIM_CARD);
         int insert = helper.InsertWidget(widgetData);
         for (int id : iArr) {
@@ -56,11 +57,14 @@ public class MediumPhotoWidgetProvider extends AppWidgetProvider {
             }
             widgetLists.add(String.valueOf(Widget_Id));
             new MyAppPref(context).setWidgetLists(context, widgetLists);
-            database = new DatabaseHelper(context);
-            for (int i = 0; i < MyAppConstants.mSelectedList1_1.size(); i++) {
-                WidgetImages widgetImages = new WidgetImages("0", MyAppConstants.mSelectedList1_1.get(i).getPath(), Widget_Id);
-                if (database.CheckIsAlreadyDBorNot(MyAppConstants.mSelectedList1_1.get(i).getPath().toString(), String.valueOf(Widget_Id))) {
-                    WidgetImages widgetImages1 = new WidgetImages(database.getImageListData(Widget_Id).getImageId(), String.valueOf(MyAppConstants.mSelectedList1_1.get(i).getPath()), Widget_Id);
+            database = new AppDatabaseHelper(context);
+
+            MyAppConstants.mSelectedList=new ArrayList<>();
+            MyAppConstants.mSelectedList.addAll(MyAppConstants.mCropSelectedList);
+            for (int i = 0; i < MyAppConstants.mSelectedList.size(); i++) {
+                WidgetImages widgetImages = new WidgetImages("0", MyAppConstants.mSelectedList.get(i).getPath(), Widget_Id);
+                if (database.CheckIsAlreadyDBorNot(MyAppConstants.mSelectedList.get(i).getPath().toString(), String.valueOf(Widget_Id))) {
+                    WidgetImages widgetImages1 = new WidgetImages(database.getImageListData(Widget_Id).getImageId(), String.valueOf(MyAppConstants.mSelectedList.get(i).getPath()), Widget_Id);
                     database.updateWidgetImages(widgetImages1);
                 } else {
                     database.InsertWidgetImage(widgetImages);
@@ -94,6 +98,9 @@ public class MediumPhotoWidgetProvider extends AppWidgetProvider {
             }
             Class<MediumPhotoWidgetProvider> cls = MediumPhotoWidgetProvider.class;
             updateWidgetView(Widget_Id, context, new Intent(context, cls));
+
+            Intent widget_create = new Intent("Widget_create");
+            LocalBroadcastManager.getInstance(context).sendBroadcast(widget_create);
         }
     }
 
@@ -109,7 +116,7 @@ public class MediumPhotoWidgetProvider extends AppWidgetProvider {
         int i3 = i;
         Context context2 = context;
         Class<MediumPhotoWidgetProvider> cls = MediumPhotoWidgetProvider.class;
-        DatabaseHelper instance = new DatabaseHelper(context);
+        AppDatabaseHelper instance = new AppDatabaseHelper(context);
         boolean booleanExtra = intent.getBooleanExtra("flip", false);
         WidgetMaster mainWidget = instance.getWidgetMaster(i3);
         if (i3 != -1) {
@@ -119,19 +126,19 @@ public class MediumPhotoWidgetProvider extends AppWidgetProvider {
                     case 0:
                         switch (mainWidget.getInterval()) {
                             case 0:
-                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_widget_no_flip);
-                                break;
-                            case 1:
-                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_widget_flip_three);
-                                break;
-                            case 2:
-                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_widget_flip_five);
-                                break;
-                            case 3:
                                 remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_widget_flip_ten);
                                 break;
+                            case 1:
+                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_widget_flip_twenty);
+                                break;
+                            case 2:
+                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_widget_flip_thirty);
+                                break;
+                            case 3:
+                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_widget_flip_one_min);
+                                break;
                             case 4:
-                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_widget_flip_fifteen);
+                                remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_widget_flip_five_min);
                                 break;
                         }
                 }

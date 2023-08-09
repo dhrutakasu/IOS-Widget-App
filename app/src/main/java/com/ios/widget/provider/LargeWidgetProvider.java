@@ -1,9 +1,9 @@
 package com.ios.widget.provider;
 
-import static com.ios.widget.crop.utils.MyAppConstants.CreateWidget;
-import static com.ios.widget.crop.utils.MyAppConstants.Widget_Id;
-import static com.ios.widget.crop.utils.MyAppConstants.Widget_Type_Id;
-import static com.ios.widget.crop.utils.MyAppPref.IS_DATE_LARGE_4;
+import static com.ios.widget.utils.MyAppConstants.CreateWidget;
+import static com.ios.widget.utils.MyAppConstants.Widget_Id;
+import static com.ios.widget.utils.MyAppConstants.Widget_Type_Id;
+import static com.ios.widget.utils.MyAppPref.IS_DATE_LARGE_4;
 
 import android.Manifest;
 import android.app.AlarmManager;
@@ -32,6 +32,7 @@ import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -41,9 +42,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ios.widget.Model.WidgetData;
 import com.ios.widget.R;
-import com.ios.widget.helper.DatabaseHelper;
-import com.ios.widget.crop.utils.MyAppConstants;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.Apphelper.AppDatabaseHelper;
+import com.ios.widget.ui.Activity.MainActivity;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,7 +63,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        DatabaseHelper helper = new DatabaseHelper(context);
+        AppDatabaseHelper helper = new AppDatabaseHelper(context);
         int insert = -1;
         WidgetData widgetData = null;
         if (CreateWidget) {
@@ -157,6 +159,11 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                             configPendingIntent = PendingIntent.getActivity(context, 0, intentCellular, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                             rv.setOnClickPendingIntent(R.id.IvCellular, configPendingIntent);
                         }
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlLargeWidget, configPendingIntent);
                         break;
                     case 2:
                     case 9:
@@ -239,7 +246,6 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                             }, new Response.ErrorListener() {
                                                 @Override
                                                 public void onErrorResponse(VolleyError error) {
-                                                    //displaying the error in toast if occur
                                                 }
                                             });
                                             queue.add(stringReq);
@@ -365,12 +371,16 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                             }, new Response.ErrorListener() {
                                                 @Override
                                                 public void onErrorResponse(VolleyError error) {
-                                                    //displaying the error in toast if occur
                                                 }
                                             });
                                             queue1.add(stringReq1);
                                         } catch (Exception e) {
                                         }
+
+                                        intent = new Intent(context, MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                        rv.setOnClickPendingIntent(R.id.LlLargeWidget, configPendingIntent);
                                     } else {
 
                                     }
@@ -382,7 +392,6 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                     case 5:
                         //todo calender 2 large
                         rv = new RemoteViews(context.getPackageName(), R.layout.layout_widget_calendar3_large);
-//                    rv.setImageViewBitmap(R.id.IvBackground, MyAppConstants.getRoundedCornerBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_widget_calendar2_large_bg), 30));
                         rv.setCharSequence(R.id.TClockMonth, "setFormat12Hour", "EEE, yyyy");
                         rv.setCharSequence(R.id.TClockMonth, "setFormat24Hour", "EEE, yyyy");
                         rv.setCharSequence(R.id.TClockDate, "setFormat12Hour", "d");
@@ -396,6 +405,11 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.RlLargeCal, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlLargeWidget, configPendingIntent);
                         break;
                     case 6:
                         //todo calender 3 large
@@ -427,6 +441,11 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.RlLargeCal, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlLargeWidget, configPendingIntent);
                         break;
                     case 7:
                         //todo calender 4 large
@@ -458,6 +477,11 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.RlLargeCal, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlLargeWidget, configPendingIntent);
                         break;
                     case 8:
                         //todo weather 1 large
@@ -671,6 +695,11 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                             queue1.add(stringReq1);
                                         } catch (Exception e) {
                                         }
+
+                                        intent = new Intent(context, MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                        rv.setOnClickPendingIntent(R.id.LlLargeWidget, configPendingIntent);
                                     } else {
 
                                     }
@@ -891,6 +920,11 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                                             queue1.add(stringReq1);
                                         } catch (Exception e) {
                                         }
+
+                                        intent = new Intent(context, MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                                        rv.setOnClickPendingIntent(R.id.LlLargeWidget, configPendingIntent);
                                     } else {
 
                                     }
@@ -908,6 +942,11 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlLargeWidget, configPendingIntent);
                         break;
                     case 12:
                         //todo clock 2 large
@@ -917,6 +956,11 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlLargeWidget, configPendingIntent);
                         break;
                     case 13:
                         //todo clock 3 large
@@ -926,6 +970,11 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.AnalogClock, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlLargeWidget, configPendingIntent);
                         break;
                     case 14:
                         //todo clock 4 large
@@ -935,6 +984,11 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.RlLargeClock, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlLargeWidget, configPendingIntent);
                         break;
                     case 19:
                         //todo clock 9 large
@@ -952,6 +1006,11 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         rv.setOnClickPendingIntent(R.id.RlLargeClock, configPendingIntent);
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlLargeWidget, configPendingIntent);
                         break;
                     case 21:
                         //todo x-panel 4 large
@@ -1012,6 +1071,11 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                             new MyAppPref(context).putBoolean(MyAppPref.IS_X_PANEL_4_ALARM, true);
                             alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, broadcast);
                         }
+
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlLargeWidget, configPendingIntent);
                         break;
                     case 22:
                         //todo x-panel 3 large
@@ -1115,6 +1179,10 @@ public class LargeWidgetProvider extends AppWidgetProvider {
                         configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
                         rv.setOnClickPendingIntent(R.id.LlTime, configPendingIntent);
 
+                        intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        configPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                        rv.setOnClickPendingIntent(R.id.LlLargeWidget, configPendingIntent);
                         break;
                 }
 
@@ -1125,6 +1193,9 @@ public class LargeWidgetProvider extends AppWidgetProvider {
             }
             super.onUpdate(context, appWidgetManager, appWidgetIds);
         }
+
+        Intent widget_create = new Intent("Widget_create");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(widget_create);
     }
 
     public int mps_to_kmph(double mps) {
@@ -1134,7 +1205,7 @@ public class LargeWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] iArr) {
         for (int id : iArr) {
-            DatabaseHelper helper = new DatabaseHelper(context);
+            AppDatabaseHelper helper = new AppDatabaseHelper(context);
             helper.getDeleteWidgets(id);
         }
     }

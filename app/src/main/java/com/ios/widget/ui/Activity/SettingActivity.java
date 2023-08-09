@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.ios.widget.Ads.MyAppAd_Interstitial;
 import com.ios.widget.Ads.MyAppAd_Native;
 import com.ios.widget.R;
-import com.ios.widget.crop.utils.MyAppConstants;
-import com.ios.widget.crop.utils.MyAppPref;
+import com.ios.widget.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppPref;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
 

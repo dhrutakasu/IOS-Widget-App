@@ -9,7 +9,7 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.ios.widget.R;
-import com.ios.widget.crop.utils.MyAppConstants;
+import com.ios.widget.utils.MyAppConstants;
 
 import java.util.ArrayList;
 import java.util.Calendar;
