@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/widget_white"
-    tools:context=".ui.Activity.WidgetItemActivity">
+    tools:context=".Appui.Activity.WidgetItemActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

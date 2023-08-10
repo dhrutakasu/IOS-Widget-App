@@ -7,9 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.ios.widget.Model.WidgetData;
-import com.ios.widget.Model.WidgetImages;
-import com.ios.widget.Model.WidgetMaster;
+import com.ios.widget.ImageModel.AppWidgetData;
+import com.ios.widget.ImageModel.AppWidgetImages;
+import com.ios.widget.ImageModel.AppWidgetMaster;
 
 import java.util.ArrayList;
 
@@ -106,123 +106,123 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
     }
 
     //todo Widgets insert
-    public int InsertWidget(WidgetData widgetData) {
+    public int InsertWidget(AppWidgetData appWidgetData) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(WIDGET_TYPE, widgetData.getType());
-        values.put(WIDGET_POSITION, widgetData.getPosition());
-        values.put(WIDGET_CITY, widgetData.getCity());
+        values.put(WIDGET_TYPE, appWidgetData.getType());
+        values.put(WIDGET_POSITION, appWidgetData.getPosition());
+        values.put(WIDGET_CITY, appWidgetData.getCity());
         int sim;
-        if (widgetData.getSim()) {
+        if (appWidgetData.getSim()) {
             sim = 0;
         } else {
             sim = 1;
         }
         values.put(WIDGET_SIM, sim);
-        values.put(WIDGET_NUMBER, widgetData.getNumber());
+        values.put(WIDGET_NUMBER, appWidgetData.getNumber());
 
         return (int) db.insert(TABLE_NAME, null, values);
     }
 
     //todo WidgetMaster insert
-    public void InsertWidget(WidgetMaster widgetMaster) {
+    public void InsertWidget(AppWidgetMaster appWidgetMaster) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(WIDGET_MASTER_widgetId, widgetMaster.getWidgetId());
-        values.put(WIDGET_MASTER_spaceBorder, widgetMaster.getSpaceBorder());
-        values.put(WIDGET_MASTER_size, widgetMaster.getSize());
-        values.put(WIDGET_MASTER_shape, widgetMaster.getShape());
-        values.put(WIDGET_MASTER_row, widgetMaster.getRow());
-        values.put(WIDGET_MASTER_rotationType, widgetMaster.getRotationType());
-        values.put(WIDGET_MASTER_opacity, widgetMaster.getOpacity());
-        values.put(WIDGET_MASTER_interval, widgetMaster.getInterval());
-        values.put(WIDGET_MASTER_flipControl, widgetMaster.isFlipControl() == true ? 1 : 0);
-        values.put(WIDGET_MASTER_customMode, widgetMaster.isCustomMode() == true ? 1 : 0);
-        values.put(WIDGET_MASTER_cropType, widgetMaster.getCropType());
-        values.put(WIDGET_MASTER_cornerBorder, widgetMaster.getCornerBorder());
-        values.put(WIDGET_MASTER_column, widgetMaster.getColumn());
-        values.put(WIDGET_MASTER_colorCode, widgetMaster.getColorCode());
-        values.put(WIDGET_MASTER_Loading_Indicator, widgetMaster.isLoadingIndicator() == true ? 1 : 0);
+        values.put(WIDGET_MASTER_widgetId, appWidgetMaster.getWidgetId());
+        values.put(WIDGET_MASTER_spaceBorder, appWidgetMaster.getSpaceBorder());
+        values.put(WIDGET_MASTER_size, appWidgetMaster.getSize());
+        values.put(WIDGET_MASTER_shape, appWidgetMaster.getShape());
+        values.put(WIDGET_MASTER_row, appWidgetMaster.getRow());
+        values.put(WIDGET_MASTER_rotationType, appWidgetMaster.getRotationType());
+        values.put(WIDGET_MASTER_opacity, appWidgetMaster.getOpacity());
+        values.put(WIDGET_MASTER_interval, appWidgetMaster.getInterval());
+        values.put(WIDGET_MASTER_flipControl, appWidgetMaster.isFlipControl() == true ? 1 : 0);
+        values.put(WIDGET_MASTER_customMode, appWidgetMaster.isCustomMode() == true ? 1 : 0);
+        values.put(WIDGET_MASTER_cropType, appWidgetMaster.getCropType());
+        values.put(WIDGET_MASTER_cornerBorder, appWidgetMaster.getCornerBorder());
+        values.put(WIDGET_MASTER_column, appWidgetMaster.getColumn());
+        values.put(WIDGET_MASTER_colorCode, appWidgetMaster.getColorCode());
+        values.put(WIDGET_MASTER_Loading_Indicator, appWidgetMaster.isLoadingIndicator() == true ? 1 : 0);
 
         db.insert(WIDGET_MASTER_TABLE_NAME, null, values);
     }
 
     //todo WidgetImages insert
-    public void InsertWidgetImage(WidgetImages widgetImages) {
+    public void InsertWidgetImage(AppWidgetImages appWidgetImages) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(WIDGET_IMAGES_Uri, widgetImages.getUri());
-        values.put(WIDGET_IMAGES_Widget_ID, widgetImages.getWidgetId());
+        values.put(WIDGET_IMAGES_Uri, appWidgetImages.getUri());
+        values.put(WIDGET_IMAGES_Widget_ID, appWidgetImages.getWidgetId());
 
         db.insert(WIDGET_IMAGES_TABLE_NAME, null, values);
     }
 
     //todo Widgets update
-    public boolean updateWidget(WidgetData widgetData) {
+    public boolean updateWidget(AppWidgetData appWidgetData) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(WIDGET_ID, widgetData.getId());
-        values.put(WIDGET_TYPE, widgetData.getType());
-        values.put(WIDGET_POSITION, widgetData.getPosition());
-        values.put(WIDGET_CITY, widgetData.getCity());
-        values.put(WIDGET_TEMP, widgetData.getTemp());
+        values.put(WIDGET_ID, appWidgetData.getId());
+        values.put(WIDGET_TYPE, appWidgetData.getType());
+        values.put(WIDGET_POSITION, appWidgetData.getPosition());
+        values.put(WIDGET_CITY, appWidgetData.getCity());
+        values.put(WIDGET_TEMP, appWidgetData.getTemp());
         int sim;
-        if (widgetData.getSim()) {
+        if (appWidgetData.getSim()) {
             sim = 0;
         } else {
             sim = 1;
         }
         values.put(WIDGET_SIM, sim);
-        values.put(WIDGET_NUMBER, widgetData.getNumber());
+        values.put(WIDGET_NUMBER, appWidgetData.getNumber());
 
-        db.update(TABLE_NAME, values, WIDGET_ID + " = ?", new String[]{String.valueOf(widgetData.getId())});
+        db.update(TABLE_NAME, values, WIDGET_ID + " = ?", new String[]{String.valueOf(appWidgetData.getId())});
         return true;
     }
 
     //todo WidgetMaster update
-    public boolean updateWidgetMaster(WidgetMaster widgetMaster) {
+    public boolean updateWidgetMaster(AppWidgetMaster appWidgetMaster) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(WIDGET_MASTER_Id, widgetMaster.getId());
-        values.put(WIDGET_MASTER_widgetId, widgetMaster.getWidgetId());
-        values.put(WIDGET_MASTER_spaceBorder, widgetMaster.getSpaceBorder());
-        values.put(WIDGET_MASTER_size, widgetMaster.getSize());
-        values.put(WIDGET_MASTER_shape, widgetMaster.getShape());
-        values.put(WIDGET_MASTER_row, widgetMaster.getRow());
-        values.put(WIDGET_MASTER_rotationType, widgetMaster.getRotationType());
-        values.put(WIDGET_MASTER_opacity, widgetMaster.getOpacity());
-        values.put(WIDGET_MASTER_interval, widgetMaster.getInterval());
-        values.put(WIDGET_MASTER_flipControl, widgetMaster.isFlipControl());
-        values.put(WIDGET_MASTER_customMode, widgetMaster.isCustomMode());
-        values.put(WIDGET_MASTER_cropType, widgetMaster.getCropType());
-        values.put(WIDGET_MASTER_cornerBorder, widgetMaster.getCornerBorder());
-        values.put(WIDGET_MASTER_column, widgetMaster.getColumn());
-        values.put(WIDGET_MASTER_colorCode, widgetMaster.getColorCode());
-        values.put(WIDGET_MASTER_Loading_Indicator, widgetMaster.isLoadingIndicator());
+        values.put(WIDGET_MASTER_Id, appWidgetMaster.getId());
+        values.put(WIDGET_MASTER_widgetId, appWidgetMaster.getWidgetId());
+        values.put(WIDGET_MASTER_spaceBorder, appWidgetMaster.getSpaceBorder());
+        values.put(WIDGET_MASTER_size, appWidgetMaster.getSize());
+        values.put(WIDGET_MASTER_shape, appWidgetMaster.getShape());
+        values.put(WIDGET_MASTER_row, appWidgetMaster.getRow());
+        values.put(WIDGET_MASTER_rotationType, appWidgetMaster.getRotationType());
+        values.put(WIDGET_MASTER_opacity, appWidgetMaster.getOpacity());
+        values.put(WIDGET_MASTER_interval, appWidgetMaster.getInterval());
+        values.put(WIDGET_MASTER_flipControl, appWidgetMaster.isFlipControl());
+        values.put(WIDGET_MASTER_customMode, appWidgetMaster.isCustomMode());
+        values.put(WIDGET_MASTER_cropType, appWidgetMaster.getCropType());
+        values.put(WIDGET_MASTER_cornerBorder, appWidgetMaster.getCornerBorder());
+        values.put(WIDGET_MASTER_column, appWidgetMaster.getColumn());
+        values.put(WIDGET_MASTER_colorCode, appWidgetMaster.getColorCode());
+        values.put(WIDGET_MASTER_Loading_Indicator, appWidgetMaster.isLoadingIndicator());
 
-        db.update(WIDGET_MASTER_TABLE_NAME, values, WIDGET_MASTER_widgetId + " = ?", new String[]{String.valueOf(widgetMaster.getWidgetId())});
+        db.update(WIDGET_MASTER_TABLE_NAME, values, WIDGET_MASTER_widgetId + " = ?", new String[]{String.valueOf(appWidgetMaster.getWidgetId())});
         return true;
     }
 
     //todo WidgetsImages update
-    public boolean updateWidgetImages(WidgetImages widgetImages) {
+    public boolean updateWidgetImages(AppWidgetImages appWidgetImages) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(WIDGET_IMAGES_Id, widgetImages.getImageId());
-        values.put(WIDGET_IMAGES_Uri, widgetImages.getUri());
-        values.put(WIDGET_IMAGES_Widget_ID, widgetImages.getWidgetId());
+        values.put(WIDGET_IMAGES_Id, appWidgetImages.getImageId());
+        values.put(WIDGET_IMAGES_Uri, appWidgetImages.getUri());
+        values.put(WIDGET_IMAGES_Widget_ID, appWidgetImages.getWidgetId());
 
-        db.update(WIDGET_IMAGES_TABLE_NAME, values, WIDGET_IMAGES_Id + " = ?", new String[]{String.valueOf(widgetImages.getImageId())});
+        db.update(WIDGET_IMAGES_TABLE_NAME, values, WIDGET_IMAGES_Id + " = ?", new String[]{String.valueOf(appWidgetImages.getImageId())});
         return true;
     }
 
     //todo get Specific Widget data
     @SuppressLint("Range")
-    public ArrayList<WidgetData> getWidgets() {
-        ArrayList<WidgetData> widgetDataArrayList = new ArrayList<>();
+    public ArrayList<AppWidgetData> getWidgets() {
+        ArrayList<AppWidgetData> appWidgetDataArrayList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         String table_name = "SELECT *FROM " + TABLE_NAME;
         Cursor cursor = db.rawQuery(table_name, null);
@@ -235,27 +235,27 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
                     } else {
                         sim = false;
                     }
-                    @SuppressLint("Range") WidgetData widgetData = new WidgetData(cursor.getInt(cursor.getColumnIndex(WIDGET_TYPE))
+                    @SuppressLint("Range") AppWidgetData appWidgetData = new AppWidgetData(cursor.getInt(cursor.getColumnIndex(WIDGET_TYPE))
                             , cursor.getInt(cursor.getColumnIndex(WIDGET_POSITION))
                             , cursor.getInt(cursor.getColumnIndex(WIDGET_NUMBER))
                             , cursor.getString(cursor.getColumnIndex(WIDGET_CITY))
                             , cursor.getInt(cursor.getColumnIndex(WIDGET_TEMP))
                             , sim);
 
-                    widgetDataArrayList.add(widgetData);
+                    appWidgetDataArrayList.add(appWidgetData);
                 } while (cursor.moveToNext());
             }
         }
-        return widgetDataArrayList;
+        return appWidgetDataArrayList;
     }
 
     //todo get Widget Type
     @SuppressLint("Range")
-    public ArrayList<WidgetData> getWidgetsType(int index) {
-        ArrayList<WidgetData> widgetDataArrayList = new ArrayList<>();
+    public ArrayList<AppWidgetData> getWidgetsType(int index, int type) {
+        ArrayList<AppWidgetData> appWidgetDataArrayList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
-        String table_name = "SELECT *FROM " + TABLE_NAME + " WHERE " + WIDGET_POSITION + "=? ";
-        Cursor cursor = db.rawQuery(table_name, new String[]{String.valueOf(index)});
+        String table_name = "SELECT *FROM " + TABLE_NAME + " WHERE " + WIDGET_POSITION + "=? AND "+WIDGET_TYPE+ "=? ";
+        Cursor cursor = db.rawQuery(table_name, new String[]{String.valueOf(index), String.valueOf(type)});
         if (cursor.moveToFirst()) {
             do {
                 boolean sim;
@@ -264,7 +264,7 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
                 } else {
                     sim = false;
                 }
-                widgetDataArrayList.add(new WidgetData(cursor.getInt(cursor.getColumnIndex(WIDGET_ID))
+                appWidgetDataArrayList.add(new AppWidgetData(cursor.getInt(cursor.getColumnIndex(WIDGET_ID))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_TYPE))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_POSITION))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_NUMBER))
@@ -273,14 +273,14 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
                         , sim));
             } while (cursor.moveToNext());
         }
-        return widgetDataArrayList;
+        return appWidgetDataArrayList;
     }
 
 
     //todo get Widget Type Order By
     @SuppressLint("Range")
-    public ArrayList<WidgetData> getWidgetsTypeOrderBy() {
-        ArrayList<WidgetData> widgetDataArrayList = new ArrayList<>();
+    public ArrayList<AppWidgetData> getWidgetsTypeOrderBy() {
+        ArrayList<AppWidgetData> appWidgetDataArrayList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         String table_name = "SELECT *FROM " + TABLE_NAME + " ORDER BY " + WIDGET_POSITION + " ASC";
         Cursor cursor = db.rawQuery(table_name, null);
@@ -292,7 +292,7 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
                 } else {
                     sim = false;
                 }
-                widgetDataArrayList.add(new WidgetData(cursor.getInt(cursor.getColumnIndex(WIDGET_ID))
+                appWidgetDataArrayList.add(new AppWidgetData(cursor.getInt(cursor.getColumnIndex(WIDGET_ID))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_TYPE))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_POSITION))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_NUMBER))
@@ -301,13 +301,13 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
                         , sim));
             } while (cursor.moveToNext());
         }
-        return widgetDataArrayList;
+        return appWidgetDataArrayList;
     }
 
     //todo get Widget data
     @SuppressLint("Range")
-    public WidgetData getWidgetsId(int index) {
-        WidgetData widgetDataArrayList = null;
+    public AppWidgetData getWidgetsId(int index) {
+        AppWidgetData appWidgetDataArrayList = null;
         SQLiteDatabase db = getReadableDatabase();
         String table_name = "SELECT *FROM " + TABLE_NAME + " WHERE " + WIDGET_ID + "=? ";
         Cursor cursor = db.rawQuery(table_name, new String[]{String.valueOf(index)});
@@ -319,7 +319,7 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
                 } else {
                     sim = false;
                 }
-                widgetDataArrayList = new WidgetData(cursor.getInt(cursor.getColumnIndex(WIDGET_ID))
+                appWidgetDataArrayList = new AppWidgetData(cursor.getInt(cursor.getColumnIndex(WIDGET_ID))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_TYPE))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_POSITION))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_NUMBER))
@@ -328,13 +328,13 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
                         , sim);
             } while (cursor.moveToNext());
         }
-        return widgetDataArrayList;
+        return appWidgetDataArrayList;
     }
 
     //todo get Widget Id data
     @SuppressLint("Range")
-    public WidgetData getWidgetsNumber(int index) {
-        WidgetData widgetDataArrayList = null;
+    public AppWidgetData getWidgetsNumber(int index) {
+        AppWidgetData appWidgetDataArrayList = null;
         SQLiteDatabase db = getReadableDatabase();
         String table_name = "SELECT *FROM " + TABLE_NAME + " WHERE " + WIDGET_NUMBER + "=? ";
         Cursor cursor = db.rawQuery(table_name, new String[]{String.valueOf(index)});
@@ -346,7 +346,7 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
                 } else {
                     sim = false;
                 }
-                widgetDataArrayList = new WidgetData(cursor.getInt(cursor.getColumnIndex(WIDGET_ID))
+                appWidgetDataArrayList = new AppWidgetData(cursor.getInt(cursor.getColumnIndex(WIDGET_ID))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_TYPE))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_POSITION))
                         , cursor.getInt(cursor.getColumnIndex(WIDGET_NUMBER))
@@ -355,7 +355,7 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
                         , sim);
             } while (cursor.moveToNext());
         }
-        return widgetDataArrayList;
+        return appWidgetDataArrayList;
     }
 
     //todo get count widgets record
@@ -377,14 +377,14 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
 
     //todo get WidgetMaster data
     @SuppressLint("Range")
-    public WidgetMaster getWidgetMaster(int i3) {
-        WidgetMaster widgetDataArrayList = null;
+    public AppWidgetMaster getWidgetMaster(int i3) {
+        AppWidgetMaster widgetDataArrayList = null;
         SQLiteDatabase db = getReadableDatabase();
         String table_name = "SELECT * FROM " + WIDGET_MASTER_TABLE_NAME + " where " + WIDGET_MASTER_widgetId + "=?";
         Cursor cursor = db.rawQuery(table_name, new String[]{String.valueOf(i3)});
         if (cursor.moveToFirst()) {
             do {
-                widgetDataArrayList = new WidgetMaster();
+                widgetDataArrayList = new AppWidgetMaster();
                 widgetDataArrayList.setId(cursor.getInt(cursor.getColumnIndex(WIDGET_MASTER_Id)));
                 widgetDataArrayList.setWidgetId(cursor.getInt(cursor.getColumnIndex(WIDGET_MASTER_widgetId)));
                 widgetDataArrayList.setSpaceBorder(cursor.getInt(cursor.getColumnIndex(WIDGET_MASTER_spaceBorder)));
@@ -409,14 +409,14 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
 
     //todo get WidgetImages data
     @SuppressLint("Range")
-    public ArrayList<WidgetImages> getImageList(int i3) {
-        ArrayList<WidgetImages> widgetDataArrayList = new ArrayList<>();
+    public ArrayList<AppWidgetImages> getImageList(int i3) {
+        ArrayList<AppWidgetImages> widgetDataArrayList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         String table_name = "SELECT * FROM " + WIDGET_IMAGES_TABLE_NAME + " where " + WIDGET_IMAGES_Widget_ID + "=?";
         Cursor cursor = db.rawQuery(table_name, new String[]{String.valueOf(i3)});
         if (cursor.moveToFirst()) {
             do {
-                WidgetImages widgetDataArray = new WidgetImages(
+                AppWidgetImages widgetDataArray = new AppWidgetImages(
                         cursor.getString(cursor.getColumnIndex(WIDGET_IMAGES_Id)),
                         cursor.getString(cursor.getColumnIndex(WIDGET_IMAGES_Uri)),
                         cursor.getInt(cursor.getColumnIndex(WIDGET_IMAGES_Widget_ID)));
@@ -429,21 +429,21 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
 
     //todo get WidgetImages data
     @SuppressLint("Range")
-    public WidgetImages getImageListData(int i3) {
-        WidgetImages widgetImages = null;
+    public AppWidgetImages getImageListData(int i3) {
+        AppWidgetImages appWidgetImages = null;
         SQLiteDatabase db = getReadableDatabase();
         String table_name = "SELECT *FROM " + WIDGET_IMAGES_TABLE_NAME + " where " + WIDGET_IMAGES_Widget_ID + "=?";
         Cursor cursor = db.rawQuery(table_name, new String[]{String.valueOf(i3)});
         if (cursor.moveToFirst()) {
             do {
-                widgetImages = new WidgetImages(
+                appWidgetImages = new AppWidgetImages(
                         cursor.getString(cursor.getColumnIndex(WIDGET_IMAGES_Id)),
                         cursor.getString(cursor.getColumnIndex(WIDGET_IMAGES_Uri)),
                         cursor.getInt(cursor.getColumnIndex(WIDGET_IMAGES_Widget_ID)));
 
             } while (cursor.moveToNext());
         }
-        return widgetImages;
+        return appWidgetImages;
     }
 
     //todo exist or not

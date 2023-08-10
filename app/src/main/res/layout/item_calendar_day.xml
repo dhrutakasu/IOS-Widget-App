@@ -22,7 +22,7 @@
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:gravity="center"
-        android:fontFamily="@font/main_medium"
+        android:fontFamily="@font/app_medium"
         android:textColor="@color/widget_brown"
         android:textSize="@dimen/_7sdp" />
 

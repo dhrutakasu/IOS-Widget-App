@@ -1,9 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent                                                                             "
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_margin="@dimen/_5sdp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <RelativeLayout
+            android:id="@+id/RlMyWidgetLarge"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_3sdp"
+            android:layout_weight="5">
+
+            <ImageView
+                android:id="@+id/IvMyWidget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:adjustViewBounds="true" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/CardPhotoWidget"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_alignStart="@id/IvMyWidget"
+                android:layout_alignTop="@id/IvMyWidget"
+                android:layout_alignEnd="@id/IvMyWidget"
+                android:layout_alignBottom="@id/IvMyWidget"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="@dimen/_3sdp"
+                app:cardCornerRadius="@dimen/_8sdp"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:id="@+id/IvPhotoWidget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop" />
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/IvWidgetRemove"
@@ -15,68 +58,4 @@
         android:paddingBottom="@dimen/_3sdp"
         android:src="@drawable/ic_remove" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="5">
-
-        <RelativeLayout
-            android:id="@+id/RlMyWidgetLarge"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/_3sdp"
-            android:layout_weight="3.3">
-
-            <ImageView
-                android:id="@+id/IvMyWidget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:adjustViewBounds="true" />
-
-            <ImageView
-                android:id="@+id/IvPhotoWidget"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_alignStart="@id/IvMyWidget"
-                android:layout_alignTop="@id/IvMyWidget"
-                android:layout_alignEnd="@id/IvMyWidget"
-                android:layout_alignBottom="@id/IvMyWidget"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:scaleType="centerCrop" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/RlMyWidgetSmall"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/_3sdp"
-            android:visibility="gone"
-            android:layout_weight="1.3">
-
-            <ImageView
-                android:id="@+id/IvMyWidgetSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:adjustViewBounds="true" />
-
-            <ImageView
-                android:id="@+id/IvPhotoWidgetSmall"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_alignStart="@id/IvMyWidgetSmall"
-                android:layout_alignTop="@id/IvMyWidgetSmall"
-                android:layout_alignEnd="@id/IvMyWidgetSmall"
-                android:layout_alignBottom="@id/IvMyWidgetSmall"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:scaleType="centerCrop" />
-        </RelativeLayout>
-    </LinearLayout>
 </FrameLayout>

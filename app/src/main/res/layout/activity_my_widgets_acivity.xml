@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/widget_white"
-    tools:context=".ui.Activity.MyWidgetsActivity">
+    tools:context=".Appui.Activity.MyWidgetsActivity">
 
     <include
         android:id="@+id/ViewHeader"
@@ -82,8 +82,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/_8sdp"
-        android:paddingStart="@dimen/_20sdp"
-        android:paddingEnd="@dimen/_20sdp"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
         app:layout_constraintBottom_toTopOf="@id/RlBannerAd"
         app:layout_constraintTop_toBottomOf="@id/ScrollMyWidget"
         app:layout_constraintVertical_bias="0.0"

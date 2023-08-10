@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/widget_white"
-    tools:context=".ui.Activity.PhotoWidgetActivity">
+    tools:context=".Appui.Activity.PhotoWidgetActivity">
 
     <include
         android:id="@+id/ViewHeader"
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:fontFamily="@font/main_bold"
+            android:fontFamily="@font/app_bold"
             android:gravity="center_vertical"
             android:text="Upload Photo"
             android:textColor="@color/widget_black"
@@ -76,7 +76,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginEnd="@dimen/_2sdp"
             android:layout_alignParentEnd="true"
-            android:fontFamily="@font/main_black"
+            android:fontFamily="@font/app_black"
             android:gravity="center_vertical"
             android:text="4/10"
             android:textColor="@color/widget_orange"
@@ -96,7 +96,7 @@
             android:layout_below="@id/RvPhotos"
             android:layout_alignParentStart="true"
             android:layout_marginTop="@dimen/_10sdp"
-            android:fontFamily="@font/main_bold"
+            android:fontFamily="@font/app_bold"
             android:gravity="center_vertical"
             android:text="Refresh Interval"
             android:textColor="@color/widget_black"

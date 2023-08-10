@@ -25,7 +25,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".Application.MyApp"
+        android:name=".AppClass.MyApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -34,36 +34,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IOSWidgetApp"
-        android:usesCleartextTraffic="true"
-        tools:replace="android:allowBackup">
+        android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.Activity.WalkthroughActivity"
+            android:name=".Appui.Activity.WalkthroughActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.Activity.ShowItemActivity"
+            android:name=".Appui.Activity.ShowItemActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.Activity.MyWidgetsActivity"
+            android:name=".Appui.Activity.MyWidgetsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.Activity.SettingActivity"
+            android:name=".Appui.Activity.SettingActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.Activity.WidgetItemActivity"
+            android:name=".Appui.Activity.WidgetItemActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.Activity.MainActivity"
+            android:name=".Appui.Activity.MainActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
-<!--        android:name=".ui.Activity.SplashActivity"-->
-
+            android:screenOrientation="portrait" /> <!-- android:name=".ui.Activity.SplashActivity" -->
         <activity
-            android:name=".ui.Activity.SplashActivity"
+            android:name=".Appui.Activity.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -73,15 +70,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.Activity.PhotoWidgetActivity"
+            android:name=".Appui.Activity.PhotoWidgetActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.Activity.ImageSelectionActivity"
+            android:name=".Appui.Activity.ImageSelectionActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".ui.Activity.CropActivity"
+        <activity
+            android:name=".Appui.Activity.CropActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
@@ -100,7 +97,7 @@
         </provider>
 
         <receiver
-            android:name=".provider.SmallWidgetProvider"
+            android:name=".Appprovider.SmallWidgetProvider"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -112,7 +109,7 @@
                 android:resource="@xml/widget_small" />
         </receiver>
         <receiver
-            android:name=".provider.MediumWidgetProvider"
+            android:name=".Appprovider.MediumWidgetProvider"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -124,7 +121,7 @@
                 android:resource="@xml/widget_medium" />
         </receiver>
         <receiver
-            android:name=".provider.LargeWidgetProvider"
+            android:name=".Appprovider.LargeWidgetProvider"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -136,7 +133,7 @@
                 android:resource="@xml/widget_large" />
         </receiver>
         <receiver
-            android:name=".provider.SmallPhotoWidgetProvider"
+            android:name=".Appprovider.SmallPhotoWidgetProvider"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -151,7 +148,7 @@
                 android:resource="@xml/photo_widget_small" />
         </receiver>
         <receiver
-            android:name=".provider.MediumPhotoWidgetProvider"
+            android:name=".Appprovider.MediumPhotoWidgetProvider"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -166,7 +163,7 @@
                 android:resource="@xml/photo_widget_medium" />
         </receiver>
         <receiver
-            android:name=".provider.LargePhotoWidgetProvider"
+            android:name=".Appprovider.LargePhotoWidgetProvider"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -181,7 +178,7 @@
                 android:resource="@xml/photo_widget_large" />
         </receiver>
         <receiver
-            android:name=".provider.BootReceiver"
+            android:name=".Appprovider.BootReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -189,52 +186,52 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".provider.XPanelFlashlightWidgetReceiver"
+            android:name=".Appprovider.XPanelFlashlightWidgetReceiver"
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".provider.XPanelFlashlight4WidgetReceiver"
+            android:name=".Appprovider.XPanelFlashlight4WidgetReceiver"
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".provider.XPanelFlashlight3WidgetReceiver"
+            android:name=".Appprovider.XPanelFlashlight3WidgetReceiver"
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".provider.BetteryBroadcastReceiver"
+            android:name=".Appprovider.BetteryBroadcastReceiver"
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".provider.LocationBroadcastReceiver"
+            android:name=".Appprovider.LocationBroadcastReceiver"
             android:exported="false" />
 
         <service
-            android:name=".provider.SmallPhotoWidgetService"
+            android:name=".Appprovider.SmallPhotoWidgetService"
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service
-            android:name=".provider.MediumPhotoWidgetService"
+            android:name=".Appprovider.MediumPhotoWidgetService"
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service
-            android:name=".provider.LargePhotoWidgetService"
+            android:name=".Appprovider.LargePhotoWidgetService"
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service
-            android:name=".provider.LargeWidgetService"
+            android:name=".Appprovider.LargeWidgetService"
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service
-            android:name=".provider.MediumWidgetService"
+            android:name=".Appprovider.MediumWidgetService"
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service
-            android:name=".provider.SmallWidgetService"
+            android:name=".Appprovider.SmallWidgetService"
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />

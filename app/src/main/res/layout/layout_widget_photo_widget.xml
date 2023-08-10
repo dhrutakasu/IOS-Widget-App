@@ -26,9 +26,9 @@
                     android:id="@+id/Flip"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inAnimation="@animator/fade_in"
+                    android:inAnimation="@anim/anim_fade_in"
                     android:loopViews="true"
-                    android:outAnimation="@animator/fade_out"
+                    android:outAnimation="@anim/anim_fade_out"
                     android:visibility="gone" />
 
                 <AdapterViewFlipper
@@ -37,9 +37,9 @@
                     android:layout_height="match_parent"
                     android:autoStart="true"
                     android:flipInterval="3000"
-                    android:inAnimation="@animator/fade_in"
+                    android:inAnimation="@anim/anim_fade_in"
                     android:loopViews="true"
-                    android:outAnimation="@animator/fade_out"
+                    android:outAnimation="@anim/anim_fade_out"
                     android:visibility="gone" />
 
                 <AdapterViewFlipper
@@ -48,9 +48,9 @@
                     android:layout_height="match_parent"
                     android:autoStart="true"
                     android:flipInterval="5000"
-                    android:inAnimation="@animator/fade_in"
+                    android:inAnimation="@anim/anim_fade_in"
                     android:loopViews="true"
-                    android:outAnimation="@animator/fade_out"
+                    android:outAnimation="@anim/anim_fade_out"
                     android:visibility="gone" />
 
                 <AdapterViewFlipper
@@ -59,9 +59,9 @@
                     android:layout_height="match_parent"
                     android:autoStart="true"
                     android:flipInterval="10000"
-                    android:inAnimation="@animator/fade_in"
+                    android:inAnimation="@anim/anim_fade_in"
                     android:loopViews="true"
-                    android:outAnimation="@animator/fade_out"
+                    android:outAnimation="@anim/anim_fade_out"
                     android:visibility="gone" />
 
                 <AdapterViewFlipper
@@ -70,9 +70,9 @@
                     android:layout_height="match_parent"
                     android:autoStart="true"
                     android:flipInterval="15000"
-                    android:inAnimation="@animator/fade_in"
+                    android:inAnimation="@anim/anim_fade_in"
                     android:loopViews="true"
-                    android:outAnimation="@animator/fade_out"
+                    android:outAnimation="@anim/anim_fade_out"
                     android:visibility="gone" />
 
                 <AdapterViewFlipper
@@ -81,9 +81,9 @@
                     android:layout_height="match_parent"
                     android:autoStart="true"
                     android:flipInterval="30000"
-                    android:inAnimation="@animator/fade_in"
+                    android:inAnimation="@anim/anim_fade_in"
                     android:loopViews="true"
-                    android:outAnimation="@animator/fade_out"
+                    android:outAnimation="@anim/anim_fade_out"
                     android:visibility="gone" />
 
                 <include layout="@layout/layout_widget_paging" />
@@ -93,9 +93,9 @@
                 android:id="@+id/widget_stack"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inAnimation="@animator/fade_in"
+                android:inAnimation="@anim/anim_fade_in"
                 android:loopViews="true"
-                android:outAnimation="@animator/fade_out"
+                android:outAnimation="@anim/anim_fade_out"
                 android:visibility="gone" />
         </FrameLayout>
 

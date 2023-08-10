@@ -19,7 +19,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/_5sdp"
-        android:fontFamily="@font/main_bold"
+        android:fontFamily="@font/app_bold"
         android:gravity="center_vertical"
         android:text="@string/app_name"
         android:textColor="@color/widget_black"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/widget_white"
-    tools:context=".ui.Activity.MainActivity">
+    tools:context=".Appui.Activity.MainActivity">
 
     <ImageView
         android:id="@+id/IvSettings"
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_8sdp"
-        android:fontFamily="@font/main_bold"
+        android:fontFamily="@font/app_bold"
         android:text="@string/widget_category"
         android:textColor="@color/widget_gray"
         android:textSize="@dimen/_12sdp"
@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_10sdp"
-        android:fontFamily="@font/main_bold"
+        android:fontFamily="@font/app_bold"
         android:text="@string/widgets_i16"
         android:textColor="@color/widget_black"
         android:textSize="@dimen/_22sdp"
